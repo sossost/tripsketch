@@ -1,13 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-const Home = ({ navigation }: any) => {
+const Home = () => {
   return (
     <View style={styles.container}>
-      <Button
-        title="Go to Mypage"
-        onPress={() => navigation.navigate("MyPage")}
-      />
       <Text>메인 화면입니다.</Text>
     </View>
   );

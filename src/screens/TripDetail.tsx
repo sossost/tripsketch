@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-const MyPage = () => {
+const TripDetail = () => {
   return (
     <View style={styles.container}>
-      <Text>MyPage</Text>
+      <Text>상세페이지 입니다.</Text>
     </View>
   );
 };
@@ -17,4 +17,4 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-export default MyPage;
+export default TripDetail;
