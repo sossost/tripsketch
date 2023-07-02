@@ -43,7 +43,8 @@ const Profile = (props: ProfileProps) => {
   );
 };
 
-// 부모컴포넌트의 리렌더링은 대부분 카테고리가 변경될때 이므로 프로필 컴포넌트 메모이제이션
+/* 부모컴포넌트의 리렌더링은 대부분 카테고리가 변경될때 이므로
+프로필 컴포넌트는 메모이제이션하여 불필요한 리렌더링을 막음 */
 export default React.memo(Profile);
 
 const styles = StyleSheet.create({
