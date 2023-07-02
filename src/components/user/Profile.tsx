@@ -1,3 +1,4 @@
+import React from "react";
 import { StyleSheet, Image, Text, View, TouchableOpacity } from "react-native";
 
 type ProfileProps = {
@@ -42,7 +43,8 @@ const Profile = (props: ProfileProps) => {
   );
 };
 
-export default Profile;
+// 부모컴포넌트의 리렌더링은 대부분 카테고리가 변경될때 이므로 프로필 컴포넌트 메모이제이션
+export default React.memo(Profile);
 
 const styles = StyleSheet.create({
   container: {
