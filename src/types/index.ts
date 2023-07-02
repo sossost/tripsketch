@@ -6,3 +6,12 @@ type User = {
   user_name: string;
   introduction: string;
 };
+
+type Diary = {
+  title: string;
+  content: string;
+  location: string;
+  thumbnail: string;
+  isHidden: boolean;
+  date: string;
+};
