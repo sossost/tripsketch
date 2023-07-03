@@ -1,5 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
+import { useQuery } from "@tanstack/react-query";
+import { getDiariesByCategory } from "../services/diary";
+// import { useNavigation } from "@react-navigation/native";
+
 import Profile from "../components/user/Profile";
 import Category from "../components/user/Category";
 import DiaryList from "../components/user/DiaryList";
@@ -16,42 +20,31 @@ const USER_DATA = {
 const CATEGORY_DATA = ["프랑스", "독일", "이탈리아"];
 CATEGORY_DATA.unshift("전체보기");
 
-const DIARY_DATA = [
-  {
-    title: "타이틀",
-    content: "컨텐츠",
-    location: "프랑스",
-    thumbnail: "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
-    isHidden: false,
-    date: "2023-07-02",
-  },
-];
-
 const MyPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("전체보기");
-  const [diaryData, setDiaryData] = useState<Diary[]>([]);
+  const {
+    data: diaries,
+    isLoading,
+    isError,
+  } = useQuery(["diaries", selectedCategory], () =>
+    getDiariesByCategory(selectedCategory)
+  );
 
-  const fetchData = (cateogry: string) => {
-    if (selectedCategory === "전체보기") {
-      // 전체일기 axios
-    }
-    // 카테고리 axios 요청
-    setDiaryData(diaryData);
-  };
-
-  useEffect(() => {
-    fetchData(selectedCategory);
-  }, [selectedCategory]);
+  // const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-      <Profile variant="myPage" user={USER_DATA} onPress={() => alert("gd")} />
+      <Profile
+        variant="myPage"
+        user={USER_DATA}
+        onPress={() => console.log("ㅎㅇ")}
+      />
       <Category
         category={CATEGORY_DATA}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
-      <DiaryList diary={diaryData} />
+      <DiaryList diaries={diaries} isLoading={isLoading} isError={isError} />
     </View>
   );
 };
