@@ -4,6 +4,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import TripDetail from "../screens/TripDetail";
 import BottomTab from "./BottomTab";
+import Login from "../screens/Login";
+import SignUp from "../screens/SignUp";
 
 const Stack = createStackNavigator();
 
@@ -17,6 +19,8 @@ export default function RootStack() {
           options={{ headerShown: false }}
         />
         <Stack.Screen name="TripDetail" component={TripDetail} />
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="SignUp" component={SignUp} />
       </Stack.Navigator>
     </NavigationContainer>
   );
