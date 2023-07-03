@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { getDiariesByCategory } from "../services/diary";
-import { useNavigation } from "@react-navigation/native";
+// import { useNavigation } from "@react-navigation/native";
 
 import Profile from "../components/user/Profile";
 import Category from "../components/user/Category";
@@ -30,7 +30,7 @@ const MyPage = () => {
     getDiariesByCategory(selectedCategory)
   );
 
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
