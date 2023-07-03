@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import Profile from "../components/user/Profile";
 import Category from "../components/user/Category";
-import DiaryList from "../components/user/DiaryList";
+// import DiaryList from "../components/user/DiaryList";
 
 const USER_DATA = {
   id: "elice_official",
@@ -51,7 +51,7 @@ const MyPage = () => {
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
-      <DiaryList diary={diaryData} />
+      {/* <DiaryList diary={diaryData} /> */}
     </View>
   );
 };
