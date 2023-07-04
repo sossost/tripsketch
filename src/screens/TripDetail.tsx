@@ -1,20 +1,17 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { CommonStyles } from "../styles/CommonStyles";
+import Comment from "../components/post/Comment";
+import PostView from "../components/post/PostView";
 
 const TripDetail = () => {
   return (
-    <View style={styles.container}>
-      <Text>상세페이지 입니다.</Text>
+    <View style={CommonStyles.appContainer}>
+      <PostView />
+      <Comment />
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+const styles = StyleSheet.create({});
 export default TripDetail;
