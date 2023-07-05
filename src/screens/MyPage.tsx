@@ -8,17 +8,7 @@ import Profile from "../components/user/Profile";
 import Category from "../components/user/Category";
 import DiaryList from "../components/user/DiaryList";
 
-const USER_DATA = {
-  id: "elice_official",
-  profile_img: "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
-  followers: ["나", "너", "우리"],
-  followings: ["너", "그", "그녀"],
-  user_name: "엘리스",
-  introduction: "프로필 불라불라 어쩌구저쩌구",
-};
-
-const CATEGORY_DATA = ["프랑스", "독일", "이탈리아"];
-CATEGORY_DATA.unshift("전체보기");
+import { category, currentUser } from "../../public/data/mockdata";
 
 const MyPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("전체보기");
@@ -36,11 +26,11 @@ const MyPage = () => {
     <View style={styles.container}>
       <Profile
         variant="myPage"
-        user={USER_DATA}
+        user={currentUser}
         onPress={() => console.log("ㅎㅇ")}
       />
       <Category
-        category={CATEGORY_DATA}
+        category={category}
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
