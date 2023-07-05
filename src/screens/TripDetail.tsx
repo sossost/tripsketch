@@ -1,17 +1,23 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { CommonStyles } from "../styles/CommonStyles";
+import { StyleSheet, ScrollView, View } from "react-native";
 import Comment from "../components/post/Comment";
 import PostView from "../components/post/PostView";
+import Line from "../components/common/Line";
 
 const TripDetail = () => {
   return (
-    <View style={CommonStyles.appContainer}>
+    <ScrollView style={styles.container}>
       <PostView />
+      <Line />
       <Comment />
-    </View>
+    </ScrollView>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+});
 export default TripDetail;

@@ -38,7 +38,6 @@ const CommentList = () => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#fff",
-    paddingTop: 20,
   },
   comment: {},
 });

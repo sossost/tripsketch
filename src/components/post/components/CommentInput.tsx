@@ -1,8 +1,19 @@
-import { StyleSheet, Text, View, SafeAreaView, TextInput } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  SafeAreaView,
+  TextInput,
+  Alert,
+  Text,
+} from "react-native";
 import { useState } from "react";
 
 const CommentInput = () => {
   const [comment, setComment] = useState("");
+
+  const submitComment = () => {
+    Alert.alert("Simple Button pressed");
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -11,6 +22,9 @@ const CommentInput = () => {
         onChangeText={setComment}
         value={comment}
       />
+      <TouchableOpacity onPress={submitComment} style={styles.button}>
+        <Text style={styles.button_text}> 등록 </Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -19,6 +33,7 @@ const styles = StyleSheet.create({
   container: {
     color: "black",
     marginTop: 20,
+    position: "relative",
   },
   input: {
     height: 40,
@@ -27,6 +42,15 @@ const styles = StyleSheet.create({
     padding: 10,
     color: "#6f6f6f",
     borderRadius: 30,
+  },
+  button: {
+    position: "absolute",
+    right: 10,
+    top: "50%",
+    marginTop: -10,
+  },
+  button_text: {
+    color: "#73BBFB",
   },
 });
 
