@@ -29,18 +29,23 @@ const SocialCard = (props: SocialCardProps) => {
   };
 
   return (
-    <View style={styles.cardContainer}>
-      <View style={styles.profileImageWrapper}>
-        <Image source={{ uri: user.profile_img }} style={styles.profileImage} />
-      </View>
-      <View style={styles.contantWrapper}>
-        <View>
-          <Text>{user.user_name}</Text>
-          <Text>{user.id}</Text>
+    <View style={styles.cardWrapper}>
+      <View style={styles.cardContainer}>
+        <View style={styles.profileImageWrapper}>
+          <Image
+            source={{ uri: user.profile_img }}
+            style={styles.profileImage}
+          />
         </View>
-        <TouchableOpacity onPress={followBtnHandler}>
-          <Image source={followBtnImagePath} style={followBtnStyle} />
-        </TouchableOpacity>
+        <View style={styles.contantWrapper}>
+          <View>
+            <Text>{user.user_name}</Text>
+            <Text>{user.id}</Text>
+          </View>
+          <TouchableOpacity onPress={followBtnHandler}>
+            <Image source={followBtnImagePath} style={followBtnStyle} />
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -49,6 +54,13 @@ const SocialCard = (props: SocialCardProps) => {
 export default SocialCard;
 
 const styles = StyleSheet.create({
+  cardWrapper: {
+    flexDirection: "column",
+    justifyContent: "space-between",
+    padding: 5,
+    flex: 1,
+  },
+
   cardContainer: {
     backgroundColor: "#ffffff",
     borderRadius: 16,
@@ -56,8 +68,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#cccccc",
     flexDirection: "column",
-    minWidth: 168,
-    minHeight: 222,
   },
 
   profileImageWrapper: {
