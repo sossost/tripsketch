@@ -23,11 +23,11 @@ const Profile = (props: ProfileProps) => {
         <View style={styles.rightWrapper}>
           <View style={styles.socialWrapper}>
             <Text style={styles.socialText}>
-              팔로워 {user.followers.length}
+              팔로워 {user.followerList.length}
             </Text>
             |
             <Text style={styles.socialText}>
-              팔로잉 {user.followings.length}
+              팔로잉 {user.followingList.length}
             </Text>
           </View>
           <View style={styles.profileWrapper}>
