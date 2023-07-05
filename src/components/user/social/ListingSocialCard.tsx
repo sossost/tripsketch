@@ -12,7 +12,6 @@ const ListingSocialCard = (props: ListingSocialCard) => {
     <FlatList
       data={userList}
       numColumns={2}
-      contentContainerStyle={styles.cardContainer}
       renderItem={(userData) => {
         const user = userData.item;
         const isFollowing = currentUser
