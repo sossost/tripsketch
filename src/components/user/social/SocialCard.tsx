@@ -9,8 +9,8 @@ const SocialCard = (props: SocialCardProps) => {
   const { user, isFollowing } = props;
 
   const followBtnImagePath = isFollowing
-    ? require("../../assets/images/isFollowingIcon.png")
-    : require("../../assets/images/isNotFollowingIcon.png");
+    ? require("../../../assets/images/isFollowingIcon.png")
+    : require("../../../assets/images/isNotFollowingIcon.png");
 
   const followBtnStyle = isFollowing
     ? styles.isFollowingBtn
