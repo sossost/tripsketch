@@ -29,7 +29,7 @@ const PostView = () => {
       <View style={styles.title_container}>
         <Text style={styles.title}>{post.title}</Text>
         <View style={styles.ellipsis}>
-          <Ionicons name="ellipsis-vertical" size={24} color="#9f9f9f" />
+          <Ionicons name="ellipsis-vertical" size={22} color="#9f9f9f" />
         </View>
       </View>
       <View style={styles.tag_container}>

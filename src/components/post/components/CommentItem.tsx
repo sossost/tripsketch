@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
   comment: {
     fontSize: 14,
     color: "#6f6f6f",
-    marginTop: 10,
+    marginTop: 8,
   },
 });
 
