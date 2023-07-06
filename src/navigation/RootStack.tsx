@@ -6,6 +6,8 @@ import TripDetail from "../screens/TripDetail";
 import BottomTab from "./BottomTab";
 import Login from "../screens/Login";
 import SignUp from "../screens/SignUp";
+import SocialPage from "../screens/SocialPage";
+import MyPage from "../screens/MyPage";
 
 const Stack = createStackNavigator();
 
@@ -21,6 +23,15 @@ export default function RootStack() {
         <Stack.Screen name="TripDetail" component={TripDetail} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={SignUp} />
+        <Stack.Screen name="MyPage" component={MyPage} />
+        <Stack.Screen
+          name="FollowerPage"
+          component={() => <SocialPage initialVariant="팔로워" />}
+        />
+        <Stack.Screen
+          name="FollowingPage"
+          component={() => <SocialPage initialVariant="팔로잉" />}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

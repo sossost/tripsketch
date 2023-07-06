@@ -1,5 +1,4 @@
 type User = {
-  id: string;
   profile_img: string;
   followerList: string[];
   followingList: string[];
