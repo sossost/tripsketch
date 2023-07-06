@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
+import SplashBack from "../components/common/SplashBack";
 
 const Home = ({ navigation }: any) => {
   /** 로그인 페이지 이동 핸들러 */
