@@ -2,12 +2,13 @@ import React, { useRef, useEffect } from "react";
 import { Animated, Dimensions, Image, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import Logo from "../../assets/logo.png";
 import RootStack from "../../navigation/RootStack";
 import { StatusBar } from "expo-status-bar";
-const splashBgColor = "#000";
+import SplashBack from "./SplashBack";
+const splashBgColor = "#fff";
 
 const SplashScreen = () => {
+  const logoPath = require("../../assets/logo.png");
   //SafeArea 값
   const edges = useSafeAreaInsets();
 
@@ -33,7 +34,7 @@ const SplashScreen = () => {
         }),
         Animated.timing(scaleLogo, {
           //0.35 비율로 줄임
-          toValue: 0.35,
+          toValue: 0.5,
           useNativeDriver: true,
         }),
         Animated.timing(scaleTitle, {
@@ -55,7 +56,7 @@ const SplashScreen = () => {
           useNativeDriver: true,
         }),
       ]).start();
-    }, 500);
+    }, 3000);
   }, []);
 
   return (
@@ -80,29 +81,31 @@ const SplashScreen = () => {
           style={{
             flex: 1,
             alignItems: "center",
+            zIndex: 2,
             justifyContent: "center",
           }}
         >
           <Animated.Image
-            source={Logo}
+            source={logoPath}
             style={{
-              width: 380,
-              height: 80,
+              width: 250,
+              height: 50,
               marginBottom: 20,
               transform: [{ translateY: moveLogo.y }, { scale: scaleLogo }],
             }}
           ></Animated.Image>
           <Animated.Text
             style={{
-              fontSize: 25,
-              fontWeight: "bold",
-              color: "blue",
+              fontSize: 15,
+              color: "white",
               opacity: opacityTitle,
+              transform: [{ translateY: moveLogo.y }],
             }}
           >
-            Tripsketch
+            당신의 여행을 스케치하세요.
           </Animated.Text>
         </Animated.View>
+        <SplashBack willFadeOut={true} />
       </Animated.View>
       <Animated.View
         style={{
