@@ -29,23 +29,15 @@ const SocialCard = (props: SocialCardProps) => {
   };
 
   return (
-    <View style={styles.cardWrapper}>
-      <View style={styles.cardContainer}>
-        <View style={styles.profileImageWrapper}>
-          <Image
-            source={{ uri: user.profile_img }}
-            style={styles.profileImage}
-          />
-        </View>
-        <View style={styles.contantWrapper}>
-          <View>
-            <Text>{user.user_name}</Text>
-            <Text>{user.id}</Text>
-          </View>
-          <TouchableOpacity onPress={followBtnHandler}>
-            <Image source={followBtnImagePath} style={followBtnStyle} />
-          </TouchableOpacity>
-        </View>
+    <View style={styles.cardContainer}>
+      <View style={styles.profileImageWrapper}>
+        <Image source={{ uri: user.profile_img }} style={styles.profileImage} />
+      </View>
+      <View style={styles.contantWrapper}>
+        <Text>{user.user_name}</Text>
+        <TouchableOpacity onPress={followBtnHandler}>
+          <Image source={followBtnImagePath} style={followBtnStyle} />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -54,13 +46,6 @@ const SocialCard = (props: SocialCardProps) => {
 export default SocialCard;
 
 const styles = StyleSheet.create({
-  cardWrapper: {
-    flexDirection: "column",
-    justifyContent: "space-between",
-    padding: 5,
-    flex: 1,
-  },
-
   cardContainer: {
     backgroundColor: "#ffffff",
     borderRadius: 16,
@@ -68,11 +53,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#cccccc",
     flexDirection: "column",
+    flex: 1,
   },
 
   profileImageWrapper: {
     position: "relative",
-    paddingTop: "70%",
+    paddingTop: "80%",
     backgroundColor: "#cccccc",
   },
 
@@ -90,9 +76,9 @@ const styles = StyleSheet.create({
   contantWrapper: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "flex-end",
+    alignItems: "center",
     gap: 10,
-    padding: 15,
+    padding: 10,
   },
 
   isFollowingBtn: {
