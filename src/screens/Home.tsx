@@ -16,7 +16,6 @@ const Home = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <Text>메인 화면입니다.</Text>
-      <SplashBack willFadeOut={false} />
 
       {/* 로그인 페이지 구현용 임시 연결 버튼 */}
       <Button title="로그인" onPress={loginMoveHandler} />
