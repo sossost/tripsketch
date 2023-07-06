@@ -4,13 +4,16 @@ import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 type VariantProps<T extends string> = {
   variant1: T;
   variant2: T;
+  initialVariant: T;
   setVariant: React.Dispatch<React.SetStateAction<T>>;
 };
 
 const VariantSelector = <T extends string>(props: VariantProps<T>) => {
-  const { variant1, variant2, setVariant } = props;
+  const { variant1, variant2, initialVariant, setVariant } = props;
 
-  const [underlinePosition, setUnderlinePosition] = useState("0%");
+  const [underlinePosition, setUnderlinePosition] = useState(
+    initialVariant === variant1 ? "0%" : "50%"
+  );
 
   return (
     <View style={styles.variantWrapper}>
