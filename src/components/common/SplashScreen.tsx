@@ -1,14 +1,16 @@
-import React, { useRef, useEffect } from "react";
-import { Animated, Dimensions, Image, Text, View } from "react-native";
+import React, { useRef, useEffect, useState } from "react";
+import { Animated, Button, Dimensions, Image, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import RootStack from "../../navigation/RootStack";
 import { StatusBar } from "expo-status-bar";
-import SplashBack from "./SplashBack";
+import SplashBack, { splashBackProps } from "./SplashBack";
 const splashBgColor = "#fff";
 
 const SplashScreen = () => {
-  const logoPath = require("../../assets/logo.png");
+  const [fadeOut, setFadeOut] = useState(false);
+
+  const logoPath = require("../../assets/logo_white.png");
   //SafeArea 값
   const edges = useSafeAreaInsets();
 
@@ -23,18 +25,28 @@ const SplashScreen = () => {
   const moveLogo = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
   const moveTitle = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
   const opacityTitle = useRef(new Animated.Value(1)).current;
+  const opacityContent = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    //0.5초 후 애니메이션 시작
     setTimeout(() => {
       Animated.parallel([
+        Animated.timing(opacityContent, {
+          toValue: 1,
+          useNativeDriver: true,
+          duration: 500,
+        }),
+      ]).start();
+    }, 2500);
+    if (fadeOut) {
+      //0.5초 후 애니메이션 시작
+      Animated.parallel([
         Animated.timing(startAnimation, {
-          toValue: -Dimensions.get("window").height + (edges.top + 75),
+          toValue: -Dimensions.get("window").height + (edges.top + 65),
           useNativeDriver: true,
         }),
         Animated.timing(scaleLogo, {
           //0.35 비율로 줄임
-          toValue: 0.5,
+          toValue: 0.35,
           useNativeDriver: true,
         }),
         Animated.timing(scaleTitle, {
@@ -45,8 +57,8 @@ const SplashScreen = () => {
         Animated.timing(moveLogo, {
           //왼쪽 끝으로 이동
           toValue: {
-            x: -(Dimensions.get("window").width / 2) + 100,
-            y: Dimensions.get("window").height / 2 - 10,
+            x: -Dimensions.get("window").width + 100,
+            y: Dimensions.get("window").height - 100,
           },
           useNativeDriver: true,
         }),
@@ -55,9 +67,13 @@ const SplashScreen = () => {
           toValue: 0,
           useNativeDriver: true,
         }),
+        Animated.timing(opacityContent, {
+          toValue: 0,
+          useNativeDriver: true,
+        }),
       ]).start();
-    }, 3000);
-  }, []);
+    }
+  }, [fadeOut]);
 
   return (
     <View
@@ -74,7 +90,8 @@ const SplashScreen = () => {
           flex: 1,
           backgroundColor: splashBgColor,
           zIndex: 1,
-          transform: [{ translateY: startAnimation }],
+          transform: fadeOut === true ? [{ translateY: startAnimation }] : [],
+          overflow: "hidden",
         }}
       >
         <Animated.View
@@ -82,30 +99,64 @@ const SplashScreen = () => {
             flex: 1,
             alignItems: "center",
             zIndex: 2,
-            justifyContent: "center",
+            top: "20%",
+            justifyContent: "flex-start",
           }}
         >
           <Animated.Image
             source={logoPath}
             style={{
               width: 250,
-              height: 50,
+              height: 54,
               marginBottom: 20,
-              transform: [{ translateY: moveLogo.y }, { scale: scaleLogo }],
+              transform:
+                fadeOut === true
+                  ? [
+                      { translateY: moveLogo.y },
+                      //{ scale: scaleLogo }
+                    ]
+                  : [],
             }}
           ></Animated.Image>
           <Animated.Text
             style={{
               fontSize: 15,
               color: "white",
-              opacity: opacityTitle,
-              transform: [{ translateY: moveLogo.y }],
+              opacity: fadeOut === true ? opacityTitle : 1,
+              transform: fadeOut === true ? [{ translateY: moveLogo.y }] : [],
             }}
           >
             당신의 여행을 스케치하세요.
           </Animated.Text>
         </Animated.View>
-        <SplashBack willFadeOut={true} />
+        <SplashBack willFadeOut={fadeOut === true ? true : false} />
+        {fadeOut ? (
+          <></>
+        ) : (
+          // 로그인 및 둘러보기 관련 내용 넣을 공간
+          <Animated.View
+            style={{
+              position: "absolute",
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+              marginVertical: 150,
+              margin: 20,
+              height: "70%",
+              borderRadius: 30,
+              top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              //backgroundColor: "white",
+              opacity: opacityContent,
+              zIndex: 3,
+            }}
+          >
+            <Text>여기에 암거나 넣어주세요 ㅎㅎㅎㅎ</Text>
+            <Button title="둘러보기" onPress={() => setFadeOut(true)}></Button>
+          </Animated.View>
+        )}
       </Animated.View>
       <Animated.View
         style={{

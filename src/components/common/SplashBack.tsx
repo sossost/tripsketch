@@ -29,6 +29,23 @@ const SplashBack: React.FC<splashBackProps> = ({ willFadeOut }) => {
   const movePlane = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
 
   useEffect(() => {
+    Animated.parallel([
+      Animated.timing(bgOpacity, {
+        toValue: 1,
+        useNativeDriver: true,
+        duration: 2500,
+      }),
+    ]).start();
+
+    if (willFadeOut === true) {
+      Animated.parallel([
+        Animated.timing(bgOpacity, {
+          toValue: 0,
+          useNativeDriver: true,
+          duration: 1000,
+        }),
+      ]).start();
+    }
     //0.5초 후 애니메이션 시작
     Animated.parallel([
       Animated.timing(startAnimation, {
@@ -42,37 +59,33 @@ const SplashBack: React.FC<splashBackProps> = ({ willFadeOut }) => {
           y: 10,
         },
         useNativeDriver: true,
-        duration: willFadeOut === true ? 6000 : 60000,
+        duration: willFadeOut === true ? 3000 : 60000,
       }),
       Animated.timing(moveCloud2, {
-        //왼쪽 끝으로 이동
         toValue: {
           x: willFadeOut === true ? 200 : 500,
           y: 10,
         },
         useNativeDriver: true,
-        duration: willFadeOut === true ? 6000 : 60000,
+        duration: willFadeOut === true ? 3000 : 60000,
       }),
       Animated.timing(moveCloud3, {
-        //왼쪽 끝으로 이동
         toValue: {
           x: willFadeOut === true ? -400 : -800,
           y: 10,
         },
         useNativeDriver: true,
-        duration: willFadeOut === true ? 6000 : 60000,
+        duration: willFadeOut === true ? 3000 : 60000,
       }),
       Animated.timing(moveCloud4, {
-        //왼쪽 끝으로 이동
         toValue: {
           x: willFadeOut === true ? 400 : 800,
           y: 10,
         },
         useNativeDriver: true,
-        duration: willFadeOut === true ? 6000 : 60000,
+        duration: willFadeOut === true ? 3000 : 60000,
       }),
       Animated.timing(movePlane, {
-        //왼쪽 끝으로 이동
         toValue: {
           x: willFadeOut === true ? -200 : -500,
           y: willFadeOut === true ? -100 : -200,
@@ -81,26 +94,7 @@ const SplashBack: React.FC<splashBackProps> = ({ willFadeOut }) => {
         duration: willFadeOut === true ? 6000 : 60000,
       }),
     ]).start();
-
-    setTimeout(() => {
-      Animated.parallel([
-        Animated.timing(bgOpacity, {
-          toValue: 0,
-          useNativeDriver: true,
-          duration: 1000,
-        }),
-      ]).start();
-    }, 3000);
-    setTimeout(() => {
-      Animated.parallel([
-        Animated.timing(bgOpacity, {
-          toValue: 1,
-          useNativeDriver: true,
-          duration: 1000,
-        }),
-      ]).start();
-    }, 1000);
-  }, []);
+  }, [willFadeOut]);
 
   return (
     <Animated.View
@@ -113,7 +107,7 @@ const SplashBack: React.FC<splashBackProps> = ({ willFadeOut }) => {
         flex: 1,
         backgroundColor: "#287FE8",
         zIndex: 0,
-        opacity: willFadeOut === true ? bgOpacity : 1,
+        opacity: bgOpacity,
       }}
     >
       <Animated.View
@@ -173,7 +167,7 @@ const SplashBack: React.FC<splashBackProps> = ({ willFadeOut }) => {
           style={{
             position: "absolute",
             right: 50,
-            top: 200,
+            top: "40%",
             width: 100,
             height: 80,
             transform: [
