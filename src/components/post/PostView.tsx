@@ -29,7 +29,7 @@ const PostView = () => {
       <View style={styles.title_container}>
         <Text style={styles.title}>{post.title}</Text>
         <View style={styles.ellipsis}>
-          <Ionicons name="ellipsis-vertical" size={22} color="#9f9f9f" />
+          <Ionicons name="ellipsis-vertical" size={18} color="#9f9f9f" />
         </View>
       </View>
       <View style={styles.tag_container}>
@@ -50,6 +50,9 @@ const PostView = () => {
           <Text style={styles.trip_date_text}>작성일</Text>
           <Text style={styles.trip_date_period}>{post.created_at}</Text>
         </View>
+        <View style={styles.bookmark}>
+          <Ionicons name="md-bookmark-sharp" size={20} color="#73BBFB" />
+        </View>
       </View>
       <RenderHtml
         source={{ html: post.content }}
@@ -59,15 +62,15 @@ const PostView = () => {
       <View style={styles.likeView_container}>
         <View style={styles.likes}>
           <View>
-            <Ionicons name="heart-outline" size={22} color="#9f9f9f" />
+            <Ionicons name="heart-outline" size={22} color="#d6d6d6" />
           </View>
-          <Text style={styles.likeView_text}>{post.likes.length}</Text>
+          <Text style={styles.likeView_text}>좋아요 {post.likes.length}</Text>
         </View>
         <View style={styles.views}>
           <View>
-            <Ionicons name="eye-outline" size={22} color="#9f9f9f" />
+            <Ionicons name="eye-outline" size={22} color="#d6d6d6" />
           </View>
-          <Text style={styles.likeView_text}>{post.views}</Text>
+          <Text style={styles.likeView_text}>조회수 {post.views}</Text>
         </View>
       </View>
     </View>
@@ -109,6 +112,7 @@ const styles = StyleSheet.create({
     color: "#73BBFB",
   },
   date_container: {
+    position: "relative",
     marginTop: 15,
     backgroundColor: "#f7f7f7",
     padding: 13,
@@ -126,12 +130,17 @@ const styles = StyleSheet.create({
   trip_date_period: {
     fontSize: 13,
   },
+  bookmark: {
+    position: "absolute",
+    right: 3,
+    top: -2,
+  },
   likeView_container: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 20,
-    gap: 13,
+    marginTop: 12,
+    gap: 10,
   },
   likes: {
     display: "flex",
@@ -145,6 +154,7 @@ const styles = StyleSheet.create({
   },
   likeView_text: {
     marginLeft: 3,
+    fontSize: 12,
   },
 });
 

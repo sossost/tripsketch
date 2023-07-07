@@ -1,14 +1,11 @@
 import { StyleSheet, View } from "react-native";
-import { useState } from "react";
 import { CommonStyles } from "../../styles/CommonStyles";
 import CommentList from "./components/CommentList";
-import CommentInput from "./components/CommentInput";
 
-const Comment = () => {
+const CommentBest = () => {
   return (
     <View style={[CommonStyles.appContainer, styles.container]}>
-      <CommentList sort={"all"} />
-      <CommentInput />
+      <CommentList sort={"best"} />
     </View>
   );
 };
@@ -19,4 +16,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Comment;
+export default CommentBest;

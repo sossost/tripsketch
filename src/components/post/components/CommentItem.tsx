@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import { Comment } from "../../../types/comment";
 
-const CommentItem = ({ comment }: { comment: Comment }) => {
+const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
   return (
     <View style={styles.container}>
       <View style={styles.image}>
@@ -34,22 +34,22 @@ const styles = StyleSheet.create({
   container: {
     display: "flex",
     flexDirection: "row",
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+    paddingVertical: 10,
+    // borderBottomWidth: 1,
+    // borderBottomColor: "#eee",
   },
   image: {
-    width: "20%",
+    width: "17%",
   },
   profile: {
-    width: 50,
-    height: 50,
+    width: 37,
+    height: 37,
     backgroundColor: "grey",
     borderRadius: 50,
     overflow: "hidden",
   },
   text: {
-    width: "80%",
+    width: "83%",
   },
   top: {
     width: "100%",
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     color: "#6f6f6f",
   },
   date: {
-    fontSize: 12,
+    fontSize: 11,
     color: "#b3b3b3",
   },
   comment: {
