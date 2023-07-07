@@ -1,8 +1,13 @@
-import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import ListingSocialCard from "../components/user/social/ListingSocialCard";
-import { currentUser, users } from "../../public/data/mockdata";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
+import { getFollowerList, getFollowingList } from "../services/user";
+import { currentUser } from "../../data/mockdata";
+
 import VariantSelector from "../components/UI/VariantSelector";
+import ListingSocialCard from "../components/user/social/ListingSocialCard";
+import Loading from "../components/UI/Loading";
 
 const SocialPage = ({
   initialVariant,
@@ -10,18 +15,20 @@ const SocialPage = ({
   initialVariant: "팔로워" | "팔로잉";
 }) => {
   const [variant, setVariant] = useState<"팔로워" | "팔로잉">(initialVariant);
-  const [userList, setUserList] = useState<User[]>();
+  const userName = currentUser.user_name;
 
-  useEffect(() => {
+  const {
+    data: users,
+    isLoading,
+    isError,
+  } = useQuery<User[] | undefined>([variant, userName], () => {
     if (variant === "팔로워") {
-      //const followerList =  getFollowerList(currentUser.id);
-      // setUserList(followerList);
+      return getFollowerList(userName);
     }
     if (variant === "팔로잉") {
-      //const followingList = getFollowingList(currentUser.id);
-      // setUserList(followingList);
+      return getFollowingList(userName);
     }
-  }, [variant, userList]);
+  });
 
   return (
     <View style={styles.pageLayout}>
@@ -31,7 +38,13 @@ const SocialPage = ({
         initialVariant={variant}
         setVariant={setVariant}
       />
-      <ListingSocialCard currentUser={currentUser} userList={users} />
+      {isLoading ? (
+        <Loading />
+      ) : isError ? (
+        <div>Error Page</div>
+      ) : (
+        <ListingSocialCard currentUser={currentUser} userList={users} />
+      )}
     </View>
   );
 };
