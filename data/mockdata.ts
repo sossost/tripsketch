@@ -1,5 +1,4 @@
 export const currentUser = {
-  id: "elice_official",
   profile_img: "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
   followerList: ["나", "너", "우리"],
   followingList: ["너", "그", "그녀"],
@@ -11,7 +10,6 @@ export const category = ["전체보기", "프랑스", "독일", "이탈리아"];
 
 export const users = [
   {
-    id: "user1",
     profile_img:
       "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
     followerList: ["user2", "user3", "user4"],
@@ -20,7 +18,6 @@ export const users = [
     introduction: "유저네임1의 프로필 입니다.",
   },
   {
-    id: "user2",
     profile_img:
       "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
     followerList: ["user1", "user3", "user4"],
@@ -29,7 +26,6 @@ export const users = [
     introduction: "유저네임2의 프로필 입니다.",
   },
   {
-    id: "user3",
     profile_img:
       "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
     followerList: ["user2", "user1", "user4"],
@@ -38,7 +34,6 @@ export const users = [
     introduction: "유저네임3의 프로필 입니다.",
   },
   {
-    id: "user4",
     profile_img:
       "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
     followerList: ["user2", "user3", "user1"],
@@ -47,7 +42,6 @@ export const users = [
     introduction: "유저네임4의 프로필 입니다.",
   },
   {
-    id: "user5",
     profile_img:
       "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
     followerList: ["user2", "user3", "user4"],
@@ -56,7 +50,6 @@ export const users = [
     introduction: "유저네임1의 프로필 입니다.",
   },
   {
-    id: "user6",
     profile_img:
       "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
     followerList: ["user1", "user3", "user4"],
@@ -65,7 +58,6 @@ export const users = [
     introduction: "유저네임2의 프로필 입니다.",
   },
   {
-    id: "user7",
     profile_img:
       "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
     followerList: ["user2", "user1", "user4"],
@@ -74,7 +66,6 @@ export const users = [
     introduction: "유저네임3의 프로필 입니다.",
   },
   {
-    id: "user8",
     profile_img:
       "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
     followerList: ["user2", "user3", "user1"],
