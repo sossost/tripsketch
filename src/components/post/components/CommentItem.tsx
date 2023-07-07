@@ -25,6 +25,9 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
         </View>
         <Text style={styles.date}>{comment.create_at}</Text>
         <Text style={styles.comment}>{comment.comment}</Text>
+        {sort === "all" ? (
+          <Text style={styles.add_comment}>답글 달기</Text>
+        ) : null}
       </View>
     </View>
   );
@@ -81,6 +84,11 @@ const styles = StyleSheet.create({
   },
   comment: {
     fontSize: 14,
+    color: "#6f6f6f",
+    marginTop: 6,
+  },
+  add_comment: {
+    fontSize: 12,
     color: "#6f6f6f",
     marginTop: 8,
   },

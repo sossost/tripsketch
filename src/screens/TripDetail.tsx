@@ -1,5 +1,12 @@
 import React, { useCallback, useRef, useMemo, useState } from "react";
-import { StyleSheet, View, ScrollView, Animated } from "react-native";
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  Animated,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import PostView from "../components/post/PostView";
 import Comment from "../components/post/Comment";
@@ -22,13 +29,19 @@ const TripDetail = () => {
     }).start();
   }, []);
 
+  const handleSnapPress = useCallback((index: number) => {
+    sheetRef.current?.snapToIndex(index);
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.containerInner}>
         <ScrollView>
           <PostView />
           <Line />
-          <CommentBest />
+          <TouchableOpacity onPress={() => handleSnapPress(1)}>
+            <CommentBest />
+          </TouchableOpacity>
         </ScrollView>
         {sheetIndex >= 1 && (
           <Animated.View
