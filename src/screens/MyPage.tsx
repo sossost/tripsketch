@@ -8,7 +8,7 @@ import Profile from "../components/user/Profile";
 import Category from "../components/user/Category";
 import DiaryList from "../components/user/DiaryList";
 
-import { category, currentUser } from "../../public/data/mockdata";
+import { category, currentUser } from "../../data/mockdata";
 
 const MyPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("전체보기");
@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 20,
     gap: 20,
+    backgroundColor: "#ffffff",
   },
 });
 export default MyPage;
