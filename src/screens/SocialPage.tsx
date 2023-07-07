@@ -8,6 +8,7 @@ import { currentUser } from "../../data/mockdata";
 import VariantSelector from "../components/UI/VariantSelector";
 import ListingSocialCard from "../components/user/social/ListingSocialCard";
 import Loading from "../components/UI/Loading";
+import SearchBar from "../components/UI/SearchBar";
 
 const SocialPage = ({
   initialVariant,
@@ -15,6 +16,7 @@ const SocialPage = ({
   initialVariant: "팔로워" | "팔로잉";
 }) => {
   const [variant, setVariant] = useState<"팔로워" | "팔로잉">(initialVariant);
+  const [text, setText] = useState<string>("");
   const userName = currentUser.user_name;
 
   const {
@@ -38,6 +40,7 @@ const SocialPage = ({
         initialVariant={variant}
         setVariant={setVariant}
       />
+      <SearchBar text={text} setText={setText} />
       {isLoading ? (
         <Loading />
       ) : isError ? (
