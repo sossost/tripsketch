@@ -3,7 +3,7 @@ import SocialCard from "./SocialCard";
 
 type ListingSocialCard = {
   currentUser: User | undefined;
-  userList: User[];
+  userList: User[] | undefined;
 };
 
 const ListingSocialCard = (props: ListingSocialCard) => {
