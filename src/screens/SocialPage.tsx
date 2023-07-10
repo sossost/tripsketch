@@ -1,36 +1,28 @@
 import { StyleSheet, View } from "react-native";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-
-import { getFollowerList, getFollowingList } from "../services/user";
 import { currentUser } from "../../data/mockdata";
 
 import VariantSelector from "../components/UI/VariantSelector";
 import ListingSocialCard from "../components/user/social/ListingSocialCard";
 import Loading from "../components/UI/Loading";
 import SearchBar from "../components/UI/SearchBar";
+import { useGetCurrentUser, useGetSocialList } from "../hooks/useUserQuery";
 
-const SocialPage = ({
-  initialVariant,
-}: {
+type SocialPageProps = {
   initialVariant: "팔로워" | "팔로잉";
-}) => {
-  const [variant, setVariant] = useState<"팔로워" | "팔로잉">(initialVariant);
-  const [text, setText] = useState<string>("");
-  const userName = currentUser.user_name;
+};
 
-  const {
-    data: users,
-    isLoading,
-    isError,
-  } = useQuery<User[] | undefined>([variant, userName], () => {
-    if (variant === "팔로워") {
-      return getFollowerList(userName);
-    }
-    if (variant === "팔로잉") {
-      return getFollowingList(userName);
-    }
-  });
+const SocialPage = (props: SocialPageProps) => {
+  const [variant, setVariant] = useState<"팔로워" | "팔로잉">(
+    props.initialVariant
+  );
+  const [text, setText] = useState<string>("");
+
+  // const { currentUser } = useGetCurrentUser();
+  const { users, isLoading, isError } = useGetSocialList(
+    variant,
+    currentUser.user_name
+  );
 
   return (
     <View style={styles.pageLayout}>
