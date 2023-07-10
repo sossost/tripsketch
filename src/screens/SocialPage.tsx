@@ -1,27 +1,28 @@
-import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import ListingSocialCard from "../components/user/social/ListingSocialCard";
-import { currentUser, users } from "../../public/data/mockdata";
+import { useState } from "react";
+import { currentUser } from "../../data/mockdata";
+
 import VariantSelector from "../components/UI/VariantSelector";
+import ListingSocialCard from "../components/user/social/ListingSocialCard";
+import Loading from "../components/UI/Loading";
+import SearchBar from "../components/UI/SearchBar";
+import { useGetCurrentUser, useGetSocialList } from "../hooks/useUserQuery";
 
-const SocialPage = ({
-  initialVariant,
-}: {
+type SocialPageProps = {
   initialVariant: "팔로워" | "팔로잉";
-}) => {
-  const [variant, setVariant] = useState<"팔로워" | "팔로잉">(initialVariant);
-  const [userList, setUserList] = useState<User[]>();
+};
 
-  useEffect(() => {
-    if (variant === "팔로워") {
-      //const followerList =  getFollowerList(currentUser.id);
-      // setUserList(followerList);
-    }
-    if (variant === "팔로잉") {
-      //const followingList = getFollowingList(currentUser.id);
-      // setUserList(followingList);
-    }
-  }, [variant, userList]);
+const SocialPage = (props: SocialPageProps) => {
+  const [variant, setVariant] = useState<"팔로워" | "팔로잉">(
+    props.initialVariant
+  );
+  const [text, setText] = useState<string>("");
+
+  // const { currentUser } = useGetCurrentUser();
+  const { users, isLoading, isError } = useGetSocialList(
+    variant,
+    currentUser.user_name
+  );
 
   return (
     <View style={styles.pageLayout}>
@@ -31,7 +32,14 @@ const SocialPage = ({
         initialVariant={variant}
         setVariant={setVariant}
       />
-      <ListingSocialCard currentUser={currentUser} userList={users} />
+      <SearchBar text={text} setText={setText} />
+      {isLoading ? (
+        <Loading />
+      ) : isError ? (
+        <div>Error Page</div>
+      ) : (
+        <ListingSocialCard currentUser={currentUser} userList={users} />
+      )}
     </View>
   );
 };

@@ -1,0 +1,142 @@
+{
+  "diaries": [
+    {
+      "title": "타이틀",
+      "content": "컨텐츠",
+      "location": "프랑스",
+      "thumbnail": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "isHidden": false,
+      "date": "2023-07-02"
+    },
+    {
+      "title": "타이틀",
+      "content": "컨텐츠",
+      "location": "프랑스",
+      "thumbnail": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "isHidden": false,
+      "date": "2023-07-02"
+    }
+  ],
+  "currentUser": {
+    "id": "me",
+    "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+    "followers": ["user1", "user2", "user3", "user4"],
+    "followings": ["user1", "user2"],
+    "user_name": "나",
+    "introduction": "나의 프로필 입니다."
+  },
+  "users": [
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임1",
+      "introduction": "유저네임1의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임2",
+      "introduction": "유저네임2의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임3",
+      "introduction": "유저네임3의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임4",
+      "introduction": "유저네임4의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임5",
+      "introduction": "유저네임5의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임6",
+      "introduction": "유저네임5의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임7",
+      "introduction": "유저네임5의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임8",
+      "introduction": "유저네임5의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임9",
+      "introduction": "유저네임5의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임10",
+      "introduction": "유저네임5의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임11",
+      "introduction": "유저네임5의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임12",
+      "introduction": "유저네임5의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임13",
+      "introduction": "유저네임5의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임14",
+      "introduction": "유저네임5의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임15",
+      "introduction": "유저네임5의 프로필 입니다."
+    },
+    {
+      "profile_img": "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+      "followers": ["user2", "user3", "user4"],
+      "followings": ["user2", "user3"],
+      "user_name": "유저네임16",
+      "introduction": "유저네임5의 프로필 입니다."
+    }
+  ]
+}
