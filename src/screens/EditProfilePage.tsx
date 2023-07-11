@@ -4,7 +4,7 @@ import { currentUser } from "../../data/mockdata";
 import InputBottomLine from "../components/UI/InputBottomLine";
 import { useState } from "react";
 
-const EditProfile = () => {
+const EditProfilePage = () => {
   const [NewProfileImage, setNewProfileImage] = useState<string>(
     currentUser.profile_img
   );
@@ -47,14 +47,16 @@ const EditProfile = () => {
   );
 };
 
-export default EditProfile;
+export default EditProfilePage;
 
 const styles = StyleSheet.create({
   layout: {
     flexDirection: "column",
+    flex: 1,
     alignItems: "center",
     width: "100%",
     paddingHorizontal: 20,
+    backgroundColor: "white",
   },
 
   profileImageWrapper: {
