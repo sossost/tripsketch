@@ -8,6 +8,7 @@ import Login from "../screens/Login";
 import SignUp from "../screens/SignUp";
 import SocialPage from "../screens/SocialPage";
 import MyPage from "../screens/MyPage";
+import EditProfilePage from "../screens/EditProfilePage";
 
 const Stack = createStackNavigator();
 
@@ -24,6 +25,7 @@ export default function RootStack() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="MyPage" component={MyPage} />
+        <Stack.Screen name="EditProfilePage" component={EditProfilePage} />
         <Stack.Screen
           name="FollowerPage"
           component={() => <SocialPage initialVariant="팔로워" />}
