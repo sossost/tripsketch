@@ -10,7 +10,7 @@ const postData: Post = {
   id: "35345",
   title: "프랑스 2일차 여행일기",
   content:
-    "<div><p>파리로 여행을 다니면서 여행은 어떻게 하는건지, 어떻게 하면 잘하는건지 깨닫게 되는 계기가 있었어욤 :D특히 첫 유럽여행을 마치고 친구들이 어디가 가장 좋았고, 어디가 가장 별로였냐고 물어보면 1초의 고민도 없이 !!가장 좋았던곳은 바르셀로나 별로였던 곳은... 파리라고 얘기했었죠 ~ 그런데 ! 파리를 n번째 여행하고 나서의 지금은 ~ 가장 좋았던 여행지중에 파리가 베스트 순위에 든답니닷 :) </p><img src='http://placehold.it/420x200' /><p>너무 좋았습니다. 꼭 방문해보세요. 마지막 사진 남기고 이만 가보겠습니다!!</p><img src='https://source.unsplash.com/random'></div>",
+    "<div><p>파리로 여행을 다니면서 여행은 어떻게 하는건지, 어떻게 하면 잘하는건지 깨닫게 되는 계기가 있었어욤 :D특히 첫 유럽여행을 마치고 친구들이 어디가 가장 좋았고, 어디가 가장 별로였냐고 물어보면 1초의 고민도 없이 !!가장 좋았던곳은 바르셀로나 별로였던 곳은... 파리라고 얘기했었죠 ~ 그런데 ! 파리를 n번째 여행하고 나서의 지금은 ~ 가장 좋았던 여행지중에 파리가 베스트 순위에 든답니닷 :) </p><img src='http://placehold.it/420x200' /><p>너무 좋았습니다. 꼭 방문해보세요. 마지막 사진 남기고 이만 가보겠습니다!!</p><img src='https://source.unsplash.com/random'><p>끝입니다!!</p></div>",
   likes: ["qfe123", "dger123", "apple34234"],
   views: 24,
   loaction: ["2342342", "2342142"],
@@ -59,20 +59,6 @@ const PostView = () => {
         contentWidth={deviceWidth}
         tagsStyles={tagStyles}
       />
-      <View style={styles.likeView_container}>
-        <View style={styles.likes}>
-          <View>
-            <Ionicons name="heart-outline" size={22} color="#d6d6d6" />
-          </View>
-          <Text style={styles.likeView_text}>좋아요 {post.likes.length}</Text>
-        </View>
-        <View style={styles.views}>
-          <View>
-            <Ionicons name="eye-outline" size={22} color="#d6d6d6" />
-          </View>
-          <Text style={styles.likeView_text}>조회수 {post.views}</Text>
-        </View>
-      </View>
     </View>
   );
 };
@@ -134,27 +120,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 3,
     top: -2,
-  },
-  likeView_container: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 12,
-    gap: 10,
-  },
-  likes: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  views: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  likeView_text: {
-    marginLeft: 3,
-    fontSize: 12,
   },
 });
 

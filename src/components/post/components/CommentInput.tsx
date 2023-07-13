@@ -21,6 +21,7 @@ const CommentInput = () => {
         style={styles.input}
         onChangeText={setComment}
         value={comment}
+        placeholder={"댓글을 입력해주세요"}
       />
       <TouchableOpacity onPress={submitComment} style={styles.button}>
         <Text style={styles.button_text}> 등록 </Text>

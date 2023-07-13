@@ -6,9 +6,11 @@ import CommentInput from "./components/CommentInput";
 
 const Comment = () => {
   return (
-    <View style={[CommonStyles.appContainer, styles.container]}>
+    <View style={styles.container}>
       <CommentList sort={"all"} />
-      <CommentInput />
+      <View style={CommonStyles.appContainer}>
+        <CommentInput />
+      </View>
     </View>
   );
 };

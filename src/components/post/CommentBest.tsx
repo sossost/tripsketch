@@ -1,10 +1,9 @@
 import { StyleSheet, View } from "react-native";
-import { CommonStyles } from "../../styles/CommonStyles";
 import CommentList from "./components/CommentList";
 
 const CommentBest = () => {
   return (
-    <View style={[CommonStyles.appContainer, styles.container]}>
+    <View style={styles.container}>
       <CommentList sort={"best"} />
     </View>
   );
@@ -12,7 +11,8 @@ const CommentBest = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 20,
+    paddingBottom: 40,
+    backgroundColor: "#fff",
   },
 });
 

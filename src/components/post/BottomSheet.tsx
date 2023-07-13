@@ -62,30 +62,6 @@ const BottomSheet = (props: any) => {
     });
   };
 
-  // return (
-  //   <Modal
-  //     visible={modalVisible}
-  //     animationType={"fade"}
-  //     transparent
-  //     statusBarTranslucent
-  //   >
-  //     <View style={styles.overlay}>
-  //       <TouchableWithoutFeedback onPress={closeModal}>
-  //         <View style={styles.background} />
-  //       </TouchableWithoutFeedback>
-  //       <Animated.View
-  //         style={{
-  //           ...styles.bottomSheetContainer,
-  //           transform: [{ translateY: translateY }],
-  //         }}
-  //         {...panResponders.panHandlers}
-  //       >
-  //         <Comment />
-  //       </Animated.View>
-  //     </View>
-  //   </Modal>
-  // );
-
   return (
     <Modal
       visible={modalVisible}

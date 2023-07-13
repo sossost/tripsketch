@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
 import CommentItem from "./CommentItem";
 import { useState } from "react";
 import { Comment } from "../../../types/comment";
@@ -59,7 +59,10 @@ const CommentList = ({ sort }: { sort: string }) => {
 
   return (
     <View style={styles.container}>
-      <Text>댓글 {commentData.length}</Text>
+      <View style={styles.comment_title}>
+        <Text>댓글</Text>
+        <Text style={styles.comment_title_number}>{commentData.length}</Text>
+      </View>
       {sort === "all" ? (
         <View style={styles.comment}>
           {comment.map((item) => (
@@ -83,7 +86,19 @@ const CommentList = ({ sort }: { sort: string }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    paddingTop: 10,
+  },
+  comment_title: {
+    paddingHorizontal: 20,
+    marginTop: 4,
+    marginBottom: 5,
+    fontWeight: "600",
+    display: "flex",
+    flexDirection: "row",
+    gap: 4,
+  },
+  comment_title_number: {
+    fontWeight: "600",
   },
   comment: {},
 });

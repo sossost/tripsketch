@@ -12,6 +12,7 @@ import PostView from "../components/post/PostView";
 import Comment from "../components/post/Comment";
 import Line from "../components/common/Line";
 import CommentBest from "../components/post/CommentBest";
+import LikesAndCommentText from "../components/post/LikesAndCommentText";
 
 const TripDetail = () => {
   const sheetRef = useRef<BottomSheet>(null);
@@ -38,7 +39,8 @@ const TripDetail = () => {
       <View style={styles.containerInner}>
         <ScrollView>
           <PostView />
-          <Line />
+          <LikesAndCommentText />
+          {/* <Line /> */}
           <TouchableOpacity onPress={() => handleSnapPress(1)}>
             <CommentBest />
           </TouchableOpacity>
