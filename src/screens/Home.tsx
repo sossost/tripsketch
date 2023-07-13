@@ -1,23 +1,31 @@
 import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
-import KakaoLoginButton from "../components/auth/KakaoLoginButton";
+import { StyleSheet, View, ScrollView } from "react-native";
+import PostCard from "../components/post/card/PostCard";
 
 const Home = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
-      <Text>메인 화면입니다.</Text>
-      <KakaoLoginButton />
+      <ScrollView style={styles.scrollView}>
+        <PostCard />
+        <PostCard />
+        <PostCard />
+        <PostCard />
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: "#eee",
     color: "black",
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "flex-start",
+  },
+  scrollView: {
+    width: "100%",
+    paddingHorizontal: 20,
   },
 });
 
