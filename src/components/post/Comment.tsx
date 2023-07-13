@@ -1,21 +1,23 @@
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { useState } from "react";
+import { CommonStyles } from "../../styles/CommonStyles";
 import CommentList from "./components/CommentList";
 import CommentInput from "./components/CommentInput";
 
 const Comment = () => {
   return (
     <View style={styles.container}>
-      <CommentList />
-      <CommentInput />
+      <CommentList sort={"all"} />
+      <View style={CommonStyles.appContainer}>
+        <CommentInput />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 20,
+    paddingBottom: 20,
   },
 });
 
