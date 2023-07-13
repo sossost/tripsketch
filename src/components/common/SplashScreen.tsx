@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import RootStack from "../../navigation/RootStack";
 import { StatusBar } from "expo-status-bar";
 import SplashBack, { splashBackProps } from "./SplashBack";
+import KakaoLoginButton from "../auth/KakaoLoginButton";
 const splashBgColor = "#fff";
 
 const SplashScreen = ({ children }) => {
@@ -53,7 +54,7 @@ const SplashScreen = ({ children }) => {
       //0.5초 후 애니메이션 시작
       Animated.parallel([
         Animated.timing(startAnimation, {
-          toValue: -Dimensions.get("window").height + (edges.top + 64),
+          toValue: -Dimensions.get("window").height,
           useNativeDriver: true,
         }),
 
@@ -171,6 +172,7 @@ const SplashScreen = ({ children }) => {
               }}
             >
               <Text>여기에 암거나 넣어주세요 ㅎㅎㅎㅎ</Text>
+              <KakaoLoginButton />
               <Button
                 title="둘러보기"
                 onPress={() => setFadeOut(true)}

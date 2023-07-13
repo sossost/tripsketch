@@ -1,10 +1,13 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, StyleSheet, Text, View, Dimensions } from "react-native";
 import React from "react";
+import { Post } from "../../../types/Post";
 
 type PostCardProps = {
-  post: string;
+  post: Post;
   isLiked: boolean;
 };
+
+const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const PostCard = (props: PostCardProps) => {
   const { post, isLiked } = props;
@@ -41,36 +44,41 @@ export default PostCard;
 
 const styles = StyleSheet.create({
   postCard: {
-    width: "90%",
-    height: "600px",
+    width: SCREEN_WIDTH - 40,
+    height: SCREEN_HEIGHT - SCREEN_HEIGHT / 3,
     backgroundColor: "white",
+    marginVertical: 10,
     borderRadius: 30,
     borderWidth: 1,
     borderColor: "#cccccc",
     flexDirection: "column",
+    justifyContent: "space-between",
     overflow: "hidden",
   },
   postImg: {
     width: "100%",
-    height: "450px",
+    height: "70%",
     backgroundColor: "gray",
   },
   textArea: {
     width: "100%",
-    height: "150px",
+    height: "30%",
     padding: 10,
   },
   upperArea: {
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "flex-start",
     width: "100%",
     height: "50%",
     padding: 10,
-    paddingTop: 5,
+    paddingTop: 0,
     borderBottomColor: "#dedede",
     borderBottomWidth: 0.5,
   },
   titleArea: {
     width: "100%",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "900",
     marginBottom: 5,
   },
@@ -80,9 +88,10 @@ const styles = StyleSheet.create({
     color: "#73BBFB",
   },
   lowerArea: {
+    marginTop: 5,
     width: "100%",
     height: "50%",
-    padding: 10,
+    padding: 6,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -97,11 +106,11 @@ const styles = StyleSheet.create({
     borderColor: "#cccccc",
     borderWidth: 0.5,
     backgroundColor: "gray",
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
   },
   userName: {
-    fontSize: 16,
+    fontSize: 18,
     fontStyle: "italic",
     marginLeft: 10,
   },

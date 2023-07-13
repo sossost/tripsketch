@@ -11,10 +11,8 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
-        <SplashScreen>
-          <StatusBar style="auto" />
-          <RootStack />
-        </SplashScreen>
+        <StatusBar style="auto" />
+        <RootStack />
 
         {/* */}
       </SafeAreaProvider>

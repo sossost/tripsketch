@@ -8,30 +8,32 @@ import KakaoLoginButton from "../components/auth/KakaoLoginButton";
 import BottomTab from "./BottomTab";
 import SocialPage from "../screens/SocialPage";
 import MyPage from "../screens/MyPage";
+import SplashScreen from "../components/common/SplashScreen";
 
 const Stack = createStackNavigator();
 
 export default function RootStack() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen
-          name="Main"
-          component={BottomTab}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="KakaoLoginButton" component={KakaoLoginButton} />
-        <Stack.Screen name="KakaoLoginPage" component={KakaoLoginPage} />
-        <Stack.Screen name="TripDetail" component={TripDetail} />
-        <Stack.Screen name="MyPage" component={MyPage} />
-        <Stack.Screen name="EditProfilePage" component={EditProfilePage} />
-        <Stack.Screen name="FollowerPage">
-          {() => <SocialPage initialVariant="팔로워" />}
-        </Stack.Screen>
-        <Stack.Screen name="FollowingPage">
-          {() => <SocialPage initialVariant="팔로잉" />}
-        </Stack.Screen>
-      </Stack.Navigator>
+      <SplashScreen>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen
+            name="Main"
+            component={BottomTab}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="KakaoLoginButton" component={KakaoLoginButton} />
+          <Stack.Screen name="KakaoLoginPage" component={KakaoLoginPage} />
+          <Stack.Screen name="TripDetail" component={TripDetail} />
+          <Stack.Screen name="MyPage" component={MyPage} />
+          <Stack.Screen name="FollowerPage">
+            {() => <SocialPage initialVariant="팔로워" />}
+          </Stack.Screen>
+          <Stack.Screen name="FollowingPage">
+            {() => <SocialPage initialVariant="팔로잉" />}
+          </Stack.Screen>
+        </Stack.Navigator>
+      </SplashScreen>
     </NavigationContainer>
   );
 }
