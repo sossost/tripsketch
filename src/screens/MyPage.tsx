@@ -10,6 +10,7 @@ import DiaryList from "../components/user/DiaryList";
 
 import { category, currentUser } from "../../data/mockdata";
 import { useNavigation } from "@react-navigation/native";
+import { styled } from "styled-components/native";
 
 const MyPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("전체보기");
@@ -24,7 +25,7 @@ const MyPage = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
+    <Layout>
       <Profile
         variant="myPage"
         user={currentUser}
@@ -36,17 +37,17 @@ const MyPage = () => {
         setSelectedCategory={setSelectedCategory}
       />
       <DiaryList diaries={diaries} isLoading={isLoading} isError={isError} />
-    </View>
+    </Layout>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "column",
-    width: "100%",
-    paddingHorizontal: 20,
-    gap: 20,
-    backgroundColor: "#ffffff",
-  },
-});
+const Layout = styled.View`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 20px;
+  gap: 20px;
+  background-color: white;
+`;
+
 export default MyPage;
