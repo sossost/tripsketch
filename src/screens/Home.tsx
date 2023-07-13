@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
-import SplashBack from "../components/common/SplashBack";
 import KakaoLoginButton from "../components/auth/KakaoLoginButton";
 
 const Home = ({ navigation }: any) => {
