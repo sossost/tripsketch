@@ -1,5 +1,5 @@
 import axios from "axios";
-import mockData from "../../public/data/mockdata.json";
+import mockData from "../../data/mockdata.json";
 
 export const getAllDiaries = async () => {
   return;
