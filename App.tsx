@@ -13,7 +13,10 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <SafeAreaProvider>
         <ToasterContext />
-        <SplashScreen></SplashScreen>
+        <SplashScreen>
+          <StatusBar style="auto" />
+          <RootStack />
+        </SplashScreen>
 
         {/* */}
       </SafeAreaProvider>

@@ -9,6 +9,7 @@ import SignUp from "../screens/SignUp";
 import SocialPage from "../screens/SocialPage";
 import MyPage from "../screens/MyPage";
 import EditProfilePage from "../screens/EditProfilePage";
+import SplashScreen from "../components/common/SplashScreen";
 
 const Stack = createStackNavigator();
 

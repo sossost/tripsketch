@@ -7,7 +7,7 @@ import { StatusBar } from "expo-status-bar";
 import SplashBack, { splashBackProps } from "./SplashBack";
 const splashBgColor = "#fff";
 
-const SplashScreen = () => {
+const SplashScreen = ({ children }) => {
   const [fadeOut, setFadeOut] = useState(false);
   const [isGone, setIsGone] = useState(false);
 
@@ -27,6 +27,7 @@ const SplashScreen = () => {
   const moveTitle = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
   const opacityTitle = useRef(new Animated.Value(1)).current;
   const opacityContent = useRef(new Animated.Value(0)).current;
+  const startDisappear = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     setTimeout(() => {
@@ -42,12 +43,20 @@ const SplashScreen = () => {
       setTimeout(() => {
         setIsGone(true);
       }, 1500);
+      setTimeout(() => {
+        Animated.timing(startDisappear, {
+          toValue: 0,
+          useNativeDriver: true,
+          duration: 500,
+        }).start();
+      }, 1000);
       //0.5초 후 애니메이션 시작
       Animated.parallel([
         Animated.timing(startAnimation, {
           toValue: -Dimensions.get("window").height + (edges.top + 64),
           useNativeDriver: true,
         }),
+
         Animated.timing(scaleLogo, {
           //0.35 비율로 줄임
           toValue: 0.35,
@@ -96,8 +105,9 @@ const SplashScreen = () => {
           style={{
             flex: 1,
             backgroundColor: splashBgColor,
-            zIndex: 1,
+            zIndex: 5,
             transform: fadeOut === true ? [{ translateY: startAnimation }] : [],
+            opacity: fadeOut === true ? startDisappear : 1,
             overflow: "hidden",
           }}
         >
@@ -181,8 +191,7 @@ const SplashScreen = () => {
           zIndex: 0,
         }}
       >
-        <StatusBar style="auto" />
-        <RootStack />
+        {children}
       </View>
     </View>
   );
