@@ -1,12 +1,12 @@
 import { StyleSheet, FlatList, View } from "react-native";
 import SocialCard from "./SocialCard";
 
-type SocialCardListProps = {
+type ListingSocialCard = {
   currentUser: User | undefined;
   userList: User[] | undefined;
 };
 
-const SocialCardList = (props: SocialCardListProps) => {
+const ListingSocialCard = (props: ListingSocialCard) => {
   const { currentUser, userList } = props;
   return (
     <FlatList
@@ -26,7 +26,7 @@ const SocialCardList = (props: SocialCardListProps) => {
   );
 };
 
-export default SocialCardList;
+export default ListingSocialCard;
 
 const styles = StyleSheet.create({
   container: {
