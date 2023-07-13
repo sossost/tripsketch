@@ -1,3 +1,5 @@
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { StyleSheet, Image, Text, View, TouchableOpacity } from "react-native";
 
@@ -8,27 +10,37 @@ type ProfileProps = {
   user: User;
 };
 
+export type RootStackParamList = {
+  FollowerPage: undefined;
+  FollowingPage: undefined;
+};
+
 const Profile = (props: ProfileProps) => {
   const { variant, isFollowing, onPress, user } = props;
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const buttonTitle =
     variant === "myPage" ? "프로필 편집" : isFollowing ? "팔로잉" : "팔로우";
 
   return (
     <View style={styles.container}>
-      <View style={styles.idWrapper}>
-        <Text style={styles.id}>{user.id}</Text>
-      </View>
       <View style={styles.wrapper}>
         <Image source={{ uri: user.profile_img }} style={styles.image} />
         <View style={styles.rightWrapper}>
           <View style={styles.socialWrapper}>
-            <Text style={styles.socialText}>
-              팔로워 {user.followers.length}
-            </Text>
-            |
-            <Text style={styles.socialText}>
-              팔로잉 {user.followings.length}
-            </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("FollowerPage")}
+            >
+              <Text style={styles.socialText}>
+                팔로워 {user.followerList.length}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("FollowingPage")}
+            >
+              <Text style={styles.socialText}>
+                팔로잉 {user.followingList.length}
+              </Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.profileWrapper}>
             <Text style={styles.userName}>{user.user_name}</Text>
