@@ -24,14 +24,13 @@ export default function RootStack() {
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="SignUp" component={SignUp} />
         <Stack.Screen name="MyPage" component={MyPage} />
-        <Stack.Screen
-          name="FollowerPage"
-          component={() => <SocialPage initialVariant="팔로워" />}
-        />
-        <Stack.Screen
-          name="FollowingPage"
-          component={() => <SocialPage initialVariant="팔로잉" />}
-        />
+        <Stack.Screen name="EditProfilePage" component={EditProfilePage} />
+        <Stack.Screen name="FollowerPage">
+          {() => <SocialPage initialVariant="팔로워" />}
+        </Stack.Screen>
+        <Stack.Screen name="FollowingPage">
+          {() => <SocialPage initialVariant="팔로잉" />}
+        </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
   );
