@@ -9,7 +9,6 @@ import Category from "../components/user/Category";
 import DiaryList from "../components/user/DiaryList";
 
 import { category, currentUser } from "../../data/mockdata";
-import { useNavigation } from "@react-navigation/native";
 
 const MyPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("전체보기");
@@ -21,14 +20,14 @@ const MyPage = () => {
     getDiariesByCategory(selectedCategory)
   );
 
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
       <Profile
         variant="myPage"
         user={currentUser}
-        onPress={() => navigation.navigate("EditProfilePage" as never)}
+        onPress={() => console.log("ㅎㅇ")}
       />
       <Category
         category={category}
