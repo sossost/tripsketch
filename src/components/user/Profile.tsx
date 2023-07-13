@@ -2,9 +2,6 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import React from "react";
 import { StyleSheet, Image, Text, View, TouchableOpacity } from "react-native";
-import ProfileImage from "./profile/ProfileImage";
-import Link from "../UI/Link";
-import Button from "../UI/Button";
 
 type ProfileProps = {
   variant: "myPage" | "userPage";
@@ -20,30 +17,38 @@ export type RootStackParamList = {
 
 const Profile = (props: ProfileProps) => {
   const { variant, isFollowing, onPress, user } = props;
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const buttonTitle =
     variant === "myPage" ? "프로필 편집" : isFollowing ? "팔로잉" : "팔로우";
-
-  const followerCount = user.followerList.length;
-  const followingCount = user.followingList.length;
 
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <ProfileImage img={user.profile_img} />
+        <Image source={{ uri: user.profile_img }} style={styles.image} />
         <View style={styles.rightWrapper}>
           <View style={styles.socialWrapper}>
-            <Link page="FollowerPage" text={`팔로워 ${followerCount}`} />
-            <Link page="FollowingPage" text={`팔로잉 ${followingCount}`} />
+            <TouchableOpacity
+              onPress={() => navigation.navigate("FollowerPage")}
+            >
+              <Text style={styles.socialText}>
+                팔로워 {user.followerList.length}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("FollowingPage")}
+            >
+              <Text style={styles.socialText}>
+                팔로잉 {user.followingList.length}
+              </Text>
+            </TouchableOpacity>
           </View>
           <View style={styles.profileWrapper}>
             <Text style={styles.userName}>{user.user_name}</Text>
             <Text>{user.introduction}</Text>
           </View>
-          <Button
-            title={buttonTitle}
-            style={{ color: "blue", fontSize: 14 }}
-            onPress={onPress}
-          />
+          <TouchableOpacity style={styles.button} onPress={onPress}>
+            <Text style={styles.buttonTitle}>{buttonTitle}</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -71,6 +76,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     width: "100%",
     gap: 25,
+  },
+
+  image: {
+    width: 80,
+    height: 80,
+    borderRadius: 100,
+    backgroundColor: "#ccc",
   },
 
   rightWrapper: {
