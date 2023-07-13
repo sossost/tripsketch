@@ -8,14 +8,14 @@ import {
 } from "react-native";
 
 type SearchBarProps = {
-  searchQuery: string;
-  setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
+  text: string;
+  setText: React.Dispatch<React.SetStateAction<string>>;
   style?: StyleProp<ViewStyle>;
   fontSize?: number;
 };
 
 const SearchBar = (props: SearchBarProps) => {
-  const { searchQuery, setSearchQuery, style, fontSize } = props;
+  const { text, setText, style, fontSize } = props;
   const inputStyle = {
     fontSize: fontSize ? fontSize : 16,
   };
@@ -28,8 +28,8 @@ const SearchBar = (props: SearchBarProps) => {
       />
       <TextInput
         style={[styles.input, inputStyle]}
-        value={searchQuery}
-        onChangeText={(text) => setSearchQuery(text)}
+        value={text}
+        onChangeText={(text) => setText(text)}
       />
     </View>
   );
