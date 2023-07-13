@@ -8,7 +8,6 @@ import Login from "../screens/Login";
 import SignUp from "../screens/SignUp";
 import SocialPage from "../screens/SocialPage";
 import MyPage from "../screens/MyPage";
-import EditProfilePage from "../screens/EditProfilePage";
 
 const Stack = createStackNavigator();
 
