@@ -9,6 +9,7 @@ const splashBgColor = "#fff";
 
 const SplashScreen = () => {
   const [fadeOut, setFadeOut] = useState(false);
+  const [isGone, setIsGone] = useState(false);
 
   const logoPath = require("../../assets/logo_white.png");
   //SafeArea 값
@@ -38,10 +39,13 @@ const SplashScreen = () => {
       ]).start();
     }, 2500);
     if (fadeOut) {
+      setTimeout(() => {
+        setIsGone(true);
+      }, 1500);
       //0.5초 후 애니메이션 시작
       Animated.parallel([
         Animated.timing(startAnimation, {
-          toValue: -Dimensions.get("window").height + (edges.top + 65),
+          toValue: -Dimensions.get("window").height + (edges.top + 64),
           useNativeDriver: true,
         }),
         Animated.timing(scaleLogo, {
@@ -85,80 +89,88 @@ const SplashScreen = () => {
         right: 0,
       }}
     >
-      <Animated.View
-        style={{
-          flex: 1,
-          backgroundColor: splashBgColor,
-          zIndex: 1,
-          transform: fadeOut === true ? [{ translateY: startAnimation }] : [],
-          overflow: "hidden",
-        }}
-      >
+      {isGone ? (
+        <></>
+      ) : (
         <Animated.View
           style={{
             flex: 1,
-            alignItems: "center",
-            zIndex: 2,
-            top: "20%",
-            justifyContent: "flex-start",
+            backgroundColor: splashBgColor,
+            zIndex: 1,
+            transform: fadeOut === true ? [{ translateY: startAnimation }] : [],
+            overflow: "hidden",
           }}
         >
-          <Animated.Image
-            source={logoPath}
-            style={{
-              width: 250,
-              height: 54,
-              marginBottom: 20,
-              transform:
-                fadeOut === true
-                  ? [
-                      { translateY: moveLogo.y },
-                      //{ scale: scaleLogo }
-                    ]
-                  : [],
-            }}
-          ></Animated.Image>
-          <Animated.Text
-            style={{
-              fontSize: 15,
-              color: "white",
-              opacity: fadeOut === true ? opacityTitle : 1,
-              transform: fadeOut === true ? [{ translateY: moveLogo.y }] : [],
-            }}
-          >
-            당신의 여행을 스케치하세요.
-          </Animated.Text>
-        </Animated.View>
-        <SplashBack willFadeOut={fadeOut === true ? true : false} />
-        {fadeOut ? (
-          <></>
-        ) : (
-          // 로그인 및 둘러보기 관련 내용 넣을 공간
           <Animated.View
             style={{
-              position: "absolute",
               flex: 1,
-              justifyContent: "center",
               alignItems: "center",
-              marginVertical: 150,
-              margin: 20,
-              height: "70%",
-              borderRadius: 30,
-              top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              //backgroundColor: "white",
-              opacity: opacityContent,
-              zIndex: 3,
+              zIndex: 2,
+              top: "20%",
+              justifyContent: "flex-start",
             }}
           >
-            <Text>여기에 암거나 넣어주세요 ㅎㅎㅎㅎ</Text>
-            <Button title="둘러보기" onPress={() => setFadeOut(true)}></Button>
+            <Animated.Image
+              source={logoPath}
+              style={{
+                width: 250,
+                height: 54,
+                marginBottom: 20,
+                transform:
+                  fadeOut === true
+                    ? [
+                        { translateY: moveLogo.y },
+                        //{ scale: scaleLogo }
+                      ]
+                    : [],
+              }}
+            ></Animated.Image>
+            <Animated.Text
+              style={{
+                fontSize: 15,
+                color: "white",
+                opacity: fadeOut === true ? opacityTitle : 1,
+                transform: fadeOut === true ? [{ translateY: moveLogo.y }] : [],
+              }}
+            >
+              당신의 여행을 스케치하세요.
+            </Animated.Text>
           </Animated.View>
-        )}
-      </Animated.View>
-      <Animated.View
+          <SplashBack willFadeOut={fadeOut === true ? true : false} />
+          {fadeOut ? (
+            <></>
+          ) : (
+            // 로그인 및 둘러보기 관련 내용 넣을 공간
+            <Animated.View
+              style={{
+                position: "absolute",
+                flex: 1,
+                justifyContent: "center",
+                alignItems: "center",
+                marginVertical: 150,
+                margin: 20,
+                height: "70%",
+                borderRadius: 30,
+                top: 0,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                //backgroundColor: "white",
+                opacity: opacityContent,
+                zIndex: 3,
+              }}
+            >
+              <Text>여기에 암거나 넣어주세요 ㅎㅎㅎㅎ</Text>
+              <Button
+                title="둘러보기"
+                onPress={() => setFadeOut(true)}
+              ></Button>
+            </Animated.View>
+          )}
+        </Animated.View>
+      )}
+
+      <View
         style={{
           position: "absolute",
           top: 0,
@@ -171,7 +183,7 @@ const SplashScreen = () => {
       >
         <StatusBar style="auto" />
         <RootStack />
-      </Animated.View>
+      </View>
     </View>
   );
 };
