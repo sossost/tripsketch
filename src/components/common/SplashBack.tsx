@@ -105,7 +105,7 @@ const SplashBack: React.FC<splashBackProps> = ({ willFadeOut }) => {
         left: 0,
         right: 0,
         flex: 1,
-        backgroundColor: "#287FE8",
+        backgroundColor: "#5D84D0",
         zIndex: 0,
         opacity: bgOpacity,
       }}
