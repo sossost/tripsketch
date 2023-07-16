@@ -1,7 +1,8 @@
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigationProp } from "@react-navigation/stack";
+import ProfileImage from "./profile/ProfileImage";
+import Link from "../UI/Link";
+import Button from "../UI/Button";
 import React from "react";
-import { StyleSheet, Image, Text, View, TouchableOpacity } from "react-native";
+import { styled } from "styled-components/native";
 
 type ProfileProps = {
   variant: "myPage" | "userPage";
@@ -17,41 +18,33 @@ export type RootStackParamList = {
 
 const Profile = (props: ProfileProps) => {
   const { variant, isFollowing, onPress, user } = props;
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const buttonTitle =
     variant === "myPage" ? "프로필 편집" : isFollowing ? "팔로잉" : "팔로우";
 
+  const followerCount = user.followerList.length;
+  const followingCount = user.followingList.length;
+
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <Image source={{ uri: user.profile_img }} style={styles.image} />
-        <View style={styles.rightWrapper}>
-          <View style={styles.socialWrapper}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("FollowerPage")}
-            >
-              <Text style={styles.socialText}>
-                팔로워 {user.followerList.length}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("FollowingPage")}
-            >
-              <Text style={styles.socialText}>
-                팔로잉 {user.followingList.length}
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.profileWrapper}>
-            <Text style={styles.userName}>{user.user_name}</Text>
-            <Text>{user.introduction}</Text>
-          </View>
-          <TouchableOpacity style={styles.button} onPress={onPress}>
-            <Text style={styles.buttonTitle}>{buttonTitle}</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </View>
+    <Container>
+      <Wrapper>
+        <ProfileImage img={user.profile_img} />
+        <RightWrapper>
+          <SocialWrapper>
+            <Link page="FollowerPage" text={`팔로워 ${followerCount}`} />
+            <Link page="FollowingPage" text={`팔로잉 ${followingCount}`} />
+          </SocialWrapper>
+          <ProfileWrapper>
+            <UserNameText>{user.user_name}</UserNameText>
+            <IntroductionText>{user.introduction}</IntroductionText>
+          </ProfileWrapper>
+          <Button
+            title={buttonTitle}
+            style={{ color: "blue", fontSize: 14 }}
+            onPress={onPress}
+          />
+        </RightWrapper>
+      </Wrapper>
+    </Container>
   );
 };
 
@@ -59,73 +52,45 @@ const Profile = (props: ProfileProps) => {
 프로필 컴포넌트는 메모이제이션하여 불필요한 리렌더링을 막음 */
 export default React.memo(Profile);
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 10,
-  },
+const Container = styled.View`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
 
-  idWrapper: {},
-  id: {
-    fontSize: 18,
-    color: "#666",
-  },
+const Wrapper = styled.View`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 25px;
+`;
 
-  wrapper: {
-    flexDirection: "row",
-    width: "100%",
-    gap: 25,
-  },
+const RightWrapper = styled.View`
+  display: flex;
+  flex-grow: 1;
+  gap: 10px;
+  align-items: flex-start;
+`;
 
-  image: {
-    width: 80,
-    height: 80,
-    borderRadius: 100,
-    backgroundColor: "#ccc",
-  },
+const SocialWrapper = styled.View`
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+`;
 
-  rightWrapper: {
-    flexDirection: "column",
-    flexGrow: 1,
-    gap: 10,
-    alignItems: "flex-start",
-  },
+const ProfileWrapper = styled.View`
+  display: flex;
+  gap: 4px;
+`;
 
-  profileWrapper: {
-    flexDirection: "column",
-    gap: 4,
-  },
+const UserNameText = styled.Text`
+  font-size: 18px;
+  font-weight: 600;
+  color: ${(props) => props.theme.mainFont};
+`;
 
-  socialWrapper: {
-    flexDirection: "row",
-    gap: 8,
-  },
-
-  socialText: {
-    fontSize: 15,
-    fontWeight: "500",
-  },
-
-  userName: {
-    fontSize: 18,
-    fontWeight: "600",
-  },
-
-  button: {
-    flex: 1,
-    height: 28,
-    width: "100%",
-    backgroundColor: "#73BBFB",
-    borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: 7,
-  },
-
-  buttonTitle: {
-    color: "#ffffff",
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-});
+const IntroductionText = styled.Text`
+  font-size: 14px;
+  font-weight: 400;
+  color: ${(props) => props.theme.mainFont};
+`;
