@@ -1,12 +1,12 @@
-import { StyleSheet, View } from "react-native";
+import { Text } from "react-native";
 import { useState } from "react";
 import { currentUser } from "../../data/mockdata";
 
 import VariantSelector from "../components/UI/VariantSelector";
 import SocialCardList from "../components/user/social/SocialCardList";
-import Loading from "../components/UI/Loading";
-import SearchBar from "../components/UI/SearchBar";
 import { useGetCurrentUser, useGetSocialList } from "../hooks/useUserQuery";
+import { styled } from "styled-components/native";
+import { useUserSearch } from "../hooks/useUserSearch";
 
 type SocialPageProps = {
   initialVariant: "팔로워" | "팔로잉";
@@ -14,67 +14,44 @@ type SocialPageProps = {
 
 const SocialPage = ({ initialVariant }: SocialPageProps) => {
   const [variant, setVariant] = useState<"팔로워" | "팔로잉">(initialVariant);
-  const [searchQuery, setSearchQuery] = useState<string>("");
 
   // const { currentUser } = useGetCurrentUser();
-  const { users, isLoading, isError } = useGetSocialList(
+  const { UserSearchBar, users, isLoading, isError } = useUserSearch(
     variant,
     currentUser.user_name
   );
 
   return (
-    <View style={styles.pageLayout}>
+    <Layout>
       <VariantSelector<"팔로워" | "팔로잉">
         variant1="팔로워"
         variant2="팔로잉"
         initialVariant={initialVariant}
+        variant={variant}
         setVariant={setVariant}
       />
-      <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+
       {isLoading ? (
-        <Loading />
+        <Text>Loading...</Text>
       ) : isError ? (
-        <div>Error Page</div>
+        <Text>Error Page</Text>
       ) : (
-        <SocialCardList currentUser={currentUser} userList={users} />
+        <SocialCardList
+          currentUser={currentUser}
+          userList={users}
+          header={UserSearchBar}
+        />
       )}
-    </View>
+    </Layout>
   );
 };
 
 export default SocialPage;
 
-const styles = StyleSheet.create({
-  pageLayout: {
-    flex: 1,
-    paddingHorizontal: 15,
-    backgroundColor: "#ffffff",
-  },
-
-  variantWrapper: {
-    flexDirection: "row",
-    height: 50,
-    alignItems: "center",
-    position: "relative",
-    marginBottom: 10,
-  },
-
-  variantBox: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
-    position: "relative",
-    height: "100%",
-  },
-
-  underline: {
-    position: "absolute",
-    bottom: 0,
-    height: 3,
-    width: "50%", // 밑줄의 너비 조정
-    backgroundColor: "#73BBFB", // 원하는 색상으로 변경
-    transitionProperty: "left",
-    transitionDuration: "0.3s",
-  },
-});
+const Layout = styled.View`
+  display: flex;
+  flex: 1;
+  padding: 0 15px;
+  background-color: white;
+  gap: 5px;
+`;
