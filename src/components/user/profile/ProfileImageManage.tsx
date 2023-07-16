@@ -30,6 +30,7 @@ const Container = styled.View`
   display: flex;
   align-items: center;
   gap: 10px;
+  padding: 20px 0;
 `;
 
 const Button = styled.TouchableOpacity`
