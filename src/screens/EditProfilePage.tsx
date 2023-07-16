@@ -1,5 +1,3 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import ProfileImage from "../components/user/profile/ProfileImage";
 import { currentUser } from "../../data/mockdata";
 import InputBottomLine from "../components/UI/InputBottomLine";
 import { useState } from "react";
