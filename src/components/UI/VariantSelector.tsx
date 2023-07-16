@@ -6,11 +6,12 @@ type VariantProps<T extends string> = {
   variant1: T;
   variant2: T;
   initialVariant: T;
+  variant: T;
   setVariant: React.Dispatch<React.SetStateAction<T>>;
 };
 
 const VariantSelector = <T extends string>(props: VariantProps<T>) => {
-  const { variant1, variant2, initialVariant, setVariant } = props;
+  const { variant1, variant2, initialVariant, variant, setVariant } = props;
 
   // 선택한 Variant 표시바 너비 계산
   const [layoutWidth, setLayoutWidth] = useState(0);
@@ -50,33 +51,42 @@ const VariantSelector = <T extends string>(props: VariantProps<T>) => {
   return (
     <Container onLayout={onLayout}>
       <VariantBtn onPress={leftVariantBtnHandler}>
-        <Text>{variant1}</Text>
+        <VariantText isSelected={variant === variant1}>{variant1}</VariantText>
       </VariantBtn>
       <VariantBtn onPress={rightVariantBtnHandler}>
-        <Text>{variant2}</Text>
+        <VariantText isSelected={variant === variant2}>{variant2}</VariantText>
       </VariantBtn>
-      <AnimatedUnderline style={{ transform: [{ translateX: position }] }} />
+      <Underline style={{ transform: [{ translateX: position }] }} />
     </Container>
   );
 };
 
 const Container = styled.View`
   flex-direction: row;
-  height: 50px;
+  height: 56px;
   align-items: center;
-  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
 `;
 
 const VariantBtn = styled(TouchableOpacity)`
   flex: 1;
   justify-content: center;
   align-items: center;
+  height: 100%;
 `;
 
-const AnimatedUnderline = styled(Animated.View)`
+const VariantText = styled.Text<{ isSelected: boolean }>`
+  font-size: 16px;
+  font-weight: ${(props) => (props.isSelected ? "600" : "400")};
+  color: ${(props) =>
+    props.isSelected ? props.theme.mainFont : props.theme.subFont};
+`;
+
+const Underline = styled(Animated.View)`
   position: absolute;
   bottom: 0;
   height: 3px;
+  border-radius: 9999px;
   width: 50%;
   background-color: #73bbfb;
 `;
