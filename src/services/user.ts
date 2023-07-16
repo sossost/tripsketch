@@ -1,4 +1,5 @@
 import axios from "axios";
+import mockData from "../../data/mockdata.json";
 
 export const getCurrentUser = async () => {
   try {
@@ -9,19 +10,17 @@ export const getCurrentUser = async () => {
   }
 };
 
-export const getFollowerList = async (userId: string) => {
+export const getFollowerList = async (userId: string, searchQuery: string) => {
   try {
-    const response = await require("/data/mockdata.json");
-    return response.users;
+    return Promise.resolve(mockData.users);
   } catch (error: any) {
     console.log(error);
   }
 };
 
-export const getFollowingList = async (userId: string) => {
+export const getFollowingList = async (userId: string, searchQuery: string) => {
   try {
-    const response = await require("/data/mockdata.json");
-    return response.users;
+    return Promise.resolve(mockData.users);
   } catch (error: any) {
     console.log(error);
   }
