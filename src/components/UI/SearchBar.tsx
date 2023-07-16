@@ -33,7 +33,6 @@ const Container = styled.View<{ style: any }>`
   flex-direction: row;
   align-items: center;
   gap: 10px;
-  margin-bottom: 10px;
   border-width: 1px;
   border-color: #d9d9d9;
   border-radius: 10px;
