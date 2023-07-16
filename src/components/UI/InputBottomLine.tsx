@@ -1,11 +1,4 @@
-import {
-  StyleProp,
-  StyleSheet,
-  Text,
-  ViewStyle,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { StyleProp, ViewStyle } from "react-native";
 import { styled } from "styled-components/native";
 
 interface InputBottomLine {
@@ -13,7 +6,6 @@ interface InputBottomLine {
   text: string;
   setText: React.Dispatch<React.SetStateAction<string>>;
   textLength: number;
-  style?: StyleProp<ViewStyle>;
 }
 
 const InputBottomLine = ({
@@ -21,23 +13,21 @@ const InputBottomLine = ({
   text,
   setText,
   textLength,
-  style,
 }: InputBottomLine) => {
   return (
     <Container>
       <Label>{label}</Label>
       <InputWrapper>
         <Input value={text} onChangeText={(text) => setText(text)} />
-        <TouchableOpacity onPress={() => setText("")}>
-          <Image
-            source={require("../../assets/images/inputResetIcon.svg")}
-            style={styles.icon}
+        <ResetBtn onPress={() => setText("")}>
+          <ResetIcon
+            source={require("../../assets/images/inputResetIcon.png")}
           />
-        </TouchableOpacity>
+        </ResetBtn>
       </InputWrapper>
-      <Text style={styles.validation}>
+      <LengthCheckText>
         {text.length}/{textLength}
-      </Text>
+      </LengthCheckText>
     </Container>
   );
 };
@@ -67,37 +57,25 @@ const InputWrapper = styled.View`
 
 const Input = styled.TextInput`
   flex: 1;
-  font-size: 16px;
+  font-size: 18px;
+  color: ${(props) => props.theme.mainFont};
   border-width: 0;
 `;
 
-const styles = StyleSheet.create({
-  wrapper: {
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginBottom: 6,
-    borderBottomWidth: 1,
-    borderColor: "#73BBFB",
-    paddingVertical: 8,
-  },
+const ResetBtn = styled.TouchableOpacity`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px 0 4px 4px;
+`;
 
-  input: {
-    flex: 1,
-    fontSize: 16,
-    borderWidth: 0,
-    outlineStyle: "none",
-  },
+const ResetIcon = styled.Image`
+  width: 18px;
+  height: 18px;
+`;
 
-  icon: {
-    width: 16,
-    height: 16,
-  },
-
-  validation: {
-    fontSize: 10,
-    color: "#bbbbbb",
-    textAlign: "right",
-  },
-});
+const LengthCheckText = styled.Text`
+  font-size: 10px;
+  color: #bbb;
+  text-align: right;
+`;
