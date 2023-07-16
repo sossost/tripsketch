@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
 import { useQuery } from "@tanstack/react-query";
 import { getDiariesByCategory } from "../services/diary";
 import { useNavigation } from "@react-navigation/native";
@@ -11,8 +10,6 @@ import DiaryList from "../components/user/DiaryList";
 
 import { category, currentUser } from "../../data/mockdata";
 
-
-
 const MyPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("전체보기");
   const {
@@ -23,14 +20,14 @@ const MyPage = () => {
     getDiariesByCategory(selectedCategory)
   );
 
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
 
   return (
     <Layout>
       <Profile
         variant="myPage"
         user={currentUser}
-        onPress={() => console.log("ㅎㅇ")}
+        onPress={() => navigation.navigate("EditProfilePage" as never)}
       />
       <Category
         category={category}
