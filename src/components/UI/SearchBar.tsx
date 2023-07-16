@@ -1,64 +1,58 @@
-import {
-  Image,
-  StyleProp,
-  StyleSheet,
-  TextInput,
-  View,
-  ViewStyle,
-} from "react-native";
+import React from "react";
+import styled, { css } from "styled-components/native";
+import { TextInput, Image } from "react-native";
 
 type SearchBarProps = {
   searchQuery: string;
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
-  style?: StyleProp<ViewStyle>;
+  style?: any;
   fontSize?: number;
+  placeholder: string;
 };
 
 const SearchBar = (props: SearchBarProps) => {
-  const { searchQuery, setSearchQuery, style, fontSize } = props;
-  const inputStyle = {
-    fontSize: fontSize ? fontSize : 16,
-  };
+  const { searchQuery, setSearchQuery, style, fontSize, placeholder } = props;
 
   return (
-    <View style={[styles.container, style]}>
-      <Image
-        source={require("../../assets/images/searchIcon.svg")}
-        style={styles.searchIcon}
-      />
-      <TextInput
-        style={[styles.input, inputStyle]}
+    <Container style={style}>
+      <SearchIcon source={require("../../assets/images/searchIcon.png")} />
+      <SearchInput
+        fontSize={fontSize ? fontSize : 18}
         value={searchQuery}
+        placeholder={placeholder}
+        placeholderTextColor="#bbb"
         onChangeText={(text) => setSearchQuery(text)}
       />
-    </View>
+    </Container>
   );
 };
 
 export default SearchBar;
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: "#D9D9D9",
-    borderRadius: 10,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-  },
+const Container = styled.View<{ style: any }>`
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  border-width: 1px;
+  border-color: #d9d9d9;
+  border-radius: 10px;
+  padding-horizontal: 14px;
+  padding-vertical: 9px;
+  ${(props) =>
+    props.style &&
+    css`
+      ${props.style}
+    `}
+`;
 
-  searchIcon: {
-    width: 20,
-    height: 20,
-  },
+const SearchIcon = styled.Image`
+  width: 18px;
+  height: 18px;
+`;
 
-  input: {
-    flex: 1,
-    fontSize: 16,
-    borderWidth: 0,
-    outlineStyle: "none",
-  },
-});
+const SearchInput = styled(TextInput)<{ fontSize: number }>`
+  flex: 1;
+  font-size: ${(props) => props.fontSize}px;
+  border-width: 0;
+`;
