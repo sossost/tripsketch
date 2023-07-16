@@ -1,8 +1,10 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ProfileImage from "../components/user/profile/ProfileImage";
 import { currentUser } from "../../data/mockdata";
 import InputBottomLine from "../components/UI/InputBottomLine";
 import { useState } from "react";
+import { styled } from "styled-components/native";
+import ProfileImageManage from "../components/user/profile/ProfileImageManage";
 
 const EditProfilePage = () => {
   const [NewProfileImage, setNewProfileImage] = useState<string>(
@@ -22,14 +24,12 @@ const EditProfilePage = () => {
   };
 
   return (
-    <View style={styles.layout}>
-      <View style={styles.profileImageWrapper}>
-        <ProfileImage img={currentUser.profile_img} />
-        <TouchableOpacity style={styles.profileImageChangeButton}>
-          사진 수정
-        </TouchableOpacity>
-      </View>
-      <View style={styles.inputWrapper}>
+    <Layout>
+      <ProfileImageManage
+        image={NewProfileImage}
+        setImage={setNewProfileImage}
+      />
+      <InputWrapper>
         <InputBottomLine
           label="닉네임"
           text={NewUserName}
@@ -42,38 +42,24 @@ const EditProfilePage = () => {
           setText={setNewIntro}
           textLength={60}
         />
-      </View>
-    </View>
+      </InputWrapper>
+    </Layout>
   );
 };
 
 export default EditProfilePage;
 
-const styles = StyleSheet.create({
-  layout: {
-    flexDirection: "column",
-    flex: 1,
-    alignItems: "center",
-    width: "100%",
-    paddingHorizontal: 20,
-    backgroundColor: "white",
-  },
+const Layout = styled.View`
+  display: flex;
+  flex: 1;
+  align-items: center;
+  width: 100%;
+  padding: 0 20px;
+  background-color: white;
+`;
 
-  profileImageWrapper: {
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 10,
-  },
-
-  profileImageChangeButton: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  inputWrapper: {
-    width: "100%",
-    flexDirection: "column",
-    gap: 20,
-  },
-});
+const InputWrapper = styled.View`
+  width: 100%;
+  display: flex;
+  gap: 20px;
+`;
