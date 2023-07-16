@@ -11,8 +11,8 @@
   "dependencies": {
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^18.1.0",
-    "@react-native-community/masked-view": "^0.1.11",
     "@gorhom/bottom-sheet": "^4.4.7",
+    "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/bottom-tabs": "^6.5.8",
     "@react-navigation/native": "^6.1.7",
     "@react-navigation/native-stack": "^6.9.13",
@@ -32,9 +32,9 @@
     "react-native-safe-area-context": "4.5.0",
     "react-native-screens": "~3.20.0",
     "react-native-web": "~0.18.10",
-    "styled-components": "^6.0.4",
     "react-native-webview": "^11.26.1",
-    "react-navigation": "^4.4.4"
+    "react-navigation": "^4.4.4",
+    "styled-components": "^6.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
