@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import React, { useState, useRef } from "react";
+import { TouchableOpacity, Text, Animated } from "react-native";
+import styled from "styled-components/native";
 
 type VariantProps<T extends string> = {
   variant1: T;
@@ -11,67 +12,73 @@ type VariantProps<T extends string> = {
 const VariantSelector = <T extends string>(props: VariantProps<T>) => {
   const { variant1, variant2, initialVariant, setVariant } = props;
 
-  const [underlinePosition, setUnderlinePosition] = useState(
-    initialVariant === variant1 ? "0%" : "50%"
-  );
+  // 선택한 Variant 표시바 너비 계산
+  const [layoutWidth, setLayoutWidth] = useState(0);
+  const halfLayoutWidth = layoutWidth / 2;
+
+  // 선택한 Variant 표시바 위치
+  const position = useRef(
+    new Animated.Value(initialVariant === variant1 ? 0 : halfLayoutWidth)
+  ).current;
+
+  // 컴포넌트 컨테이너 너비 계산
+  const onLayout = (event: { nativeEvent: { layout: { width: number } } }) => {
+    const { width } = event.nativeEvent.layout;
+    setLayoutWidth(width);
+  };
+
+  const leftVariantBtnHandler = () => {
+    // 슬라이드 애니메이션 적용
+    Animated.timing(position, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+    setVariant(variant1);
+  };
+
+  const rightVariantBtnHandler = () => {
+    // 슬라이드 애니메이션 적용
+    Animated.timing(position, {
+      toValue: halfLayoutWidth,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+    setVariant(variant2);
+  };
 
   return (
-    <View style={styles.variantWrapper}>
-      <TouchableOpacity
-        style={styles.variantBox}
-        onPress={() => {
-          setUnderlinePosition("0%");
-          setVariant(variant1);
-        }}
-      >
+    <Container onLayout={onLayout}>
+      <VariantBtn onPress={leftVariantBtnHandler}>
         <Text>{variant1}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.variantBox}
-        onPress={() => {
-          setUnderlinePosition("50%");
-          setVariant(variant2);
-        }}
-      >
+      </VariantBtn>
+      <VariantBtn onPress={rightVariantBtnHandler}>
         <Text>{variant2}</Text>
-      </TouchableOpacity>
-      <View
-        style={[
-          styles.underline,
-          { left: underlinePosition }, // 밑줄의 위치 조정
-        ]}
-      />
-    </View>
+      </VariantBtn>
+      <AnimatedUnderline style={{ transform: [{ translateX: position }] }} />
+    </Container>
   );
 };
 
-const styles = StyleSheet.create({
-  variantWrapper: {
-    flexDirection: "row",
-    height: 50,
-    alignItems: "center",
-    position: "relative",
-    marginBottom: 10,
-  },
+const Container = styled.View`
+  flex-direction: row;
+  height: 50px;
+  align-items: center;
+  margin-bottom: 10px;
+`;
 
-  variantBox: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
-    position: "relative",
-    height: "100%",
-  },
+const VariantBtn = styled(TouchableOpacity)`
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+`;
 
-  underline: {
-    position: "absolute",
-    bottom: 0,
-    height: 3,
-    width: "50%", // 밑줄의 너비 조정
-    backgroundColor: "#73BBFB", // 원하는 색상으로 변경
-    transitionProperty: "left",
-    transitionDuration: "0.3s",
-  },
-});
+const AnimatedUnderline = styled(Animated.View)`
+  position: absolute;
+  bottom: 0;
+  height: 3px;
+  width: 50%;
+  background-color: #73bbfb;
+`;
 
 export default VariantSelector;
