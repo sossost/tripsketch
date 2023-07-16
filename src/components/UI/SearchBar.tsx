@@ -1,6 +1,5 @@
 import React from "react";
 import styled, { css } from "styled-components/native";
-import { TextInput, Image } from "react-native";
 
 type SearchBarProps = {
   searchQuery: string;
@@ -50,7 +49,7 @@ const SearchIcon = styled.Image`
   height: 18px;
 `;
 
-const SearchInput = styled(TextInput)<{ fontSize: number }>`
+const SearchInput = styled.TextInput<{ fontSize: number }>`
   flex: 1;
   font-size: ${(props) => props.fontSize}px;
   border-width: 0;
