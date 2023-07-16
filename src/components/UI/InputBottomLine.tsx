@@ -9,6 +9,7 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import { styled } from "styled-components/native";
 
 interface InputBottomLine {
   label: string;
@@ -26,39 +27,54 @@ const InputBottomLine = ({
   style,
 }: InputBottomLine) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
-      <View style={styles.wrapper}>
-        <TextInput
-          style={[styles.input, style]}
-          value={text}
-          onChangeText={(text) => setText(text)}
-        />
+    <Container>
+      <Label>{label}</Label>
+      <InputWrapper>
+        <Input value={text} onChangeText={(text) => setText(text)} />
         <TouchableOpacity onPress={() => setText("")}>
           <Image
             source={require("../../assets/images/inputResetIcon.svg")}
             style={styles.icon}
           />
         </TouchableOpacity>
-      </View>
+      </InputWrapper>
       <Text style={styles.validation}>
         {text.length}/{textLength}
       </Text>
-    </View>
+    </Container>
   );
 };
 
 export default InputBottomLine;
 
+const Container = styled.View`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Label = styled.Text`
+  font-size: 13px;
+  color: #aaa;
+`;
+
+const InputWrapper = styled.View`
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 6px;
+  border-bottom-width: 1px;
+  border-color: ${(props) => props.theme.mainBlue};
+  padding: 6px 0;
+`;
+
+const Input = styled.TextInput`
+  flex: 1;
+  font-size: 16px;
+  border-width: 0;
+`;
+
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "column",
-  },
-
-  label: {
-    fontSize: 12,
-  },
-
   wrapper: {
     width: "100%",
     flexDirection: "row",
