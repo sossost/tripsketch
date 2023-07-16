@@ -1,10 +1,7 @@
-import React from "react";
 import {
   StyleProp,
   StyleSheet,
   Text,
-  TextInput,
-  View,
   ViewStyle,
   Image,
   TouchableOpacity,

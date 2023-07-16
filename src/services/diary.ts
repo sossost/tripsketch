@@ -7,8 +7,8 @@ export const getAllDiaries = async () => {
 
 export const getDiariesByCategory = async (category: string) => {
   try {
-    const diaries = Promise.resolve(mockData.diaries);
-    return diaries;
+    // const diaries = Promise.resolve(mockData.diaries);
+    // return diaries;
   } catch (error: any) {
     console.log(error);
   }
