@@ -6,6 +6,7 @@ import RootStack from "../../navigation/RootStack";
 import { StatusBar } from "expo-status-bar";
 import SplashBack, { splashBackProps } from "./SplashBack";
 import KakaoLoginButton from "../auth/KakaoLoginButton";
+import CustomButton from "./CustomButton";
 const splashBgColor = "#fff";
 
 const SplashScreen = ({ children }) => {
@@ -171,12 +172,13 @@ const SplashScreen = ({ children }) => {
                 zIndex: 3,
               }}
             >
-              <Text>여기에 암거나 넣어주세요 ㅎㅎㅎㅎ</Text>
               <KakaoLoginButton />
-              <Button
-                title="둘러보기"
+              <View style={{ height: 10 }} />
+              <CustomButton
+                color="blue"
                 onPress={() => setFadeOut(true)}
-              ></Button>
+                buttonText="둘러보기"
+              />
             </Animated.View>
           )}
         </Animated.View>
