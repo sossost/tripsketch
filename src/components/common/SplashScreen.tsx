@@ -6,6 +6,8 @@ import RootStack from "../../navigation/RootStack";
 import { StatusBar } from "expo-status-bar";
 import SplashBack, { splashBackProps } from "./SplashBack";
 import KakaoLoginButton from "../auth/KakaoLoginButton";
+import CustomButton from "./CustomButton";
+import { TouchableOpacity } from "react-native-gesture-handler";
 const splashBgColor = "#fff";
 
 const SplashScreen = ({ children }) => {
@@ -171,12 +173,22 @@ const SplashScreen = ({ children }) => {
                 zIndex: 3,
               }}
             >
-              <Text>여기에 암거나 넣어주세요 ㅎㅎㅎㅎ</Text>
-              <KakaoLoginButton />
-              <Button
-                title="둘러보기"
+              <TouchableOpacity
+                onPress={() => {
+                  setFadeOut(true);
+                }}
+              >
+                <KakaoLoginButton />
+              </TouchableOpacity>
+
+              <CustomButton
                 onPress={() => setFadeOut(true)}
-              ></Button>
+                buttonText="둘러보기"
+                style={{
+                  marginVertical: 10,
+                }}
+                color="white"
+              ></CustomButton>
             </Animated.View>
           )}
         </Animated.View>
