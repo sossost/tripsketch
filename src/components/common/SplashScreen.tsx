@@ -172,7 +172,7 @@ const SplashScreen = ({ children }) => {
                 zIndex: 3,
               }}
             >
-              <KakaoLoginButton />
+              <KakaoLoginButton onPress={() => setFadeOut(true)} />
               <View style={{ height: 10 }} />
               <CustomButton
                 color="blue"
