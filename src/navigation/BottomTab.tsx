@@ -44,7 +44,7 @@ export default function BottomTab() {
         component={CreatePost}
         options={{
           title: "작성하기",
-          tabBarIcon: ({ color, size }) => (
+          tabBarIcon: () => (
             <AntDesign name="pluscircle" color={"black"} size={35} />
           ),
         }}
