@@ -41,7 +41,10 @@ const TripDetail = () => {
           <PostView />
           <LikesAndCommentText />
           {/* <Line /> */}
-          <TouchableOpacity onPress={() => handleSnapPress(1)}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => handleSnapPress(1)}
+          >
             <CommentBest />
           </TouchableOpacity>
         </ScrollView>

@@ -1,9 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 
 import Home from "../screens/Home";
 import MyPage from "../screens/MyPage";
 import TripList from "../screens/TripList";
+import Notice from "../screens/Notice";
+import CreatePost from "../screens/CreatePost";
 
 const Tabs = createBottomTabNavigator();
 
@@ -13,6 +16,7 @@ export default function BottomTab() {
       initialRouteName="Home"
       screenOptions={{
         tabBarActiveTintColor: "#167DD8",
+        tabBarShowLabel: false,
       }}
     >
       <Tabs.Screen
@@ -31,7 +35,27 @@ export default function BottomTab() {
         options={{
           title: "트립",
           tabBarIcon: ({ color, size }) => (
-            <Feather name="airplay" color={color} size={size} />
+            <Feather name="search" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="CreatePost"
+        component={CreatePost}
+        options={{
+          title: "작성하기",
+          tabBarIcon: () => (
+            <AntDesign name="pluscircle" color={"black"} size={35} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="Notice"
+        component={Notice}
+        options={{
+          title: "알림",
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="bell" color={color} size={size} />
           ),
         }}
       />

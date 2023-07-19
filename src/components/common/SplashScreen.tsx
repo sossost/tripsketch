@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, createContext } from "react";
 import { Animated, Button, Dimensions, Image, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -7,7 +7,18 @@ import { StatusBar } from "expo-status-bar";
 import SplashBack, { splashBackProps } from "./SplashBack";
 import KakaoLoginButton from "../auth/KakaoLoginButton";
 import CustomButton from "./CustomButton";
+import { TouchableOpacity } from "react-native-gesture-handler";
 const splashBgColor = "#fff";
+
+export const FadeOutContext = React.createContext<fadeOutContextType>({
+  fadeOut: false,
+  setFadeOut: () => {},
+});
+
+interface fadeOutContextType {
+  fadeOut: boolean;
+  setFadeOut: (value: boolean) => void;
+}
 
 const SplashScreen = ({ children }) => {
   const [fadeOut, setFadeOut] = useState(false);
@@ -153,33 +164,38 @@ const SplashScreen = ({ children }) => {
             <></>
           ) : (
             // 로그인 및 둘러보기 관련 내용 넣을 공간
-            <Animated.View
-              style={{
-                position: "absolute",
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                marginVertical: 150,
-                margin: 20,
-                height: "70%",
-                borderRadius: 30,
-                top: 0,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                //backgroundColor: "white",
-                opacity: opacityContent,
-                zIndex: 3,
-              }}
-            >
-              <KakaoLoginButton onPress={() => setFadeOut(true)} />
-              <View style={{ height: 10 }} />
-              <CustomButton
-                color="blue"
-                onPress={() => setFadeOut(true)}
-                buttonText="둘러보기"
-              />
-            </Animated.View>
+            <FadeOutContext.Provider value={{ fadeOut, setFadeOut }}>
+              <Animated.View
+                style={{
+                  position: "absolute",
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginVertical: 150,
+                  margin: 20,
+                  height: "70%",
+                  borderRadius: 30,
+                  top: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  //backgroundColor: "white",
+                  opacity: opacityContent,
+                  zIndex: 3,
+                }}
+              >
+                <KakaoLoginButton />
+
+                <CustomButton
+                  onPress={() => setFadeOut(true)}
+                  buttonText="둘러보기"
+                  style={{
+                    marginVertical: 10,
+                  }}
+                  color="white"
+                ></CustomButton>
+              </Animated.View>
+            </FadeOutContext.Provider>
           )}
         </Animated.View>
       )}
