@@ -32,7 +32,7 @@ const CustomButton = ({
       style={[
         {
           width: buttonWidth,
-          height: 52,
+          height: 55,
           marginHorizontal: 20,
           backgroundColor: buttonColor,
           borderRadius: 15,
