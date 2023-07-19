@@ -9,6 +9,7 @@ import BottomTab from "./BottomTab";
 import SocialPage from "../screens/SocialPage";
 import MyPage from "../screens/MyPage";
 import SplashScreen from "../components/common/SplashScreen";
+import CreatePost from "../screens/CreatePost";
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,7 @@ export default function RootStack() {
           <Stack.Screen name="KakaoLoginPage" component={KakaoLoginPage} />
           <Stack.Screen name="TripDetail" component={TripDetail} />
           <Stack.Screen name="MyPage" component={MyPage} />
+          <Stack.Screen name="CreatePost" component={CreatePost} />
           <Stack.Screen name="FollowerPage">
             {() => <SocialPage initialVariant="팔로워" />}
           </Stack.Screen>
