@@ -1,56 +1,100 @@
-import { StyleSheet, Text, View, ScrollView, Dimensions } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import CommentItem from "./CommentItem";
 import { useState } from "react";
 import { Comment } from "../../../types/comment";
 
-const commentData = [
+const commentData: Comment[] = [
   {
     id: "123345",
     comment: "안녕안녕앙녕~볶음밥이랑 같이 먹으면 더 맛있어요.",
     create_at: "2023-04-03",
     like: ["ks2323", "wego2311"],
+    user: {
+      id: "1234",
+      nickName: "파란하늘",
+      profile_img: "https://reactnative.dev/img/tiny_logo.png",
+    },
+    children: [
+      {
+        parentId: "1234",
+        comment_id: "12322",
+        created_at: "2015-03-02",
+        content: "우와 짱입니다! 흐핳하",
+        user: {
+          id: "123324",
+          nickName: "다람쥐",
+          profile_img: "https://source.unsplash.com/random/300×300",
+        },
+        likes: 1,
+        liked_user_list: ["sad1123", "happy12"],
+        toReply: "파란하늘",
+      },
+      {
+        parentId: "1234",
+        comment_id: "12342234",
+        created_at: "2015-03-03",
+        content: "으음 그런가요?",
+        user: {
+          id: "122434",
+          nickName: "효은아빠",
+          profile_img: "https://source.unsplash.com/random/300×300",
+        },
+        likes: 0,
+        liked_user_list: [],
+        toReply: "다람쥐",
+      },
+    ],
   },
   {
-    id: "1456456",
-    comment: "공유 감사합니다!!!",
-    create_at: "2023-06-23",
-    like: ["good23211", "wego2311", "dd123"],
+    id: "121312",
+    comment: "너무 좋아보여요! 저도 다음주 주말에 방문하기로 했습니다.",
+    create_at: "2023-04-03",
+    like: ["ks2323", "wego2311", "gogo1222", "das123"],
+    user: {
+      id: "12341231",
+      nickName: "고구마",
+      profile_img: "https://reactnative.dev/img/tiny_logo.png",
+    },
+    children: [
+      {
+        parentId: "12341231",
+        comment_id: "12322",
+        created_at: "2015-03-02",
+        content: "부러워요. 다녀오세요",
+        user: {
+          id: "123324",
+          nickName: "다람쥐",
+          profile_img: "https://source.unsplash.com/random/300×300",
+        },
+        likes: 1,
+        liked_user_list: ["sad1123", "happy12"],
+        toReply: "고구마",
+      },
+    ],
   },
   {
-    id: "34523",
-    comment: "공유 감사합니다!!!",
-    create_at: "2023-06-23",
-    like: ["good23211", "wego2311", "dd123"],
+    id: "121322",
+    comment: "우와 멋져요",
+    create_at: "2023-04-03",
+    like: ["ks2323"],
+    user: {
+      id: "234224",
+      nickName: "도토리",
+      profile_img: "https://reactnative.dev/img/tiny_logo.png",
+    },
+    children: [],
   },
   {
-    id: "345123",
-    comment: "공유 감사합니다!!!",
-    create_at: "2023-06-23",
-    like: ["good23211", "wego2311", "dd123"],
-  },
-  {
-    id: "354222",
-    comment: "공유 감사합니다!!!",
-    create_at: "2023-06-23",
-    like: ["good23211", "wego2311", "dd123"],
-  },
-  {
-    id: "7653",
-    comment: "공유 감사합니다!!!",
-    create_at: "2023-06-23",
-    like: ["good23211", "wego2311", "dd123"],
-  },
-  {
-    id: "46222",
-    comment: "공유 감사합니다!!!",
-    create_at: "2023-06-23",
-    like: ["good23211", "wego2311", "dd123"],
-  },
-  {
-    id: "867",
-    comment: "공유 감사합니다!!!",
-    create_at: "2023-06-23",
-    like: ["good23211", "wego2311", "dd123"],
+    id: "143242",
+    comment: "우와 멋져요",
+    create_at: "2023-04-23",
+    like: ["ks2323"],
+    user: {
+      id: "213231",
+      nickName: "감자",
+      profile_img: "https://reactnative.dev/img/tiny_logo.png",
+    },
+    children: [],
   },
 ];
 

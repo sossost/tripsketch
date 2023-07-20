@@ -1,10 +1,28 @@
-import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import { ScrollView as GestureHandlerScrollView } from "react-native-gesture-handler";
 import { Comment } from "../../../types/comment";
+import { useState } from "react";
+import ReCommentItem from "./ReCommentItem";
+import CommentInput from "./CommentInput";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
+  const [showCommentInput, setShowCommentInput] = useState(false);
+
+  const handleCommentButtonClick = () => {
+    setShowCommentInput(!showCommentInput);
+  };
+
+  const handleCommentSubmit = () => {};
+
   return (
     <GestureHandlerScrollView
       pagingEnabled
@@ -23,7 +41,7 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
           </View>
           <View style={styles.text}>
             <View style={styles.top}>
-              <Text style={styles.id}>허니자몽</Text>
+              <Text style={styles.id}>{comment.user.nickName}</Text>
               <View style={styles.likes}>
                 <Image
                   style={styles.heart}
@@ -35,7 +53,32 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
             <Text style={styles.date}>{comment.create_at}</Text>
             <Text style={styles.comment}>{comment.comment}</Text>
             {sort === "all" ? (
-              <Text style={styles.add_comment}>답글 달기</Text>
+              // <TouchableOpacity>
+              //   <Text style={styles.add_comment}>답글 달기</Text>
+              // </TouchableOpacity>
+              <View>
+                {!showCommentInput ? (
+                  <TouchableOpacity onPress={handleCommentButtonClick}>
+                    <Text style={styles.add_comment}>답글 달기</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <View>
+                    <TouchableOpacity onPress={handleCommentButtonClick}>
+                      <Text style={styles.add_comment}>답글 달기</Text>
+                    </TouchableOpacity>
+                    <CommentInput onSubmit={handleCommentSubmit} />
+                  </View>
+                )}
+              </View>
+            ) : null}
+            {sort === "all" && comment.children.length > 0 ? (
+              <View style={styles.recomment_container}>
+                {comment.children.map((item) => (
+                  <View key={item.comment_id}>
+                    <ReCommentItem recomment={item} />
+                  </View>
+                ))}
+              </View>
             ) : null}
           </View>
         </View>
@@ -61,17 +104,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   background: {
-    backgroundColor: "#fff",
+    backgroundColor: "#f7f7f7",
     width: "100%",
     borderRadius: 10,
     display: "flex",
     flexDirection: "row",
     padding: 15,
-    shadowColor: "#5555557a",
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.4,
-    shadowRadius: 5,
-    elevation: 5,
   },
   image: {
     width: "17%",
@@ -142,6 +180,11 @@ const styles = StyleSheet.create({
   button_text_delete: {
     fontSize: 13,
     color: "#fff",
+  },
+  recomment_container: {
+    marginTop: 10,
+    backgroundColor: "#f7f7f7",
+    padding: 10,
   },
 });
 

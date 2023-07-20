@@ -9,4 +9,9 @@ export type Post = {
   end_at: string;
   hashtag: string[];
   created_at: string;
+  user: {
+    id: string;
+    nickName: string;
+    profile_img: string;
+  };
 };

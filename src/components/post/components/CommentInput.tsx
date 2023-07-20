@@ -8,7 +8,11 @@ import {
 } from "react-native";
 import { useState } from "react";
 
-const CommentInput = () => {
+type CommentInputProps = {
+  onSubmit?: () => void;
+};
+
+const CommentInput = ({ onSubmit }: CommentInputProps) => {
   const [comment, setComment] = useState("");
 
   const submitComment = () => {
