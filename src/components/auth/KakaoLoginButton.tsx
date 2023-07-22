@@ -5,10 +5,6 @@ import { FadeOutContext } from "../common/SplashScreen";
 
 const { width: screenWidth } = Dimensions.get("window");
 
-type KakaoLoginButtonProps = {
-  onPress: () => void;
-};
-
 /** 카카오 로그인 버튼 컴포넌트 */
 const KakaoLoginButton = () => {
   const { fadeOut, setFadeOut } = useContext(FadeOutContext);
@@ -21,7 +17,7 @@ const KakaoLoginButton = () => {
     // if (typeof onPress === "function") {
     //   onPress();
     // }
-    (navigation.navigate as (route: string) => void)("KakaoLoginPage");
+    (navigation.navigate as (route: string) => void)("카카오톡 로그인");
     setTimeout(() => {
       setFadeOut(true);
     }, 500);

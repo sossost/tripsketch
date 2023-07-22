@@ -19,12 +19,12 @@ export default function RootStack() {
       <SplashScreen>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen
-            name="Main"
+            name="홈"
             component={BottomTab}
             options={{ headerShown: false }}
           />
           <Stack.Screen name="KakaoLoginButton" component={KakaoLoginButton} />
-          <Stack.Screen name="KakaoLoginPage" component={KakaoLoginPage} />
+          <Stack.Screen name="카카오톡 로그인" component={KakaoLoginPage} />
           <Stack.Screen name="TripDetail" component={TripDetail} />
           <Stack.Screen name="MyPage" component={MyPage} />
           <Stack.Screen name="CreatePost" component={CreatePost} />
