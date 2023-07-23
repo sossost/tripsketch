@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { styled } from "styled-components/native";
 
-const BackBtn = () => {
+const BackButton = () => {
   const navigation = useNavigation();
 
   const backPressHandler = () => {
@@ -16,7 +16,7 @@ const BackBtn = () => {
   );
 };
 
-export default BackBtn;
+export default BackButton;
 
 const BackBtnWrapper = styled.TouchableOpacity`
   display: flex;
