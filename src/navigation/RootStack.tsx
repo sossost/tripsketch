@@ -10,6 +10,7 @@ import SocialPage from "../screens/SocialPage";
 import MyPage from "../screens/MyPage";
 import SplashScreen from "../components/common/SplashScreen";
 import CreatePost from "../screens/CreatePost";
+import EditProfilePage from "../screens/EditProfilePage";
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,7 @@ export default function RootStack() {
           <Stack.Screen name="FollowingPage">
             {() => <SocialPage initialVariant="팔로잉" />}
           </Stack.Screen>
+          <Stack.Screen name="EditProfilePage" component={EditProfilePage} />
         </Stack.Navigator>
       </SplashScreen>
     </NavigationContainer>
