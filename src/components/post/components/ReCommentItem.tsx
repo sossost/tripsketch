@@ -1,9 +1,23 @@
-import { Text, View, Image, StyleSheet } from "react-native";
+import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { ReComment } from "../../../types/ReComment";
 import { Feather } from "@expo/vector-icons";
 import { EvilIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
 
 const ReCommentItem = ({ recomment }: { recomment: ReComment }) => {
+  const [likes, setLikes] = useState(recomment.liked_user_list);
+  const isLiked = likes.includes("1234");
+
+  const handleLike = () => {
+    const userLiked = likes.includes("1234");
+    if (userLiked) {
+      setLikes(likes.filter((id) => id !== "1234"));
+    } else {
+      setLikes([...likes, "1234"]);
+    }
+  };
+
   return (
     <View style={styles.recomment_container}>
       <View style={styles.image}>
@@ -17,9 +31,16 @@ const ReCommentItem = ({ recomment }: { recomment: ReComment }) => {
         <Text style={styles.comment}>{recomment.content}</Text>
         <View style={styles.likes}>
           <Text>
-            <EvilIcons name="heart" size={20} color="#777" />
+            {/* <EvilIcons name="heart" size={20} color="#777" /> */}
+            <TouchableOpacity onPress={handleLike}>
+              <Ionicons
+                name={isLiked ? "md-heart-sharp" : "md-heart-outline"}
+                size={18}
+                color={isLiked ? "#ec6565" : "#777"}
+              />
+            </TouchableOpacity>
           </Text>
-          <Text style={styles.likes_text}>{recomment.likes}</Text>
+          <Text style={styles.likes_text}>{likes.length}</Text>
         </View>
       </View>
       <View style={styles.delete}>

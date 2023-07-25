@@ -9,6 +9,7 @@ const commentData: Comment[] = [
     comment: "안녕안녕앙녕~볶음밥이랑 같이 먹으면 더 맛있어요.",
     create_at: "2023-04-03",
     like: ["ks2323", "wego2311"],
+    parentId: "35345",
     user: {
       id: "1234",
       nickName: "파란하늘",
@@ -16,7 +17,7 @@ const commentData: Comment[] = [
     },
     children: [
       {
-        parentId: "1234",
+        parentId: "123345",
         comment_id: "12322",
         created_at: "2015-03-02",
         content: "우와 짱입니다! 흐핳하",
@@ -30,7 +31,7 @@ const commentData: Comment[] = [
         toReply: "파란하늘",
       },
       {
-        parentId: "1234",
+        parentId: "123345",
         comment_id: "12342234",
         created_at: "2015-03-03",
         content: "으음 그런가요?",
@@ -50,6 +51,7 @@ const commentData: Comment[] = [
     comment: "너무 좋아보여요! 저도 다음주 주말에 방문하기로 했습니다.",
     create_at: "2023-04-03",
     like: ["ks2323", "wego2311", "gogo1222", "das123"],
+    parentId: "1111",
     user: {
       id: "12341231",
       nickName: "고구마",
@@ -57,7 +59,7 @@ const commentData: Comment[] = [
     },
     children: [
       {
-        parentId: "12341231",
+        parentId: "121312",
         comment_id: "12322",
         created_at: "2015-03-02",
         content: "부러워요. 다녀오세요",
@@ -77,6 +79,7 @@ const commentData: Comment[] = [
     comment: "우와 멋져요",
     create_at: "2023-04-03",
     like: ["ks2323"],
+    parentId: "1111",
     user: {
       id: "234224",
       nickName: "도토리",
@@ -89,6 +92,7 @@ const commentData: Comment[] = [
     comment: "우와 멋져요",
     create_at: "2023-04-23",
     like: ["ks2323"],
+    parentId: "1111",
     user: {
       id: "213231",
       nickName: "감자",

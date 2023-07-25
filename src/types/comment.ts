@@ -5,6 +5,7 @@ export type Comment = {
   comment: string;
   create_at: string;
   like: string[];
+  parentId: string;
   user: {
     id: string;
     nickName: string;

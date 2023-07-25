@@ -107,7 +107,7 @@ const TripList = ({ navigation }: any) => {
       </View>
       <View>
         {data.map((item) => (
-          <View>
+          <View key={item.id}>
             <Text>{item.title}</Text>
           </View>
         ))}

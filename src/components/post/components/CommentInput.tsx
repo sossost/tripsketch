@@ -10,25 +10,36 @@ import { useState } from "react";
 
 type CommentInputProps = {
   onSubmit?: () => void;
+  commentId?: string;
+  commentNickname?: string;
 };
 
-const CommentInput = ({ onSubmit }: CommentInputProps) => {
+const CommentInput = ({
+  onSubmit,
+  commentId,
+  commentNickname,
+}: CommentInputProps) => {
   const [comment, setComment] = useState("");
 
   const submitComment = () => {
     Alert.alert("Simple Button pressed");
   };
 
+  const isCommentIdEmpty = commentId === undefined;
+
+  console.log(commentNickname);
   return (
     <SafeAreaView style={styles.container}>
       <TextInput
         style={styles.input}
         onChangeText={setComment}
         value={comment}
-        placeholder={"댓글을 입력해주세요"}
+        placeholder={
+          isCommentIdEmpty ? "댓글을 입력해주세요" : `@${commentNickname}`
+        }
       />
       <TouchableOpacity onPress={submitComment} style={styles.button}>
-        <Text style={styles.button_text}> 등록 </Text>
+        <Text style={styles.button_text}>등록 </Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

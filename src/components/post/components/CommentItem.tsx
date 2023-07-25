@@ -11,11 +11,24 @@ import { Comment } from "../../../types/comment";
 import { useState } from "react";
 import ReCommentItem from "./ReCommentItem";
 import CommentInput from "./CommentInput";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
   const [showCommentInput, setShowCommentInput] = useState(false);
+
+  const [likes, setLikes] = useState(comment.like);
+  const isLiked = likes.includes("1234");
+
+  const handleLike = () => {
+    const userLiked = likes.includes("1234");
+    if (userLiked) {
+      setLikes(likes.filter((id) => id !== "1234"));
+    } else {
+      setLikes([...likes, "1234"]);
+    }
+  };
 
   const handleCommentButtonClick = () => {
     setShowCommentInput(!showCommentInput);
@@ -43,11 +56,14 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
             <View style={styles.top}>
               <Text style={styles.id}>{comment.user.nickName}</Text>
               <View style={styles.likes}>
-                <Image
-                  style={styles.heart}
-                  source={require("../../../assets/images/heart.png")}
-                ></Image>
-                <Text style={styles.like_length}>{comment.like.length}</Text>
+                <TouchableOpacity onPress={handleLike}>
+                  <Ionicons
+                    name={isLiked ? "md-heart-sharp" : "md-heart-outline"}
+                    size={18}
+                    color={isLiked ? "#ec6565" : "#777"}
+                  />
+                </TouchableOpacity>
+                <Text style={styles.like_length}>{likes.length}</Text>
               </View>
             </View>
             <Text style={styles.date}>{comment.create_at}</Text>
@@ -66,7 +82,11 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
                     <TouchableOpacity onPress={handleCommentButtonClick}>
                       <Text style={styles.add_comment}>답글 달기</Text>
                     </TouchableOpacity>
-                    <CommentInput onSubmit={handleCommentSubmit} />
+                    <CommentInput
+                      onSubmit={handleCommentSubmit}
+                      commentId={comment.id}
+                      commentNickname={comment.user.nickName}
+                    />
                   </View>
                 )}
               </View>
