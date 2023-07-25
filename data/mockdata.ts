@@ -74,3 +74,30 @@ export const users = [
     introduction: "유저네임4의 프로필 입니다.",
   },
 ];
+
+export const diaries = [
+  {
+    id: "11111",
+    title: "타이틀",
+    author: "user1",
+    content: "컨텐츠",
+    likes: ["1", "user3"],
+    views: 149,
+    location: "프랑스",
+    thumbnail: "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+    isHidden: false,
+    date: "2023-07-02",
+  },
+  {
+    id: "111311",
+    title: "우왕",
+    author: "user2",
+    content: "컨텐츠",
+    likes: ["1", "2"],
+    views: 149,
+    location: "프랑스",
+    thumbnail: "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
+    isHidden: false,
+    date: "2023-07-02",
+  },
+];

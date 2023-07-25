@@ -2,12 +2,9 @@ import React, { useRef, useEffect, useState, createContext } from "react";
 import { Animated, Button, Dimensions, Image, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import RootStack from "../../navigation/RootStack";
-import { StatusBar } from "expo-status-bar";
 import SplashBack, { splashBackProps } from "./SplashBack";
 import KakaoLoginButton from "../auth/KakaoLoginButton";
 import CustomButton from "./CustomButton";
-import { TouchableOpacity } from "react-native-gesture-handler";
 const splashBgColor = "#fff";
 
 export const FadeOutContext = React.createContext<fadeOutContextType>({

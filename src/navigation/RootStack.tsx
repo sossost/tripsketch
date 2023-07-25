@@ -10,6 +10,9 @@ import SocialPage from "../screens/SocialPage";
 import MyPage from "../screens/MyPage";
 import SplashScreen from "../components/common/SplashScreen";
 import CreatePost from "../screens/CreatePost";
+import EditProfilePage from "../screens/EditProfilePage";
+import Header from "../components/UI/header/Header";
+import HeaderLeft from "../components/UI/header/HeaderLeft";
 
 const Stack = createStackNavigator();
 
@@ -19,12 +22,12 @@ export default function RootStack() {
       <SplashScreen>
         <Stack.Navigator initialRouteName="Home">
           <Stack.Screen
-            name="Main"
+            name="홈"
             component={BottomTab}
             options={{ headerShown: false }}
           />
           <Stack.Screen name="KakaoLoginButton" component={KakaoLoginButton} />
-          <Stack.Screen name="KakaoLoginPage" component={KakaoLoginPage} />
+          <Stack.Screen name="카카오톡 로그인" component={KakaoLoginPage} />
           <Stack.Screen name="TripDetail" component={TripDetail} />
           <Stack.Screen name="MyPage" component={MyPage} />
           <Stack.Screen name="CreatePost" component={CreatePost} />
@@ -34,6 +37,15 @@ export default function RootStack() {
           <Stack.Screen name="FollowingPage">
             {() => <SocialPage initialVariant="팔로잉" />}
           </Stack.Screen>
+          <Stack.Screen
+            name="EditProfilePage"
+            component={EditProfilePage}
+            options={{
+              header: () => (
+                <Header left={<HeaderLeft title="프로필 수정" />} />
+              ),
+            }}
+          />
         </Stack.Navigator>
       </SplashScreen>
     </NavigationContainer>
