@@ -2,36 +2,41 @@ import { Image, StyleSheet, Text, View, Dimensions } from "react-native";
 import React from "react";
 import { Post } from "../../../types/Post";
 
-type PostCardProps = {
-  post: Post;
-  isLiked: boolean;
-};
-
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
-const PostCard = (props: PostCardProps) => {
-  const { post, isLiked } = props;
+interface PostCardProps {
+  post: Post;
+}
 
-  // const likeButtonImgPath = isLiked
-  //   ? require("../../../assets/images/isLikedIcon.png")
-  //   : require("../../../assets/images/isNotLikedIcon.png");
-  const likeButtonImgPath = require("../../../assets/images/isNotLikedIcon.png");
-  const postImgPath = require("../../../assets/images/test_post.png");
+const PostCard = (props: PostCardProps) => {
+  const currentUser = {
+    id: "user3",
+    name: "미라벨 마드리갈",
+    profile_img: "../../../assets/images/test_user.png",
+  };
+  const { post } = props;
+  const isLiked = post.likes.find((like) => like === currentUser.id)
+    ? true
+    : false;
+  const likeButtonImgPath =
+    isLiked === true
+      ? require("../../../assets/images/isLikedIcon.png")
+      : require("../../../assets/images/isNotLikedIcon.png");
   const userProfilePath = require("../../../assets/images/test_user.png");
 
   return (
     <View style={styles.postCard}>
-      <Image source={postImgPath} style={styles.postImg} />
+      <Image source={{ uri: post.thumbnail }} style={styles.postImg} />
       <View style={styles.textArea}>
         <View style={styles.upperArea}>
-          <Text style={styles.titleArea}>콜럼비아 여행! 넘 즐겁당</Text>
+          <Text style={styles.titleArea}>{post.title}</Text>
 
-          <Text style={styles.locationArea}>콜럼비아</Text>
+          <Text style={styles.locationArea}>{post.location}</Text>
         </View>
         <View style={styles.lowerArea}>
           <View style={styles.userArea}>
             <Image source={userProfilePath} style={styles.profilePic} />
-            <Text style={styles.userName}>미라벨 마드리갈</Text>
+            <Text style={styles.userName}>{post.author}</Text>
           </View>
           <Image source={likeButtonImgPath} style={styles.likeBtn} />
         </View>

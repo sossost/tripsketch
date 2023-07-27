@@ -14,7 +14,10 @@ const KakaoLoginButton = () => {
 
   /** 카카오톡 로그인 버튼 핸들러 */
   const loginButtonHandler = () => {
-    (navigation.navigate as (route: string) => void)("KakaoLoginPage");
+    // if (typeof onPress === "function") {
+    //   onPress();
+    // }
+    (navigation.navigate as (route: string) => void)("카카오톡 로그인");
     setTimeout(() => {
       setFadeOut(true);
     }, 500);
