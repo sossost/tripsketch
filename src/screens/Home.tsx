@@ -1,12 +1,21 @@
-import React from "react";
+import React, { useRef } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
 import PostCard from "../components/post/card/PostCard";
 import { Text } from "react-native";
 import KakaoLoginButton from "../components/auth/KakaoLoginButton";
 import { diaries } from "../../data/mockdata";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const Home = ({ navigation }: any) => {
   let loggedIn = false;
+  const scrollViewRef = useRef<ScrollView>(null);
+
+  const onPress = () => {
+    scrollViewRef.current?.scrollTo({
+      y: 0,
+    });
+  };
+
   return (
     <View style={styles.container}>
       {loggedIn ? (
@@ -19,7 +28,7 @@ const Home = ({ navigation }: any) => {
           <KakaoLoginButton />
         </View>
       )}
-      <ScrollView style={styles.scrollView}>
+      <ScrollView ref={scrollViewRef} style={styles.scrollView}>
         <View style={styles.sectionDescView}>
           <View style={styles.centerLine}></View>
           <Text style={styles.sectionDesc}>요즘 뜨는 스케치</Text>
@@ -36,6 +45,11 @@ const Home = ({ navigation }: any) => {
           <PostCard post={diary} />
         ))}
       </ScrollView>
+      <View style={styles.buttonItself}>
+        <TouchableOpacity onPress={this.onPress}>
+          <Text style={styles.buttonText}>맨 위로</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -95,6 +109,26 @@ const styles = StyleSheet.create({
   greetingText: {
     fontSize: 18,
     marginVertical: 15,
+  },
+  buttonItself: {
+    margin: 10,
+    bottom: 0,
+    right: 0,
+    position: "absolute",
+    width: 80,
+    height: 50,
+    borderRadius: 100,
+    backgroundColor: "white",
+    shadowColor: "#111",
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    zIndex: 5,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonText: {
+    fontSize: 16,
   },
 });
 
