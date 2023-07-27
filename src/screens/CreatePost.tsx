@@ -1,41 +1,136 @@
-import { Keyboard, ScrollView, Text, View } from "react-native";
+import {
+  Keyboard,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import styled from "styled-components/native";
 import PropTypes from "prop-types";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import { useState } from "react";
+import React, { useState } from "react";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import Calendar from "react-native-calendars/src/calendar";
 
 /** 여행 글쓰기 */
 const CreatePost = () => {
-  //   const hideKeyboard = () => {
-  //     Keyboard.dismiss();
-  //   };
-
   const [isPublic, setIsPublic] = useState(true);
 
+  /** 공개 설정 핸들러 */
   const publicToggleHandler = () => {
     setIsPublic(true);
   };
 
+  /** 비공개 설정 핸들러 */
   const privateToggleHandler = () => {
     setIsPublic(false);
   };
+
+  /** 여행기간 선택 핸들러 */
+  const periodSelectHandler = () => {
+    console.log("여행 기간 선택");
+  };
+
+  // react-native-calendars 패키지를 사용하여 달력을 구현 --------
+
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const [selectedStartDate, setSelectedStartDate] = useState(new Date());
+  const [selectedEndDate, setSelectedEndDate] = useState(new Date());
+
+  const showStartDatepicker = () => {
+    setShowStartDatePicker(true);
+  };
+
+  const showEndDatepicker = () => {
+    setShowEndDatePicker(true);
+  };
+
+  const handleStartDateChange = (date: Date) => {
+    setShowStartDatePicker(false);
+    if (date) {
+      setSelectedStartDate(date);
+    }
+  };
+
+  const handleEndDateChange = (date: Date) => {
+    setShowEndDatePicker(false);
+    if (date) {
+      setSelectedEndDate(date);
+    }
+  };
+
+  // -----------
+
   return (
     <>
       <Container>
         <HeaderInfo>
           {/* 여행기간 */}
+
           <InfoBox>
             <CalendarIcon name="calendar" />
             <Title>여행기간</Title>
-            <ContentText>2023.03.03 ~ 2023.04.02</ContentText>
-            <SelectButton>
-              <SelectText>선택</SelectText>
+
+            {/* <ContentText>2023.03.03 ~ 2023.04.02</ContentText> */}
+            <ContentText>
+              {selectedStartDate.toLocaleDateString()} ~{" "}
+              {selectedEndDate.toLocaleDateString()}
+            </ContentText>
+
+            {/* <SelectButton onPress={showDatepicker}> */}
+            {/* <SelectButton onPress={periodSelectHandler}> */}
+            {/* <SelectText>선택</SelectText> */}
+            {/* </SelectButton> */}
+
+            <SelectButton onPress={showStartDatepicker}>
+              <SelectText>시작일</SelectText>
+            </SelectButton>
+
+            <SelectButton onPress={showEndDatepicker}>
+              <SelectText>종료일</SelectText>
             </SelectButton>
           </InfoBox>
 
+          {/* {showStartDatePicker && (
+            <DateTimePicker
+              value={selectedStartDate}
+              mode="date"
+              display="calendar"
+              onChange={handleStartDateChange}
+            />
+          )}
+          {showEndDatePicker && (
+            <DateTimePicker
+              value={selectedEndDate}
+              mode="date"
+              display="calendar"
+              onChange={handleEndDateChange}
+            />
+          )} */}
+
+          {showStartDatePicker && (
+            <DateTimePickerModal
+              isVisible={true}
+              mode="date"
+              date={selectedStartDate}
+              onCancel={() => setShowStartDatePicker(false)}
+              onConfirm={handleStartDateChange}
+            />
+          )}
+
+          {showEndDatePicker && (
+            <DateTimePickerModal
+              isVisible={true}
+              mode="date"
+              date={selectedEndDate}
+              onCancel={() => setShowEndDatePicker(false)}
+              onConfirm={handleEndDateChange}
+            />
+          )}
           {/* 여행지 */}
           <InfoBox>
             <MapIcon name="map-marker-alt" />
