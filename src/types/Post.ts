@@ -5,8 +5,14 @@ export type Post = {
   content: string;
   likes: string[];
   views: number;
-  location: string;
-  thumbnail: string;
-  isHidden: boolean;
-  date: string;
+  loaction: string[];
+  start_at: string;
+  end_at: string;
+  hashtag: string[];
+  created_at: string;
+  user: {
+    id: string;
+    nickName: string;
+    profile_img: string;
+  };
 };
