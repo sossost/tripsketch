@@ -71,6 +71,3 @@ export const getFollowingList = async (userId: string, searchQuery: string) => {
     console.log(error);
   }
 };
-function useRecoilValue(tokenState: any) {
-  throw new Error("Function not implemented.");
-}
