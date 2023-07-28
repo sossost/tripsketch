@@ -44,6 +44,7 @@
     "react-native-webview": "^11.26.1",
     "react-navigation": "^4.4.4",
     "react-spinners": "^0.13.8",
+    "recoil": "^0.7.7",
     "styled-components": "^6.0.4",
     "xdate": "^0.8.2"
   },
