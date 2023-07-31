@@ -1,23 +1,64 @@
-import {
-  Keyboard,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useState } from "react";
+import { View, Modal, Text, ScrollView, TouchableOpacity } from "react-native";
+import { Calendar, LocaleConfig } from "react-native-calendars";
 import styled from "styled-components/native";
-import PropTypes from "prop-types";
 
+import { Feather } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
-import React, { useState } from "react";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import Calendar from "react-native-calendars/src/calendar";
+
+LocaleConfig.locales["ko"] = {
+  monthNames: [
+    "1월",
+    "2월",
+    "3월",
+    "4월",
+    "5월",
+    "6월",
+    "7월",
+    "8월",
+    "9월",
+    "10월",
+    "11월",
+    "12월",
+  ],
+  monthNamesShort: [
+    "1월",
+    "2월",
+    "3월",
+    "4월",
+    "5월",
+    "6월",
+    "7월",
+    "8월",
+    "9월",
+    "10월",
+    "11월",
+    "12월",
+  ],
+  dayNames: ["일", "월", "화", "수", "목", "금", "토"],
+  dayNamesShort: ["일", "월", "화", "수", "목", "금", "토"],
+  today: "오늘",
+};
+LocaleConfig.defaultLocale = "ko";
+
+/** 날짜 정보 Type */
+interface RangeKeyDict {
+  [key: string]: {
+    startingDay?: boolean;
+    endingDay?: boolean;
+    color: string;
+    selected?: boolean;
+  };
+}
 
 /** 여행 글쓰기 */
-const CreatePost = () => {
+const CreatePost: React.FC = () => {
   const [isPublic, setIsPublic] = useState(true);
+
+  // 230728
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
   /** 공개 설정 핸들러 */
   const publicToggleHandler = () => {
@@ -29,41 +70,63 @@ const CreatePost = () => {
     setIsPublic(false);
   };
 
-  /** 여행기간 선택 핸들러 */
-  const periodSelectHandler = () => {
-    console.log("여행 기간 선택");
+  const [showModal, setShowModal] = useState(false);
+  const [markedDates, setMarkedDates] = useState<RangeKeyDict>({});
+  const [selectedDates, setSelectedDates] = useState<string[]>([]);
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
+
+  /** 달력 모달 닫는 핸들러 */
+  const modalCloseHandler = () => {
+    setShowModal(false);
   };
 
-  // react-native-calendars 패키지를 사용하여 달력을 구현 --------
+  /** 날짜 클릭 핸들러 */
+  const dayPressHandler = (day: { dateString: string }) => {
+    if (selectedDates.length === 0) {
+      setSelectedDates([day.dateString]);
+      setMarkedDates({ [day.dateString]: { color: "lightblue" } });
+    } else if (selectedDates.length === 1) {
+      const startDate = selectedDates[0];
+      const endDate = day.dateString;
+      const sortedDates = [startDate, endDate].sort();
 
-  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
-  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
-  const [selectedStartDate, setSelectedStartDate] = useState(new Date());
-  const [selectedEndDate, setSelectedEndDate] = useState(new Date());
+      const newMarkedDates: RangeKeyDict = {
+        [sortedDates[0]]: { startingDay: true, color: "lightblue" },
+        [sortedDates[1]]: { endingDay: true, color: "lightblue" },
+      };
 
-  const showStartDatepicker = () => {
-    setShowStartDatePicker(true);
-  };
+      const rangeDates = getRangeDates(sortedDates[0], sortedDates[1]);
+      Object.keys(rangeDates).forEach((date) => {
+        if (date !== sortedDates[0] && date !== sortedDates[1]) {
+          newMarkedDates[date] = { color: "lightblue" };
+        }
+      });
 
-  const showEndDatepicker = () => {
-    setShowEndDatePicker(true);
-  };
-
-  const handleStartDateChange = (date: Date) => {
-    setShowStartDatePicker(false);
-    if (date) {
-      setSelectedStartDate(date);
+      setMarkedDates(newMarkedDates);
+      setSelectedDates(sortedDates);
+      setStartDate(sortedDates[0]);
+      setEndDate(sortedDates[1]);
+    } else if (selectedDates.length >= 2) {
+      setSelectedDates([day.dateString]);
+      setMarkedDates({ [day.dateString]: { color: "lightblue" } });
+      setStartDate(null);
+      setEndDate(null);
     }
   };
 
-  const handleEndDateChange = (date: Date) => {
-    setShowEndDatePicker(false);
-    if (date) {
-      setSelectedEndDate(date);
+  /** 사이 날짜 구하는 함수 */
+  const getRangeDates = (start: string, end: string) => {
+    const rangeDates: RangeKeyDict = {};
+    const currentDate = new Date(start);
+    while (currentDate <= new Date(end)) {
+      rangeDates[currentDate.toISOString().split("T")[0]] = {
+        color: "lightblue",
+      };
+      currentDate.setDate(currentDate.getDate() + 1);
     }
+    return rangeDates;
   };
-
-  // -----------
 
   return (
     <>
@@ -75,62 +138,108 @@ const CreatePost = () => {
             <CalendarIcon name="calendar" />
             <Title>여행기간</Title>
 
-            {/* <ContentText>2023.03.03 ~ 2023.04.02</ContentText> */}
             <ContentText>
-              {selectedStartDate.toLocaleDateString()} ~{" "}
-              {selectedEndDate.toLocaleDateString()}
+              <Text>
+                {startDate} ~ {endDate}
+              </Text>
             </ContentText>
-
-            {/* <SelectButton onPress={showDatepicker}> */}
-            {/* <SelectButton onPress={periodSelectHandler}> */}
-            {/* <SelectText>선택</SelectText> */}
-            {/* </SelectButton> */}
-
-            <SelectButton onPress={showStartDatepicker}>
-              <SelectText>시작일</SelectText>
+            <SelectButton onPress={() => setShowModal(true)}>
+              <SelectText>선택</SelectText>
             </SelectButton>
 
-            <SelectButton onPress={showEndDatepicker}>
-              <SelectText>종료일</SelectText>
-            </SelectButton>
+            {/* 날짜 선택 클릭시 달력에서 여행 기간 선택 */}
+            {showModal && (
+              <Modal visible={showModal} animationType="fade">
+                <ModalContainer>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "80%",
+                      height: 65, // 레이블들이 고정된 높이를 가지도록 추가
+                      borderRadius: 10,
+                      backgroundColor: "white",
+                    }}
+                  >
+                    {/* <Text>selectedDates : {selectedDates}</Text> */}
+                    <View
+                      style={{
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flex: 1,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          textAlign: "center",
+                          color: "#6F6F6F",
+                          marginBottom: "3%",
+                        }}
+                      >
+                        시작일
+                      </Text>
+                      <Text style={{ fontSize: 16, color: "#414141" }}>
+                        {startDate}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        alignItems: "center",
+                        justifyContent: "center",
+                        flex: 1,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          textAlign: "center",
+                          color: "#6F6F6F",
+                          marginBottom: "3%",
+                        }}
+                      >
+                        종료일
+                      </Text>
+                      <Text style={{ fontSize: 16, color: "#414141" }}>
+                        {endDate}
+                      </Text>
+                    </View>
+                  </View>
+
+                  {/* 달력 모달 닫기 버튼 */}
+                  {/* <CloseButton onPress={modalCloseHandler}>
+                    <CloseIcon name="x" />
+                  </CloseButton> */}
+                  <Calendar
+                    style={{
+                      borderRadius: 20,
+                      marginTop: 20,
+                      width: "90%",
+                      aspectRatio: 0.9,
+                    }}
+                    onDayPress={dayPressHandler}
+                    markingType={"period"}
+                    markedDates={markedDates}
+                  />
+                  <TouchableOpacity
+                    style={{
+                      width: "30%",
+                      height: "6%",
+                      backgroundColor: "white",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: 10,
+                      marginTop: 10,
+                    }}
+                    onPress={modalCloseHandler}
+                  >
+                    <Text style={{ fontSize: 18 }}>선택하기</Text>
+                  </TouchableOpacity>
+                </ModalContainer>
+              </Modal>
+            )}
           </InfoBox>
 
-          {/* {showStartDatePicker && (
-            <DateTimePicker
-              value={selectedStartDate}
-              mode="date"
-              display="calendar"
-              onChange={handleStartDateChange}
-            />
-          )}
-          {showEndDatePicker && (
-            <DateTimePicker
-              value={selectedEndDate}
-              mode="date"
-              display="calendar"
-              onChange={handleEndDateChange}
-            />
-          )} */}
-
-          {showStartDatePicker && (
-            <DateTimePickerModal
-              isVisible={true}
-              mode="date"
-              date={selectedStartDate}
-              onCancel={() => setShowStartDatePicker(false)}
-              onConfirm={handleStartDateChange}
-            />
-          )}
-
-          {showEndDatePicker && (
-            <DateTimePickerModal
-              isVisible={true}
-              mode="date"
-              date={selectedEndDate}
-              onCancel={() => setShowEndDatePicker(false)}
-              onConfirm={handleEndDateChange}
-            />
-          )}
           {/* 여행지 */}
           <InfoBox>
             <MapIcon name="map-marker-alt" />
@@ -208,6 +317,13 @@ const Container = styled.View`
   padding: 15px 0;
 `;
 
+const ModalContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  background-color: #d4eff6;
+  padding-top: 45%;
+`;
+
 /** 여행기간, 여행지 감싸는 View */
 const HeaderInfo = styled.View`
   padding: 0 20px;
@@ -238,6 +354,18 @@ const Title = styled.Text`
 
 /** 달력 아이콘 */
 const CalendarIcon = styled(Feather)`
+  font-size: 28px;
+  color: #73bbfb;
+  margin-right: 5px;
+`;
+
+const CloseButton = styled.TouchableOpacity`
+  position: absolute;
+  top: 190px;
+  right: 10px;
+`;
+
+const CloseIcon = styled(Feather)`
   font-size: 28px;
   color: #73bbfb;
   margin-right: 5px;
