@@ -41,9 +41,7 @@ export default function RootStack() {
             name="EditProfilePage"
             component={EditProfilePage}
             options={{
-              header: () => (
-                <Header left={<HeaderLeft title="프로필 수정" />} />
-              ),
+              headerShown: false,
             }}
           />
         </Stack.Navigator>

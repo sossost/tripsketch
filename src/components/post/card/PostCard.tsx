@@ -1,6 +1,14 @@
-import { Image, StyleSheet, Text, View, Dimensions } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import React from "react";
 import { Post } from "../../../types/Post";
+import { useNavigation } from "@react-navigation/native";
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -23,10 +31,18 @@ const PostCard = (props: PostCardProps) => {
       ? require("../../../assets/images/isLikedIcon.png")
       : require("../../../assets/images/isNotLikedIcon.png");
   const userProfilePath = require("../../../assets/images/test_user.png");
+  const navigation = useNavigation();
+
+  const postHandler = () => {
+    (navigation.navigate as (route: string) => void)("TripDetail");
+  };
 
   return (
     <View style={styles.postCard}>
-      <Image source={{ uri: post.thumbnail }} style={styles.postImg} />
+      <TouchableOpacity style={styles.touchables} onPress={postHandler}>
+        <Image source={{ uri: post.thumbnail }} style={styles.postImg} />
+      </TouchableOpacity>
+
       <View style={styles.textArea}>
         <View style={styles.upperArea}>
           <Text style={styles.titleArea}>{post.title}</Text>
@@ -50,7 +66,7 @@ export default PostCard;
 const styles = StyleSheet.create({
   postCard: {
     width: SCREEN_WIDTH - 40,
-    height: SCREEN_HEIGHT - SCREEN_HEIGHT / 3,
+    height: SCREEN_HEIGHT - SCREEN_HEIGHT / 2.5,
     backgroundColor: "white",
     marginVertical: 10,
     borderRadius: 30,
@@ -60,9 +76,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     overflow: "hidden",
   },
-  postImg: {
+  touchables: {
     width: "100%",
     height: "70%",
+  },
+  postImg: {
+    width: "100%",
+    height: "100%",
     backgroundColor: "gray",
   },
   textArea: {
@@ -96,7 +116,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     width: "100%",
     height: "50%",
-    padding: 6,
+    padding: 8,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -111,17 +131,17 @@ const styles = StyleSheet.create({
     borderColor: "#cccccc",
     borderWidth: 0.5,
     backgroundColor: "gray",
-    width: 50,
-    height: 50,
+    width: 45,
+    height: 45,
   },
   userName: {
-    fontSize: 18,
+    fontSize: 16,
     fontStyle: "italic",
-    marginLeft: 10,
+    marginLeft: 15,
   },
   likeBtn: {
-    width: 30,
-    height: 30,
+    width: 25,
+    height: 25,
     resizeMode: "contain",
   },
 });

@@ -1,106 +1,56 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { WebView } from "react-native-webview";
+import { useNavigation } from "@react-navigation/native";
 import { axiosBase } from "../../../api/axios";
-import axios from "axios";
+import { tokenState } from "../../recoil/atom";
+import { useRecoilState } from "recoil";
 
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 
-// 230717 배포 완료 기준
-const redirectUri =
-  "https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app";
 const clientId = "1927d084a86a31e01a814ce0b2fe3459";
-const authorizeUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}/oauth/kakao/callback&response_type=code`;
+const authorizeUrl = `https://accounts.kakao.com/login/?continue=https%3A%2F%2Fkauth.kakao.com%2Foauth%2Fauthorize%3Fresponse_type%3Dcode%26redirect_uri%3Dhttps%253A%252F%252Fport-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app%252Foauth%252Fkakao%252Fcode%26through_account%3Dtrue%26client_id%3D${clientId}#login`;
 
+/** 카카오 로그인 페이지 컴포넌트 */
 const KaKaoLogin = () => {
+  const navigation = useNavigation();
+
+  // 토큰 상태 관리
+  const [token, setToken] = useRecoilState(tokenState);
+
   // 카카오 로그인 진행하는 화면
   const KakaoLoginWebView = (url: string) => {
-    console.log("url...", url);
-    // const exp = "code=";
-    // const condition = url.indexOf(exp);
-    // if (condition != -1) {
-    //   const authorize_code = url.substring(condition + exp.length);
-    //   console.log("authorize_code", authorize_code);
-    //   requestToken(authorize_code);
-    // }
-
-    // fetch(
-    //   `https://kauth.kakao.com/oauth/authorize?client_id=1927d084a86a31e01a814ce0b2fe3459&redirect_uri=https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/oauth/kakao/callback&response_type=${authorize_code}`
-    // )
-
-    axios
-      .get(url)
-      .then((response) => {
-        console.log("response!!!", response);
-      })
-      .catch((error) => {
-        console.log("error...", error);
-      });
+    const exp = "code=";
+    const condition = url.indexOf(exp);
+    if (condition != -1) {
+      const authorize_code = url.substring(condition + exp.length);
+      console.log("authorize_code", authorize_code);
+      requestToken(authorize_code);
+    }
   };
 
   // 토큰 발급받는 부분
   const requestToken = async (authorize_code: string) => {
     try {
-      // 1) 트립스케치 서버에 토큰 헤더에 담아서 요청하는 부분
-      // const response = await axiosBase.get(`oauth/kakao/callback`, {
-      //   headers: {
-      //     Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJibXAudG9tQGdtYWlsLmNvbSIsIm5pY2tuYW1lIjoi7Lm07Lm07JikIiwiaWF0IjoxNjg5MzM0MjI2LCJleHAiOjE2ODkzMzc4MjZ9.ErZgQ4tWbeGXZwYhd09xtPtx9tFNLo_UY3-ctc0gGD8`,
-      //   },
-      // });
-      // const response = await axiosBase.get(
-      //   `oauth/kakao/callback/code=${authorize_code}`
-      // );
-      // console.log("response...", response);
-      // axios
-      //   .get(url)
-      //   .then((response) => {
-      //     console.log("response...", response.data);
-      //   })
-      //   .catch((error) => {
-      //     console.log("error...", error);
-      //   });
-      // 2) 카카오측에 인가코드를 통해 접근 토큰 받는 코드
-      // const tokenResponse = await axios.post(
-      //   "https://kauth.kakao.com/oauth/token",
-      //   {
-      //     grant_type: "authorization_code",
-      //     client_id: clientId,
-      //     redirect_uri: redirectUri,
-      //     code: authorize_code,
-      //   }
-      // );
-      // console.log("tokenResponse...", tokenResponse);
-      // const accessToken = tokenResponse.data.access_token;
-      // console.log("accessToken...", accessToken);
-      // const userResponse = await axiosBase.get(`oauth/user`, {
-      //   headers: {
-      //     Authorization: `Bearer ${accessToken}`,
-      //   },
-      // });
-      // console.log("user response...", userResponse);
-    } catch (error) {
-      console.log("로그인 토큰 요청 실패와 관련한 오류는..🧐", error);
-    }
+      const response = await axiosBase.get(
+        `oauth/kakao/callback?code=${authorize_code}`
+      );
+      console.log("response...", response);
 
-    // const accessToken = "none";
-    // axios({
-    //   method: "post",
-    //   url: "https://kauth.kakao.com/oauth/token",
-    //   params: {
-    //     grant_type: "authorization_code",
-    //     client_id: clientId,
-    //     redirect_uri: redirectUri,
-    //     code: authorize_code,
-    //   },
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //     const accessToken = response.data.access_token;
-    //     console.log(accessToken);
-    //   })
-    //   .catch((error) => {
-    //     console.log("error...", error);
-    //   });
+      // headers에서 토큰값 추출
+      const tokenValue = response.headers.authorization.split(" ")[1];
+      console.log("bearerToken", tokenValue);
+
+      // recoil에 token 설정
+      setToken(tokenValue);
+
+      // 토큰이 정상발급 된 경우 메인 페이지로 이동
+      if (tokenValue) {
+        (navigation.navigate as (route: string) => void)("Home");
+      }
+    } catch (error) {
+      console.log("로그인 실패와 관련한 에러는...🤔", error);
+    }
   };
 
   return (

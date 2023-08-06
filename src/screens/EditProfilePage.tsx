@@ -3,6 +3,9 @@ import InputBottomLine from "../components/UI/InputBottomLine";
 import { useState } from "react";
 import { styled } from "styled-components/native";
 import ProfileImageManage from "../components/user/profile/ProfileImageManage";
+import Header from "../components/UI/header/Header";
+import CommonHeaderLeft from "../components/UI/header/HeaderLeft";
+import ConfirmButton from "../components/UI/header/ConfirmButton";
 
 const EditProfilePage = () => {
   const [NewProfileImage, setNewProfileImage] = useState<string>(
@@ -17,31 +20,37 @@ const EditProfilePage = () => {
       user_name: NewUserName,
       introduction: NewIntro,
     };
-
+    console.log("바뀜");
     // EditProfile(data);
   };
 
   return (
-    <Layout>
-      <ProfileImageManage
-        image={NewProfileImage}
-        setImage={setNewProfileImage}
+    <>
+      <Header
+        left={<CommonHeaderLeft title="프로필 수정" />}
+        right={<ConfirmButton onPress={profileSubmitHandler} />}
       />
-      <InputWrapper>
-        <InputBottomLine
-          label="닉네임"
-          text={NewUserName}
-          setText={SetNewUsername}
-          textLength={20}
+      <Layout>
+        <ProfileImageManage
+          image={NewProfileImage}
+          setImage={setNewProfileImage}
         />
-        <InputBottomLine
-          label="소개"
-          text={NewIntro}
-          setText={setNewIntro}
-          textLength={60}
-        />
-      </InputWrapper>
-    </Layout>
+        <InputWrapper>
+          <InputBottomLine
+            label="닉네임"
+            text={NewUserName}
+            setText={SetNewUsername}
+            textLength={20}
+          />
+          <InputBottomLine
+            label="소개"
+            text={NewIntro}
+            setText={setNewIntro}
+            textLength={60}
+          />
+        </InputWrapper>
+      </Layout>
+    </>
   );
 };
 
