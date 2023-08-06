@@ -1,14 +1,18 @@
 export type Post = {
   id: string;
   title: string;
+  image: string[];
   content: string;
   likes: string[];
   views: number;
-  loaction: string[];
-  start_at: string;
-  end_at: string;
+  location: string[];
+  startAt: string;
+  endAt: string;
   hashtag: string[];
-  created_at: string;
+  createdAt: string;
+  updatedAt?: string;
+  deletedAt?: string;
+  hidden: boolean;
   user: {
     id: string;
     nickName: string;
