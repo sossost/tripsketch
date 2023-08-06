@@ -1,12 +1,11 @@
 import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { ReComment } from "../../../types/ReComment";
+import { Comment } from "../../../types/comment";
 import { Feather } from "@expo/vector-icons";
-import { EvilIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 
-const ReCommentItem = ({ recomment }: { recomment: ReComment }) => {
-  const [likes, setLikes] = useState(recomment.liked_user_list);
+const ReCommentItem = ({ recomment }: { recomment: Comment }) => {
+  const [likes, setLikes] = useState(recomment.likedBy);
   const isLiked = likes.includes("1234");
 
   const handleLike = () => {
@@ -23,15 +22,14 @@ const ReCommentItem = ({ recomment }: { recomment: ReComment }) => {
       <View style={styles.image}>
         <Image
           style={styles.profile}
-          source={{ uri: recomment.user.profile_img }}
+          source={{ uri: recomment.userProfileUrl }}
         />
       </View>
       <View style={styles.info}>
-        <Text style={styles.nickname}>{recomment.user.nickName}</Text>
+        <Text style={styles.nickname}>{recomment.userNickName}</Text>
         <Text style={styles.comment}>{recomment.content}</Text>
         <View style={styles.likes}>
           <Text>
-            {/* <EvilIcons name="heart" size={20} color="#777" /> */}
             <TouchableOpacity onPress={handleLike}>
               <Ionicons
                 name={isLiked ? "md-heart-sharp" : "md-heart-outline"}

@@ -1,15 +1,14 @@
-import { ReComment } from "./ReComment";
-
 export type Comment = {
   id: string;
-  comment: string;
-  create_at: string;
-  like: string[];
+  userNickName: string;
+  userProfileUrl: string;
+  tripId: string;
   parentId: string;
-  user: {
-    id: string;
-    nickName: string;
-    profile_img: string;
-  };
-  children: ReComment[];
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  likes: number;
+  likedBy: string[];
+  replyTo: string;
+  children: Comment[];
 };
