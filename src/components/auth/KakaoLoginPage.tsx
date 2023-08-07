@@ -9,7 +9,8 @@ import { useRecoilState } from "recoil";
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 
 const clientId = "1927d084a86a31e01a814ce0b2fe3459";
-const authorizeUrl = `https://accounts.kakao.com/login/?continue=https%3A%2F%2Fkauth.kakao.com%2Foauth%2Fauthorize%3Fresponse_type%3Dcode%26redirect_uri%3Dhttps%253A%252F%252Fport-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app%252Foauth%252Fkakao%252Fcode%26through_account%3Dtrue%26client_id%3D${clientId}#login`;
+// const authorizeUrl = `https://accounts.kakao.com/login/?continue=https%3A%2F%2Fkauth.kakao.com%2Foauth%2Fauthorize%3Fresponse_type%3Dcode%26redirect_uri%3Dhttps%253A%252F%252Fport-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app%252Foauth%252Fkakao%252Fcode%26through_account%3Dtrue%26client_id%3D${clientId}#login`;
+const authorizeUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao/code&response_type=code`;
 
 /** 카카오 로그인 페이지 컴포넌트 */
 const KaKaoLogin = () => {
@@ -33,7 +34,7 @@ const KaKaoLogin = () => {
   const requestToken = async (authorize_code: string) => {
     try {
       const response = await axiosBase.get(
-        `oauth/kakao/callback?code=${authorize_code}`
+        `/api/oauth/kakao/login?code=${authorize_code}`
       );
       console.log("response...", response);
 
