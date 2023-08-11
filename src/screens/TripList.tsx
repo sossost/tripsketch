@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import { useState } from "react";
 import { Post } from "../types/Post";
 import { usePostSearch } from "../hooks/usePostSearch";
@@ -79,9 +79,17 @@ const TripList = ({ navigation }: any) => {
         ) : isError ? (
           <Text>Something Wrong!</Text>
         ) : ( */}
-        <View style={{ marginTop: 20 }}>
-          <HorizontalPostCard post={postData[0]} />
-        </View>
+        <FlatList
+          data={postData}
+          renderItem={({ item }) => <HorizontalPostCard post={item} />}
+          keyExtractor={(item) => item.id.toString()}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{
+            gap: 10,
+            paddingVertical: 20,
+            paddingHorizontal: 2,
+          }}
+        />
         {/* )} */}
       </View>
     </View>
