@@ -1,23 +1,15 @@
-import axios from "axios";
 import mockData from "../../data/mockdata.json";
 import { axiosBase } from "../../api/axios";
-
-export const getCurrentUser = async () => {
-  try {
-    const reponse = await axios("data/mockdata.json");
-    return reponse.data;
-  } catch (error: any) {
-    console.log(error);
-  }
-};
+import * as SecureStore from "expo-secure-store";
 
 /** 유저 정보 get 요청하는 함수 (230728 updated) */
-export const getCurrentUser2 = async (token: string | null) => {
+export const getCurrentUser = async () => {
+  const accessToken = await SecureStore.getItemAsync("accessToken");
   try {
-    if (token) {
-      const response = await axiosBase.get("/oauth/user", {
+    if (accessToken) {
+      const response = await axiosBase.get("/api/user", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       return response.data;
@@ -26,6 +18,23 @@ export const getCurrentUser2 = async (token: string | null) => {
     return null;
   } catch (error: any) {
     console.log("유저 정보 get 요청과 관련한 오류는...🤔", error);
+  }
+};
+
+/** 유저 정보 SecureStore에서 불러오는 함수 */
+export const getUserInfo = async () => {
+  try {
+    const userInfoJSON = await SecureStore.getItemAsync("userProfile");
+    if (userInfoJSON) {
+      const userInfo = JSON.parse(userInfoJSON);
+      return userInfo;
+    }
+  } catch (error) {
+    console.error(
+      "SecureStore에 저장된 유저 정보를 가져오면서 발생한 에러는...🤔",
+      error
+    );
+    return null;
   }
 };
 
