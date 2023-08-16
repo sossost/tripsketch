@@ -3,21 +3,16 @@ import { View, StyleSheet } from "react-native";
 import { WebView } from "react-native-webview";
 import { useNavigation } from "@react-navigation/native";
 import { axiosBase } from "../../../api/axios";
-import { tokenState } from "../../recoil/atom";
-import { useRecoilState } from "recoil";
+import * as SecureStore from "expo-secure-store";
 
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 
 const clientId = "1927d084a86a31e01a814ce0b2fe3459";
-// const authorizeUrl = `https://accounts.kakao.com/login/?continue=https%3A%2F%2Fkauth.kakao.com%2Foauth%2Fauthorize%3Fresponse_type%3Dcode%26redirect_uri%3Dhttps%253A%252F%252Fport-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app%252Foauth%252Fkakao%252Fcode%26through_account%3Dtrue%26client_id%3D${clientId}#login`;
 const authorizeUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao/code&response_type=code`;
 
 /** 카카오 로그인 페이지 컴포넌트 */
 const KaKaoLogin = () => {
   const navigation = useNavigation();
-
-  // 토큰 상태 관리
-  const [token, setToken] = useRecoilState(tokenState);
 
   // 카카오 로그인 진행하는 화면
   const KakaoLoginWebView = (url: string) => {
@@ -36,16 +31,26 @@ const KaKaoLogin = () => {
       const response = await axiosBase.get(
         `/api/oauth/kakao/login?code=${authorize_code}`
       );
-      console.log("response...", response);
 
-      // headers에서 토큰값 추출
-      const tokenValue = response.headers.authorization.split(" ")[1];
-      console.log("bearerToken", tokenValue);
+      // 액세스 토큰 저장
+      const accessToken = JSON.stringify(response.data.accessToken);
+      await SecureStore.setItemAsync("accessToken", accessToken);
 
-      // recoil에 token 설정
-      setToken(tokenValue);
+      // 리프레시 토큰 저장
+      const refreshToken = JSON.stringify(response.data.refreshToken);
+      await SecureStore.setItemAsync("refreshToken", refreshToken);
 
-      // 토큰이 정상발급 된 경우 메인 페이지로 이동
+      // 리프레시 토큰 만료 기간 저장
+      const refreshTokenExpiryDate = JSON.stringify(
+        response.data.refreshTokenExpiryDate
+      );
+      await SecureStore.setItemAsync(
+        "refreshTokenExpiryDate",
+        refreshTokenExpiryDate
+      );
+
+      // 토큰이 정상 발급 된 경우 메인 페이지로 이동
+      const tokenValue = await SecureStore.getItemAsync("accessToken");
       if (tokenValue) {
         (navigation.navigate as (route: string) => void)("Home");
       }
