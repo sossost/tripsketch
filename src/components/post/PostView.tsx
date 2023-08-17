@@ -2,73 +2,107 @@ import {
   StyleSheet,
   Text,
   View,
-  Dimensions,
   TouchableOpacity,
+  Image,
+  ImageBackground,
 } from "react-native";
 import { useState } from "react";
 import { Post } from "../../types/Post";
-import { CommonStyles } from "../../styles/CommonStyles";
 import { Ionicons } from "@expo/vector-icons";
-import { MixedStyleDeclaration } from "react-native-render-html";
-import RenderHtml from "react-native-render-html";
+import Slick from "react-native-slick";
 
 const PostView = ({ post }: { post: Post }) => {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
-  const deviceWidth = Dimensions.get("window").width;
-
   const settingBox = () => {
     setIsSettingOpen(!isSettingOpen);
   };
 
   return (
-    <View style={[CommonStyles.appContainer, styles.container]}>
-      <View style={styles.title_container}>
-        <Text style={styles.title}>{post.title}</Text>
-        <View style={styles.ellipsis}>
-          <TouchableOpacity onPress={settingBox}>
-            <Ionicons name="ellipsis-vertical" size={18} color="#9f9f9f" />
-          </TouchableOpacity>
-          {isSettingOpen && (
-            <View style={styles.setting_box}>
-              <Text style={styles.setting_box_text}>수정하기</Text>
+    <View style={[styles.container]}>
+      <ImageBackground
+        source={{ uri: post.image[0] }}
+        resizeMode="cover"
+        style={styles.image_bg}
+      >
+        <View style={styles.opacity}></View>
+        <View style={styles.wrap}>
+          <View style={styles.title_container}>
+            <Text style={styles.title} numberOfLines={3}>
+              {post.title}
+            </Text>
+            <View style={styles.ellipsis}>
+              <TouchableOpacity onPress={settingBox}>
+                <Ionicons name="ellipsis-vertical" size={18} color="#9f9f9f" />
+              </TouchableOpacity>
+              {isSettingOpen && (
+                <View style={styles.setting_box}>
+                  <Text style={styles.setting_box_text}>수정하기</Text>
+                </View>
+              )}
             </View>
-          )}
+          </View>
+          <View style={styles.tag_container}>
+            {post.hashtag.map((item, index) => (
+              <View style={styles.tag} key={index}>
+                <Text style={styles.tag_text}>{item}</Text>
+              </View>
+            ))}
+          </View>
+          <View style={styles.writer_container}>
+            <Text style={styles.writer}>by {post.user.nickName}</Text>
+          </View>
+        </View>
+      </ImageBackground>
+      <View style={styles.wrap}>
+        <View style={styles.date_container}>
+          <View style={styles.trip_date_container}>
+            <Text style={styles.trip_date_text}>여행 일정</Text>
+            <Text style={styles.trip_date_period}>
+              {post.startAt} ~ {post.endAt}
+            </Text>
+          </View>
+          <View style={styles.trip_date_container}>
+            <Text style={styles.trip_date_text}>작성일</Text>
+            <Text style={styles.trip_date_period}>{post.createdAt}</Text>
+          </View>
+          <View style={styles.bookmark}>
+            <Ionicons name="md-bookmark-sharp" size={20} color="#73BBFB" />
+          </View>
         </View>
       </View>
-      <View style={styles.tag_container}>
-        {post.hashtag.map((item, index) => (
-          <View style={styles.tag} key={index}>
-            <Text style={styles.tag_text}>{item}</Text>
+      <Slick showsButtons={false} style={styles.slick}>
+        {post.image.map((item, index) => (
+          <View key={index} style={styles.slide_container}>
+            <Image source={{ uri: item }} style={styles.slide_image} />
           </View>
         ))}
+      </Slick>
+      <View style={styles.content_container}>
+        <Text style={styles.content_text}>{post.content}</Text>
       </View>
-      <View style={styles.date_container}>
-        <View style={styles.trip_date_container}>
-          <Text style={styles.trip_date_text}>여행 일정</Text>
-          <Text style={styles.trip_date_period}>
-            {post.start_at} ~ {post.end_at}
-          </Text>
-        </View>
-        <View style={styles.trip_date_container}>
-          <Text style={styles.trip_date_text}>작성일</Text>
-          <Text style={styles.trip_date_period}>{post.created_at}</Text>
-        </View>
-        <View style={styles.bookmark}>
-          <Ionicons name="md-bookmark-sharp" size={20} color="#73BBFB" />
-        </View>
-      </View>
-      <RenderHtml
-        source={{ html: post.content }}
-        contentWidth={deviceWidth}
-        tagsStyles={tagStyles}
-      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 20,
+  container: {},
+  image_bg: {
+    width: "100%",
+    height: 200,
+    paddingVertical: 40,
+    position: "relative",
+  },
+  opacity: {
+    position: "absolute",
+    width: "100%",
+    height: 200,
+    paddingVertical: 40,
+    backgroundColor: "#000",
+    opacity: 0.6,
+    top: 0,
+  },
+  wrap: {
+    paddingHorizontal: 20,
   },
   title_container: {
     position: "relative",
@@ -77,6 +111,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "600",
     width: "90%",
+    color: "#fff",
   },
   ellipsis: {
     position: "absolute",
@@ -112,6 +147,16 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "#73BBFB",
   },
+  writer_container: {
+    position: "absolute",
+    bottom: -43,
+    right: 20,
+  },
+  writer: {
+    color: "#ddd",
+    textAlign: "right",
+    fontSize: 14,
+  },
   date_container: {
     position: "relative",
     marginTop: 15,
@@ -136,19 +181,30 @@ const styles = StyleSheet.create({
     right: 3,
     top: -2,
   },
-});
 
-const tagStyles: Record<string, MixedStyleDeclaration> = {
-  p: {
-    fontSize: 16,
-    lineHeight: 25,
-    color: "#333",
+  //slick slide Style
+  slick: {
+    height: 400,
+    marginTop: 7,
+    marginBottom: 20,
   },
-  img: {
+  slide_container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  slide_image: {
     width: "100%",
-    height: "auto",
-    resizeMode: "contain",
+    height: 400,
+    resizeMode: "cover",
   },
-};
+
+  content_container: {
+    paddingHorizontal: 20,
+  },
+  content_text: {
+    lineHeight: 18,
+  },
+});
 
 export default PostView;

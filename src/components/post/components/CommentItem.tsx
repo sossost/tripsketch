@@ -5,6 +5,7 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { ScrollView as GestureHandlerScrollView } from "react-native-gesture-handler";
 import { Comment } from "../../../types/comment";
@@ -17,8 +18,9 @@ const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
   const [showCommentInput, setShowCommentInput] = useState(false);
+  const [isUpdateInput, setIsUpdateInput] = useState(false);
 
-  const [likes, setLikes] = useState(comment.like);
+  const [likes, setLikes] = useState(comment.likedBy);
   const isLiked = likes.includes("1234");
 
   const handleLike = () => {
@@ -28,6 +30,23 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
     } else {
       setLikes([...likes, "1234"]);
     }
+  };
+
+  const updateComment = () => {
+    Alert.alert(
+      "알림",
+      "댓글을 수정하시겠습니까?",
+      [
+        {
+          text: "아니요",
+          onPress: () => console.log("아니오"),
+          style: "cancel",
+        },
+        { text: "네", onPress: () => console.log("네") },
+        // 이벤트 발생시 로그를 찍는다
+      ],
+      { cancelable: false }
+    );
   };
 
   const handleCommentButtonClick = () => {
@@ -54,7 +73,7 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
           </View>
           <View style={styles.text}>
             <View style={styles.top}>
-              <Text style={styles.id}>{comment.user.nickName}</Text>
+              <Text style={styles.id}>{comment.userNickName}</Text>
               <View style={styles.likes}>
                 <TouchableOpacity onPress={handleLike}>
                   <Ionicons
@@ -66,12 +85,9 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
                 <Text style={styles.like_length}>{likes.length}</Text>
               </View>
             </View>
-            <Text style={styles.date}>{comment.create_at}</Text>
-            <Text style={styles.comment}>{comment.comment}</Text>
+            <Text style={styles.date}>{comment.createdAt}</Text>
+            <Text style={styles.comment}>{comment.content}</Text>
             {sort === "all" ? (
-              // <TouchableOpacity>
-              //   <Text style={styles.add_comment}>답글 달기</Text>
-              // </TouchableOpacity>
               <View>
                 {!showCommentInput ? (
                   <TouchableOpacity onPress={handleCommentButtonClick}>
@@ -85,7 +101,7 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
                     <CommentInput
                       onSubmit={handleCommentSubmit}
                       commentId={comment.id}
-                      commentNickname={comment.user.nickName}
+                      commentNickname={comment.userNickName}
                     />
                   </View>
                 )}
@@ -94,7 +110,7 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
             {sort === "all" && comment.children.length > 0 ? (
               <View style={styles.recomment_container}>
                 {comment.children.map((item) => (
-                  <View key={item.comment_id}>
+                  <View key={item.id}>
                     <ReCommentItem recomment={item} />
                   </View>
                 ))}
@@ -103,12 +119,15 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
           </View>
         </View>
       </View>
-      <View style={[styles.button, styles.edit]}>
+      <TouchableOpacity
+        style={[styles.button, styles.edit]}
+        onPress={updateComment}
+      >
         <Text style={styles.button_text_edit}>수정하기</Text>
-      </View>
-      <View style={[styles.button, styles.delete]}>
+      </TouchableOpacity>
+      <TouchableOpacity style={[styles.button, styles.delete]}>
         <Text style={styles.button_text_delete}>삭제하기</Text>
-      </View>
+      </TouchableOpacity>
     </GestureHandlerScrollView>
   );
 };
