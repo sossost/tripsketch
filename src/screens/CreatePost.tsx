@@ -1,22 +1,44 @@
 import {
+  FlatList,
   Keyboard,
   ScrollView,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import styled from "styled-components/native";
-import PropTypes from "prop-types";
 
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Calendar from "react-native-calendars/src/calendar";
+import MapView, { Marker, UrlTile } from "react-native-maps";
+import CitySearch from "../components/post/CitySearch";
+
+type Suggestion = {
+  place_id: string;
+  display_name: string;
+  lat: string;
+  lon: string;
+};
 
 /** 여행 글쓰기 */
 const CreatePost = () => {
+  const [query, setQuery] = useState<string>("");
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [mapViewOn, setMapViewOn] = useState(false);
+  const [address, setAddress] = useState({
+    country: "",
+    city: "",
+    town: "",
+    road: "",
+    display_name: "",
+    latitude: 0,
+    longitude: 0,
+  });
   const [isPublic, setIsPublic] = useState(true);
 
   /** 공개 설정 핸들러 */
@@ -32,6 +54,71 @@ const CreatePost = () => {
   /** 여행기간 선택 핸들러 */
   const periodSelectHandler = () => {
     console.log("여행 기간 선택");
+  };
+
+  type MapPressEvent = {
+    nativeEvent: {
+      coordinate: {
+        latitude: number;
+        longitude: number;
+      };
+    };
+  };
+
+  const handlePressLocation = async (event: MapPressEvent) => {
+    const { latitude, longitude } = event.nativeEvent.coordinate;
+    fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`
+    )
+      .then((response) => response.json())
+      .then((data) =>
+        setAddress({
+          country: data.address.country,
+          city: data.address.city,
+          town: data.address.town,
+          road: data.address.road,
+          display_name: `${
+            data.address.city
+              ? data.address.city
+              : data.address.town
+              ? data.address.town
+              : data.address.road
+              ? data.address.road
+              : "알 수 없는 곳"
+          }, ${data.address.country}`,
+          latitude: Number(latitude),
+          longitude: Number(longitude),
+        })
+      );
+  };
+
+  useEffect(() => {
+    setQuery(address.display_name);
+  }, [address]);
+
+  const handleInputChange = (value: string) => {
+    setQuery(value);
+    searchCity(value);
+  };
+
+  const searchCity = (cityName: string) => {
+    if (cityName.length > 2) {
+      fetch(
+        `https://nominatim.openstreetmap.org/search?city=${cityName}&format=json`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          setSuggestions(data);
+          console.log(data);
+        });
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion: Suggestion) => {
+    console.log("Selected city:", suggestion);
+    // Handle the selected city, e.g., navigation or fetching more details
   };
 
   // react-native-calendars 패키지를 사용하여 달력을 구현 --------
@@ -74,25 +161,17 @@ const CreatePost = () => {
           <InfoBox>
             <CalendarIcon name="calendar" />
             <Title>여행기간</Title>
-
             {/* <ContentText>2023.03.03 ~ 2023.04.02</ContentText> */}
-            <ContentText>
-              {selectedStartDate.toLocaleDateString()} ~{" "}
+            <ContentText onPress={showStartDatepicker}>
+              {selectedStartDate.toLocaleDateString()}
+            </ContentText>
+            <ContentText onPress={showEndDatepicker}>
               {selectedEndDate.toLocaleDateString()}
             </ContentText>
-
             {/* <SelectButton onPress={showDatepicker}> */}
             {/* <SelectButton onPress={periodSelectHandler}> */}
             {/* <SelectText>선택</SelectText> */}
             {/* </SelectButton> */}
-
-            <SelectButton onPress={showStartDatepicker}>
-              <SelectText>시작일</SelectText>
-            </SelectButton>
-
-            <SelectButton onPress={showEndDatepicker}>
-              <SelectText>종료일</SelectText>
-            </SelectButton>
           </InfoBox>
 
           {/* {showStartDatePicker && (
@@ -135,12 +214,56 @@ const CreatePost = () => {
           <InfoBox>
             <MapIcon name="map-marker-alt" />
             <Title>여행지</Title>
-            <ContentText>아이슬란드</ContentText>
-            <SelectButton>
-              <SelectText>선택</SelectText>
-            </SelectButton>
+            <ContentText onPress={() => setMapViewOn(!mapViewOn)}>
+              선택
+            </ContentText>
           </InfoBox>
         </HeaderInfo>
+        {mapViewOn && (
+          <SelectLocation>
+            <SelectLocationUpper>
+              <View></View>
+
+              <TouchableOpacity onPress={() => setMapViewOn(false)}>
+                <Text>╳</Text>
+              </TouchableOpacity>
+            </SelectLocationUpper>
+            <SelectLocationUpperBottom>
+              <LocationInput
+                value={query}
+                onChangeText={handleInputChange}
+                placeholder="도시 이름을 입력해주세요."
+              />
+              <FontAwesome name="check" size={24} color="#73bbfb" />
+            </SelectLocationUpperBottom>
+
+            <SelectLocationMiddle>
+              <MapView
+                style={{
+                  width: "100%",
+                  zIndex: 5,
+                  position: "absolute",
+                  height: 500,
+                }}
+                onPress={handlePressLocation}
+              >
+                <UrlTile
+                  urlTemplate="http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  maximumZ={19}
+                />
+                <Marker
+                  coordinate={{
+                    latitude: address.latitude,
+                    longitude: address.longitude,
+                  }}
+                  title="My Marker"
+                  description="Some description"
+                />
+              </MapView>
+            </SelectLocationMiddle>
+            <SelectLocationLower></SelectLocationLower>
+          </SelectLocation>
+        )}
 
         <ScrollView>
           <BodyInfo>
@@ -263,9 +386,11 @@ const SelectButton = styled.TouchableOpacity`
 
 /** 내용 Text */
 const ContentText = styled.Text`
-  color: #6f6f6f;
+  color: #73bbfb;
   margin-right: 10px;
-  font-size: 15px;
+  font-size: 16px;
+  font-style: italic;
+  text-decoration: underline #73bbfb;
 `;
 
 /** 선택 Text */
@@ -295,6 +420,18 @@ const TitleInput = styled.TextInput`
   border-radius: 5px;
   margin-top: 10px;
   margin-bottom: 15px;
+  color: #6f6f6f;
+`;
+
+const LocationInput = styled.TextInput`
+  padding: 10px 10px;
+  height: 45px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  width: 70%;
+  z-index: 20;
+
   color: #6f6f6f;
 `;
 
@@ -363,6 +500,94 @@ const ActionButton = styled.TouchableOpacity<{ cancel: boolean }>`
 const ActionButtonText = styled.Text<{ cancel: boolean }>`
   color: ${(props) => (props.cancel ? "#73bbfb" : "#ffffff")};
   font-size: 16px;
+`;
+
+const SelectLocation = styled.View`
+  background-color: white;
+  shadow-color: "#111";
+  shadow-opacity: 0.1;
+  shadow-radius: 8rem;
+  shadow-offset-x: 50px;
+  top: 10%;
+  left: 0;
+  position: absolute;
+  width: 90%;
+  height: 300px;
+  color: white;
+  border-radius: 30px;
+  margin: 20px;
+  font-size: 15px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  border-width: 0.5px;
+  border-color: #dddddd;
+  overflow: hidden;
+`;
+
+const SelectLocationUpper = styled.View`
+  width: 100%;
+  height: 50px;
+  color: white;
+  padding: 0 20px;
+  font-size: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const SelectLocationUpperBottom = styled.View`
+  width: 100%;
+  height: 50px;
+  color: white;
+
+  padding: 10px;
+  padding-right: 20px;
+
+  font-size: 16px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  backgroundcolor: white;
+  z-index: 10;
+`;
+
+const SelectLocationMiddle = styled.View`
+  background-color: gray;
+  width: 100%;
+  height: 220px;
+  color: white;
+  font-size: 16px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  border-width: 0.5px;
+  border-color: #cccccc;
+`;
+
+const SelectLocationLower = styled.View`
+  width: 100%;
+  height: 100px;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 10px;
+  padding: 10px;
+`;
+
+const SelectLocationButtonText = styled.Text`
+  font-size: 16px;
+  color: white;
 `;
 
 export default CreatePost;
