@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { styled } from "styled-components/native";
 
 type CategoryProps = {
   category: string[];
@@ -11,7 +12,7 @@ const Category = (props: CategoryProps) => {
   const { category, selectedCategory, setSelectedCategory } = props;
 
   return (
-    <View style={styles.container}>
+    <CategoryContainer>
       {category.map((item, index) => {
         const isClicked = item === selectedCategory;
         const clickedStyle = {
@@ -20,37 +21,38 @@ const Category = (props: CategoryProps) => {
         };
 
         return (
-          <TouchableOpacity
+          <CategoryButton
+            isClicked={isClicked}
             key={index}
-            style={[styles.categoryWrapper, clickedStyle]}
             onPress={() => setSelectedCategory(item)}
           >
             <Text style={[styles.category, clickedStyle]}>{item}</Text>
-          </TouchableOpacity>
+          </CategoryButton>
         );
       })}
-    </View>
+    </CategoryContainer>
   );
 };
 
 export default Category;
 
+export const CategoryContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+`;
+
+export const CategoryButton = styled.TouchableOpacity<{ isClicked: boolean }>`
+  padding: 6px 10px;
+  border-width: 1px;
+  border-color: #73bbfb;
+  border-radius: 25px;
+  background-color: ${(props) => (props.isClicked ? "#73BBFB" : "#ffffff")};
+  color: ${(props) => (props.isClicked ? "#ffffff" : "#73BBFB")};
+`;
+
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    gap: 10,
-  },
-
-  categoryWrapper: {
-    paddingVertical: 6,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "#73BBFB",
-    borderRadius: 25,
-  },
-
   category: {
     fontSize: 13,
     fontWeight: "bold",
