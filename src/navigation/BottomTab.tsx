@@ -7,6 +7,7 @@ import MyPage from "../screens/MyPage";
 import TripList from "../screens/TripList";
 import Notice from "../screens/Notice";
 import CreatePost from "../screens/CreatePost";
+import UserPage from "../screens/UserPage";
 
 const Tabs = createBottomTabNavigator();
 
