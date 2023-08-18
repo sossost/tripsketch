@@ -22,9 +22,11 @@ const BackBtnWrapper = styled.TouchableOpacity`
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 20px;
+  height: 20px;
 `;
 
 const BackBtnIcon = styled.Image`
-  width: 20px;
+  width: 12px;
   height: 20px;
 `;
