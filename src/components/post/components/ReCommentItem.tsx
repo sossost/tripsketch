@@ -5,15 +5,16 @@ import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
 
 const ReCommentItem = ({ recomment }: { recomment: Comment }) => {
-  const [likes, setLikes] = useState(recomment.likedBy);
-  const isLiked = likes.includes("1234");
+  const [likes, setLikes] = useState(recomment.isLiked);
+  const [likeNum, setLikeNum] = useState(recomment.numberOfLikes);
 
   const handleLike = () => {
-    const userLiked = likes.includes("1234");
-    if (userLiked) {
-      setLikes(likes.filter((id) => id !== "1234"));
+    if (likes) {
+      setLikes(false);
+      setLikeNum(likeNum - 1);
     } else {
-      setLikes([...likes, "1234"]);
+      setLikes(true);
+      setLikeNum(likeNum + 1);
     }
   };
 
@@ -32,13 +33,13 @@ const ReCommentItem = ({ recomment }: { recomment: Comment }) => {
           <Text>
             <TouchableOpacity onPress={handleLike}>
               <Ionicons
-                name={isLiked ? "md-heart-sharp" : "md-heart-outline"}
+                name={likes ? "md-heart-sharp" : "md-heart-outline"}
                 size={18}
-                color={isLiked ? "#ec6565" : "#777"}
+                color={likes ? "#ec6565" : "#777"}
               />
             </TouchableOpacity>
           </Text>
-          <Text style={styles.likes_text}>{likes.length}</Text>
+          <Text style={styles.likes_text}>{likeNum}</Text>
         </View>
       </View>
       <View style={styles.delete}>

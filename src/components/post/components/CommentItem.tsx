@@ -20,15 +20,16 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
   const [showCommentInput, setShowCommentInput] = useState(false);
   const [isUpdateInput, setIsUpdateInput] = useState(false);
 
-  const [likes, setLikes] = useState(comment.likedBy);
-  const isLiked = likes.includes("1234");
+  const [likes, setLikes] = useState(comment.isLiked);
+  const [likeNum, setLikeNum] = useState(comment.numberOfLikes);
 
   const handleLike = () => {
-    const userLiked = likes.includes("1234");
-    if (userLiked) {
-      setLikes(likes.filter((id) => id !== "1234"));
+    if (likes) {
+      setLikes(false);
+      setLikeNum(likeNum - 1);
     } else {
-      setLikes([...likes, "1234"]);
+      setLikes(true);
+      setLikeNum(likeNum + 1);
     }
   };
 
@@ -43,7 +44,7 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
           style: "cancel",
         },
         { text: "네", onPress: () => console.log("네") },
-        // 이벤트 발생시 로그를 찍는다
+        // 이벤트 발생시 로그
       ],
       { cancelable: false }
     );
@@ -66,9 +67,7 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
           <View style={styles.image}>
             <Image
               style={styles.profile}
-              source={{
-                uri: "https://reactnative.dev/img/tiny_logo.png",
-              }}
+              source={{ uri: comment.userProfileUrl }}
             ></Image>
           </View>
           <View style={styles.text}>
@@ -77,12 +76,12 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
               <View style={styles.likes}>
                 <TouchableOpacity onPress={handleLike}>
                   <Ionicons
-                    name={isLiked ? "md-heart-sharp" : "md-heart-outline"}
+                    name={likes ? "md-heart-sharp" : "md-heart-outline"}
                     size={18}
-                    color={isLiked ? "#ec6565" : "#777"}
+                    color={likes ? "#ec6565" : "#777"}
                   />
                 </TouchableOpacity>
-                <Text style={styles.like_length}>{likes.length}</Text>
+                <Text style={styles.like_length}>{likeNum}</Text>
               </View>
             </View>
             <Text style={styles.date}>{comment.createdAt}</Text>
