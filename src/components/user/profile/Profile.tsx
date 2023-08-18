@@ -1,11 +1,5 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getFollowerList, getFollowingList } from "../../../services/user";
-import { User } from "../../../types";
-
-import ProfileImage from "./ProfileImage";
-import Link from "../../UI/Link";
-import Button from "../../UI/Button";
+import { User } from "../../../types/user";
 import {
   ProfileContainer,
   ProfileIntroductionText,
@@ -15,6 +9,11 @@ import {
   ProfileTextWrapper,
   ProfileUserNameText,
 } from "./Profile.style";
+import { useGetSocialList } from "../../../hooks/useUserQuery";
+
+import ProfileImage from "./ProfileImage";
+import Link from "../../UI/Link";
+import Button from "../../UI/Button";
 
 type ProfileProps = {
   variant: "myPage" | "userPage";
@@ -29,24 +28,18 @@ export type RootStackParamList = {
 
 const Profile = ({ variant, onPress, user }: ProfileProps) => {
   console.log(user);
-  const { data: followerList = [] } = useQuery<string[]>(
-    ["followerList", user.nickname],
-    () => getFollowerList(user.nickname)
-  );
-  const { data: followingList = [] } = useQuery<string[]>(
-    ["followingList", user.nickname],
-    () => getFollowingList(user.nickname)
-  );
+  const followerList = useGetSocialList("팔로워", user.nickname);
+  const followingList = useGetSocialList("팔로잉", user.nickname);
 
-  const isFollowing = followingList.find(
-    (nickName: string) => nickName === user.nickname
+  const isFollowing = followingList.data.find(
+    (follwing) => follwing === user.nickname
   );
 
   const buttonTitle =
     variant === "myPage" ? "프로필 편집" : isFollowing ? "팔로잉" : "팔로우";
 
-  const followerCount = followerList.length;
-  const followingCount = followingList.length;
+  const followerCount = followerList.data.length;
+  const followingCount = followingList.data.length;
 
   return (
     <ProfileLayout>
