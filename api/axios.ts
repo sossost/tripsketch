@@ -76,23 +76,6 @@ export const tokenRefresh = async () => {
   }
 };
 
-// 요청 인터셉터: 모든 요청 전에 실행되는 함수
-// axiosBase.interceptors.request.use(
-//   (config) => {
-//     const accessToken = getAccessToken();
-
-//     // 요청 헤더에 토큰과 컨텐트 타입을 설정합니다.
-//     config.headers["Content-Type"] = "application/json";
-//     config.headers["Authorization"] = `Bearer ${accessToken}`;
-
-//     return config; // 수정된 설정(config)을 반환하여 요청을 계속 진행합니다.
-//   },
-//   (error) => {
-//     console.log(error);
-//     return Promise.reject(error); // 에러가 발생하면 해당 에러를 반환합니다.
-//   }
-// );
-
 // 응답 인터셉터: 모든 응답 전에 실행되는 함수
 axiosBase.interceptors.response.use(
   (response) => {
@@ -103,9 +86,9 @@ axiosBase.interceptors.response.use(
     return response; // 응답이 정상적으로 도착하면 해당 응답을 반환합니다.
   },
   async (error) => {
+    // 응답 상태 코드가 401 (Unauthorized)인 경우
     if (error.response?.status === 401) {
       console.log("401에러!!!");
-      // 응답 상태 코드가 401 (Unauthorized)인 경우
       if (await isTokenExpired()) await tokenRefresh(); // 토큰이 만료되었다면 토큰을 갱신합니다.
 
       const accessToken = await getAccessToken(); // 갱신된 토큰을 가져옵니다.
