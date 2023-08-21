@@ -5,6 +5,8 @@ import * as SecureStore from "expo-secure-store";
 /** 유저 정보 get 요청하는 함수 (230728 updated) */
 export const getCurrentUser = async () => {
   const accessToken = await SecureStore.getItemAsync("accessToken");
+  console.log("                              ");
+  console.log("user.ts 현재 액세스 토큰 ===> ", accessToken);
   try {
     if (accessToken) {
       const response = await axiosBase.get("/api/user", {
@@ -12,9 +14,11 @@ export const getCurrentUser = async () => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+      console.log("user.ts 요청한 유저 데이터 ===> ", response.data);
       return response.data;
     }
     // 토큰이 없을 때 null 처리
+    console.log("토큰이 없음");
     return null;
   } catch (error: any) {
     console.log("유저 정보 get 요청과 관련한 오류는...🤔", error);
@@ -27,7 +31,11 @@ export const getUserInfo = async () => {
     const userInfoJSON = await SecureStore.getItemAsync("userProfile");
     if (userInfoJSON) {
       const userInfo = JSON.parse(userInfoJSON);
+      console.log("SecureStore에 저장된 유저정보!", userInfo);
       return userInfo;
+    } else {
+      console.log("유저 정보가 없습니다..");
+      return null;
     }
   } catch (error) {
     console.error(
