@@ -3,40 +3,69 @@ import {
   getCurrentUser,
   getFollowerList,
   getFollowingList,
+  getUserByNickname,
 } from "../services/user";
 import { queryKeys } from "../react-query/constants";
+import { User } from "../types/user";
 
 export const useGetCurrentUser = () => {
-  const { data: currentUser } = useQuery(
-    [queryKeys.currentUser],
-    getCurrentUser
-  );
+  const fallback = {
+    id: "",
+    email: "",
+    nickname: "",
+    introduction: "",
+    profileImageUrl: "",
+  };
 
-  return { currentUser };
+  const {
+    data = fallback as User,
+    isLoading,
+    isError,
+  } = useQuery<User>([queryKeys.currentUser], () => getCurrentUser("네이버"));
+
+  return { data, isLoading, isError };
+};
+
+export const useGetUserByNickname = (nickname: string) => {
+  const fallback = {
+    id: "",
+    email: "",
+    nickname: "",
+    introduction: "",
+    profileImageUrl: "",
+  };
+
+  const {
+    data = fallback as User,
+    isLoading,
+    isError,
+  } = useQuery<User>([queryKeys.user], () => getUserByNickname(nickname));
+
+  return { data, isLoading, isError };
 };
 
 export const useGetSocialList = (
   variant: "팔로워" | "팔로잉",
-  userName: string
+  nickname: string
 ) => {
-  const queryKey = [variant, userName];
+  const queryKey = [variant, nickname];
 
   const queryFn = () => {
     if (variant === "팔로워") {
-      return getFollowerList(userName);
+      return getFollowerList(nickname);
     }
     if (variant === "팔로잉") {
-      return getFollowingList(userName);
+      return getFollowingList(nickname);
     }
   };
 
-  const fallback: User[] | undefined = [];
+  const fallback: string[] = [];
 
   const {
-    data: users = fallback,
+    data = fallback,
     isLoading,
     isError,
-  } = useQuery<User[] | undefined>(queryKey, queryFn);
+  } = useQuery<string[] | undefined>(queryKey, queryFn);
 
-  return { users, isLoading, isError };
+  return { data, isLoading, isError };
 };

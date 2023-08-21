@@ -1,40 +1,43 @@
 import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { styled } from "styled-components/native";
 import { category } from "../../data/mockdata";
 import { Text, TouchableOpacity } from "react-native";
 import { useGetDiariesByCategory } from "../hooks/usePostQuery";
-import { useGetCurrentUser } from "../hooks/useUserQuery";
+import { useGetUserByNickname } from "../hooks/useUserQuery";
 
 import Profile from "../components/user/profile/Profile";
 import Category from "../components/user/Category";
 import DiaryList from "../components/user/DiaryList";
 import UserPageSkeletonUI from "../components/user/UserPageSkeletonUI";
-import { UserPageLayout } from "./UserPage";
+import { RootStackParamList } from "../types/RootStack";
 
-const MyPage = () => {
+type UserScreenRouteProp = RouteProp<RootStackParamList, "UserPage">;
+
+const UserPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("전체보기");
 
   const navigation = useNavigation();
+  const route = useRoute<UserScreenRouteProp>();
+  const nickname = route.params?.nickname ?? "";
 
-  const currentUser = useGetCurrentUser();
-  const nickname = currentUser.data?.nickname ?? "";
+  const user = useGetUserByNickname(nickname);
   const diaries = useGetDiariesByCategory(nickname, selectedCategory) ?? [];
 
-  if (currentUser.isLoading) {
+  if (user.isLoading) {
     return <UserPageSkeletonUI />;
   }
-  if (currentUser.isError) {
+  if (user.isError) {
     return <UserPageSkeletonUI />;
   }
 
+  const handleFollow = async () => {
+    console.log("팔로우");
+  };
+
   return (
-    <MyPageLayout>
-      <Profile
-        variant={"myPage"}
-        user={currentUser.data}
-        onPress={() => navigation.navigate("EditProfilePage" as never)}
-      />
+    <UserPageLayout>
+      <Profile variant={"userPage"} user={user.data} onPress={handleFollow} />
 
       <Category
         category={category}
@@ -55,10 +58,18 @@ const MyPage = () => {
       >
         <Text>유저버튼</Text>
       </TouchableOpacity>
-    </MyPageLayout>
+    </UserPageLayout>
   );
 };
 
-const MyPageLayout = styled(UserPageLayout)``;
+export const UserPageLayout = styled.View`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  padding: 0 20px;
+  gap: 20px;
+  background-color: white;
+`;
 
-export default MyPage;
+export default UserPage;

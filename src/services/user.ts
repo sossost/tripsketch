@@ -73,17 +73,43 @@ export const patchCurrentUser = async (token: string | null, data: any) => {
   }
 };
 
-export const getFollowerList = async (userId: string, searchQuery: string) => {
+export const getFollowerList = async (nickname: string) => {
   try {
-    return Promise.resolve(mockData.users);
+    const response = await axiosBase.get(
+      `/api/follow/followers?nickname=${nickname}`
+    );
+    return response.data;
   } catch (error: any) {
     console.log(error);
   }
 };
 
-export const getFollowingList = async (userId: string, searchQuery: string) => {
+export const getFollowingList = async (nickname: string) => {
   try {
-    return Promise.resolve(mockData.users);
+    const response = await axiosBase.get(
+      `/api/follow/followings?nickname=${nickname}`
+    );
+    return response.data;
+  } catch (error: any) {
+    console.log(error);
+  }
+};
+
+export const getUserByNickname = async (nickname: string) => {
+  try {
+    const response = await axiosBase.get(
+      `/api/user/nickname?nickname=${nickname}`
+    );
+    return response.data;
+  } catch (error: any) {
+    console.log(error);
+  }
+};
+
+export const getUserByEmail = async (email: string) => {
+  try {
+    const response = await axiosBase.get(`/api/user/email?email=${email}`);
+    return response.data;
   } catch (error: any) {
     console.log(error);
   }

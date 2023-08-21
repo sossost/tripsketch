@@ -46,7 +46,7 @@ const Home = ({ navigation }: any) => {
         ))}
       </ScrollView>
       <View style={styles.buttonItself}>
-        <TouchableOpacity onPress={this.onPress}>
+        <TouchableOpacity onPress={onPress}>
           <Text style={styles.buttonText}>맨 위로</Text>
         </TouchableOpacity>
       </View>
