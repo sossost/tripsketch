@@ -48,8 +48,6 @@ const isTokenExpired = async () => {
 
 /** 리프레시 토큰으로 액세스 토큰 갱신하는 함수 */
 export const tokenRefresh = async () => {
-  const navigation = useNavigation();
-
   // 리프레시 토큰으로 액세스 토큰 갱신 요청
   try {
     const refreshToken = await SecureStore.getItemAsync("refreshToken");
@@ -62,11 +60,12 @@ export const tokenRefresh = async () => {
       // 새로운 액세스 토큰 저장
       const newAccessToken = response.data.accessToken;
       console.log(
-        "리프레시 토큰으로 새로 발근한 액세스 토큰은...",
+        "리프레시 토큰으로 새로 발급한 액세스 토큰은...",
         newAccessToken
       );
       await SecureStore.setItemAsync("accessToken", newAccessToken);
     } else {
+      const navigation = useNavigation();
       console.log("리프레시 토큰이 없습니다!!");
       // 리프레시 토큰이 만료된 경우 로그인 화면으로 이동
       navigation.navigate as (route: string) => void;
@@ -105,10 +104,12 @@ axiosBase.interceptors.response.use(
   },
   async (error) => {
     if (error.response?.status === 401) {
+      console.log("401에러!!!");
       // 응답 상태 코드가 401 (Unauthorized)인 경우
       if (await isTokenExpired()) await tokenRefresh(); // 토큰이 만료되었다면 토큰을 갱신합니다.
 
-      const accessToken = getAccessToken(); // 갱신된 토큰을 가져옵니다.
+      const accessToken = await getAccessToken(); // 갱신된 토큰을 가져옵니다.
+      console.log("갱신된 accessToken은...", accessToken);
 
       // 에러가 발생한 요청의 헤더를 갱신된 토큰으로 업데이트합니다.
       error.config.headers = {
