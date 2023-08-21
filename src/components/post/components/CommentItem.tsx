@@ -57,83 +57,85 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
   const handleCommentSubmit = () => {};
 
   return (
-    <GestureHandlerScrollView
-      pagingEnabled
-      horizontal
-      showsHorizontalScrollIndicator={false}
-    >
-      <View style={styles.container}>
-        <View style={[styles.normal, sort === "best" && styles.background]}>
-          <View style={styles.image}>
-            <Image
-              style={styles.profile}
-              source={{ uri: comment.userProfileUrl }}
-            ></Image>
-          </View>
-          <View style={styles.text}>
-            <View style={styles.top}>
-              <Text style={styles.id}>{comment.userNickName}</Text>
-              <View style={styles.likes}>
-                <TouchableOpacity onPress={handleLike}>
-                  <Ionicons
-                    name={likes ? "md-heart-sharp" : "md-heart-outline"}
-                    size={18}
-                    color={likes ? "#ec6565" : "#777"}
-                  />
-                </TouchableOpacity>
-                <Text style={styles.like_length}>{likeNum}</Text>
-              </View>
+    <View>
+      <GestureHandlerScrollView
+        pagingEnabled
+        horizontal
+        showsHorizontalScrollIndicator={false}
+      >
+        <View style={styles.container}>
+          <View style={[styles.normal, sort === "best" && styles.background]}>
+            <View style={styles.image}>
+              <Image
+                style={styles.profile}
+                source={{ uri: comment.userProfileUrl }}
+              ></Image>
             </View>
-            <Text style={styles.date}>{comment.createdAt}</Text>
-            <Text style={styles.comment}>{comment.content}</Text>
-            {sort === "all" ? (
-              <View>
-                {!showCommentInput ? (
-                  <TouchableOpacity onPress={handleCommentButtonClick}>
-                    <Text style={styles.add_comment}>답글 달기</Text>
-                  </TouchableOpacity>
-                ) : (
-                  <View>
-                    <TouchableOpacity onPress={handleCommentButtonClick}>
-                      <Text style={styles.add_comment}>답글 달기</Text>
-                    </TouchableOpacity>
-                    <CommentInput
-                      onSubmit={handleCommentSubmit}
-                      commentId={comment.id}
-                      commentNickname={comment.userNickName}
+            <View style={styles.text}>
+              <View style={styles.top}>
+                <Text style={styles.id}>{comment.userNickName}</Text>
+                <View style={styles.likes}>
+                  <TouchableOpacity onPress={handleLike}>
+                    <Ionicons
+                      name={likes ? "md-heart-sharp" : "md-heart-outline"}
+                      size={18}
+                      color={likes ? "#ec6565" : "#777"}
                     />
-                  </View>
-                )}
+                  </TouchableOpacity>
+                  <Text style={styles.like_length}>{likeNum}</Text>
+                </View>
               </View>
-            ) : null}
-            {sort === "all" && comment.children.length > 0 ? (
-              <View style={styles.recomment_container}>
-                {comment.children.map((item) => (
-                  <View key={item.id}>
-                    <ReCommentItem recomment={item} />
-                  </View>
-                ))}
-              </View>
-            ) : null}
+              <Text style={styles.date}>{comment.createdAt}</Text>
+              <Text style={styles.comment}>{comment.content}</Text>
+            </View>
           </View>
         </View>
-      </View>
-      <TouchableOpacity
-        style={[styles.button, styles.edit]}
-        onPress={updateComment}
-      >
-        <Text style={styles.button_text_edit}>수정하기</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, styles.delete]}>
-        <Text style={styles.button_text_delete}>삭제하기</Text>
-      </TouchableOpacity>
-    </GestureHandlerScrollView>
+        <TouchableOpacity
+          style={[styles.button, styles.edit]}
+          onPress={updateComment}
+        >
+          <Text style={styles.button_text_edit}>수정하기</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, styles.delete]}>
+          <Text style={styles.button_text_delete}>삭제하기</Text>
+        </TouchableOpacity>
+      </GestureHandlerScrollView>
+      {sort === "all" ? (
+        <View style={styles.recommentBox}>
+          {!showCommentInput ? (
+            <TouchableOpacity onPress={handleCommentButtonClick}>
+              <Text style={styles.add_comment}>답글 달기</Text>
+            </TouchableOpacity>
+          ) : (
+            <View>
+              <TouchableOpacity onPress={handleCommentButtonClick}>
+                <Text style={styles.add_comment}>답글 달기</Text>
+              </TouchableOpacity>
+              <CommentInput
+                onSubmit={handleCommentSubmit}
+                commentId={comment.id}
+                commentNickname={comment.userNickName}
+              />
+            </View>
+          )}
+        </View>
+      ) : null}
+      {sort === "all" && comment.children.length > 0 ? (
+        <View style={styles.recomment_container}>
+          {comment.children.map((item) => (
+            <View key={item.id}>
+              <ReCommentItem recomment={item} />
+            </View>
+          ))}
+        </View>
+      ) : null}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 7,
+    paddingVertical: 12,
     width: SCREEN_WIDTH,
     paddingHorizontal: 15,
   },
@@ -219,10 +221,14 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: "#fff",
   },
+  recommentBox: {
+    paddingHorizontal: 20,
+  },
   recomment_container: {
-    marginTop: 10,
+    marginTop: 14,
     backgroundColor: "#f7f7f7",
-    padding: 10,
+    paddingHorizontal: 25,
+    paddingVertical: 10,
   },
 });
 
