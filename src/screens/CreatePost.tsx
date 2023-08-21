@@ -1,4 +1,3 @@
-
 import { View, Modal, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import styled from "styled-components/native";
@@ -9,7 +8,6 @@ import React, { useEffect, useState } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import MapView, { Marker, UrlTile } from "react-native-maps";
-import CitySearch from "../components/post/CitySearch";
 
 type Suggestion = {
   place_id: string;
@@ -19,19 +17,6 @@ type Suggestion = {
 };
 
 /** 여행 글쓰기 */
-const CreatePost = () => {
-  const [query, setQuery] = useState<string>("");
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-  const [mapViewOn, setMapViewOn] = useState(false);
-  const [address, setAddress] = useState({
-    country: "",
-    city: "",
-    town: "",
-    road: "",
-    display_name: "",
-    latitude: 0,
-    longitude: 0,
-  });
 
 LocaleConfig.locales["ko"] = {
   monthNames: [
@@ -81,10 +66,20 @@ interface RangeKeyDict {
 /** 여행 글쓰기 */
 const CreatePost: React.FC = () => {
   const [isPublic, setIsPublic] = useState(true);
+  const [query, setQuery] = useState<string>("");
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [mapViewOn, setMapViewOn] = useState(false);
+  const [address, setAddress] = useState({
+    country: "",
+    city: "",
+    town: "",
+    road: "",
+    display_name: "",
+    latitude: 0,
+    longitude: 0,
+  });
 
   // 230728
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
   /** 공개 설정 핸들러 */
   const publicToggleHandler = () => {
@@ -153,14 +148,14 @@ const CreatePost: React.FC = () => {
   };
 
   const searchCity = (cityName: string) => {
-    if (cityName.length > 2) {
+    if (cityName.length > 1) {
       fetch(
         `https://nominatim.openstreetmap.org/search?city=${cityName}&format=json`
       )
         .then((response) => response.json())
         .then((data) => {
           setSuggestions(data);
-          console.log(data);
+          console.log(suggestions);
         });
     } else {
       setSuggestions([]);
@@ -232,7 +227,9 @@ const CreatePost: React.FC = () => {
 
             <ContentText>
               <Text>
-                {startDate} ~ {endDate}
+                {startDate === null
+                  ? "날짜를 선택해주세요."
+                  : `${startDate} ~ ${endDate}`}
               </Text>
             </ContentText>
             <SelectButton onPress={() => setShowModal(true)}>
@@ -357,6 +354,21 @@ const CreatePost: React.FC = () => {
                 placeholder="도시 이름을 입력해주세요."
               />
               <FontAwesome name="check" size={24} color="#73bbfb" />
+              {suggestions.length > 0 ? (
+                <LocationSuggestions>
+                  {suggestions.map((e) => {
+                    return (
+                      <LocationSuggestionsFields>
+                        <LocationSuggestionsTexts>
+                          {e.display_name}
+                        </LocationSuggestionsTexts>
+                      </LocationSuggestionsFields>
+                    );
+                  })}
+                </LocationSuggestions>
+              ) : (
+                <></>
+              )}
             </SelectLocationUpperBottom>
 
             <SelectLocationMiddle>
@@ -695,6 +707,54 @@ const SelectLocationUpperBottom = styled.View`
   align-items: center;
   backgroundcolor: white;
   z-index: 10;
+`;
+
+const LocationSuggestions = styled.View`
+  margin: 5px;
+  background-color: white;
+  width: 100%;
+  height: auto;
+  position: absolute;
+  z-index: 20;
+  top: 150%;
+  display: flex;
+  flex-direction: column;
+  justify-contents: flex-start;
+  align-items: flex-start;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 10px;
+  shadow-color: black;
+  shadow-opacity: 0.2;
+  shadow-radius: 5px;
+  border: solid;
+  border-width: 0.5px;
+  border-color: #dddddd;
+`;
+
+const LocationSuggestionsFields = styled.View`
+  background-color: white;
+  width: 100%;
+  height: 50px;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-contents: center;
+  align-items: flex-start;
+  padding: 2px;
+  border-bottom-width: 0.5px;
+  border-bottom-color: #dddddd;
+`;
+
+const LocationSuggestionsTexts = styled.Text`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-contents: center;
+  align-items: flex-start;
+  font-size: 16px;
 `;
 
 const SelectLocationMiddle = styled.View`
