@@ -1,4 +1,3 @@
-
 import { View, Modal, Text, ScrollView, TouchableOpacity } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import styled from "styled-components/native";
@@ -9,7 +8,6 @@ import React, { useEffect, useState } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import MapView, { Marker, UrlTile } from "react-native-maps";
-import CitySearch from "../components/post/CitySearch";
 
 type Suggestion = {
   place_id: string;
@@ -19,19 +17,6 @@ type Suggestion = {
 };
 
 /** 여행 글쓰기 */
-const CreatePost = () => {
-  const [query, setQuery] = useState<string>("");
-  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
-  const [mapViewOn, setMapViewOn] = useState(false);
-  const [address, setAddress] = useState({
-    country: "",
-    city: "",
-    town: "",
-    road: "",
-    display_name: "",
-    latitude: 0,
-    longitude: 0,
-  });
 
 LocaleConfig.locales["ko"] = {
   monthNames: [
@@ -81,6 +66,18 @@ interface RangeKeyDict {
 /** 여행 글쓰기 */
 const CreatePost: React.FC = () => {
   const [isPublic, setIsPublic] = useState(true);
+  const [query, setQuery] = useState<string>("");
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [mapViewOn, setMapViewOn] = useState(false);
+  const [address, setAddress] = useState({
+    country: "",
+    city: "",
+    town: "",
+    road: "",
+    display_name: "",
+    latitude: 0,
+    longitude: 0,
+  });
 
   // 230728
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
