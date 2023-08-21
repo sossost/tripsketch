@@ -1,10 +1,9 @@
-import { StyleSheet, View } from "react-native";
-import { ClipLoader } from "react-spinners";
+import { StyleSheet, View, Text } from "react-native";
 
 const Loading = () => {
   return (
     <View style={styles.container}>
-      <ClipLoader color="#73BBFB" />
+      <Text>Loading...</Text>
     </View>
   );
 };
