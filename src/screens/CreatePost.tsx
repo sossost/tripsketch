@@ -79,6 +79,12 @@ const CreatePost: React.FC = () => {
     longitude: 0,
   });
 
+  const [showModal, setShowModal] = useState(false);
+  const [markedDates, setMarkedDates] = useState<RangeKeyDict>({});
+  const [selectedDates, setSelectedDates] = useState<string[]>([]);
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
+
   // 230728
 
   /** 공개 설정 핸들러 */
@@ -90,12 +96,6 @@ const CreatePost: React.FC = () => {
   const privateToggleHandler = () => {
     setIsPublic(false);
   };
-
-  const [showModal, setShowModal] = useState(false);
-  const [markedDates, setMarkedDates] = useState<RangeKeyDict>({});
-  const [selectedDates, setSelectedDates] = useState<string[]>([]);
-  const [startDate, setStartDate] = useState<string | null>(null);
-  const [endDate, setEndDate] = useState<string | null>(null);
 
   /** 달력 모달 닫는 핸들러 */
   const modalCloseHandler = () => {
@@ -111,6 +111,7 @@ const CreatePost: React.FC = () => {
     };
   };
 
+  /** 지도클릭시 도시 선택하는 핸들러 */
   const handlePressLocation = async (event: MapPressEvent) => {
     const { latitude, longitude } = event.nativeEvent.coordinate;
     fetch(
@@ -123,15 +124,7 @@ const CreatePost: React.FC = () => {
           city: data.address.city,
           town: data.address.town,
           road: data.address.road,
-          display_name: `${
-            data.address.city
-              ? data.address.city
-              : data.address.town
-              ? data.address.town
-              : data.address.road
-              ? data.address.road
-              : "알 수 없는 곳"
-          }, ${data.address.country}`,
+          display_name: data.display_name,
           latitude: Number(latitude),
           longitude: Number(longitude),
         })
@@ -142,11 +135,14 @@ const CreatePost: React.FC = () => {
     setQuery(address.display_name);
   }, [address]);
 
+  /** 입력에 따라 도시를 찾는 핸들러 */
+
   const handleInputChange = (value: string) => {
     setQuery(value);
     searchCity(value);
   };
 
+  /** 도시 검색 */
   const searchCity = (cityName: string) => {
     if (cityName.length > 1) {
       fetch(
@@ -162,9 +158,22 @@ const CreatePost: React.FC = () => {
     }
   };
 
-  const handleSuggestionClick = (suggestion: Suggestion) => {
-    console.log("Selected city:", suggestion);
-    // Handle the selected city, e.g., navigation or fetching more details
+  const handleSuggestionClick = async (suggestion: Suggestion) => {
+    fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${suggestion.lat}&lon=${suggestion.lon}&zoom=18&addressdetails=1`
+    )
+      .then((response) => response.json())
+      .then((data) =>
+        setAddress({
+          country: data.address.country,
+          city: data.address.city,
+          town: data.address.town,
+          road: data.address.road,
+          display_name: data.display_name,
+          latitude: Number(suggestion.lat),
+          longitude: Number(suggestion.lon),
+        })
+      );
   };
 
   // react-native-calendars 패키지를 사용하여 달력을 구현 --------
@@ -226,15 +235,12 @@ const CreatePost: React.FC = () => {
             <Title>여행기간</Title>
 
             <ContentText>
-              <Text>
+              <Text onPress={() => setShowModal(true)}>
                 {startDate === null
                   ? "날짜를 선택해주세요."
                   : `${startDate} ~ ${endDate}`}
               </Text>
             </ContentText>
-            <SelectButton onPress={() => setShowModal(true)}>
-              <SelectText>선택</SelectText>
-            </SelectButton>
 
             {/* 날짜 선택 클릭시 달력에서 여행 기간 선택 */}
             {showModal && (
@@ -354,15 +360,29 @@ const CreatePost: React.FC = () => {
                 placeholder="도시 이름을 입력해주세요."
               />
               <FontAwesome name="check" size={24} color="#73bbfb" />
-              {suggestions.length > 0 ? (
+              {query.length === 0 ? (
+                <></>
+              ) : suggestions.length > 0 ? (
                 <LocationSuggestions>
                   {suggestions.map((e) => {
                     return (
-                      <LocationSuggestionsFields>
-                        <LocationSuggestionsTexts>
-                          {e.display_name}
-                        </LocationSuggestionsTexts>
-                      </LocationSuggestionsFields>
+                      <TouchableOpacity
+                        style={{
+                          width: "100%",
+                          height: 50,
+                          backgroundColor: "white",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderRadius: 10,
+                          marginTop: 10,
+                        }}
+                      >
+                        <LocationSuggestionsFields>
+                          <LocationSuggestionsTexts>
+                            {e.display_name}
+                          </LocationSuggestionsTexts>
+                        </LocationSuggestionsFields>
+                      </TouchableOpacity>
                     );
                   })}
                 </LocationSuggestions>
@@ -710,7 +730,8 @@ const SelectLocationUpperBottom = styled.View`
 `;
 
 const LocationSuggestions = styled.View`
-  margin: 5px;
+  margin: 13px;
+  margin-top: 10px;
   background-color: white;
   width: 100%;
   height: auto;
@@ -740,11 +761,9 @@ const LocationSuggestionsFields = styled.View`
   z-index: 10;
   display: flex;
   flex-direction: column;
-  justify-contents: center;
+
   align-items: flex-start;
-  padding: 2px;
-  border-bottom-width: 0.5px;
-  border-bottom-color: #dddddd;
+  padding: 13px;
 `;
 
 const LocationSuggestionsTexts = styled.Text`
@@ -752,7 +771,7 @@ const LocationSuggestionsTexts = styled.Text`
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-contents: center;
+
   align-items: flex-start;
   font-size: 16px;
 `;
