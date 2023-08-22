@@ -1,12 +1,12 @@
-import mockData from "../../data/mockdata.json";
 import { axiosBase } from "../../api/axios";
 import * as SecureStore from "expo-secure-store";
+import { User } from "../types/user";
 
 /** 유저 정보 get 요청하는 함수 (230728 updated) */
 export const getCurrentUser = async () => {
   const accessToken = await SecureStore.getItemAsync("accessToken");
-  console.log("                              ");
-  console.log("user.ts 현재 액세스 토큰 ===> ", accessToken);
+  // console.log("                              ");
+  // console.log("user.ts 현재 액세스 토큰 ===> ", accessToken);
   try {
     if (accessToken) {
       const response = await axiosBase.get("/api/user", {
@@ -14,14 +14,15 @@ export const getCurrentUser = async () => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      console.log("user.ts 요청한 유저 데이터 ===> ", response.data);
-      return response.data;
+      // console.log("user.ts 요청한 유저 데이터 ===> ", response.data);
+      return response.data as User;
     }
     // 토큰이 없을 때 null 처리
     console.log("토큰이 없음");
     return null;
   } catch (error: any) {
     console.log("유저 정보 get 요청과 관련한 오류는...🤔", error);
+    return null;
   }
 };
 
@@ -32,7 +33,7 @@ export const getUserInfo = async () => {
     if (userInfoJSON) {
       const userInfo = JSON.parse(userInfoJSON);
       console.log("SecureStore에 저장된 유저정보!", userInfo);
-      return userInfo;
+      return userInfo as User;
     } else {
       console.log("유저 정보가 없습니다..");
       return null;
