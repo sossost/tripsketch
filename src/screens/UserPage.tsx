@@ -5,29 +5,36 @@ import { category } from "../../data/mockdata";
 import { Text, TouchableOpacity } from "react-native";
 import { useGetDiariesByCategory } from "../hooks/usePostQuery";
 import { useGetUserByNickname } from "../hooks/useUserQuery";
+import { RootStackParamList, StackNavigation } from "../types/RootStack";
 
 import Profile from "../components/user/profile/Profile";
 import Category from "../components/user/Category";
 import DiaryList from "../components/user/DiaryList";
 import UserPageSkeletonUI from "../components/user/UserPageSkeletonUI";
-import { RootStackParamList } from "../types/RootStack";
 
 type UserScreenRouteProp = RouteProp<RootStackParamList, "UserPage">;
 
 const UserPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("전체보기");
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigation>();
   const route = useRoute<UserScreenRouteProp>();
-  const nickname = route.params?.nickname ?? "";
+  const nickname = route.params.nickname;
 
   const user = useGetUserByNickname(nickname);
-  const diaries = useGetDiariesByCategory(nickname, selectedCategory) ?? [];
+  // const diaries = useGetDiariesByCategory(nickname, selectedCategory) ?? [];
+
+  console.log(user);
 
   if (user.isLoading) {
     return <UserPageSkeletonUI />;
   }
+
   if (user.isError) {
+    return <UserPageSkeletonUI />;
+  }
+
+  if (!user.data) {
     return <UserPageSkeletonUI />;
   }
 
@@ -48,12 +55,9 @@ const UserPage = () => {
       {/* <DiaryList diaries={diaries.data} /> */}
       <TouchableOpacity
         onPress={() =>
-          navigation.navigate(
-            "UserPage" as never,
-            {
-              nickname: "asdf",
-            } as never
-          )
+          navigation.navigate("UserPage", {
+            nickname: "네이버",
+          })
         }
       >
         <Text>유저버튼</Text>

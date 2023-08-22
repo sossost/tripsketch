@@ -7,6 +7,7 @@ const Title = ({ title }: { title: string }) => {
 export default Title;
 
 const TitleText = styled.Text`
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
+  padding-bottom: 2px;
 `;

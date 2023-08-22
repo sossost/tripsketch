@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import MapView, { Marker, UrlTile } from "react-native-maps";
-import CitySearch from "../components/post/CitySearch";
 
 type Suggestion = {
   place_id: string;
@@ -18,7 +17,55 @@ type Suggestion = {
 };
 
 /** 여행 글쓰기 */
-const CreatePost = () => {
+
+LocaleConfig.locales["ko"] = {
+  monthNames: [
+    "1월",
+    "2월",
+    "3월",
+    "4월",
+    "5월",
+    "6월",
+    "7월",
+    "8월",
+    "9월",
+    "10월",
+    "11월",
+    "12월",
+  ],
+  monthNamesShort: [
+    "1월",
+    "2월",
+    "3월",
+    "4월",
+    "5월",
+    "6월",
+    "7월",
+    "8월",
+    "9월",
+    "10월",
+    "11월",
+    "12월",
+  ],
+  dayNames: ["일", "월", "화", "수", "목", "금", "토"],
+  dayNamesShort: ["일", "월", "화", "수", "목", "금", "토"],
+  today: "오늘",
+};
+LocaleConfig.defaultLocale = "ko";
+
+/** 날짜 정보 Type */
+interface RangeKeyDict {
+  [key: string]: {
+    startingDay?: boolean;
+    endingDay?: boolean;
+    color: string;
+    selected?: boolean;
+  };
+}
+
+/** 여행 글쓰기 */
+const CreatePost: React.FC = () => {
+  const [isPublic, setIsPublic] = useState(true);
   const [query, setQuery] = useState<string>("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [mapViewOn, setMapViewOn] = useState(false);
@@ -32,418 +79,383 @@ const CreatePost = () => {
     longitude: 0,
   });
 
-  LocaleConfig.locales["ko"] = {
-    monthNames: [
-      "1월",
-      "2월",
-      "3월",
-      "4월",
-      "5월",
-      "6월",
-      "7월",
-      "8월",
-      "9월",
-      "10월",
-      "11월",
-      "12월",
-    ],
-    monthNamesShort: [
-      "1월",
-      "2월",
-      "3월",
-      "4월",
-      "5월",
-      "6월",
-      "7월",
-      "8월",
-      "9월",
-      "10월",
-      "11월",
-      "12월",
-    ],
-    dayNames: ["일", "월", "화", "수", "목", "금", "토"],
-    dayNamesShort: ["일", "월", "화", "수", "목", "금", "토"],
-    today: "오늘",
+  // 230728
+
+  /** 공개 설정 핸들러 */
+  const publicToggleHandler = () => {
+    setIsPublic(true);
   };
-  LocaleConfig.defaultLocale = "ko";
 
-  /** 날짜 정보 Type */
-  interface RangeKeyDict {
-    [key: string]: {
-      startingDay?: boolean;
-      endingDay?: boolean;
-      color: string;
-      selected?: boolean;
-    };
-  }
+  /** 비공개 설정 핸들러 */
+  const privateToggleHandler = () => {
+    setIsPublic(false);
+  };
 
-  /** 여행 글쓰기 */
-  const CreatePost: React.FC = () => {
-    const [isPublic, setIsPublic] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [markedDates, setMarkedDates] = useState<RangeKeyDict>({});
+  const [selectedDates, setSelectedDates] = useState<string[]>([]);
+  const [startDate, setStartDate] = useState<string | null>(null);
+  const [endDate, setEndDate] = useState<string | null>(null);
 
-    // 230728
-    const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-    const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
+  /** 달력 모달 닫는 핸들러 */
+  const modalCloseHandler = () => {
+    setShowModal(false);
+  };
 
-    /** 공개 설정 핸들러 */
-    const publicToggleHandler = () => {
-      setIsPublic(true);
-    };
-
-    /** 비공개 설정 핸들러 */
-    const privateToggleHandler = () => {
-      setIsPublic(false);
-    };
-
-    const [showModal, setShowModal] = useState(false);
-    const [markedDates, setMarkedDates] = useState<RangeKeyDict>({});
-    const [selectedDates, setSelectedDates] = useState<string[]>([]);
-    const [startDate, setStartDate] = useState<string | null>(null);
-    const [endDate, setEndDate] = useState<string | null>(null);
-
-    /** 달력 모달 닫는 핸들러 */
-    const modalCloseHandler = () => {
-      setShowModal(false);
-    };
-
-    type MapPressEvent = {
-      nativeEvent: {
-        coordinate: {
-          latitude: number;
-          longitude: number;
-        };
+  type MapPressEvent = {
+    nativeEvent: {
+      coordinate: {
+        latitude: number;
+        longitude: number;
       };
     };
+  };
 
-    const handlePressLocation = async (event: MapPressEvent) => {
-      const { latitude, longitude } = event.nativeEvent.coordinate;
+  const handlePressLocation = async (event: MapPressEvent) => {
+    const { latitude, longitude } = event.nativeEvent.coordinate;
+    fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`
+    )
+      .then((response) => response.json())
+      .then((data) =>
+        setAddress({
+          country: data.address.country,
+          city: data.address.city,
+          town: data.address.town,
+          road: data.address.road,
+          display_name: `${
+            data.address.city
+              ? data.address.city
+              : data.address.town
+              ? data.address.town
+              : data.address.road
+              ? data.address.road
+              : "알 수 없는 곳"
+          }, ${data.address.country}`,
+          latitude: Number(latitude),
+          longitude: Number(longitude),
+        })
+      );
+  };
+
+  useEffect(() => {
+    setQuery(address.display_name);
+  }, [address]);
+
+  const handleInputChange = (value: string) => {
+    setQuery(value);
+    searchCity(value);
+  };
+
+  const searchCity = (cityName: string) => {
+    if (cityName.length > 1) {
       fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`
+        `https://nominatim.openstreetmap.org/search?city=${cityName}&format=json`
       )
         .then((response) => response.json())
-        .then((data) =>
-          setAddress({
-            country: data.address.country,
-            city: data.address.city,
-            town: data.address.town,
-            road: data.address.road,
-            display_name: `${
-              data.address.city
-                ? data.address.city
-                : data.address.town
-                ? data.address.town
-                : data.address.road
-                ? data.address.road
-                : "알 수 없는 곳"
-            }, ${data.address.country}`,
-            latitude: Number(latitude),
-            longitude: Number(longitude),
-          })
-        );
-    };
-
-    useEffect(() => {
-      setQuery(address.display_name);
-    }, [address]);
-
-    const handleInputChange = (value: string) => {
-      setQuery(value);
-      searchCity(value);
-    };
-
-    const searchCity = (cityName: string) => {
-      if (cityName.length > 2) {
-        fetch(
-          `https://nominatim.openstreetmap.org/search?city=${cityName}&format=json`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            setSuggestions(data);
-            console.log(data);
-          });
-      } else {
-        setSuggestions([]);
-      }
-    };
-
-    const handleSuggestionClick = (suggestion: Suggestion) => {
-      console.log("Selected city:", suggestion);
-      // Handle the selected city, e.g., navigation or fetching more details
-    };
-
-    // react-native-calendars 패키지를 사용하여 달력을 구현 --------
-    /** 날짜 클릭 핸들러 */
-    const dayPressHandler = (day: { dateString: string }) => {
-      if (selectedDates.length === 0) {
-        setSelectedDates([day.dateString]);
-        setMarkedDates({ [day.dateString]: { color: "lightblue" } });
-      } else if (selectedDates.length === 1) {
-        const startDate = selectedDates[0];
-        const endDate = day.dateString;
-        const sortedDates = [startDate, endDate].sort();
-
-        const newMarkedDates: RangeKeyDict = {
-          [sortedDates[0]]: { startingDay: true, color: "lightblue" },
-          [sortedDates[1]]: { endingDay: true, color: "lightblue" },
-        };
-
-        const rangeDates = getRangeDates(sortedDates[0], sortedDates[1]);
-        Object.keys(rangeDates).forEach((date) => {
-          if (date !== sortedDates[0] && date !== sortedDates[1]) {
-            newMarkedDates[date] = { color: "lightblue" };
-          }
+        .then((data) => {
+          setSuggestions(data);
+          console.log(suggestions);
         });
+    } else {
+      setSuggestions([]);
+    }
+  };
 
-        setMarkedDates(newMarkedDates);
-        setSelectedDates(sortedDates);
-        setStartDate(sortedDates[0]);
-        setEndDate(sortedDates[1]);
-      } else if (selectedDates.length >= 2) {
-        setSelectedDates([day.dateString]);
-        setMarkedDates({ [day.dateString]: { color: "lightblue" } });
-        setStartDate(null);
-        setEndDate(null);
-      }
-    };
+  const handleSuggestionClick = (suggestion: Suggestion) => {
+    console.log("Selected city:", suggestion);
+    // Handle the selected city, e.g., navigation or fetching more details
+  };
 
-    /** 사이 날짜 구하는 함수 */
-    const getRangeDates = (start: string, end: string) => {
-      const rangeDates: RangeKeyDict = {};
-      const currentDate = new Date(start);
-      while (currentDate <= new Date(end)) {
-        rangeDates[currentDate.toISOString().split("T")[0]] = {
-          color: "lightblue",
-        };
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-      return rangeDates;
-    };
+  // react-native-calendars 패키지를 사용하여 달력을 구현 --------
+  /** 날짜 클릭 핸들러 */
+  const dayPressHandler = (day: { dateString: string }) => {
+    if (selectedDates.length === 0) {
+      setSelectedDates([day.dateString]);
+      setMarkedDates({ [day.dateString]: { color: "lightblue" } });
+    } else if (selectedDates.length === 1) {
+      const startDate = selectedDates[0];
+      const endDate = day.dateString;
+      const sortedDates = [startDate, endDate].sort();
 
-    return (
-      <>
-        <Container>
-          <HeaderInfo>
-            {/* 여행기간 */}
+      const newMarkedDates: RangeKeyDict = {
+        [sortedDates[0]]: { startingDay: true, color: "lightblue" },
+        [sortedDates[1]]: { endingDay: true, color: "lightblue" },
+      };
 
-            <InfoBox>
-              <CalendarIcon name="calendar" />
-              <Title>여행기간</Title>
+      const rangeDates = getRangeDates(sortedDates[0], sortedDates[1]);
+      Object.keys(rangeDates).forEach((date) => {
+        if (date !== sortedDates[0] && date !== sortedDates[1]) {
+          newMarkedDates[date] = { color: "lightblue" };
+        }
+      });
 
-              <ContentText>
-                <Text>
-                  {startDate} ~ {endDate}
-                </Text>
-              </ContentText>
-              <SelectButton onPress={() => setShowModal(true)}>
-                <SelectText>선택</SelectText>
-              </SelectButton>
+      setMarkedDates(newMarkedDates);
+      setSelectedDates(sortedDates);
+      setStartDate(sortedDates[0]);
+      setEndDate(sortedDates[1]);
+    } else if (selectedDates.length >= 2) {
+      setSelectedDates([day.dateString]);
+      setMarkedDates({ [day.dateString]: { color: "lightblue" } });
+      setStartDate(null);
+      setEndDate(null);
+    }
+  };
 
-              {/* 날짜 선택 클릭시 달력에서 여행 기간 선택 */}
-              {showModal && (
-                <Modal visible={showModal} animationType="fade">
-                  <ModalContainer>
+  /** 사이 날짜 구하는 함수 */
+  const getRangeDates = (start: string, end: string) => {
+    const rangeDates: RangeKeyDict = {};
+    const currentDate = new Date(start);
+    while (currentDate <= new Date(end)) {
+      rangeDates[currentDate.toISOString().split("T")[0]] = {
+        color: "lightblue",
+      };
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return rangeDates;
+  };
+
+  return (
+    <>
+      <Container>
+        <HeaderInfo>
+          {/* 여행기간 */}
+
+          <InfoBox>
+            <CalendarIcon name="calendar" />
+            <Title>여행기간</Title>
+
+            <ContentText>
+              <Text>
+                {startDate === null
+                  ? "날짜를 선택해주세요."
+                  : `${startDate} ~ ${endDate}`}
+              </Text>
+            </ContentText>
+            <SelectButton onPress={() => setShowModal(true)}>
+              <SelectText>선택</SelectText>
+            </SelectButton>
+
+            {/* 날짜 선택 클릭시 달력에서 여행 기간 선택 */}
+            {showModal && (
+              <Modal visible={showModal} animationType="fade">
+                <ModalContainer>
+                  <View
+                    style={{
+                      flexDirection: "row",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      width: "80%",
+                      height: 65, // 레이블들이 고정된 높이를 가지도록 추가
+                      borderRadius: 10,
+                      backgroundColor: "white",
+                    }}
+                  >
+                    {/* <Text>selectedDates : {selectedDates}</Text> */}
                     <View
                       style={{
-                        flexDirection: "row",
                         alignItems: "center",
                         justifyContent: "center",
-                        width: "80%",
-                        height: 65, // 레이블들이 고정된 높이를 가지도록 추가
-                        borderRadius: 10,
-                        backgroundColor: "white",
+                        flex: 1,
                       }}
                     >
-                      {/* <Text>selectedDates : {selectedDates}</Text> */}
-                      <View
+                      <Text
                         style={{
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flex: 1,
+                          textAlign: "center",
+                          color: "#6F6F6F",
+                          marginBottom: "3%",
                         }}
                       >
-                        <Text
-                          style={{
-                            textAlign: "center",
-                            color: "#6F6F6F",
-                            marginBottom: "3%",
-                          }}
-                        >
-                          시작일
-                        </Text>
-                        <Text style={{ fontSize: 16, color: "#414141" }}>
-                          {startDate}
-                        </Text>
-                      </View>
-
-                      <View
-                        style={{
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flex: 1,
-                        }}
-                      >
-                        <Text
-                          style={{
-                            textAlign: "center",
-                            color: "#6F6F6F",
-                            marginBottom: "3%",
-                          }}
-                        >
-                          종료일
-                        </Text>
-                        <Text style={{ fontSize: 16, color: "#414141" }}>
-                          {endDate}
-                        </Text>
-                      </View>
+                        시작일
+                      </Text>
+                      <Text style={{ fontSize: 16, color: "#414141" }}>
+                        {startDate}
+                      </Text>
                     </View>
 
-                    {/* 달력 모달 닫기 버튼 */}
-                    {/* <CloseButton onPress={modalCloseHandler}>
-                    <CloseIcon name="x" />
-                  </CloseButton> */}
-                    <Calendar
+                    <View
                       style={{
-                        borderRadius: 20,
-                        marginTop: 20,
-                        width: "90%",
-                        aspectRatio: 0.9,
-                      }}
-                      onDayPress={dayPressHandler}
-                      markingType={"period"}
-                      markedDates={markedDates}
-                    />
-                    <TouchableOpacity
-                      style={{
-                        width: "30%",
-                        height: "6%",
-                        backgroundColor: "white",
                         alignItems: "center",
                         justifyContent: "center",
-                        borderRadius: 10,
-                        marginTop: 10,
+                        flex: 1,
                       }}
-                      onPress={modalCloseHandler}
                     >
-                      <Text style={{ fontSize: 18 }}>선택하기</Text>
-                    </TouchableOpacity>
-                  </ModalContainer>
-                </Modal>
-              )}
-            </InfoBox>
+                      <Text
+                        style={{
+                          textAlign: "center",
+                          color: "#6F6F6F",
+                          marginBottom: "3%",
+                        }}
+                      >
+                        종료일
+                      </Text>
+                      <Text style={{ fontSize: 16, color: "#414141" }}>
+                        {endDate}
+                      </Text>
+                    </View>
+                  </View>
 
-            {/* 여행지 */}
-            <InfoBox>
-              <MapIcon name="map-marker-alt" />
-              <Title>여행지</Title>
-              <ContentText onPress={() => setMapViewOn(!mapViewOn)}>
-                선택
-              </ContentText>
-            </InfoBox>
-          </HeaderInfo>
-          {mapViewOn && (
-            <SelectLocation>
-              <SelectLocationUpper>
-                <View></View>
-
-                <TouchableOpacity onPress={() => setMapViewOn(false)}>
-                  <Text>╳</Text>
-                </TouchableOpacity>
-              </SelectLocationUpper>
-              <SelectLocationUpperBottom>
-                <LocationInput
-                  value={query}
-                  onChangeText={handleInputChange}
-                  placeholder="도시 이름을 입력해주세요."
-                />
-                <FontAwesome name="check" size={24} color="#73bbfb" />
-              </SelectLocationUpperBottom>
-
-              <SelectLocationMiddle>
-                <MapView
-                  style={{
-                    width: "100%",
-                    zIndex: 5,
-                    position: "absolute",
-                    height: 500,
-                  }}
-                  onPress={handlePressLocation}
-                >
-                  <UrlTile
-                    urlTemplate="http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    maximumZ={19}
-                  />
-                  <Marker
-                    coordinate={{
-                      latitude: address.latitude,
-                      longitude: address.longitude,
+                  {/* 달력 모달 닫기 버튼 */}
+                  {/* <CloseButton onPress={modalCloseHandler}>
+                    <CloseIcon name="x" />
+                  </CloseButton> */}
+                  <Calendar
+                    style={{
+                      borderRadius: 20,
+                      marginTop: 20,
+                      width: "90%",
+                      aspectRatio: 0.9,
                     }}
-                    title="My Marker"
-                    description="Some description"
+                    onDayPress={dayPressHandler}
+                    markingType={"period"}
+                    markedDates={markedDates}
                   />
-                </MapView>
-              </SelectLocationMiddle>
-              <SelectLocationLower></SelectLocationLower>
-            </SelectLocation>
-          )}
+                  <TouchableOpacity
+                    style={{
+                      width: "30%",
+                      height: "6%",
+                      backgroundColor: "white",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      borderRadius: 10,
+                      marginTop: 10,
+                    }}
+                    onPress={modalCloseHandler}
+                  >
+                    <Text style={{ fontSize: 18 }}>선택하기</Text>
+                  </TouchableOpacity>
+                </ModalContainer>
+              </Modal>
+            )}
+          </InfoBox>
 
-          <ScrollView>
-            <BodyInfo>
-              {/* 제목 */}
-              <Title>제목</Title>
-              <TitleInput placeholder="여행기의 제목을 작성해주세요" />
+          {/* 여행지 */}
+          <InfoBox>
+            <MapIcon name="map-marker-alt" />
+            <Title>여행지</Title>
+            <ContentText onPress={() => setMapViewOn(!mapViewOn)}>
+              선택
+            </ContentText>
+          </InfoBox>
+        </HeaderInfo>
+        {mapViewOn && (
+          <SelectLocation>
+            <SelectLocationUpper>
+              <View></View>
 
-              {/* 내용 */}
-              <ContentPhotoBox>
-                <Title>내용</Title>
-                <PhotoIcon name="photo" />
-              </ContentPhotoBox>
-              {/* <ScrollView
+              <TouchableOpacity onPress={() => setMapViewOn(false)}>
+                <Text>╳</Text>
+              </TouchableOpacity>
+            </SelectLocationUpper>
+            <SelectLocationUpperBottom>
+              <LocationInput
+                value={query}
+                onChangeText={handleInputChange}
+                placeholder="도시 이름을 입력해주세요."
+              />
+              <FontAwesome name="check" size={24} color="#73bbfb" />
+              {suggestions.length > 0 ? (
+                <LocationSuggestions>
+                  {suggestions.map((e) => {
+                    return (
+                      <LocationSuggestionsFields>
+                        <LocationSuggestionsTexts>
+                          {e.display_name}
+                        </LocationSuggestionsTexts>
+                      </LocationSuggestionsFields>
+                    );
+                  })}
+                </LocationSuggestions>
+              ) : (
+                <></>
+              )}
+            </SelectLocationUpperBottom>
+
+            <SelectLocationMiddle>
+              <MapView
+                style={{
+                  width: "100%",
+                  zIndex: 5,
+                  position: "absolute",
+                  height: 500,
+                }}
+                onPress={handlePressLocation}
+              >
+                <UrlTile
+                  urlTemplate="http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  maximumZ={19}
+                />
+                <Marker
+                  coordinate={{
+                    latitude: address.latitude,
+                    longitude: address.longitude,
+                  }}
+                  title="My Marker"
+                  description="Some description"
+                />
+              </MapView>
+            </SelectLocationMiddle>
+            <SelectLocationLower></SelectLocationLower>
+          </SelectLocation>
+        )}
+
+        <ScrollView>
+          <BodyInfo>
+            {/* 제목 */}
+            <Title>제목</Title>
+            <TitleInput placeholder="여행기의 제목을 작성해주세요" />
+
+            {/* 내용 */}
+            <ContentPhotoBox>
+              <Title>내용</Title>
+              <PhotoIcon name="photo" />
+            </ContentPhotoBox>
+            {/* <ScrollView
             contentContainerStyle={{ flexGrow: 1 }}
             keyboardShouldPersistTaps="handled"
           > */}
-              <ContentInput
-                multiline
-                placeholder="내용을 자유롭게 작성해주세요"
-                //   returnKeyType="done"
-                //   onSubmitEditing={hideKeyboard}
-              />
-              {/* </ScrollView> */}
+            <ContentInput
+              multiline
+              placeholder="내용을 자유롭게 작성해주세요"
+              //   returnKeyType="done"
+              //   onSubmitEditing={hideKeyboard}
+            />
+            {/* </ScrollView> */}
 
-              {/* 태그 */}
-              <Title>태그</Title>
-              <TitleInput placeholder="ex) #프랑스, #해외여행" />
+            {/* 태그 */}
+            <Title>태그</Title>
+            <TitleInput placeholder="ex) #프랑스, #해외여행" />
 
-              {/* 공개 설정 */}
-              <Title>공개 설정</Title>
-              <VisibilityBox>
-                <VisibilityButton
-                  isSelected={isPublic}
-                  onPress={publicToggleHandler}
-                >
-                  <ButtonText isSelected={isPublic}>전체공개</ButtonText>
-                </VisibilityButton>
-                <VisibilityButton
-                  isSelected={!isPublic}
-                  onPress={privateToggleHandler}
-                >
-                  <ButtonText isSelected={!isPublic}>비공개</ButtonText>
-                </VisibilityButton>
-              </VisibilityBox>
-            </BodyInfo>
+            {/* 공개 설정 */}
+            <Title>공개 설정</Title>
+            <VisibilityBox>
+              <VisibilityButton
+                isSelected={isPublic}
+                onPress={publicToggleHandler}
+              >
+                <ButtonText isSelected={isPublic}>전체공개</ButtonText>
+              </VisibilityButton>
+              <VisibilityButton
+                isSelected={!isPublic}
+                onPress={privateToggleHandler}
+              >
+                <ButtonText isSelected={!isPublic}>비공개</ButtonText>
+              </VisibilityButton>
+            </VisibilityBox>
+          </BodyInfo>
 
-            <BottomInfo>
-              <ActionButton cancel={true}>
-                <ActionButtonText cancel={true}>취소</ActionButtonText>
-              </ActionButton>
-              <ActionButton cancel={false}>
-                <ActionButtonText cancel={false}>등록</ActionButtonText>
-              </ActionButton>
-            </BottomInfo>
-          </ScrollView>
-        </Container>
-      </>
-    );
-  };
+          <BottomInfo>
+            <ActionButton cancel={true}>
+              <ActionButtonText cancel={true}>취소</ActionButtonText>
+            </ActionButton>
+            <ActionButton cancel={false}>
+              <ActionButtonText cancel={false}>등록</ActionButtonText>
+            </ActionButton>
+          </BottomInfo>
+        </ScrollView>
+      </Container>
+    </>
+  );
 };
 
 /** 전체 감싸는 container */
@@ -695,6 +707,54 @@ const SelectLocationUpperBottom = styled.View`
   align-items: center;
   backgroundcolor: white;
   z-index: 10;
+`;
+
+const LocationSuggestions = styled.View`
+  margin: 5px;
+  background-color: white;
+  width: 100%;
+  height: auto;
+  position: absolute;
+  z-index: 20;
+  top: 150%;
+  display: flex;
+  flex-direction: column;
+  justify-contents: flex-start;
+  align-items: flex-start;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 10px;
+  shadow-color: black;
+  shadow-opacity: 0.2;
+  shadow-radius: 5px;
+  border: solid;
+  border-width: 0.5px;
+  border-color: #dddddd;
+`;
+
+const LocationSuggestionsFields = styled.View`
+  background-color: white;
+  width: 100%;
+  height: 50px;
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-contents: center;
+  align-items: flex-start;
+  padding: 2px;
+  border-bottom-width: 0.5px;
+  border-bottom-color: #dddddd;
+`;
+
+const LocationSuggestionsTexts = styled.Text`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-contents: center;
+  align-items: flex-start;
+  font-size: 16px;
 `;
 
 const SelectLocationMiddle = styled.View`
