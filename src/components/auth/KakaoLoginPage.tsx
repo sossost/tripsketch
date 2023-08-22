@@ -36,7 +36,9 @@ const KaKaoLogin = () => {
       }
 
       const token = (
-        await Notifications.getExpoPushTokenAsync({ projectId: "limeorange" })
+        await Notifications.getExpoPushTokenAsync({
+          projectId: "f8190d6c-4843-4990-8bbb-f70715ad169f",
+        })
       ).data;
       const pushToken = token.slice("ExponentPushToken[".length, -1);
       await SecureStore.setItemAsync("pushToken", pushToken);
