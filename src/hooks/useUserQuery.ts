@@ -21,7 +21,7 @@ export const useGetCurrentUser = () => {
     data = fallback as User,
     isLoading,
     isError,
-  } = useQuery<User>([queryKeys.currentUser], () => getCurrentUser("네이버"));
+  } = useQuery<User | null>([queryKeys.currentUser], getCurrentUser);
 
   return { data, isLoading, isError };
 };
@@ -59,13 +59,13 @@ export const useGetSocialList = (
     }
   };
 
-  const fallback: string[] = [];
+  const fallback: User[] = [];
 
   const {
     data = fallback,
     isLoading,
     isError,
-  } = useQuery<string[] | undefined>(queryKey, queryFn);
+  } = useQuery<User[] | undefined>(queryKey, queryFn);
 
   return { data, isLoading, isError };
 };

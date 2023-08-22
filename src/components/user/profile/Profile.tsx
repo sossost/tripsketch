@@ -1,5 +1,6 @@
 import React from "react";
 import { User } from "../../../types/user";
+import { useGetSocialList } from "../../../hooks/useUserQuery";
 import {
   ProfileContainer,
   ProfileIntroductionText,
@@ -9,7 +10,6 @@ import {
   ProfileTextWrapper,
   ProfileUserNameText,
 } from "./Profile.style";
-import { useGetSocialList } from "../../../hooks/useUserQuery";
 
 import ProfileImage from "./ProfileImage";
 import Link from "../../UI/Link";
@@ -27,19 +27,14 @@ export type RootStackParamList = {
 };
 
 const Profile = ({ variant, onPress, user }: ProfileProps) => {
-  console.log(user);
-  const followerList = useGetSocialList("팔로워", user.nickname);
   const followingList = useGetSocialList("팔로잉", user.nickname);
 
   const isFollowing = followingList.data.find(
-    (follwing) => follwing === user.nickname
+    (follwing) => follwing.nickname === user.nickname
   );
 
   const buttonTitle =
     variant === "myPage" ? "프로필 편집" : isFollowing ? "팔로잉" : "팔로우";
-
-  const followerCount = followerList.data.length;
-  const followingCount = followingList.data.length;
 
   return (
     <ProfileLayout>
@@ -47,8 +42,16 @@ const Profile = ({ variant, onPress, user }: ProfileProps) => {
         <ProfileImage img={user.profileImageUrl} />
         <ProfileRightWrapper>
           <ProfileSocialWrapper>
-            <Link page="FollowerPage" text={`팔로워 ${followerCount}`} />
-            <Link page="FollowingPage" text={`팔로잉 ${followingCount}`} />
+            <Link
+              page="FollowerPage"
+              params={{ nickname: user.nickname, variant: "팔로워" }}
+              text={`팔로워 ${user.followersCount}`}
+            />
+            <Link
+              page="FollowingPage"
+              params={{ nickname: user.nickname, variant: "팔로잉" }}
+              text={`팔로잉 ${user.followingCount}`}
+            />
           </ProfileSocialWrapper>
           <ProfileTextWrapper>
             <ProfileUserNameText>{user.nickname}</ProfileUserNameText>
