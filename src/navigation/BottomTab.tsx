@@ -7,7 +7,8 @@ import MyPage from "../screens/MyPage";
 import TripList from "../screens/TripList";
 import Notice from "../screens/Notice";
 import CreatePost from "../screens/CreatePost";
-import UserPage from "../screens/UserPage";
+import Header from "../components/UI/header/Header";
+import Title from "../components/UI/header/Title";
 
 const Tabs = createBottomTabNavigator();
 
@@ -34,7 +35,7 @@ export default function BottomTab() {
         name="Trip"
         component={TripList}
         options={{
-          title: "트립",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Feather name="search" color={color} size={size} />
           ),
@@ -64,7 +65,7 @@ export default function BottomTab() {
         name="MyPage"
         component={MyPage}
         options={{
-          title: "마이페이지",
+          header: () => <Header left={<Title title="마이페이지" />} />,
           tabBarIcon: ({ color, size }) => (
             <Feather name="user" color={color} size={size} />
           ),
