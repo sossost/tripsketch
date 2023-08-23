@@ -1,13 +1,12 @@
 import { StyleSheet, Image, Text, View, TouchableOpacity } from "react-native";
+import { User } from "../../../types/user";
 
 type SocialCardProps = {
   user: User;
   isFollowing: boolean;
 };
 
-const SocialCard = (props: SocialCardProps) => {
-  const { user, isFollowing } = props;
-
+const SocialCard = ({ user, isFollowing }: SocialCardProps) => {
   const followBtnImagePath = isFollowing
     ? require("../../../assets/images/isFollowingIcon.png")
     : require("../../../assets/images/isNotFollowingIcon.png");
@@ -31,10 +30,13 @@ const SocialCard = (props: SocialCardProps) => {
   return (
     <View style={styles.cardContainer}>
       <View style={styles.profileImageWrapper}>
-        <Image source={{ uri: user.profile_img }} style={styles.profileImage} />
+        <Image
+          source={{ uri: user.profileImageUrl }}
+          style={styles.profileImage}
+        />
       </View>
       <View style={styles.contantWrapper}>
-        <Text>{user.user_name}</Text>
+        <Text>{user.nickname}</Text>
         <TouchableOpacity onPress={followBtnHandler}>
           <Image source={followBtnImagePath} style={followBtnStyle} />
         </TouchableOpacity>
@@ -64,8 +66,6 @@ const styles = StyleSheet.create({
 
   profileImage: {
     position: "absolute",
-    width: "100%",
-    height: "100%",
     top: 0,
     left: 0,
     right: 0,

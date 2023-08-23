@@ -1,19 +1,21 @@
 import React from "react";
-import { TouchableOpacity, Text, StyleProp, ViewStyle } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { css, styled } from "styled-components/native";
+import { StackNavigation } from "../../types/RootStack";
 
 interface LinkProps {
   page: string;
+  params?: object;
   text: string;
   fontSize?: number;
 }
 
-const Link: React.FC<LinkProps> = ({ page, text, fontSize }) => {
-  const navigation = useNavigation();
+const Link: React.FC<LinkProps> = ({ page, params, text, fontSize }) => {
+  const navigation = useNavigation<StackNavigation>();
 
   const handlePress = () => {
-    navigation.navigate(page as never);
+    navigation.navigate(page, params);
   };
 
   return (
