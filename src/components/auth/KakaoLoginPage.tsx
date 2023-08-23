@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import { WebView } from "react-native-webview";
 import { useNavigation } from "@react-navigation/native";
-import { axiosBase, tokenRefresh } from "../../../api/axios";
+import { axiosBase, tokenRefresh } from "../../services/axios";
 import * as SecureStore from "expo-secure-store";
 import { getCurrentUser, getUserInfo } from "../../services/user";
 import * as Notifications from "expo-notifications";
@@ -74,7 +74,7 @@ const KaKaoLogin = () => {
   const requestToken = async (authorize_code: string) => {
     try {
       const pushToken = await SecureStore.getItemAsync("pushToken");
-      const response = await axiosBase.post(`/api/oauth/kakao/login`, {
+      const response = await axiosBase.post(`oauth/kakao/login`, {
         code: authorize_code,
         pushToken: pushToken,
       });
