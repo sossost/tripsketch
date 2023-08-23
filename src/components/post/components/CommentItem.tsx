@@ -5,23 +5,24 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
-  Alert,
 } from "react-native";
-import { ScrollView as GestureHandlerScrollView } from "react-native-gesture-handler";
 import { Comment } from "../../../types/comment";
 import { useState } from "react";
 import ReCommentItem from "./ReCommentItem";
 import CommentInput from "./CommentInput";
 import { Ionicons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
+import { useGetCurrentUser } from "../../../hooks/useUserQuery";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
   const [showCommentInput, setShowCommentInput] = useState(false);
-  const [isUpdateInput, setIsUpdateInput] = useState(false);
-
+  const { data: userData } = useGetCurrentUser();
   const [likes, setLikes] = useState(comment.isLiked);
   const [likeNum, setLikeNum] = useState(comment.numberOfLikes);
+  const [isButton, setIsButton] = useState(false);
+  const [isUpdateInput, setIsUpdateInput] = useState(false);
 
   const handleLike = () => {
     if (likes) {
@@ -33,73 +34,83 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
     }
   };
 
-  const updateComment = () => {
-    Alert.alert(
-      "알림",
-      "댓글을 수정하시겠습니까?",
-      [
-        {
-          text: "아니요",
-          onPress: () => console.log("아니오"),
-          style: "cancel",
-        },
-        { text: "네", onPress: () => console.log("네") },
-        // 이벤트 발생시 로그
-      ],
-      { cancelable: false }
-    );
-  };
-
   const handleCommentButtonClick = () => {
     setShowCommentInput(!showCommentInput);
+  };
+
+  const handleButton = () => {
+    isButton ? setIsButton(false) : setIsButton(true);
+    setIsUpdateInput(false);
+  };
+
+  const handleUpdate = () => {
+    isUpdateInput ? setIsUpdateInput(false) : setIsUpdateInput(true);
   };
 
   const handleCommentSubmit = () => {};
 
   return (
-    <View>
-      <GestureHandlerScrollView
-        pagingEnabled
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      >
-        <View style={styles.container}>
-          <View style={[styles.normal, sort === "best" && styles.background]}>
-            <View style={styles.image}>
-              <Image
-                style={styles.profile}
-                source={{ uri: comment.userProfileUrl }}
-              ></Image>
-            </View>
-            <View style={styles.text}>
-              <View style={styles.top}>
-                <Text style={styles.id}>{comment.userNickName}</Text>
-                <View style={styles.likes}>
-                  <TouchableOpacity onPress={handleLike}>
-                    <Ionicons
-                      name={likes ? "md-heart-sharp" : "md-heart-outline"}
-                      size={18}
-                      color={likes ? "#ec6565" : "#777"}
+    <View style={styles.container}>
+      <View style={styles.container_inner}>
+        <View style={[styles.normal, sort === "best" && styles.background]}>
+          <View style={styles.image}>
+            <Image
+              style={styles.profile}
+              source={{ uri: comment.userProfileUrl }}
+            ></Image>
+          </View>
+          <View style={styles.text}>
+            <View style={styles.top}>
+              <Text style={styles.id}>{comment.userNickName}</Text>
+              <View style={styles.likes}>
+                {userData && userData.email === comment.userEmail ? (
+                  <TouchableOpacity onPress={handleButton}>
+                    <Entypo
+                      name="dots-three-vertical"
+                      size={14}
+                      color="#c5c5c5"
                     />
                   </TouchableOpacity>
-                  <Text style={styles.like_length}>{likeNum}</Text>
-                </View>
+                ) : null}
               </View>
-              <Text style={styles.date}>{comment.createdAt}</Text>
-              <Text style={styles.comment}>{comment.content}</Text>
+            </View>
+            <Text style={styles.date}>{comment.createdAt}</Text>
+            <Text style={styles.comment}>{comment.content}</Text>
+            <View style={styles.likes_container}>
+              <TouchableOpacity onPress={handleLike}>
+                <Ionicons
+                  name={likes ? "md-heart-sharp" : "md-heart-outline"}
+                  size={18}
+                  color={likes ? "#ec6565" : "#777"}
+                />
+              </TouchableOpacity>
+              <Text style={styles.like_length}>{likeNum}</Text>
             </View>
           </View>
         </View>
-        <TouchableOpacity
-          style={[styles.button, styles.edit]}
-          onPress={updateComment}
-        >
-          <Text style={styles.button_text_edit}>수정하기</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.button, styles.delete]}>
-          <Text style={styles.button_text_delete}>삭제하기</Text>
-        </TouchableOpacity>
-      </GestureHandlerScrollView>
+        <View>
+          {isUpdateInput ? (
+            <View style={styles.inputPadd}>
+              <CommentInput />
+            </View>
+          ) : null}
+        </View>
+        <View>
+          {userData && isButton && userData.email === comment.userEmail ? (
+            <View style={styles.button_container}>
+              <TouchableOpacity
+                style={styles.button_update}
+                onPress={handleUpdate}
+              >
+                <Text style={styles.update_txt}>수정하기</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.button_delete}>
+                <Text style={styles.update_txt}>삭제하기</Text>
+              </TouchableOpacity>
+            </View>
+          ) : null}
+        </View>
+      </View>
       {sort === "all" ? (
         <View style={styles.recommentBox}>
           {!showCommentInput ? (
@@ -124,7 +135,11 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
         <View style={styles.recomment_container}>
           {comment.children.map((item) => (
             <View key={item.id}>
-              <ReCommentItem recomment={item} />
+              {userData ? (
+                <ReCommentItem recomment={item} userData={userData} />
+              ) : (
+                <Text>사용자 데이터를 사용할 수 없습니다.</Text>
+              )}
             </View>
           ))}
         </View>
@@ -134,7 +149,8 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
+  container: { width: "100%" },
+  container_inner: {
     paddingVertical: 12,
     width: SCREEN_WIDTH,
     paddingHorizontal: 15,
@@ -173,6 +189,21 @@ const styles = StyleSheet.create({
   id: {
     fontWeight: "600",
   },
+  date: {
+    fontSize: 11,
+    color: "#b3b3b3",
+  },
+  comment: {
+    fontSize: 14,
+    color: "#6f6f6f",
+    marginTop: 6,
+  },
+  likes_container: {
+    marginTop: 5,
+    display: "flex",
+    flexDirection: "row",
+    gap: 3,
+  },
   likes: {
     display: "flex",
     flexDirection: "row",
@@ -188,38 +219,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#6f6f6f",
   },
-  date: {
-    fontSize: 11,
-    color: "#b3b3b3",
-  },
-  comment: {
-    fontSize: 14,
-    color: "#6f6f6f",
-    marginTop: 6,
-  },
+
   add_comment: {
     fontSize: 11,
     color: "#6f6f6f",
     marginTop: 8,
-  },
-  button: {
-    width: 100,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  edit: {
-    backgroundColor: "#ececec",
-  },
-  delete: {
-    backgroundColor: "#ff7777",
-  },
-  button_text_edit: {
-    fontSize: 13,
-  },
-  button_text_delete: {
-    fontSize: 13,
-    color: "#fff",
   },
   recommentBox: {
     paddingHorizontal: 20,
@@ -229,6 +233,38 @@ const styles = StyleSheet.create({
     backgroundColor: "#f7f7f7",
     paddingHorizontal: 25,
     paddingVertical: 10,
+  },
+  inputPadd: { paddingHorizontal: 10 },
+  button_container: {
+    display: "flex",
+    flexDirection: "row",
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    justifyContent: "space-evenly",
+    gap: 5,
+  },
+  button_update: {
+    width: "50%",
+    backgroundColor: "#73BBFB",
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  update_txt: {
+    textAlign: "center",
+    color: "#ffffff",
+    fontSize: 12,
+  },
+  button_delete: {
+    width: "50%",
+    textAlign: "center",
+    backgroundColor: "#939393",
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  delete_txt: {
+    textAlign: "center",
+    color: "#ffffff",
+    fontSize: 12,
   },
 });
 

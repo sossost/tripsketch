@@ -27,7 +27,6 @@ const CommentInput = ({
 
   const isCommentIdEmpty = commentId === undefined;
 
-  console.log(commentNickname);
   return (
     <SafeAreaView style={styles.container}>
       <TextInput
@@ -55,9 +54,13 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 1,
     borderColor: "#ddd",
-    padding: 10,
+    backgroundColor: "#fff",
+    paddingVertical: 10,
+    paddingLeft: 15,
+    paddingRight: 50,
     color: "#6f6f6f",
     borderRadius: 30,
+    fontSize: 13,
   },
   button: {
     position: "absolute",
