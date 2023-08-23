@@ -7,59 +7,70 @@ import KakaoLoginPage from "../components/auth/KakaoLoginPage";
 import KakaoLoginButton from "../components/auth/KakaoLoginButton";
 import BottomTab from "./BottomTab";
 import SocialPage from "../screens/SocialPage";
-import MyPage from "../screens/MyPage";
 import SplashScreen from "../components/common/SplashScreen";
 import CreatePost from "../screens/CreatePost";
 import EditProfilePage from "../screens/EditProfilePage";
 import Header from "../components/UI/header/Header";
 import UserPage from "../screens/UserPage";
-import BackButton from "../components/UI/header/BackButton";
-import Title from "../components/UI/header/Title";
+import CommonHeaderLeft from "../components/UI/header/HeaderLeft";
+import Toast from "react-native-toast-message";
 
 const Stack = createStackNavigator();
 
 export default function RootStack() {
   return (
-    <NavigationContainer>
-      <SplashScreen>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen
-            name="홈"
-            component={BottomTab}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="KakaoLoginButton" component={KakaoLoginButton} />
-          <Stack.Screen name="카카오톡 로그인" component={KakaoLoginPage} />
-          <Stack.Screen name="TripDetail" component={TripDetail} />
-          <Stack.Screen name="MyPage" component={MyPage} />
-          <Stack.Screen
-            name="UserPage"
-            component={UserPage}
-            options={({ route }) => ({
-              header: () => (
-                <Header
-                  left={<BackButton />}
-                  center={<Title title={route.params?.nickname} />}
-                />
-              ),
-            })}
-          />
-          <Stack.Screen name="CreatePost" component={CreatePost} />
-          <Stack.Screen name="FollowerPage">
-            {() => <SocialPage initialVariant="팔로워" />}
-          </Stack.Screen>
-          <Stack.Screen name="FollowingPage">
-            {() => <SocialPage initialVariant="팔로잉" />}
-          </Stack.Screen>
-          <Stack.Screen
-            name="EditProfilePage"
-            component={EditProfilePage}
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Stack.Navigator>
-      </SplashScreen>
-    </NavigationContainer>
+    <>
+      <NavigationContainer>
+        <SplashScreen>
+          <Stack.Navigator initialRouteName="Home">
+            <Stack.Screen
+              name="홈"
+              component={BottomTab}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="KakaoLoginButton"
+              component={KakaoLoginButton}
+            />
+            <Stack.Screen name="KakaoLoginPage" component={KakaoLoginPage} />
+            <Stack.Screen name="TripDetail" component={TripDetail} />
+            <Stack.Screen
+              name="UserPage"
+              component={UserPage}
+              options={({ route }: any) => ({
+                header: () => (
+                  <Header
+                    left={<CommonHeaderLeft title={route.params?.nickname} />}
+                  />
+                ),
+              })}
+            />
+            <Stack.Screen name="CreatePost" component={CreatePost} />
+            <Stack.Screen
+              name="FollowerPage"
+              component={SocialPage}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="FollowingPage"
+              component={SocialPage}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="EditProfilePage"
+              component={EditProfilePage}
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack.Navigator>
+        </SplashScreen>
+      </NavigationContainer>
+      <Toast />
+    </>
   );
 }
