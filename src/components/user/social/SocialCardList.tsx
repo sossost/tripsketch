@@ -1,38 +1,38 @@
-import { StyleSheet, FlatList, View } from "react-native";
-import SocialCard from "./SocialCard";
-import SearchBar from "../../UI/SearchBar";
+import { StyleSheet, FlatList, View, Dimensions } from "react-native";
+import { User } from "../../../types/user";
 import {
-  ComponentType,
-  JSXElementConstructor,
-  ReactElement,
-  useState,
-} from "react";
+  useGetCurrentUser,
+  useGetSocialList,
+} from "../../../hooks/useUserQuery";
+
+import SocialCard from "./SocialCard";
 
 type SocialCardListProps = {
-  currentUser: User | undefined;
   userList: User[] | undefined;
-  header?:
-    | ReactElement<any, string | JSXElementConstructor<any>>
-    | ComponentType<any>
-    | null
-    | undefined;
 };
 
-const SocialCardList = (props: SocialCardListProps) => {
-  const { currentUser, userList, header } = props;
+const SocialCardList = ({ userList }: SocialCardListProps) => {
+  const currentUser = useGetCurrentUser().data;
+  const followingList = useGetSocialList("팔로잉", currentUser?.nickname ?? "");
+
+  const windowWidth = Dimensions.get("window").width;
+  const calculateItemSize = (windowWidth - 40) / 2;
 
   return (
     <FlatList
       data={userList}
       numColumns={2}
       columnWrapperStyle={{ gap: 10 }}
-      ListHeaderComponent={header}
       renderItem={(userData) => {
         const user = userData.item;
-        const isFollowing = currentUser
-          ? currentUser?.followingList.includes(user.user_name)
-          : false;
-        return <SocialCard user={user} isFollowing={isFollowing} />;
+        const isFollowing = followingList.data.some(
+          (following: User) => following.nickname === user.nickname
+        );
+        return (
+          <View style={{ width: calculateItemSize }}>
+            <SocialCard user={user} isFollowing={isFollowing} />
+          </View>
+        );
       }}
       alwaysBounceVertical={false}
       contentContainerStyle={styles.container}

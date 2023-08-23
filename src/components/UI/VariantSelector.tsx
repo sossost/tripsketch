@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { TouchableOpacity, Text, Animated } from "react-native";
+import { TouchableOpacity, Text, Animated, Dimensions } from "react-native";
 import styled from "styled-components/native";
 
 type VariantProps<T extends string> = {
@@ -13,20 +13,14 @@ type VariantProps<T extends string> = {
 const VariantSelector = <T extends string>(props: VariantProps<T>) => {
   const { variant1, variant2, initialVariant, variant, setVariant } = props;
 
-  // 선택한 Variant 표시바 너비 계산
-  const [layoutWidth, setLayoutWidth] = useState(0);
-  const halfLayoutWidth = layoutWidth / 2;
+  const windowWidth = Dimensions.get("window").width;
+
+  const halfLayoutWidth = (windowWidth - 30) / 2;
 
   // 선택한 Variant 표시바 위치
   const position = useRef(
     new Animated.Value(initialVariant === variant1 ? 0 : halfLayoutWidth)
   ).current;
-
-  // 컴포넌트 컨테이너 너비 계산
-  const onLayout = (event: { nativeEvent: { layout: { width: number } } }) => {
-    const { width } = event.nativeEvent.layout;
-    setLayoutWidth(width);
-  };
 
   const leftVariantBtnHandler = () => {
     // 슬라이드 애니메이션 적용
@@ -49,7 +43,7 @@ const VariantSelector = <T extends string>(props: VariantProps<T>) => {
   };
 
   return (
-    <Container onLayout={onLayout}>
+    <Container>
       <VariantBtn onPress={leftVariantBtnHandler}>
         <VariantText isSelected={variant === variant1}>{variant1}</VariantText>
       </VariantBtn>
