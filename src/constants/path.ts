@@ -6,5 +6,9 @@ export const API_PATH = {
       // COMMENT TRIPID로 조회하기
       COMMENT_ID: `/api/comment/:tripId`,
     },
+    POST: {
+      // COMMENT TRIPID로 조회하기
+      COMMENT: `/api/comment`,
+    },
   },
 };

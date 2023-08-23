@@ -15,8 +15,6 @@ const CommentList = ({ sort }: { sort: string }) => {
     return <Text>error</Text>;
   }
 
-  //console.log(commentData);
-
   return (
     <View style={styles.container}>
       <View style={styles.comment_title}>

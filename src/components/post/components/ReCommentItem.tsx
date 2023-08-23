@@ -1,11 +1,18 @@
 import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Comment } from "../../../types/comment";
-import { Feather } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import { useState } from "react";
 import CommentInput from "./CommentInput";
+import { User } from "../../../types/user";
 
-const ReCommentItem = ({ recomment }: { recomment: Comment }) => {
+const ReCommentItem = ({
+  recomment,
+  userData,
+}: {
+  recomment: Comment;
+  userData: User;
+}) => {
   const [likes, setLikes] = useState(recomment.isLiked);
   const [likeNum, setLikeNum] = useState(recomment.numberOfLikes);
   const [isButton, setIsButton] = useState(false);
@@ -32,10 +39,7 @@ const ReCommentItem = ({ recomment }: { recomment: Comment }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.recomment_container}
-        onPress={handleButton}
-      >
+      <View style={styles.recomment_container}>
         <View style={styles.image}>
           <Image
             style={styles.profile}
@@ -43,8 +47,17 @@ const ReCommentItem = ({ recomment }: { recomment: Comment }) => {
           />
         </View>
         <View style={styles.info}>
-          <Text style={styles.nickname}>{recomment.userNickName}</Text>
-          <Text style={styles.comment}>{recomment.content}</Text>
+          <View style={styles.top_container}>
+            <View>
+              <Text style={styles.nickname}>{recomment.userNickName}</Text>
+              <Text style={styles.comment}>{recomment.content}</Text>
+            </View>
+            {userData && userData.email === recomment.userEmail ? (
+              <TouchableOpacity onPress={handleButton}>
+                <Entypo name="dots-three-vertical" size={14} color="#c5c5c5" />
+              </TouchableOpacity>
+            ) : null}
+          </View>
           <View style={styles.likes}>
             <Text>
               <TouchableOpacity onPress={handleLike}>
@@ -58,7 +71,7 @@ const ReCommentItem = ({ recomment }: { recomment: Comment }) => {
             <Text style={styles.likes_text}>{likeNum}</Text>
           </View>
         </View>
-      </TouchableOpacity>
+      </View>
       <View>
         {isUpdateInput ? (
           <View>
@@ -67,7 +80,7 @@ const ReCommentItem = ({ recomment }: { recomment: Comment }) => {
         ) : null}
       </View>
       <View>
-        {isButton ? (
+        {userData && isButton && userData.email === recomment.userEmail ? (
           <View style={styles.button_container}>
             <TouchableOpacity
               style={styles.button_update}
@@ -109,6 +122,11 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     flex: 5,
   },
+  top_container: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
   nickname: {
     fontSize: 13,
     fontWeight: "600",
@@ -127,7 +145,6 @@ const styles = StyleSheet.create({
     marginLeft: 2,
     color: "#777",
   },
-  delete: {},
   button_container: {
     display: "flex",
     flexDirection: "row",

@@ -1,56 +1,105 @@
-import { currentUser } from "../../data/mockdata";
-import InputBottomLine from "../components/UI/InputBottomLine";
+import { Text } from "react-native";
 import { useState } from "react";
 import { styled } from "styled-components/native";
+import { useGetCurrentUser } from "../hooks/useUserQuery";
+import { patchCurrentUser } from "../services/user";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "../types/RootStack";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "../react-query/constants";
+
+import InputBottomLine from "../components/UI/InputBottomLine";
 import ProfileImageManage from "../components/user/profile/ProfileImageManage";
 import Header from "../components/UI/header/Header";
 import CommonHeaderLeft from "../components/UI/header/HeaderLeft";
 import ConfirmButton from "../components/UI/header/ConfirmButton";
+import Toast from "react-native-toast-message";
+import AuthGuard from "../components/auth/AuthGuard";
+
+interface ModifyProfileProps {
+  profileImageUrl: string;
+  nickname: string;
+  introduction: string;
+}
 
 const EditProfilePage = () => {
-  const [NewProfileImage, setNewProfileImage] = useState<string>(
-    currentUser.profile_img
-  );
-  const [NewUserName, SetNewUsername] = useState<string>(currentUser.user_name);
-  const [NewIntro, setNewIntro] = useState<string>(currentUser.introduction);
+  const queryClient = useQueryClient();
+  const navigation = useNavigation<StackNavigation>();
 
-  const profileSubmitHandler = () => {
+  // 로그인한 유저정보 요청
+  const currentUser = useGetCurrentUser();
+
+  // 쿼리 상태에 따라 분기처리
+  if (currentUser.isLoading) return <Text>로딩중</Text>;
+  if (currentUser.isError) return <Text>에러</Text>;
+  if (!currentUser.data) return <Text>에러</Text>;
+
+  // 로그인한 유저프로필 초기데이터 변수화
+  const profileImageUrl = currentUser.data.profileImageUrl;
+  const nickname = currentUser.data.nickname;
+  const introduction = currentUser.data.introduction;
+
+  // 수정할 새로운 유저프로필 상태값 정의 및 할당
+  const [newProfileImage, setNewProfileImage] = useState(profileImageUrl);
+  const [newNickname, SetNewNickname] = useState(nickname);
+  const [newIntroduction, setNewIntroduction] = useState(introduction);
+
+  /** 리액트 쿼리 뮤테이션 */
+  const mutation = useMutation(
+    (data: ModifyProfileProps) => patchCurrentUser(data),
+    {
+      onSuccess: () => {
+        Toast.show({ type: "success", text1: "프로필 변경이 완료되었습니다." });
+        navigation.goBack();
+
+        // 프로필이 변경되었으므로, currentUser 쿼리를 다시 가져오도록 갱신
+        queryClient.invalidateQueries([queryKeys.currentUser]);
+      },
+      onError: (error) => {
+        Toast.show({ type: "error", text1: "프로필 변경에 실패하였습니다." });
+      },
+    }
+  );
+
+  /** 프로필 수정 제출 함수 */
+  const handleProfileSubmit = async () => {
     const data = {
-      profile_img: NewProfileImage,
-      user_name: NewUserName,
-      introduction: NewIntro,
+      profileImageUrl: newProfileImage,
+      nickname: newNickname,
+      introduction: newIntroduction,
     };
-    console.log("바뀜");
-    // EditProfile(data);
+
+    // 리액트 쿼리의 mutation을 호출하여 데이터 업데이트
+    mutation.mutate(data);
   };
 
   return (
-    <>
+    <AuthGuard>
       <Header
         left={<CommonHeaderLeft title="프로필 수정" />}
-        right={<ConfirmButton onPress={profileSubmitHandler} />}
+        right={<ConfirmButton onPress={handleProfileSubmit} />}
       />
       <Layout>
         <ProfileImageManage
-          image={NewProfileImage}
+          image={newProfileImage}
           setImage={setNewProfileImage}
         />
         <InputWrapper>
           <InputBottomLine
             label="닉네임"
-            text={NewUserName}
-            setText={SetNewUsername}
+            text={newNickname}
+            setText={SetNewNickname}
             textLength={20}
           />
           <InputBottomLine
             label="소개"
-            text={NewIntro}
-            setText={setNewIntro}
+            text={newIntroduction}
+            setText={setNewIntroduction}
             textLength={60}
           />
         </InputWrapper>
       </Layout>
-    </>
+    </AuthGuard>
   );
 };
 
