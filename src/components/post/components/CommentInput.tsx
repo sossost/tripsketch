@@ -3,13 +3,13 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
-  Alert,
   Text,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 
 type CommentInputProps = {
-  onSubmit?: () => void;
+  onSubmit?: (comment: string, parentId?: string) => void;
   commentId?: string;
   commentNickname?: string;
 };
@@ -21,8 +21,15 @@ const CommentInput = ({
 }: CommentInputProps) => {
   const [comment, setComment] = useState("");
 
+  const parentId = commentId ? commentId : "";
+
   const submitComment = () => {
-    Alert.alert("Simple Button pressed");
+    if (onSubmit && comment !== "") {
+      onSubmit(comment, parentId);
+      setComment("");
+    } else {
+      Alert.alert("알림", "내용을 입력해주세요.");
+    }
   };
 
   const isCommentIdEmpty = commentId === undefined;

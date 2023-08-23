@@ -8,11 +8,13 @@ import {
 } from "react-native";
 import { Comment } from "../../../types/comment";
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import ReCommentItem from "./ReCommentItem";
 import CommentInput from "./CommentInput";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { useGetCurrentUser } from "../../../hooks/useUserQuery";
+import { getCreateComment } from "../../../hooks/useCommentQuery";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -23,6 +25,27 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
   const [likeNum, setLikeNum] = useState(comment.numberOfLikes);
   const [isButton, setIsButton] = useState(false);
   const [isUpdateInput, setIsUpdateInput] = useState(false);
+
+  const createCommentMutation = getCreateComment();
+  const queryClient = useQueryClient();
+
+  const handleCommentSubmit = async (comment: String, parentId?: String) => {
+    try {
+      const commentData = {
+        tripId: "1234",
+        content: comment,
+        parentId: parentId,
+        replyTo: "",
+      };
+      const createdComment = await createCommentMutation.mutateAsync(
+        commentData
+      );
+      queryClient.invalidateQueries(["comment"]);
+      console.log("댓글이 성공적으로 생성되었습니다.", createdComment);
+    } catch (error) {
+      console.error("댓글 생성 중 오류 발생:", error);
+    }
+  };
 
   const handleLike = () => {
     if (likes) {
@@ -47,7 +70,11 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
     isUpdateInput ? setIsUpdateInput(false) : setIsUpdateInput(true);
   };
 
-  const handleCommentSubmit = () => {};
+  const formattedDate = () => {
+    const originalDate = comment.createdAt;
+    const cutDate = originalDate.split("T")[0];
+    return cutDate;
+  };
 
   return (
     <View style={styles.container}>
@@ -74,7 +101,7 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
                 ) : null}
               </View>
             </View>
-            <Text style={styles.date}>{comment.createdAt}</Text>
+            <Text style={styles.date}>{formattedDate()}</Text>
             <Text style={styles.comment}>{comment.content}</Text>
             <View style={styles.likes_container}>
               <TouchableOpacity onPress={handleLike}>
