@@ -9,23 +9,32 @@ import {
 import { useState } from "react";
 
 type CommentInputProps = {
-  onSubmit?: (comment: string, parentId?: string) => void;
+  onSubmit?: (comment: string) => void;
+  onReplySubmit?: (
+    comment: string,
+    parentId: string,
+    replyToNickname: string
+  ) => void;
   commentId?: string;
   commentNickname?: string;
 };
 
 const CommentInput = ({
   onSubmit,
+  onReplySubmit,
   commentId,
   commentNickname,
 }: CommentInputProps) => {
   const [comment, setComment] = useState("");
-
   const parentId = commentId ? commentId : "";
+  const replyToNickname = commentNickname ? commentNickname : "";
 
   const submitComment = () => {
     if (onSubmit && comment !== "") {
-      onSubmit(comment, parentId);
+      onSubmit(comment);
+      setComment("");
+    } else if (onReplySubmit && comment !== "") {
+      onReplySubmit(comment, parentId, replyToNickname);
       setComment("");
     } else {
       Alert.alert("알림", "내용을 입력해주세요.");

@@ -17,12 +17,16 @@ import CommentInput from "./CommentInput";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 type CommentProps = {
-  onSubmit?: (comment: string, parentId?: string) => void;
+  onReplySubmit?: (
+    comment: string,
+    parentId: string,
+    replyToNickname: string
+  ) => void;
   sort: string;
   comment: Comment;
 };
 
-const CommentItem = ({ comment, sort, onSubmit }: CommentProps) => {
+const CommentItem = ({ comment, sort, onReplySubmit }: CommentProps) => {
   const [showCommentInput, setShowCommentInput] = useState(false);
   const { data: userData } = useGetCurrentUser();
   const [likes, setLikes] = useState(comment.isLiked);
@@ -133,7 +137,7 @@ const CommentItem = ({ comment, sort, onSubmit }: CommentProps) => {
                 <Text style={styles.add_comment}>답글 달기</Text>
               </TouchableOpacity>
               <CommentInput
-                onSubmit={onSubmit}
+                onReplySubmit={onReplySubmit}
                 commentId={comment.id}
                 commentNickname={comment.userNickName}
               />

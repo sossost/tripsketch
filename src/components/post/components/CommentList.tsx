@@ -1,16 +1,19 @@
 import { StyleSheet, Text, View } from "react-native";
 import CommentItem from "./CommentItem";
-import { useState } from "react";
-import { Comment } from "../../../types/comment";
-import { getPostCommentList } from "../../../hooks/useCommentQuery";
+import { getPostCommentListByTripId } from "../../../hooks/useCommentQuery";
 
 type CommentProps = {
-  onSubmit?: (comment: string, parentId?: string) => void;
+  onReplySubmit?: (
+    comment: string,
+    parentId: string,
+    replyToNickname: string
+  ) => void;
   sort: string;
 };
 
-const CommentList = ({ sort, onSubmit }: CommentProps) => {
-  const { commentData, isLoading, isError } = getPostCommentList();
+const CommentList = ({ sort, onReplySubmit }: CommentProps) => {
+  const { commentData, isLoading, isError } =
+    getPostCommentListByTripId("1234");
 
   if (isLoading) {
     return <Text>Loading...</Text>;
@@ -26,22 +29,32 @@ const CommentList = ({ sort, onSubmit }: CommentProps) => {
         <Text>댓글</Text>
         <Text style={styles.comment_title_number}>{commentData.length}</Text>
       </View>
-      {sort === "all" ? (
-        <View style={styles.comment}>
-          {commentData.map((item: any) => (
-            <View key={item.id}>
-              <CommentItem comment={item} sort={"all"} onSubmit={onSubmit} />
+      {commentData.length !== 0 ? (
+        <View>
+          {sort === "all" ? (
+            <View style={styles.comment}>
+              {commentData.map((item: any) => (
+                <View key={item.id}>
+                  <CommentItem
+                    comment={item}
+                    sort={"all"}
+                    onReplySubmit={onReplySubmit}
+                  />
+                </View>
+              ))}
             </View>
-          ))}
+          ) : (
+            <View style={styles.comment}>
+              {commentData.slice(0, 1).map((item: any) => (
+                <View key={item.id}>
+                  <CommentItem comment={item} sort={"best"} />
+                </View>
+              ))}
+            </View>
+          )}
         </View>
       ) : (
-        <View style={styles.comment}>
-          {commentData.slice(0, 1).map((item: any) => (
-            <View key={item.id}>
-              <CommentItem comment={item} sort={"best"} />
-            </View>
-          ))}
-        </View>
+        <View></View>
       )}
     </View>
   );

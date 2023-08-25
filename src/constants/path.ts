@@ -2,13 +2,15 @@ export const API_PATH = {
   COMMENT: {
     GET: {
       // 모든 COMMENT 조회하기
-      ALL: `/comment/comments`,
+      ALL: `/comment/admin/comments`,
       // COMMENT TRIPID로 조회하기
-      COMMENT_ID: `/comment/:tripId`,
+      COMMENT_ID: `/comment/user/:tripId`,
     },
     POST: {
-      // COMMENT TRIPID로 조회하기
+      // COMMENT 댓글 생성하기
       COMMENT: `/comment`,
+      // RECOMMENT 대댓글 생성하기
+      RECOMMENT: `/comment/:parentId`,
     },
     PATCH: {
       // COMMENT CONTENT 댓글 수정하기
