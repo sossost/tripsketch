@@ -1,5 +1,9 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { getCommentData, createComment } from "../services/comment";
+import {
+  getCommentData,
+  createComment,
+  updateCommentLike,
+} from "../services/comment";
 
 export const getPostCommentList = () => {
   const {
@@ -13,4 +17,8 @@ export const getPostCommentList = () => {
 
 export const getCreateComment = () => {
   return useMutation(createComment);
+};
+
+export const getUpdateCommentLike = () => {
+  return useMutation(updateCommentLike);
 };

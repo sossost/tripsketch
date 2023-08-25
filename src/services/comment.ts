@@ -27,3 +27,18 @@ export const createComment = async (commentData: any) => {
     throw new Error("Error");
   }
 };
+
+export const updateCommentLike = async (commentLike: any) => {
+  try {
+    const response = await axiosBase.patch(
+      API_PATH.COMMENT.PATCH.COMMENT_LIKE,
+      commentLike
+    );
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
+    }
+    return response.data;
+  } catch (error) {
+    throw new Error("Error");
+  }
+};
