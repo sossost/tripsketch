@@ -1,11 +1,19 @@
-import { View, Modal, Text, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Modal,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  Button,
+} from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import styled from "styled-components/native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import * as ImagePicker from "expo-image-picker";
 
 import MapView, { Marker, UrlTile } from "react-native-maps";
 
@@ -14,6 +22,16 @@ type Suggestion = {
   display_name: string;
   lat: string;
   lon: string;
+};
+
+type ImagePickerResult = {
+  cancelled: boolean;
+  uri?: string;
+  width?: number;
+  height?: number;
+  type?: string;
+  exif?: { [key: string]: any };
+  base64?: string;
 };
 
 /** 여행 글쓰기 */
@@ -84,6 +102,7 @@ const CreatePost: React.FC = () => {
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
   const [startDate, setStartDate] = useState<string | null>(null);
   const [endDate, setEndDate] = useState<string | null>(null);
+  const [image, setImage] = useState(null);
 
   // 230728
 
@@ -137,13 +156,13 @@ const CreatePost: React.FC = () => {
 
   /** 입력에 따라 도시를 찾는 핸들러 */
 
-  const handleInputChange = (value: string) => {
+  const handleInputChange = async (value: string) => {
     setQuery(value);
-    searchCity(value);
+    await searchCity(value);
   };
 
   /** 도시 검색 */
-  const searchCity = (cityName: string) => {
+  const searchCity = async (cityName: string) => {
     if (cityName.length > 1) {
       fetch(
         `https://nominatim.openstreetmap.org/search?city=${cityName}&format=json`
@@ -151,7 +170,6 @@ const CreatePost: React.FC = () => {
         .then((response) => response.json())
         .then((data) => {
           setSuggestions(data);
-          console.log(suggestions);
         });
     } else {
       setSuggestions([]);
@@ -174,6 +192,21 @@ const CreatePost: React.FC = () => {
           longitude: Number(suggestion.lon),
         })
       );
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.canceled) {
+      setImage(result.uri);
+    }
   };
 
   // react-native-calendars 패키지를 사용하여 달력을 구현 --------
@@ -428,7 +461,14 @@ const CreatePost: React.FC = () => {
             {/* 내용 */}
             <ContentPhotoBox>
               <Title>내용</Title>
-              <PhotoIcon name="photo" />
+
+              <PhotoIcon name="photo" onPress={pickImage} />
+              {image && (
+                <Image
+                  source={{ uri: image }}
+                  style={{ width: 200, height: 200 }}
+                />
+              )}
             </ContentPhotoBox>
             {/* <ScrollView
             contentContainerStyle={{ flexGrow: 1 }}

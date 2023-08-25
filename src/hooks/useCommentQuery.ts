@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getCommentData } from "../services/comment";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { getCommentData, createComment } from "../services/comment";
 
 export const getPostCommentList = () => {
   const {
@@ -9,4 +9,8 @@ export const getPostCommentList = () => {
   } = useQuery(["comment"], getCommentData);
 
   return { commentData, isLoading, isError };
+};
+
+export const getCreateComment = () => {
+  return useMutation(createComment);
 };

@@ -3,13 +3,13 @@ import {
   TouchableOpacity,
   SafeAreaView,
   TextInput,
-  Alert,
   Text,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 
 type CommentInputProps = {
-  onSubmit?: () => void;
+  onSubmit?: (comment: string, parentId?: string) => void;
   commentId?: string;
   commentNickname?: string;
 };
@@ -21,13 +21,19 @@ const CommentInput = ({
 }: CommentInputProps) => {
   const [comment, setComment] = useState("");
 
+  const parentId = commentId ? commentId : "";
+
   const submitComment = () => {
-    Alert.alert("Simple Button pressed");
+    if (onSubmit && comment !== "") {
+      onSubmit(comment, parentId);
+      setComment("");
+    } else {
+      Alert.alert("알림", "내용을 입력해주세요.");
+    }
   };
 
   const isCommentIdEmpty = commentId === undefined;
 
-  console.log(commentNickname);
   return (
     <SafeAreaView style={styles.container}>
       <TextInput
@@ -55,9 +61,13 @@ const styles = StyleSheet.create({
     height: 40,
     borderWidth: 1,
     borderColor: "#ddd",
-    padding: 10,
+    backgroundColor: "#fff",
+    paddingVertical: 10,
+    paddingLeft: 15,
+    paddingRight: 50,
     color: "#6f6f6f",
     borderRadius: 30,
+    fontSize: 13,
   },
   button: {
     position: "absolute",
