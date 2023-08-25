@@ -59,11 +59,7 @@ export const tokenRefresh = async () => {
       });
 
       // 새로운 액세스 토큰 저장
-      const newAccessToken = response.data.accessToken;
-      // console.log(
-      //   "리프레시 토큰으로 새로 발급한 액세스 토큰은...",
-      //   newAccessToken
-      // );
+      const newAccessToken = response.headers.accesstoken;
       await SecureStore.setItemAsync("accessToken", newAccessToken);
     } else {
       const navigation = useNavigation();
