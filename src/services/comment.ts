@@ -1,5 +1,5 @@
-import { axiosBase } from "./axios";
 import { API_PATH } from "../constants/path";
+import axiosBase from "./axios";
 
 export const getCommentData = async () => {
   try {
