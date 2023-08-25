@@ -5,16 +5,17 @@ import { User } from "../types/user";
 /** 유저 정보 get 요청하는 함수 (230728 updated) */
 export const getCurrentUser = async () => {
   const accessToken = await SecureStore.getItemAsync("accessToken");
-  // console.log("                              ");
-  // console.log("user.ts 현재 액세스 토큰 ===> ", accessToken);
+  console.log("111", accessToken);
+  const pushToken = await SecureStore.getItemAsync("pushToken");
+  console.log("222", pushToken);
+
   try {
     if (accessToken) {
-      const response = await axiosBase.get("user", {
+      const response = await axiosBase.get(`user?token=${pushToken}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      // console.log("user.ts 요청한 유저 데이터 ===> ", response.data);
       return response.data as User;
     }
     // 토큰이 없을 때 null 처리
