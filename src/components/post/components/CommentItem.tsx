@@ -8,44 +8,27 @@ import {
 } from "react-native";
 import { Comment } from "../../../types/comment";
 import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import ReCommentItem from "./ReCommentItem";
-import CommentInput from "./CommentInput";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { useGetCurrentUser } from "../../../hooks/useUserQuery";
-import { getCreateComment } from "../../../hooks/useCommentQuery";
+import ReCommentItem from "./ReCommentItem";
+import CommentInput from "./CommentInput";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
-const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
+type CommentProps = {
+  onSubmit?: (comment: string, parentId?: string) => void;
+  sort: string;
+  comment: Comment;
+};
+
+const CommentItem = ({ comment, sort, onSubmit }: CommentProps) => {
   const [showCommentInput, setShowCommentInput] = useState(false);
   const { data: userData } = useGetCurrentUser();
   const [likes, setLikes] = useState(comment.isLiked);
   const [likeNum, setLikeNum] = useState(comment.numberOfLikes);
   const [isButton, setIsButton] = useState(false);
   const [isUpdateInput, setIsUpdateInput] = useState(false);
-
-  const createCommentMutation = getCreateComment();
-  const queryClient = useQueryClient();
-
-  const handleCommentSubmit = async (comment: String, parentId?: String) => {
-    try {
-      const commentData = {
-        tripId: "1234",
-        content: comment,
-        parentId: parentId,
-        replyTo: "",
-      };
-      const createdComment = await createCommentMutation.mutateAsync(
-        commentData
-      );
-      queryClient.invalidateQueries(["comment"]);
-      console.log("댓글이 성공적으로 생성되었습니다.", createdComment);
-    } catch (error) {
-      console.error("댓글 생성 중 오류 발생:", error);
-    }
-  };
 
   const handleLike = () => {
     if (likes) {
@@ -150,7 +133,7 @@ const CommentItem = ({ comment, sort }: { comment: Comment; sort: string }) => {
                 <Text style={styles.add_comment}>답글 달기</Text>
               </TouchableOpacity>
               <CommentInput
-                onSubmit={handleCommentSubmit}
+                onSubmit={onSubmit}
                 commentId={comment.id}
                 commentNickname={comment.userNickName}
               />
@@ -250,7 +233,6 @@ const styles = StyleSheet.create({
   add_comment: {
     fontSize: 11,
     color: "#6f6f6f",
-    marginTop: 8,
   },
   recommentBox: {
     paddingHorizontal: 20,

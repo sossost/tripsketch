@@ -1,4 +1,4 @@
-import { axiosBase } from "../../api/axios";
+import { axiosBase } from "./axios";
 import { API_PATH } from "../constants/path";
 
 export const getCommentData = async () => {
@@ -18,6 +18,21 @@ export const createComment = async (commentData: any) => {
     const response = await axiosBase.post(
       API_PATH.COMMENT.POST.COMMENT,
       commentData
+    );
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
+    }
+    return response.data;
+  } catch (error) {
+    throw new Error("Error");
+  }
+};
+
+export const updateCommentLike = async (commentLike: any) => {
+  try {
+    const response = await axiosBase.patch(
+      API_PATH.COMMENT.PATCH.COMMENT_LIKE,
+      commentLike
     );
     if (response.status !== 200) {
       throw new Error("Network response was not ok");

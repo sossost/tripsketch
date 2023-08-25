@@ -4,7 +4,12 @@ import { useState } from "react";
 import { Comment } from "../../../types/comment";
 import { getPostCommentList } from "../../../hooks/useCommentQuery";
 
-const CommentList = ({ sort }: { sort: string }) => {
+type CommentProps = {
+  onSubmit?: (comment: string, parentId?: string) => void;
+  sort: string;
+};
+
+const CommentList = ({ sort, onSubmit }: CommentProps) => {
   const { commentData, isLoading, isError } = getPostCommentList();
 
   if (isLoading) {
@@ -25,7 +30,7 @@ const CommentList = ({ sort }: { sort: string }) => {
         <View style={styles.comment}>
           {commentData.map((item: any) => (
             <View key={item.id}>
-              <CommentItem comment={item} sort={"all"} />
+              <CommentItem comment={item} sort={"all"} onSubmit={onSubmit} />
             </View>
           ))}
         </View>
