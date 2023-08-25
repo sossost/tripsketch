@@ -7,11 +7,14 @@ import * as SecureStore from "expo-secure-store";
 import { getCurrentUser, getUserInfo } from "../../services/user";
 import * as Notifications from "expo-notifications";
 import jwtDecode, { JwtPayload } from "jwt-decode";
+import axios from "axios";
 
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
+// const clientId = "1927d084a86a31e01a814ce0b2fe3459";
+// const authorizeUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao/code&response_type=code`;
 
-const clientId = "1927d084a86a31e01a814ce0b2fe3459";
-const authorizeUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao/code&response_type=code`;
+// 230825
+const authorizeUrl = `https://kauth.kakao.com/oauth/authorize?client_id=1927d084a86a31e01a814ce0b2fe3459&redirect_uri=https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao/callback&response_type=code`;
 
 /** 카카오 로그인 페이지 컴포넌트 */
 const KaKaoLogin = () => {
@@ -50,14 +53,8 @@ const KaKaoLogin = () => {
 
   // 카카오 로그인 진행하는 화면
   const KakaoLoginWebView = (url: string) => {
-    const exp = "code=";
-    const condition = url.indexOf(exp);
-    if (condition != -1) {
-      const authorize_code = url.substring(condition + exp.length);
-      requestToken(authorize_code);
-    }
+    requestToken(url);
   };
-
   /** 유저 정보를 SecureStore에 저장하는 함수 */
   const saveUserInfo = async (profileData: any) => {
     try {
@@ -71,26 +68,25 @@ const KaKaoLogin = () => {
   };
 
   /** 토큰 발급받는 함수 */
-  const requestToken = async (authorize_code: string) => {
+  const requestToken = async (url: string) => {
     try {
-      const pushToken = await SecureStore.getItemAsync("pushToken");
-      const response = await axiosBase.post(`oauth/kakao/login`, {
-        code: authorize_code,
-        pushToken: pushToken,
-      });
+      const response = await axios.get(
+        `https://kauth.kakao.com/oauth/authorize?client_id=1927d084a86a31e01a814ce0b2fe3459&redirect_uri=https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao/callback&response_type=code`
+      );
 
       // 액세스 토큰 저장
-      const accessToken = response.data.accessToken;
+      const accessToken = response.headers.accesstoken;
       await SecureStore.setItemAsync("accessToken", accessToken);
       console.log("액세스 토큰", accessToken);
 
       // 리프레시 토큰 저장
-      const refreshToken = response.data.refreshToken;
+      const refreshToken = response.headers.refreshtoken;
       await SecureStore.setItemAsync("refreshToken", refreshToken);
+      console.log("리프레시 토큰", refreshToken);
 
       // 리프레시 토큰 만료 기간 저장
       const refreshTokenExpiryDate = JSON.stringify(
-        response.data.refreshTokenExpiryDate
+        response.headers.refreshtokenexpirydate
       );
       await SecureStore.setItemAsync(
         "refreshTokenExpiryDate",
@@ -124,7 +120,7 @@ const KaKaoLogin = () => {
         (navigation.navigate as (route: string) => void)("Home");
       }
     } catch (error) {
-      console.log("로그인 실패와 관련한 에러는...🤔", error);
+      console.log(error);
     }
   };
 
