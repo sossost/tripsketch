@@ -13,18 +13,10 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../types/RootStack";
 
 export const useGetCurrentUser = () => {
-  const fallback = {
-    id: "",
-    email: "",
-    nickname: "",
-    introduction: "",
-    profileImageUrl: "",
-    followersCount: 0,
-    followingCount: 0,
-  };
+  const fallback = null;
 
   const {
-    data = fallback as User,
+    data = fallback as User | null,
     isLoading,
     isError,
   } = useQuery<User | null>([queryKeys.currentUser], getCurrentUser);
@@ -56,10 +48,8 @@ export const useGetUserByNickname = (nickname: string) => {
 
 export const useGetSocialList = (
   variant: "팔로워" | "팔로잉",
-  nickname: string | undefined
+  nickname: string
 ) => {
-  if (!nickname) return { data: [], isLoading: false, isError: false };
-
   const queryKey = [
     variant === "팔로워" ? queryKeys.followers : queryKeys.following,
     nickname,
