@@ -6,7 +6,6 @@ import TripDetail from "../screens/TripDetail";
 import KakaoLoginPage from "../components/auth/KakaoLoginPage";
 import KakaoLoginButton from "../components/auth/KakaoLoginButton";
 import BottomTab from "./BottomTab";
-import SocialPage from "../screens/SocialPage";
 import SplashScreen from "../components/common/SplashScreen";
 import CreatePost from "../screens/CreatePost";
 import Header from "../components/UI/header/Header";
@@ -15,6 +14,7 @@ import EditProfilePage from "../screens/EditProfilePage";
 
 import CommonHeaderLeft from "../components/UI/header/HeaderLeft";
 import Toast from "react-native-toast-message";
+import SocialPage from "../screens/SocialPage";
 
 const Stack = createStackNavigator();
 
