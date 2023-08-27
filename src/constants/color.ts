@@ -4,5 +4,6 @@ export const colors = {
   mainFont: "#414141",
   subFont: "#6F6F6F",
   lightGrey: "#D9D9D9",
+  white: "#ffffff",
   skeleton: "#ccc",
 };

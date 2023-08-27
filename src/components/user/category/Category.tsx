@@ -1,24 +1,22 @@
 import React from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import { styled } from "styled-components/native";
+import { colors } from "../../../constants/color";
 
 type CategoryProps = {
-  category: string[];
+  categoryList: string[];
   selectedCategory: string;
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const Category = (props: CategoryProps) => {
-  const { category, selectedCategory, setSelectedCategory } = props;
-
+const Category = ({
+  categoryList,
+  selectedCategory,
+  setSelectedCategory,
+}: CategoryProps) => {
   return (
     <CategoryContainer>
-      {category.map((item, index) => {
+      {categoryList.map((item, index) => {
         const isClicked = item === selectedCategory;
-        const clickedStyle = {
-          backgroundColor: isClicked ? "#73BBFB" : "#ffffff",
-          color: isClicked ? "#ffffff" : "#73BBFB",
-        };
 
         return (
           <CategoryButton
@@ -26,7 +24,7 @@ const Category = (props: CategoryProps) => {
             key={index}
             onPress={() => setSelectedCategory(item)}
           >
-            <Text style={[styles.category, clickedStyle]}>{item}</Text>
+            <CategoryText isClicked={isClicked}>{item}</CategoryText>
           </CategoryButton>
         );
       })}
@@ -43,18 +41,18 @@ export const CategoryContainer = styled.View`
   gap: 10px;
 `;
 
-export const CategoryButton = styled.TouchableOpacity<{ isClicked: boolean }>`
+const CategoryButton = styled.TouchableOpacity<{ isClicked: boolean }>`
   padding: 6px 10px;
   border-width: 1px;
   border-color: #73bbfb;
   border-radius: 25px;
-  background-color: ${(props) => (props.isClicked ? "#73BBFB" : "#ffffff")};
-  color: ${(props) => (props.isClicked ? "#ffffff" : "#73BBFB")};
+  background-color: ${({ isClicked }) =>
+    isClicked ? colors.primary : colors.white};
+  color: ${({ isClicked }) => (isClicked ? colors.white : colors.primary)};
 `;
 
-const styles = StyleSheet.create({
-  category: {
-    fontSize: 13,
-    fontWeight: "bold",
-  },
-});
+const CategoryText = styled.Text<{ isClicked: boolean }>`
+  font-size: 13px;
+  font-weight: bold;
+  color: ${({ isClicked }) => (isClicked ? colors.white : colors.primary)};
+`;
