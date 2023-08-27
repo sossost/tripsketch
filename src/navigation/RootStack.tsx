@@ -9,9 +9,9 @@ import BottomTab from "./BottomTab";
 import SocialPage from "../screens/SocialPage";
 import SplashScreen from "../components/common/SplashScreen";
 import CreatePost from "../screens/CreatePost";
-import EditProfilePage from "../screens/EditProfilePage";
 import Header from "../components/UI/header/Header";
 import UserPage from "../screens/UserPage";
+import EditProfilePage from "../screens/EditProfilePage";
 
 import CommonHeaderLeft from "../components/UI/header/HeaderLeft";
 import Toast from "react-native-toast-message";
