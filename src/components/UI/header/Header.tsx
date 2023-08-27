@@ -46,5 +46,5 @@ const RightWrapper = styled.View`
   flex-direction: row;
   gap: 10px;
   align-items: center;
-  min-width: 20px;
+  min-width: 30px;
 `;

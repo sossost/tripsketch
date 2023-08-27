@@ -13,18 +13,10 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../types/RootStack";
 
 export const useGetCurrentUser = () => {
-  const fallback = {
-    id: "",
-    email: "",
-    nickname: "",
-    introduction: "",
-    profileImageUrl: "",
-    followersCount: 0,
-    followingCount: 0,
-  };
+  const fallback = null;
 
   const {
-    data = fallback as User,
+    data = fallback as User | null,
     isLoading,
     isError,
   } = useQuery<User | null>([queryKeys.currentUser], getCurrentUser);
