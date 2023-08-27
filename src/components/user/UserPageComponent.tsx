@@ -35,7 +35,7 @@ const UserPageComponent = ({ nickname, variant }: UserPageComponentProps) => {
   // 로그인한 유저정보를 통해 팔로잉 리스트를 가져옴
   const currentUserFollowingList = useGetSocialList(
     "팔로잉",
-    currentUser.data?.nickname ?? ""
+    currentUser.data?.nickname
   ).data;
 
   // 현재 로그인한 유저가 해당 유저를 팔로잉하고 있는지 확인

@@ -56,8 +56,10 @@ export const useGetUserByNickname = (nickname: string) => {
 
 export const useGetSocialList = (
   variant: "팔로워" | "팔로잉",
-  nickname: string
+  nickname: string | undefined
 ) => {
+  if (!nickname) return { data: [], isLoading: false, isError: false };
+
   const queryKey = [
     variant === "팔로워" ? queryKeys.followers : queryKeys.following,
     nickname,
