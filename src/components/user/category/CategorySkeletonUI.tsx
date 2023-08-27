@@ -1,6 +1,6 @@
 import { styled } from "styled-components/native";
-import { CategoryContainer, CategoryButton } from "./Category";
-import { colors } from "../../constants/color";
+import { CategoryContainer } from "./Category";
+import { colors } from "../../../constants/color";
 
 const CategorySkeletonUI = () => {
   return (

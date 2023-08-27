@@ -1,6 +1,5 @@
 import React from "react";
 import { User } from "../../../types/user";
-import { useGetSocialList } from "../../../hooks/useUserQuery";
 import {
   ProfileContainer,
   ProfileIntroductionText,
@@ -18,6 +17,7 @@ import Button from "../../UI/Button";
 type ProfileProps = {
   variant: "myPage" | "userPage";
   onPress: () => void;
+  isFollowing?: boolean;
   user: User;
 };
 
@@ -26,13 +26,7 @@ export type RootStackParamList = {
   FollowingPage: undefined;
 };
 
-const Profile = ({ variant, onPress, user }: ProfileProps) => {
-  const followingList = useGetSocialList("팔로잉", user.nickname);
-
-  const isFollowing = followingList.data.find(
-    (follwing) => follwing.nickname === user.nickname
-  );
-
+const Profile = ({ variant, onPress, isFollowing, user }: ProfileProps) => {
   const buttonTitle =
     variant === "myPage" ? "프로필 편집" : isFollowing ? "팔로잉" : "팔로우";
 

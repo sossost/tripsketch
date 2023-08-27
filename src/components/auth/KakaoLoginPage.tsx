@@ -8,6 +8,8 @@ import { getCurrentUser, getUserInfo } from "../../services/user";
 import * as Notifications from "expo-notifications";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 import axios from "axios";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "../../react-query/constants";
 
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 // const clientId = "1927d084a86a31e01a814ce0b2fe3459";
@@ -19,6 +21,7 @@ const authorizeUrl = `https://kauth.kakao.com/oauth/authorize?client_id=1927d084
 /** 카카오 로그인 페이지 컴포넌트 */
 const KaKaoLogin = () => {
   const navigation = useNavigation();
+  const queryClient = useQueryClient();
 
   // 로그인 시 Expo 알림 토큰 요청
   useEffect(() => {
@@ -54,17 +57,6 @@ const KaKaoLogin = () => {
   // 카카오 로그인 진행하는 화면
   const KakaoLoginWebView = (url: string) => {
     requestToken(url);
-  };
-  /** 유저 정보를 SecureStore에 저장하는 함수 */
-  const saveUserInfo = async (profileData: any) => {
-    try {
-      // 유저 정보를 JSON 문자열로 변환
-      const userDataJSON = JSON.stringify(profileData);
-      await SecureStore.setItemAsync("userProfile", userDataJSON);
-      console.log("유저 정보가 SecureStore에 성공적으로 저장되었습니다!");
-    } catch (error) {
-      console.error("유저 정보 저장 중 발생한 에러는...🤔", error);
-    }
   };
 
   /** 토큰 발급받는 함수 */
@@ -112,7 +104,7 @@ const KaKaoLogin = () => {
 
       // 유저 정보를 SecureStore에 저장
       const userInfo = await getCurrentUser();
-      await saveUserInfo(userInfo);
+      queryClient.setQueryData([queryKeys.currentUser], userInfo);
       const userInfoFromSecureStore = await getUserInfo();
 
       // 토큰 정상 발급되고, 유저 정보 저장 성공 후 메인 페이지로 이동
