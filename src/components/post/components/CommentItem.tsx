@@ -24,9 +24,21 @@ type CommentProps = {
   ) => void;
   sort: string;
   comment: Comment;
+  likeComment?: (likeCommentId: string, isLikeStatus: boolean) => void;
+  likeReplyComment?: (
+    likeCommentId: string,
+    parentId: string,
+    isLikeStatus: boolean
+  ) => void;
 };
 
-const CommentItem = ({ comment, sort, onReplySubmit }: CommentProps) => {
+const CommentItem = ({
+  comment,
+  sort,
+  onReplySubmit,
+  likeComment,
+  likeReplyComment,
+}: CommentProps) => {
   const [showCommentInput, setShowCommentInput] = useState(false);
   const { data: userData } = useGetCurrentUser();
   const [likes, setLikes] = useState(comment.isLiked);
@@ -34,13 +46,15 @@ const CommentItem = ({ comment, sort, onReplySubmit }: CommentProps) => {
   const [isButton, setIsButton] = useState(false);
   const [isUpdateInput, setIsUpdateInput] = useState(false);
 
+  const likeCommentId = comment.id;
+  const isLikeStatus = likes;
+
   const handleLike = () => {
-    if (likes) {
-      setLikes(false);
-      setLikeNum(likeNum - 1);
-    } else {
-      setLikes(true);
-      setLikeNum(likeNum + 1);
+    if (likeComment) {
+      const updatedLikeStatus = !likes;
+      likeComment(likeCommentId, isLikeStatus);
+      setLikes(updatedLikeStatus);
+      setLikeNum(updatedLikeStatus ? likeNum + 1 : likeNum - 1);
     }
   };
 
@@ -77,7 +91,7 @@ const CommentItem = ({ comment, sort, onReplySubmit }: CommentProps) => {
             <View style={styles.top}>
               <Text style={styles.id}>{comment.userNickName}</Text>
               <View style={styles.likes}>
-                {userData && userData.email === comment.userEmail ? (
+                {userData && userData.nickname === comment.userNickName ? (
                   <TouchableOpacity onPress={handleButton}>
                     <Entypo
                       name="dots-three-vertical"
@@ -110,7 +124,7 @@ const CommentItem = ({ comment, sort, onReplySubmit }: CommentProps) => {
           ) : null}
         </View>
         <View>
-          {userData && isButton && userData.email === comment.userEmail ? (
+          {userData && isButton ? (
             <View style={styles.button_container}>
               <TouchableOpacity
                 style={styles.button_update}
@@ -150,7 +164,11 @@ const CommentItem = ({ comment, sort, onReplySubmit }: CommentProps) => {
           {comment.children.map((item) => (
             <View key={item.id}>
               {userData ? (
-                <ReCommentItem recomment={item} userData={userData} />
+                <ReCommentItem
+                  recomment={item}
+                  userData={userData}
+                  likeReplyComment={likeReplyComment}
+                />
               ) : (
                 <Text>사용자 데이터를 사용할 수 없습니다.</Text>
               )}

@@ -6,25 +6,36 @@ import { useState } from "react";
 import CommentInput from "./CommentInput";
 import { User } from "../../../types/user";
 
+type ReplyCommentProps = {
+  recomment: Comment;
+  userData: User;
+  likeReplyComment?: (
+    likeCommentId: string,
+    parentId: string,
+    isLikeStatus: boolean
+  ) => void;
+};
+
 const ReCommentItem = ({
   recomment,
   userData,
-}: {
-  recomment: Comment;
-  userData: User;
-}) => {
+  likeReplyComment,
+}: ReplyCommentProps) => {
   const [likes, setLikes] = useState(recomment.isLiked);
   const [likeNum, setLikeNum] = useState(recomment.numberOfLikes);
   const [isButton, setIsButton] = useState(false);
   const [isUpdateInput, setIsUpdateInput] = useState(false);
 
+  const likeReplyCommentId = recomment.id;
+  const parentId = recomment.parentId;
+  const isLikeStatus = likes;
+
   const handleLike = () => {
-    if (likes) {
-      setLikes(false);
-      setLikeNum(likeNum - 1);
-    } else {
-      setLikes(true);
-      setLikeNum(likeNum + 1);
+    if (likeReplyComment) {
+      const updatedLikeStatus = !likes;
+      likeReplyComment(likeReplyCommentId, parentId, isLikeStatus);
+      setLikes(updatedLikeStatus);
+      setLikeNum(updatedLikeStatus ? likeNum + 1 : likeNum - 1);
     }
   };
 
@@ -52,7 +63,7 @@ const ReCommentItem = ({
               <Text style={styles.nickname}>{recomment.userNickName}</Text>
               <Text style={styles.comment}>{recomment.content}</Text>
             </View>
-            {userData && userData.email === recomment.userEmail ? (
+            {userData && userData.nickname === recomment.userNickName ? (
               <TouchableOpacity onPress={handleButton}>
                 <Entypo name="dots-three-vertical" size={14} color="#c5c5c5" />
               </TouchableOpacity>
@@ -80,7 +91,7 @@ const ReCommentItem = ({
         ) : null}
       </View>
       <View>
-        {userData && isButton && userData.email === recomment.userEmail ? (
+        {userData && isButton ? (
           <View style={styles.button_container}>
             <TouchableOpacity
               style={styles.button_update}

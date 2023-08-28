@@ -9,9 +9,20 @@ type CommentProps = {
     replyToNickname: string
   ) => void;
   sort: string;
+  likeComment?: (likeCommentId: string, isLikeStatus: boolean) => void;
+  likeReplyComment?: (
+    likeCommentId: string,
+    parentId: string,
+    isLikeStatus: boolean
+  ) => void;
 };
 
-const CommentList = ({ sort, onReplySubmit }: CommentProps) => {
+const CommentList = ({
+  sort,
+  onReplySubmit,
+  likeComment,
+  likeReplyComment,
+}: CommentProps) => {
   const { commentData, isLoading, isError } =
     getPostCommentListByTripId("1234");
 
@@ -39,6 +50,8 @@ const CommentList = ({ sort, onReplySubmit }: CommentProps) => {
                     comment={item}
                     sort={"all"}
                     onReplySubmit={onReplySubmit}
+                    likeComment={likeComment}
+                    likeReplyComment={likeReplyComment}
                   />
                 </View>
               ))}

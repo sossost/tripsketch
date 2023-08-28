@@ -4,6 +4,7 @@ import {
   createComment,
   createReplyComment,
   updateCommentLike,
+  updateReplyCommentLike,
   getCommentByTripId,
 } from "../services/comment";
 
@@ -37,4 +38,8 @@ export const getCreateReplyComment = () => {
 
 export const getUpdateCommentLike = () => {
   return useMutation(updateCommentLike);
+};
+
+export const getUpdateReplyCommentLike = () => {
+  return useMutation(updateReplyCommentLike);
 };

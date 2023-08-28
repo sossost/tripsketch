@@ -8,13 +8,15 @@ import {
   getCreateComment,
   getCreateReplyComment,
   getUpdateCommentLike,
+  getUpdateReplyCommentLike,
 } from "../../hooks/useCommentQuery";
 
 const Comment = () => {
   const createCommentMutation = getCreateComment();
   const queryClient = useQueryClient();
 
-  const handleSubmit = async (comment: String) => {
+  // 게시글 댓글 생성하기
+  const handleSubmit = async (comment: string) => {
     try {
       const commentData = {
         tripId: "1234",
@@ -29,6 +31,7 @@ const Comment = () => {
     }
   };
 
+  // 게시글 대댓글 생성하기
   const createReplyCommentMutation = getCreateReplyComment();
   const handleReplyCommentSubmit = async (
     comment: string,
@@ -36,13 +39,13 @@ const Comment = () => {
     replyToNickname: string
   ) => {
     try {
-      const commentData = {
+      const replyCommentData = {
         tripId: "1234",
         content: comment,
         replyToNickname: replyToNickname,
         parentId: parentId,
       };
-      await createReplyCommentMutation.mutateAsync(commentData);
+      await createReplyCommentMutation.mutateAsync(replyCommentData);
       Toast.show({ type: "success", text1: "댓글 생성이 완료되었습니다." });
       queryClient.invalidateQueries(["commentTripId"]);
     } catch (error) {
@@ -51,18 +54,54 @@ const Comment = () => {
     }
   };
 
-  // const isLikeCommentMutation = getUpdateCommentLike();
-  // const isLikeComment = async (isLikeComment) => {
-  //   try {
-  //     await isLikeCommentMutation.mutateAsync(isLikeComment);
-  //   } catch (error) {
-  //     console.error("오류 발생:", error);
-  //   }
-  // };
+  // 게시글 댓글 좋아요 요청
+  const isLikeCommentMutation = getUpdateCommentLike();
+  const likeComment = async (likeCommentId: string, isLikeStatus: boolean) => {
+    try {
+      await isLikeCommentMutation.mutateAsync(likeCommentId);
+      queryClient.invalidateQueries(["commentTripId"]);
+      if (isLikeStatus) {
+        Toast.show({ type: "success", text1: "좋아요가 해제되었습니다." });
+      } else {
+        Toast.show({ type: "success", text1: "좋아요가 표시되었습니다." });
+      }
+    } catch (error) {
+      console.error("오류 발생:", error);
+    }
+  };
+
+  // 게시글 대댓글 좋아요 요청
+  const isLikeReplyCommentMutation = getUpdateReplyCommentLike();
+  const likeReplyComment = async (
+    likeCommentId: string,
+    parentId: string,
+    isLikeStatus: boolean
+  ) => {
+    try {
+      const replyCommentData = {
+        likeReplyCommentId: likeCommentId,
+        parentId: parentId,
+      };
+      await isLikeReplyCommentMutation.mutateAsync(replyCommentData);
+      queryClient.invalidateQueries(["commentTripId"]);
+      if (isLikeStatus) {
+        Toast.show({ type: "success", text1: "좋아요가 해제되었습니다." });
+      } else {
+        Toast.show({ type: "success", text1: "좋아요가 표시되었습니다." });
+      }
+    } catch (error) {
+      console.error("오류 발생:", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
-      <CommentList sort={"all"} onReplySubmit={handleReplyCommentSubmit} />
+      <CommentList
+        sort={"all"}
+        onReplySubmit={handleReplyCommentSubmit}
+        likeComment={likeComment}
+        likeReplyComment={likeReplyComment}
+      />
       <View style={CommonStyles.appContainer}>
         <CommentInput onSubmit={handleSubmit} />
       </View>
