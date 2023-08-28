@@ -3,7 +3,7 @@ import { Image, Text, View } from "react-native";
 import { colors } from "../../constants/color";
 
 interface LikesCountProps {
-  likes: string[];
+  likes: number;
   variant?: "small" | "medium" | "large";
 }
 
@@ -32,7 +32,7 @@ const LikesCount = ({ likes, variant }: LikesCountProps) => {
           fontSize: style.fontSize[variant || "medium"],
         }}
       >
-        {likes.length}
+        {likes}
       </Text>
     </View>
   );
@@ -42,12 +42,12 @@ export default LikesCount;
 
 const style = {
   fontSize: {
-    small: 10,
+    small: 13,
     medium: 16,
     large: 24,
   },
   iconSize: {
-    small: 12,
+    small: 13,
     medium: 18,
     large: 26,
   },

@@ -1,6 +1,7 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
-import UserPageComponent from "../components/user/UserPageComponent";
 import { RootStackParamList } from "../types/RootStack";
+
+import UserPageComponent from "../components/user/UserPageComponent";
 
 type UserScreenRouteProp = RouteProp<RootStackParamList, "UserPage">;
 

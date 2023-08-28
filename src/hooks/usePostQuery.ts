@@ -1,19 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { queryKeys } from "../react-query/constants";
 import { Post } from "../types/Post";
-import { getDiariesByCategory } from "../services/diary";
+import { getPostsByNickname } from "../services/diary";
 
-export const useGetDiariesByCategory = (nickname: string, category: string) => {
-  if (!nickname) return;
-
+export const useGetPostsByNickname = (nickname: string, category: string) => {
   const fallback: Post[] = [];
 
   const {
     data = fallback as Post[],
     isLoading,
     isError,
-  } = useQuery<Post[] | undefined>([queryKeys.diaries, category], () =>
-    getDiariesByCategory(nickname, category)
+  } = useQuery<Post[] | undefined>([queryKeys.posts, nickname, category], () =>
+    getPostsByNickname(nickname, category)
   );
 
   return { data, isLoading, isError };

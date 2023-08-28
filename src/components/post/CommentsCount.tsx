@@ -3,7 +3,7 @@ import { Image, Text, View } from "react-native";
 import { colors } from "../../constants/color";
 
 interface CommentsCountProps {
-  comments: string[];
+  comments: number;
   variant?: "small" | "medium" | "large";
 }
 
@@ -31,7 +31,7 @@ const CommentsCount = ({ comments, variant }: CommentsCountProps) => {
           fontSize: style.fontSize[variant || "medium"],
         }}
       >
-        {comments.length}
+        {comments}
       </Text>
     </View>
   );
@@ -41,12 +41,12 @@ export default CommentsCount;
 
 const style = {
   fontSize: {
-    small: 10,
+    small: 13,
     medium: 16,
     large: 24,
   },
   iconSize: {
-    small: 10,
+    small: 11,
     medium: 18,
     large: 26,
   },
