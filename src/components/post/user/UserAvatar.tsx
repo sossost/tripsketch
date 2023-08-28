@@ -18,16 +18,16 @@ const UserAvatar = ({ profile_img, nickName }: UserAvatar) => {
       }}
     >
       <Image
-        style={{ width: 16, height: 16, borderRadius: 9999 }}
+        style={{ width: 20, height: 20, borderRadius: 9999 }}
         source={{
           uri: profile_img,
         }}
       />
       <Text
         style={{
-          fontSize: 10,
+          fontSize: 14,
           color: colors.subFont,
-          fontWeight: 500,
+          fontWeight: "500",
         }}
       >
         {nickName}

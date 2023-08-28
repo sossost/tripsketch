@@ -17,15 +17,11 @@ interface PostCardProps {
 }
 
 const PostCard = (props: PostCardProps) => {
-  const currentUser = {
-    id: "user3",
-    name: "미라벨 마드리갈",
-    profile_img: "../../../assets/images/test_user.png",
-  };
   const { post } = props;
-  const isLiked = post.likes.find((like) => like === currentUser.id)
-    ? true
-    : false;
+  // const isLiked = post.likes.find((like) => like === currentUser.id)
+  //   ? true
+  //   : false;
+  const isLiked = true;
   const likeButtonImgPath =
     isLiked === true
       ? require("../../../assets/images/isLikedIcon.png")
@@ -40,7 +36,7 @@ const PostCard = (props: PostCardProps) => {
   return (
     <View style={styles.postCard}>
       <TouchableOpacity style={styles.touchables} onPress={postHandler}>
-        <Image source={{ uri: post.thumbnail }} style={styles.postImg} />
+        {/* <Image source={{ uri: post.images[0] }} style={styles.postImg} /> */}
       </TouchableOpacity>
 
       <View style={styles.textArea}>
@@ -52,7 +48,7 @@ const PostCard = (props: PostCardProps) => {
         <View style={styles.lowerArea}>
           <View style={styles.userArea}>
             <Image source={userProfilePath} style={styles.profilePic} />
-            <Text style={styles.userName}>{post.author}</Text>
+            <Text style={styles.userName}>{post.nickname}</Text>
           </View>
           <Image source={likeButtonImgPath} style={styles.likeBtn} />
         </View>

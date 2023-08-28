@@ -18,7 +18,6 @@ const AuthGuard = ({ children }: { children: ReactNode }) => {
 
   // 유저정보가 없으면 아무것도 렌더링하지 않음
   if (currentUser.data === null) {
-    navigation.navigate("LoginPage");
     return null;
   }
 

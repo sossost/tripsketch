@@ -4,11 +4,11 @@ import { AntDesign } from "@expo/vector-icons";
 
 import Home from "../screens/Home";
 import MyPage from "../screens/MyPage";
-import TripList from "../screens/TripList";
 import Notice from "../screens/Notice";
 import CreatePost from "../screens/CreatePost";
 import Header from "../components/UI/header/Header";
 import Title from "../components/UI/header/Title";
+import ExplorePage from "../screens/ExplorePage";
 
 const Tabs = createBottomTabNavigator();
 
@@ -32,8 +32,8 @@ export default function BottomTab() {
         }}
       />
       <Tabs.Screen
-        name="Trip"
-        component={TripList}
+        name="ExplorePage"
+        component={ExplorePage}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
