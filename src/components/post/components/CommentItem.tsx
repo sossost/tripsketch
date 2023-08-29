@@ -5,6 +5,7 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { Comment } from "../../../types/comment";
 import { useState } from "react";
@@ -17,12 +18,40 @@ import CommentInput from "./CommentInput";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 type CommentProps = {
-  onSubmit?: (comment: string, parentId?: string) => void;
+  onReplySubmit?: (
+    comment: string,
+    parentId: string,
+    replyToNickname: string
+  ) => void;
   sort: string;
   comment: Comment;
+  likeComment?: (likeCommentId: string, isLikeStatus: boolean) => void;
+  likeReplyComment?: (
+    likeCommentId: string,
+    parentId: string,
+    isLikeStatus: boolean
+  ) => void;
+  updateComment?: (updateCommentId: string, content: string) => void;
+  updateReplyComment?: (
+    updateReplyCommentId: string,
+    parentId: string,
+    content: string
+  ) => void;
+  deleteComment?: (id: string) => void;
+  deleteReplyComment?: (id: string, parentId: string) => void;
 };
 
-const CommentItem = ({ comment, sort, onSubmit }: CommentProps) => {
+const CommentItem = ({
+  comment,
+  sort,
+  onReplySubmit,
+  likeComment,
+  likeReplyComment,
+  updateComment,
+  updateReplyComment,
+  deleteComment,
+  deleteReplyComment,
+}: CommentProps) => {
   const [showCommentInput, setShowCommentInput] = useState(false);
   const { data: userData } = useGetCurrentUser();
   const [likes, setLikes] = useState(comment.isLiked);
@@ -30,13 +59,15 @@ const CommentItem = ({ comment, sort, onSubmit }: CommentProps) => {
   const [isButton, setIsButton] = useState(false);
   const [isUpdateInput, setIsUpdateInput] = useState(false);
 
+  const likeCommentId = comment.id;
+  const isLikeStatus = likes;
+
   const handleLike = () => {
-    if (likes) {
-      setLikes(false);
-      setLikeNum(likeNum - 1);
-    } else {
-      setLikes(true);
-      setLikeNum(likeNum + 1);
+    if (likeComment) {
+      const updatedLikeStatus = !likes;
+      likeComment(likeCommentId, isLikeStatus);
+      setLikes(updatedLikeStatus);
+      setLikeNum(updatedLikeStatus ? likeNum + 1 : likeNum - 1);
     }
   };
 
@@ -49,6 +80,7 @@ const CommentItem = ({ comment, sort, onSubmit }: CommentProps) => {
     setIsUpdateInput(false);
   };
 
+  // comment 수정하기 유/무 체크하기
   const handleUpdate = () => {
     isUpdateInput ? setIsUpdateInput(false) : setIsUpdateInput(true);
   };
@@ -57,6 +89,26 @@ const CommentItem = ({ comment, sort, onSubmit }: CommentProps) => {
     const originalDate = comment.createdAt;
     const cutDate = originalDate.split("T")[0];
     return cutDate;
+  };
+
+  // 댓글 삭제 핸들러
+  const handleDelete = () => {
+    if (deleteComment) {
+      Alert.alert("알림", "정말 삭제하시겠습니까?", [
+        {
+          text: "괜찮습니다.",
+          style: "cancel",
+        },
+        {
+          text: "삭제",
+          onPress: () => {
+            deleteComment(comment.id);
+          },
+        },
+      ]),
+        { cancelable: false };
+      setIsButton(false);
+    }
   };
 
   return (
@@ -73,7 +125,9 @@ const CommentItem = ({ comment, sort, onSubmit }: CommentProps) => {
             <View style={styles.top}>
               <Text style={styles.id}>{comment.userNickName}</Text>
               <View style={styles.likes}>
-                {userData && userData.email === comment.userEmail ? (
+                {userData &&
+                userData.nickname === comment.userNickName &&
+                comment.isDeleted === false ? (
                   <TouchableOpacity onPress={handleButton}>
                     <Entypo
                       name="dots-three-vertical"
@@ -86,27 +140,32 @@ const CommentItem = ({ comment, sort, onSubmit }: CommentProps) => {
             </View>
             <Text style={styles.date}>{formattedDate()}</Text>
             <Text style={styles.comment}>{comment.content}</Text>
-            <View style={styles.likes_container}>
-              <TouchableOpacity onPress={handleLike}>
-                <Ionicons
-                  name={likes ? "md-heart-sharp" : "md-heart-outline"}
-                  size={18}
-                  color={likes ? "#ec6565" : "#777"}
-                />
-              </TouchableOpacity>
-              <Text style={styles.like_length}>{likeNum}</Text>
-            </View>
+            {comment.isDeleted ? null : (
+              <View style={styles.likes_container}>
+                <TouchableOpacity onPress={handleLike}>
+                  <Ionicons
+                    name={likes ? "md-heart-sharp" : "md-heart-outline"}
+                    size={18}
+                    color={likes ? "#ec6565" : "#777"}
+                  />
+                </TouchableOpacity>
+                <Text style={styles.like_length}>{likeNum}</Text>
+              </View>
+            )}
           </View>
         </View>
         <View>
           {isUpdateInput ? (
             <View style={styles.inputPadd}>
-              <CommentInput />
+              <CommentInput
+                updateComment={updateComment}
+                updateId={comment.id}
+              />
             </View>
           ) : null}
         </View>
         <View>
-          {userData && isButton && userData.email === comment.userEmail ? (
+          {userData && isButton ? (
             <View style={styles.button_container}>
               <TouchableOpacity
                 style={styles.button_update}
@@ -114,7 +173,10 @@ const CommentItem = ({ comment, sort, onSubmit }: CommentProps) => {
               >
                 <Text style={styles.update_txt}>수정하기</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button_delete}>
+              <TouchableOpacity
+                style={styles.button_delete}
+                onPress={handleDelete}
+              >
                 <Text style={styles.update_txt}>삭제하기</Text>
               </TouchableOpacity>
             </View>
@@ -133,7 +195,7 @@ const CommentItem = ({ comment, sort, onSubmit }: CommentProps) => {
                 <Text style={styles.add_comment}>답글 달기</Text>
               </TouchableOpacity>
               <CommentInput
-                onSubmit={onSubmit}
+                onReplySubmit={onReplySubmit}
                 commentId={comment.id}
                 commentNickname={comment.userNickName}
               />
@@ -146,7 +208,13 @@ const CommentItem = ({ comment, sort, onSubmit }: CommentProps) => {
           {comment.children.map((item) => (
             <View key={item.id}>
               {userData ? (
-                <ReCommentItem recomment={item} userData={userData} />
+                <ReCommentItem
+                  recomment={item}
+                  userData={userData}
+                  likeReplyComment={likeReplyComment}
+                  updateReplyComment={updateReplyComment}
+                  deleteReplyComment={deleteReplyComment}
+                />
               ) : (
                 <Text>사용자 데이터를 사용할 수 없습니다.</Text>
               )}
