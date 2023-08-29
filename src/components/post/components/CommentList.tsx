@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import CommentItem from "./CommentItem";
 import { getPostCommentListByTripId } from "../../../hooks/useCommentQuery";
+import CommentNone from "./CommentNone";
 
 type CommentProps = {
   onReplySubmit?: (
@@ -83,7 +84,7 @@ const CommentList = ({
           )}
         </View>
       ) : (
-        <View></View>
+        <CommentNone />
       )}
     </View>
   );
@@ -106,6 +107,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   comment: {},
+  none_data: {},
 });
 
 export default CommentList;
