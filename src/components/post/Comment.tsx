@@ -9,6 +9,10 @@ import {
   getCreateReplyComment,
   getUpdateCommentLike,
   getUpdateReplyCommentLike,
+  getUpdateComment,
+  getUpdateReplyComment,
+  getDeleteComment,
+  getDeleteReplyComment,
 } from "../../hooks/useCommentQuery";
 
 const Comment = () => {
@@ -94,6 +98,75 @@ const Comment = () => {
     }
   };
 
+  // 댓글 content 수정 요청
+  const updateCommentMutation = getUpdateComment();
+  const updateComment = async (updateCommentId: string, content: string) => {
+    try {
+      const updateData = {
+        id: updateCommentId,
+        content: content,
+      };
+      await updateCommentMutation.mutateAsync(updateData);
+      Toast.show({ type: "success", text1: "댓글 수정 완료!" });
+      queryClient.invalidateQueries(["commentTripId"]);
+    } catch (error) {
+      console.error("오류 발생:", error);
+      Toast.show({ type: "error", text1: "댓글 수정 실패!" });
+    }
+  };
+
+  // 대댓글 content 수정 요청
+  const updateReplyCommentMutation = getUpdateReplyComment();
+  const updateReplyComment = async (
+    updateReplyCommentId: string,
+    parentId: string,
+    content: string
+  ) => {
+    try {
+      const updateReplyData = {
+        id: updateReplyCommentId,
+        parentId: parentId,
+        content: content,
+      };
+      await updateReplyCommentMutation.mutateAsync(updateReplyData);
+      Toast.show({ type: "success", text1: "댓글 수정 완료!" });
+      queryClient.invalidateQueries(["commentTripId"]);
+    } catch (error) {
+      console.error("오류 발생:", error);
+      Toast.show({ type: "error", text1: "댓글 수정 실패!" });
+    }
+  };
+
+  // 댓글 삭제요청
+  const deleteCommentMutation = getDeleteComment();
+  const deleteComment = async (id: string) => {
+    try {
+      await deleteCommentMutation.mutateAsync(id);
+      Toast.show({ type: "success", text1: "댓글 삭제 완료!" });
+      queryClient.invalidateQueries(["commentTripId"]);
+    } catch (error) {
+      console.error("오류 발생:", error);
+      Toast.show({ type: "error", text1: "댓글 삭제 실패!" });
+    }
+  };
+
+  // 대댓글 삭제요청
+  const deleteReplyCommentMutation = getDeleteReplyComment();
+  const deleteReplyComment = async (id: string, parentId: string) => {
+    try {
+      const deleteData = {
+        id: id,
+        parentId: parentId,
+      };
+      await deleteReplyCommentMutation.mutateAsync(deleteData);
+      Toast.show({ type: "success", text1: "댓글 삭제 완료!" });
+      queryClient.invalidateQueries(["commentTripId"]);
+    } catch (error) {
+      console.error("오류 발생:", error);
+      Toast.show({ type: "error", text1: "댓글 삭제 실패!" });
+    }
+  };
+
   return (
     <View style={styles.container}>
       <CommentList
@@ -101,6 +174,10 @@ const Comment = () => {
         onReplySubmit={handleReplyCommentSubmit}
         likeComment={likeComment}
         likeReplyComment={likeReplyComment}
+        updateComment={updateComment}
+        updateReplyComment={updateReplyComment}
+        deleteComment={deleteComment}
+        deleteReplyComment={deleteReplyComment}
       />
       <View style={CommonStyles.appContainer}>
         <CommentInput onSubmit={handleSubmit} />

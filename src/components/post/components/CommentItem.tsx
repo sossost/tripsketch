@@ -5,6 +5,7 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { Comment } from "../../../types/comment";
 import { useState } from "react";
@@ -30,6 +31,14 @@ type CommentProps = {
     parentId: string,
     isLikeStatus: boolean
   ) => void;
+  updateComment?: (updateCommentId: string, content: string) => void;
+  updateReplyComment?: (
+    updateReplyCommentId: string,
+    parentId: string,
+    content: string
+  ) => void;
+  deleteComment?: (id: string) => void;
+  deleteReplyComment?: (id: string, parentId: string) => void;
 };
 
 const CommentItem = ({
@@ -38,6 +47,10 @@ const CommentItem = ({
   onReplySubmit,
   likeComment,
   likeReplyComment,
+  updateComment,
+  updateReplyComment,
+  deleteComment,
+  deleteReplyComment,
 }: CommentProps) => {
   const [showCommentInput, setShowCommentInput] = useState(false);
   const { data: userData } = useGetCurrentUser();
@@ -67,6 +80,7 @@ const CommentItem = ({
     setIsUpdateInput(false);
   };
 
+  // comment 수정하기 유/무 체크하기
   const handleUpdate = () => {
     isUpdateInput ? setIsUpdateInput(false) : setIsUpdateInput(true);
   };
@@ -75,6 +89,26 @@ const CommentItem = ({
     const originalDate = comment.createdAt;
     const cutDate = originalDate.split("T")[0];
     return cutDate;
+  };
+
+  // 댓글 삭제 핸들러
+  const handleDelete = () => {
+    if (deleteComment) {
+      Alert.alert("알림", "정말 삭제하시겠습니까?", [
+        {
+          text: "괜찮습니다.",
+          style: "cancel",
+        },
+        {
+          text: "삭제",
+          onPress: () => {
+            deleteComment(comment.id);
+          },
+        },
+      ]),
+        { cancelable: false };
+      setIsButton(false);
+    }
   };
 
   return (
@@ -91,7 +125,9 @@ const CommentItem = ({
             <View style={styles.top}>
               <Text style={styles.id}>{comment.userNickName}</Text>
               <View style={styles.likes}>
-                {userData && userData.nickname === comment.userNickName ? (
+                {userData &&
+                userData.nickname === comment.userNickName &&
+                comment.isDeleted === false ? (
                   <TouchableOpacity onPress={handleButton}>
                     <Entypo
                       name="dots-three-vertical"
@@ -104,22 +140,27 @@ const CommentItem = ({
             </View>
             <Text style={styles.date}>{formattedDate()}</Text>
             <Text style={styles.comment}>{comment.content}</Text>
-            <View style={styles.likes_container}>
-              <TouchableOpacity onPress={handleLike}>
-                <Ionicons
-                  name={likes ? "md-heart-sharp" : "md-heart-outline"}
-                  size={18}
-                  color={likes ? "#ec6565" : "#777"}
-                />
-              </TouchableOpacity>
-              <Text style={styles.like_length}>{likeNum}</Text>
-            </View>
+            {comment.isDeleted ? null : (
+              <View style={styles.likes_container}>
+                <TouchableOpacity onPress={handleLike}>
+                  <Ionicons
+                    name={likes ? "md-heart-sharp" : "md-heart-outline"}
+                    size={18}
+                    color={likes ? "#ec6565" : "#777"}
+                  />
+                </TouchableOpacity>
+                <Text style={styles.like_length}>{likeNum}</Text>
+              </View>
+            )}
           </View>
         </View>
         <View>
           {isUpdateInput ? (
             <View style={styles.inputPadd}>
-              <CommentInput />
+              <CommentInput
+                updateComment={updateComment}
+                updateId={comment.id}
+              />
             </View>
           ) : null}
         </View>
@@ -132,7 +173,10 @@ const CommentItem = ({
               >
                 <Text style={styles.update_txt}>수정하기</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.button_delete}>
+              <TouchableOpacity
+                style={styles.button_delete}
+                onPress={handleDelete}
+              >
                 <Text style={styles.update_txt}>삭제하기</Text>
               </TouchableOpacity>
             </View>
@@ -168,6 +212,8 @@ const CommentItem = ({
                   recomment={item}
                   userData={userData}
                   likeReplyComment={likeReplyComment}
+                  updateReplyComment={updateReplyComment}
+                  deleteReplyComment={deleteReplyComment}
                 />
               ) : (
                 <Text>사용자 데이터를 사용할 수 없습니다.</Text>

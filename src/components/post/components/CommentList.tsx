@@ -15,6 +15,14 @@ type CommentProps = {
     parentId: string,
     isLikeStatus: boolean
   ) => void;
+  updateComment?: (updateCommentId: string, content: string) => void;
+  updateReplyComment?: (
+    updateReplyCommentId: string,
+    parentId: string,
+    content: string
+  ) => void;
+  deleteComment?: (id: string) => void;
+  deleteReplyComment?: (id: string, parentId: string) => void;
 };
 
 const CommentList = ({
@@ -22,6 +30,10 @@ const CommentList = ({
   onReplySubmit,
   likeComment,
   likeReplyComment,
+  updateComment,
+  updateReplyComment,
+  deleteComment,
+  deleteReplyComment,
 }: CommentProps) => {
   const { commentData, isLoading, isError } =
     getPostCommentListByTripId("1234");
@@ -52,6 +64,10 @@ const CommentList = ({
                     onReplySubmit={onReplySubmit}
                     likeComment={likeComment}
                     likeReplyComment={likeReplyComment}
+                    updateComment={updateComment}
+                    updateReplyComment={updateReplyComment}
+                    deleteComment={deleteComment}
+                    deleteReplyComment={deleteReplyComment}
                   />
                 </View>
               ))}

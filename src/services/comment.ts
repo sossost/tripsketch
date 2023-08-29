@@ -102,7 +102,6 @@ export const updateReplyCommentLike = async (
   replyCommentData: ReplyCommentLikeData
 ) => {
   try {
-    console.log(replyCommentData);
     const response = await axiosBase.patch(
       `${API_PATH.COMMENT.PATCH.RECOMMENT_LIKE.replace(
         ":id",
@@ -113,6 +112,89 @@ export const updateReplyCommentLike = async (
       throw new Error("Network response was not ok");
     }
     return response.data;
+  } catch (error) {
+    throw new Error("Error");
+  }
+};
+
+interface updateData {
+  id: string;
+  content: string;
+}
+
+export const updateComment = async (updateData: updateData) => {
+  try {
+    const response = await axiosBase.patch(
+      `${API_PATH.COMMENT.PATCH.COMMENT_CONTENT.replace(":id", updateData.id)}`,
+      {
+        content: updateData.content,
+      }
+    );
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
+    }
+    return response.data;
+  } catch (error) {
+    throw new Error("Error");
+  }
+};
+
+interface updateReplyData {
+  id: string;
+  parentId: string;
+  content: string;
+}
+
+export const updateReplyComment = async (updateReplyData: updateReplyData) => {
+  try {
+    const response = await axiosBase.patch(
+      `${API_PATH.COMMENT.PATCH.RECOMMENT_CONTENT.replace(
+        ":id",
+        updateReplyData.id
+      ).replace(":parentId", updateReplyData.parentId)}`,
+      {
+        content: updateReplyData.content,
+      }
+    );
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
+    }
+    return response.data;
+  } catch (error) {
+    throw new Error("Error");
+  }
+};
+
+export const deleteComment = async (id: string) => {
+  try {
+    const response = await axiosBase.delete(
+      `${API_PATH.COMMENT.DELETE.COMMENT.replace(":id", id)}`
+    );
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
+    }
+    return response.data;
+  } catch (error) {
+    throw new Error("Error");
+  }
+};
+
+interface deleteData {
+  id: string;
+  parentId: string;
+}
+
+export const deleteReplyComment = async (deleteData: deleteData) => {
+  try {
+    const response = await axiosBase.delete(
+      `${API_PATH.COMMENT.DELETE.RECOMMENT.replace(
+        ":id",
+        deleteData.id
+      ).replace(":parentId", deleteData.parentId)}`
+    );
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
+    }
   } catch (error) {
     throw new Error("Error");
   }

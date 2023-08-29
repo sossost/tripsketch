@@ -6,6 +6,10 @@ import {
   updateCommentLike,
   updateReplyCommentLike,
   getCommentByTripId,
+  updateComment,
+  updateReplyComment,
+  deleteComment,
+  deleteReplyComment,
 } from "../services/comment";
 
 export const getPostCommentList = () => {
@@ -42,4 +46,20 @@ export const getUpdateCommentLike = () => {
 
 export const getUpdateReplyCommentLike = () => {
   return useMutation(updateReplyCommentLike);
+};
+
+export const getUpdateComment = () => {
+  return useMutation(updateComment);
+};
+
+export const getUpdateReplyComment = () => {
+  return useMutation(updateReplyComment);
+};
+
+export const getDeleteComment = () => {
+  return useMutation(deleteComment);
+};
+
+export const getDeleteReplyComment = () => {
+  return useMutation(deleteReplyComment);
 };
