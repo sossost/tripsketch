@@ -45,10 +45,9 @@ export const getPostsById = async (id: string) => {
 
 export const postLike = async (id: string) => {
   try {
-    const data = {
+    const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP_LIKE, {
       id: id,
-    };
-    const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP_LIKE, data);
+    });
     if (response.status !== 200) {
       throw new Error("Network response was not ok");
     }
@@ -60,10 +59,9 @@ export const postLike = async (id: string) => {
 
 export const postUnlike = async (id: string) => {
   try {
-    const data = {
+    const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP_UNLIKE, {
       id: id,
-    };
-    const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP_UNLIKE, data);
+    });
     if (response.status !== 200) {
       throw new Error("Network response was not ok");
     }

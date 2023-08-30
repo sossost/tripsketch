@@ -12,16 +12,13 @@ import Comment from "../components/post/Comment";
 import CommentBest from "../components/post/CommentBest";
 import LikesAndCommentText from "../components/post/LikesAndCommentText";
 import { useRoute, RouteProp } from "@react-navigation/native";
+import { RootStackParamList } from "../types/RootStack";
 
-type ParamList = {
-  TripDetail: {
-    postId: string;
-  };
-};
+type TripDetailScreenRouteProp = RouteProp<RootStackParamList, "TripDetail">;
 
 const TripDetail = () => {
   // 라우터에서 받아온 파라미터 값 저장
-  const route = useRoute<RouteProp<ParamList, "TripDetail">>();
+  const route = useRoute<TripDetailScreenRouteProp>();
   const { postId } = route.params;
 
   // 바텀시트 높이 조절하는 변수
