@@ -10,13 +10,11 @@ import jwtDecode, { JwtPayload } from "jwt-decode";
 import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../react-query/constants";
+import { KAKAO_CLIENT_ID } from "@env";
 
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
-// const clientId = "1927d084a86a31e01a814ce0b2fe3459";
-// const authorizeUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao/code&response_type=code`;
-
-// 230825
-const authorizeUrl = `https://kauth.kakao.com/oauth/authorize?client_id=1927d084a86a31e01a814ce0b2fe3459&redirect_uri=https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao/callback&response_type=code`;
+const clientId = KAKAO_CLIENT_ID!;
+const authorizeUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao/callback&response_type=code`;
 
 /** 카카오 로그인 페이지 컴포넌트 */
 const KaKaoLogin = () => {
