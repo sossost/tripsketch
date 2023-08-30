@@ -10,17 +10,43 @@ import { useState } from "react";
 import { Post } from "../../types/Post";
 import { Ionicons } from "@expo/vector-icons";
 import Slick from "react-native-slick";
+import { useGetPostsById } from "../../hooks/usePostQuery";
 
-const PostView = ({ post }: { post: Post }) => {
+const PostView = ({ postId }: { postId: string }) => {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const settingBox = () => {
     setIsSettingOpen(!isSettingOpen);
   };
 
+  const { postData, isLoading, isError } = useGetPostsById(postId);
+
+  if (isLoading) {
+    return <Text>loading</Text>;
+  }
+
+  if (isError) {
+    return <Text>error</Text>;
+  }
+
+  if (!postData) {
+    return <Text>Data not available.</Text>;
+  }
+
+  // ISO 날짜, 시간 형식에서 날짜형으로 변환
+  const convertDate = (getDate: string) => {
+    const dateObject = new Date(getDate);
+    const customFormattedDate = `${dateObject.getFullYear()}-${(
+      dateObject.getMonth() + 1
+    )
+      .toString()
+      .padStart(2, "0")}-${dateObject.getDate().toString().padStart(2, "0")}`;
+    return customFormattedDate;
+  };
+
   return (
     <View style={[styles.container]}>
       <ImageBackground
-        source={{ uri: post.image[0] }}
+        source={{ uri: postData.images[0] }}
         resizeMode="cover"
         style={styles.image_bg}
       >
@@ -28,7 +54,7 @@ const PostView = ({ post }: { post: Post }) => {
         <View style={styles.wrap}>
           <View style={styles.title_container}>
             <Text style={styles.title} numberOfLines={3}>
-              {post.title}
+              {postData.title}
             </Text>
             <View style={styles.ellipsis}>
               <TouchableOpacity onPress={settingBox}>
@@ -42,14 +68,14 @@ const PostView = ({ post }: { post: Post }) => {
             </View>
           </View>
           <View style={styles.tag_container}>
-            {post.hashtag.map((item, index) => (
+            {postData.hashtag.map((item, index) => (
               <View style={styles.tag} key={index}>
                 <Text style={styles.tag_text}>{item}</Text>
               </View>
             ))}
           </View>
           <View style={styles.writer_container}>
-            <Text style={styles.writer}>by {post.user.nickName}</Text>
+            <Text style={styles.writer}>by {postData.nickname}</Text>
           </View>
         </View>
       </ImageBackground>
@@ -58,12 +84,14 @@ const PostView = ({ post }: { post: Post }) => {
           <View style={styles.trip_date_container}>
             <Text style={styles.trip_date_text}>여행 일정</Text>
             <Text style={styles.trip_date_period}>
-              {post.startAt} ~ {post.endAt}
+              {convertDate(postData.startedAt)} ~ {convertDate(postData.endAt)}
             </Text>
           </View>
           <View style={styles.trip_date_container}>
             <Text style={styles.trip_date_text}>작성일</Text>
-            <Text style={styles.trip_date_period}>{post.createdAt}</Text>
+            <Text style={styles.trip_date_period}>
+              {convertDate(postData.createdAt)}
+            </Text>
           </View>
           <View style={styles.bookmark}>
             <Ionicons name="md-bookmark-sharp" size={20} color="#73BBFB" />
@@ -71,14 +99,14 @@ const PostView = ({ post }: { post: Post }) => {
         </View>
       </View>
       <Slick showsButtons={false} style={styles.slick}>
-        {post.image.map((item, index) => (
+        {postData.images.map((item, index) => (
           <View key={index} style={styles.slide_container}>
             <Image source={{ uri: item }} style={styles.slide_image} />
           </View>
         ))}
       </Slick>
       <View style={styles.content_container}>
-        <Text style={styles.content_text}>{post.content}</Text>
+        <Text style={styles.content_text}>{postData.content}</Text>
       </View>
     </View>
   );

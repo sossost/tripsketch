@@ -3,6 +3,7 @@ import { Post } from "../../../types/Post";
 import { colors } from "../../../constants/color";
 import { useGetUserByNickname } from "../../../hooks/useUserQuery";
 import { View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import UserAvatar from "../user/UserAvatar";
 import LikesCount from "../LikesCount";
@@ -10,44 +11,59 @@ import CommentsCount from "../CommentsCount";
 
 interface HorizontalPostCardProps {
   post: Post;
+  postId: string;
 }
 
-const HorizontalPostCard = ({ post }: HorizontalPostCardProps) => {
+const HorizontalPostCard = ({ post, postId }: HorizontalPostCardProps) => {
   const userProfileImage = useGetUserByNickname(post.nickname).data
     ?.profileImageUrl;
 
+  const navigation = useNavigation();
+  const handlePostDetailPress = () => {
+    (navigation.navigate as (route: string) => void)("TripDetail", { postId });
+  };
+
   return (
-    <Container>
-      <ThumbnailImage
-        source={{
-          uri: post.images[0],
-        }}
-      />
-      <PostBody>
-        <View>
-          <RowView>
-            <Title numberOfLines={1} ellipsizeMode="tail">
-              {post.title}
-            </Title>
-            <CreatedAt>{post.createdAt.slice(0, 10)}</CreatedAt>
-          </RowView>
-          <Content numberOfLines={1} ellipsizeMode="tail">
-            {post.content}
-          </Content>
-        </View>
-        <MetaData>
-          <UserAvatar profile_img={userProfileImage} nickName={post.nickname} />
-          <LikeCommentWrapper>
-            <LikesCount likes={post.likes} variant="small" />
-            <CommentsCount comments={post.views} variant="small" />
-          </LikeCommentWrapper>
-        </MetaData>
-      </PostBody>
-    </Container>
+    <Naviagation onPress={handlePostDetailPress}>
+      <Container>
+        <ThumbnailImage
+          source={{
+            uri: post.images[0],
+          }}
+        />
+        <PostBody>
+          <View>
+            <RowView>
+              <Title numberOfLines={1} ellipsizeMode="tail">
+                {post.title}
+              </Title>
+              <CreatedAt>{post.createdAt.slice(0, 10)}</CreatedAt>
+            </RowView>
+            <Content numberOfLines={1} ellipsizeMode="tail">
+              {post.content}
+            </Content>
+          </View>
+          <MetaData>
+            <UserAvatar
+              profile_img={userProfileImage}
+              nickName={post.nickname}
+            />
+            <LikeCommentWrapper>
+              <LikesCount likes={post.likes} variant="small" />
+              <CommentsCount comments={post.views} variant="small" />
+            </LikeCommentWrapper>
+          </MetaData>
+        </PostBody>
+      </Container>
+    </Naviagation>
   );
 };
 
 export default HorizontalPostCard;
+
+const Naviagation = styled.TouchableOpacity`
+  width: 100%;
+`;
 
 const Container = styled.View`
   display: flex;

@@ -13,4 +13,6 @@ export type Post = {
   createdAt: string;
   tripLikes: string[];
   images: string[];
+  isLiked: boolean;
+  public: boolean;
 };

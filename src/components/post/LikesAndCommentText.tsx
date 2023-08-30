@@ -2,37 +2,67 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { EvilIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import { Post } from "../../types/Post";
+import { useGetPostsById } from "../../hooks/usePostQuery";
+import { usePostLike, usePostUnlike } from "../../hooks/usePostQuery";
+import { useQueryClient } from "@tanstack/react-query";
+import { useGetCurrentUser } from "../../hooks/useUserQuery";
+import Toast from "react-native-toast-message";
 
 interface LikesAndCommentTextProps {
-  post: Post;
+  postId: string;
   handleIconPress?: (index: number) => void;
 }
 
 const LikesAndCommentText = ({
-  post,
+  postId,
   handleIconPress,
 }: LikesAndCommentTextProps) => {
-  const [likes, setLikes] = useState(post.likes);
-  const isLiked = likes.includes("1234");
+  const { postData, isLoading } = useGetPostsById(postId);
+  const { data: userData } = useGetCurrentUser();
 
-  const handleLike = () => {
-    const userLiked = likes.includes("1234");
-    if (userLiked) {
-      setLikes(likes.filter((id) => id !== "1234"));
-    } else {
-      setLikes([...likes, "1234"]);
+  // 리스트에서 좋아요 유/무 확인는 로직
+  const checkLikeUser = () =>
+    Boolean(userData?.email && postData?.tripLikes.includes(userData.email));
+
+  const [likes, setLikes] = useState(checkLikeUser());
+
+  const queryClient = useQueryClient();
+  const postLikeMutation = usePostLike();
+  const postUnlikeMutation = usePostUnlike();
+
+  const handleLike = async () => {
+    try {
+      if (likes) {
+        setLikes(false);
+        await postUnlikeMutation.mutateAsync(postId);
+        Toast.show({ type: "success", text1: "좋아요가 해제되었습니다." });
+      } else {
+        setLikes(true);
+        await postLikeMutation.mutateAsync(postId);
+        Toast.show({ type: "success", text1: "좋아요가 표시되었습니다." });
+      }
+      queryClient.invalidateQueries(["postId"]);
+    } catch (error) {
+      console.error("오류 발생:", error);
     }
   };
+
+  if (isLoading) {
+    return <Text>loading</Text>;
+  }
+
+  if (!postData) {
+    return <Text>Data not available.</Text>;
+  }
 
   return (
     <View>
       <View style={styles.icon_container}>
         <TouchableOpacity onPress={handleLike}>
           <Ionicons
-            name={isLiked ? "md-heart-sharp" : "md-heart-outline"}
+            name={likes ? "md-heart-sharp" : "md-heart-outline"}
             size={26}
-            color={isLiked ? "#ec6565" : "black"}
+            color={likes ? "#ec6565" : "black"}
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleIconPress && handleIconPress(1)}>
@@ -45,13 +75,13 @@ const LikesAndCommentText = ({
             <View style={styles.info_name}>
               <Text style={styles.info_text}>좋아요</Text>
             </View>
-            <Text style={styles.likeView_text}>{likes.length}</Text>
+            <Text style={styles.likeView_text}>{postData.likes}</Text>
           </View>
           <View style={styles.views}>
             <View style={styles.info_name}>
               <Text style={styles.info_text}>조회수</Text>
             </View>
-            <Text style={styles.likeView_text}>{post.views}</Text>
+            <Text style={styles.likeView_text}>{postData.views}</Text>
           </View>
         </View>
       </View>
