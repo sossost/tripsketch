@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import CommentItem from "./CommentItem";
 import { getPostCommentListByTripId } from "../../../hooks/useCommentQuery";
 import CommentNone from "./CommentNone";
+import CommentSkeleton from "./CommentSkeleton";
 
 type CommentProps = {
   onReplySubmit?: (
@@ -40,7 +41,7 @@ const CommentList = ({
     getPostCommentListByTripId("1234");
 
   if (isLoading) {
-    return <Text>Loading...</Text>;
+    return <CommentSkeleton />;
   }
 
   if (isError) {
