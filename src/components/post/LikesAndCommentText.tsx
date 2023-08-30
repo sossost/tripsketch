@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { EvilIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { useGetPostsById } from "../../hooks/usePostQuery";
@@ -20,16 +20,20 @@ const LikesAndCommentText = ({
   const { postData, isLoading } = useGetPostsById(postId);
   const { data: userData } = useGetCurrentUser();
 
-  // 리스트에서 좋아요 유/무 확인는 로직
+  // 리스트에서 좋아요 유/무 확인하는 로직
   const checkLikeUser = () =>
     Boolean(userData?.email && postData?.tripLikes.includes(userData.email));
 
-  const [likes, setLikes] = useState(checkLikeUser());
+  const [likes, setLikes] = useState(false);
+  useEffect(() => {
+    setLikes(checkLikeUser());
+  }, [userData, postData]);
 
   const queryClient = useQueryClient();
   const postLikeMutation = usePostLike();
   const postUnlikeMutation = usePostUnlike();
 
+  // 현재 게시글 좋아요 추가, 해제
   const handleLike = async () => {
     try {
       if (likes) {

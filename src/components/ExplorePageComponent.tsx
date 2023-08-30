@@ -41,9 +41,7 @@ const ExplorePageComponent = () => {
         ) : (
           <FlatList
             data={posts}
-            renderItem={(post) => (
-              <HorizontalPostCard post={post.item} postId={post.item.id} />
-            )}
+            renderItem={(post) => <HorizontalPostCard post={post.item} />}
             keyExtractor={(post) => post.id.toString()}
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{
