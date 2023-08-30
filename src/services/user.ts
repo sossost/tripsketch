@@ -5,9 +5,7 @@ import { User } from "../types/user";
 /** 유저 정보 get 요청하는 함수 (230728 updated) */
 export const getCurrentUser = async () => {
   const accessToken = await SecureStore.getItemAsync("accessToken");
-  console.log("111", accessToken);
   const pushToken = await SecureStore.getItemAsync("pushToken");
-  console.log("222", pushToken);
 
   try {
     if (accessToken) {
