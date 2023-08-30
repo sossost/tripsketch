@@ -1,7 +1,9 @@
 export const queryKeys = {
-  diaries: "diaries",
-  diary: "diary",
+  posts: "posts",
+  post: "post",
   currentUser: "currentUser",
   user: "user",
   users: "users",
+  followers: "followers",
+  following: "following",
 };

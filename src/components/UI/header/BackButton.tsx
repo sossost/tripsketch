@@ -21,9 +21,10 @@ export default BackButton;
 const BackBtnWrapper = styled.TouchableOpacity`
   display: flex;
   justify-content: center;
-  align-items: center;
-  width: 20px;
-  height: 20px;
+  align-items: flex-start;
+  width: 30px;
+  height: 30px;
+  padding: 10px;
 `;
 
 const BackBtnIcon = styled.Image`

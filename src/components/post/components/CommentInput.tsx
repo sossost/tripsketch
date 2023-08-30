@@ -9,23 +9,52 @@ import {
 import { useState } from "react";
 
 type CommentInputProps = {
-  onSubmit?: (comment: string, parentId?: string) => void;
+  onSubmit?: (comment: string) => void;
+  onReplySubmit?: (
+    comment: string,
+    parentId: string,
+    replyToNickname: string
+  ) => void;
+  updateComment?: (updateCommentId: string, content: string) => void;
+  updateReplyComment?: (
+    updateReplyCommentId: string,
+    parentId: string,
+    content: string
+  ) => void;
   commentId?: string;
   commentNickname?: string;
+  updateId?: string;
+  parentReplyCommentId?: string;
 };
 
 const CommentInput = ({
   onSubmit,
+  onReplySubmit,
+  updateComment,
+  updateReplyComment,
   commentId,
   commentNickname,
+  updateId,
+  parentReplyCommentId,
 }: CommentInputProps) => {
   const [comment, setComment] = useState("");
-
   const parentId = commentId ? commentId : "";
+  const replyToNickname = commentNickname ? commentNickname : "";
+  const updateCommentId = updateId ? updateId : "";
+  const parentReplyId = parentReplyCommentId ? parentReplyCommentId : "";
 
   const submitComment = () => {
     if (onSubmit && comment !== "") {
-      onSubmit(comment, parentId);
+      onSubmit(comment);
+      setComment("");
+    } else if (onReplySubmit && comment !== "") {
+      onReplySubmit(comment, parentId, replyToNickname);
+      setComment("");
+    } else if (updateComment && comment !== "") {
+      updateComment(updateCommentId, comment);
+      setComment("");
+    } else if (updateReplyComment && comment !== "") {
+      updateReplyComment(updateCommentId, parentReplyId, comment);
       setComment("");
     } else {
       Alert.alert("알림", "내용을 입력해주세요.");

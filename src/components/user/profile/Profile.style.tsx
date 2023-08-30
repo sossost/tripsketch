@@ -16,19 +16,20 @@ export const ProfileContainer = styled.View`
 export const ProfileRightWrapper = styled.View`
   display: flex;
   flex-grow: 1;
-  gap: 10px;
+  gap: 5px;
   align-items: flex-start;
 `;
 
 export const ProfileSocialWrapper = styled.View`
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 12px;
 `;
 
 export const ProfileTextWrapper = styled.View`
   display: flex;
-  gap: 4px;
+  gap: 2px;
+  padding-bottom: 8px;
 `;
 
 export const ProfileUserNameText = styled.Text`

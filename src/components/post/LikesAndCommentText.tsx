@@ -4,7 +4,15 @@ import { EvilIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { Post } from "../../types/Post";
 
-const LikesAndCommentText = ({ post }: { post: Post }) => {
+interface LikesAndCommentTextProps {
+  post: Post;
+  handleIconPress?: (index: number) => void;
+}
+
+const LikesAndCommentText = ({
+  post,
+  handleIconPress,
+}: LikesAndCommentTextProps) => {
   const [likes, setLikes] = useState(post.likes);
   const isLiked = likes.includes("1234");
 
@@ -27,8 +35,9 @@ const LikesAndCommentText = ({ post }: { post: Post }) => {
             color={isLiked ? "#ec6565" : "black"}
           />
         </TouchableOpacity>
-
-        <EvilIcons name="comment" size={32} color="black" />
+        <TouchableOpacity onPress={() => handleIconPress && handleIconPress(1)}>
+          <EvilIcons name="comment" size={32} color="black" />
+        </TouchableOpacity>
       </View>
       <View style={styles.line}>
         <View style={styles.likeView_container}>

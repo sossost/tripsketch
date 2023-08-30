@@ -66,7 +66,10 @@ const TripDetail = () => {
       <View style={styles.containerInner}>
         <ScrollView>
           <PostView post={post} />
-          <LikesAndCommentText post={post} />
+          <LikesAndCommentText
+            post={post}
+            handleIconPress={(index) => handleSnapPress(index)}
+          />
           <TouchableOpacity
             activeOpacity={0.8}
             onPress={() => handleSnapPress(1)}

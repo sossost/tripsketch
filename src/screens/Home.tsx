@@ -35,13 +35,14 @@ const Home = ({ navigation }: any) => {
           <KakaoLoginButton />
         </View>
       )}
-      <ScrollView ref={scrollViewRef} style={styles.scrollView}>
-        {/* 액세스 토큰 갱신 */}
+      <ScrollView ref={scrollViewRef} style={styles.scrollView} />
+      {/* 액세스 토큰 갱신 */}
 
-        <TouchableOpacity onPress={getUserInfoHandler}>
-          <Text>유저 정보 요청</Text>
-        </TouchableOpacity>
+      <TouchableOpacity onPress={getUserInfoHandler}>
+        <Text>유저 정보 요청</Text>
+      </TouchableOpacity>
 
+      {/* <ScrollView ref={scrollViewRef} style={styles.scrollView}>
         <View style={styles.sectionDescView}>
           <View style={styles.centerLine}></View>
           <Text style={styles.sectionDesc}>요즘 뜨는 스케치</Text>
@@ -57,7 +58,7 @@ const Home = ({ navigation }: any) => {
         {diaries.map((diary) => (
           <PostCard post={diary} />
         ))}
-      </ScrollView>
+      </ScrollView> */}
       <View style={styles.buttonItself}>
         <TouchableOpacity onPress={onPress}>
           <Text style={styles.buttonText}>맨 위로</Text>

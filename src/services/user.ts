@@ -59,7 +59,7 @@ export const patchCurrentUser = async (data: PatchUserProps) => {
   const accessToken = await SecureStore.getItemAsync("accessToken");
   try {
     if (accessToken) {
-      const response = await axiosBase.patch("/user", data, {
+      const response = await axiosBase.patch("user", data, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -110,4 +110,47 @@ export const getUserByEmail = async (email: string) => {
   } catch (error: any) {
     console.log(error);
   }
+};
+
+export const followUser = async (nickname: string) => {
+  const accessToken = await SecureStore.getItemAsync("accessToken");
+
+  const data = { nickname: nickname };
+
+  if (accessToken) {
+    try {
+      const response = await axiosBase.post("follow", data, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      console.log(error.response);
+    }
+  }
+
+  return;
+};
+
+export const unfollowUser = async (nickname: string) => {
+  const accessToken = await SecureStore.getItemAsync("accessToken");
+
+  const data = { nickname: nickname };
+
+  if (accessToken) {
+    try {
+      const response = await axiosBase.delete("follow", {
+        data,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
+
+  return;
 };

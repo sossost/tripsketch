@@ -1,15 +1,24 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../types/RootStack";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 
 const AuthGuard = ({ children }: { children: ReactNode }) => {
-  const currentUser = useGetCurrentUser();
-
   const navigation = useNavigation<StackNavigation>();
 
-  if (!currentUser.data) {
-    navigation.navigate("LoginPage");
+  // 유저정보를 가져옴
+  const currentUser = useGetCurrentUser();
+
+  // 유저정보가 없으면 로그인 페이지로 이동
+  useEffect(() => {
+    if (currentUser.data === null) {
+      navigation.navigate("KakaoLoginPage");
+    }
+  }, []);
+
+  // 유저정보가 없으면 아무것도 렌더링하지 않음
+  if (currentUser.data === null) {
+    return null;
   }
 
   return <>{children}</>;
