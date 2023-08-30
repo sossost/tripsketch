@@ -5,6 +5,7 @@ import { Text } from "react-native";
 import KakaoLoginButton from "../components/auth/KakaoLoginButton";
 import { diaries } from "../../data/mockdata";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { getCurrentUser, getUserInfo } from "../services/user";
 
 const Home = ({ navigation }: any) => {
   let loggedIn = false;
@@ -14,6 +15,12 @@ const Home = ({ navigation }: any) => {
     scrollViewRef.current?.scrollTo({
       y: 0,
     });
+  };
+
+  // 액세스 갱신 확인용 핸들러
+  const getUserInfoHandler = async () => {
+    const userInfo = await getCurrentUser();
+    console.log("userInfo", userInfo);
   };
 
   return (
@@ -28,6 +35,13 @@ const Home = ({ navigation }: any) => {
           <KakaoLoginButton />
         </View>
       )}
+      <ScrollView ref={scrollViewRef} style={styles.scrollView} />
+      {/* 액세스 토큰 갱신 */}
+
+      <TouchableOpacity onPress={getUserInfoHandler}>
+        <Text>유저 정보 요청</Text>
+      </TouchableOpacity>
+
       {/* <ScrollView ref={scrollViewRef} style={styles.scrollView}>
         <View style={styles.sectionDescView}>
           <View style={styles.centerLine}></View>
