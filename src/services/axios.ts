@@ -49,27 +49,29 @@ const isTokenExpired = async () => {
 
 /** 리프레시 토큰으로 액세스 토큰 갱신하는 함수 */
 export const tokenRefresh = async () => {
-  // 리프레시 토큰으로 액세스 토큰 갱신 요청
   try {
+    // 기존의 리프레시 토큰으로 액세스 토큰 갱신 요청
     const refreshToken = await SecureStore.getItemAsync("refreshToken");
+    const response = await axiosBase.post("oauth/kakao/refreshToken", {
+      ourRefreshToken: refreshToken,
+    });
+    console.log("액세스 토큰 갱신 요청에 대한 res...", response);
 
-    if (refreshToken) {
-      const response = await axiosBase.post("oauth/kakao/refreshToken", {
-        ourRefreshToken: refreshToken,
-      });
+    // 새로운 액세스 토큰 저장
+    const newAccessToken = response.headers.accesstoken;
+    await SecureStore.setItemAsync("accessToken", newAccessToken);
 
-      // 새로운 액세스 토큰 저장
-      const newAccessToken = response.headers.accesstoken;
-      await SecureStore.setItemAsync("accessToken", newAccessToken);
-    } else {
-      const navigation = useNavigation();
-      console.log("리프레시 토큰이 없습니다!!");
-      // 리프레시 토큰이 만료된 경우 로그인 화면으로 이동
-      navigation.navigate as (route: string) => void;
-      ("Login");
-    }
+    // 새로운 리프레시 토큰 저장
+    const newRefreshToken = response.headers.refreshtoken;
+    await SecureStore.setItemAsync("refreshToken", newRefreshToken);
   } catch (error) {
     console.log("리프레시 토큰 갱신 요청 중 발생한 에러는...🤔", error);
+
+    console.log("리프레시 토큰이 만료되었습니다!");
+    // 리프레시 토큰이 만료된 경우 로그인 화면으로 이동
+    const navigation = useNavigation();
+    navigation.navigate as (route: string) => void;
+    ("Login");
   }
 };
 
