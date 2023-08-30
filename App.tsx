@@ -6,6 +6,7 @@ import SplashScreen from "./src/components/common/SplashScreen";
 import StyledTheme from "./src/context/themeContext";
 import { StatusBar } from "expo-status-bar";
 import { RecoilRoot } from "recoil";
+import NotificationProvider from "./src/context/notificationProvider";
 
 const queryClient = new QueryClient();
 
@@ -15,8 +16,10 @@ export default function App() {
       <RecoilRoot>
         <StyledTheme>
           <SafeAreaProvider>
-            <StatusBar style="auto" />
-            <RootStack />
+            <NotificationProvider>
+              <StatusBar style="auto" />
+              <RootStack />
+            </NotificationProvider>
           </SafeAreaProvider>
         </StyledTheme>
       </RecoilRoot>

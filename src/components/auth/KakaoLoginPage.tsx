@@ -5,7 +5,6 @@ import { useNavigation } from "@react-navigation/native";
 import { axiosBase, tokenRefresh } from "../../services/axios";
 import * as SecureStore from "expo-secure-store";
 import { getCurrentUser, getUserInfo } from "../../services/user";
-import * as Notifications from "expo-notifications";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";
@@ -20,37 +19,6 @@ const authorizeUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${client
 const KaKaoLogin = () => {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
-
-  // 로그인 시 Expo 알림 토큰 요청
-  useEffect(() => {
-    // Expo 알림 토큰 요청하는 함수
-    const registerForPushNotificationsAsync = async () => {
-      const { status: existingStatus } =
-        await Notifications.getPermissionsAsync();
-      let finalStatus = existingStatus;
-
-      if (existingStatus !== "granted") {
-        const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-      }
-
-      if (finalStatus !== "granted") {
-        console.log("알림 권한이 거부되었습니다.");
-        return;
-      }
-
-      const token = (
-        await Notifications.getExpoPushTokenAsync({
-          projectId: "f8190d6c-4843-4990-8bbb-f70715ad169f",
-        })
-      ).data;
-      const pushToken = token.slice("ExponentPushToken[".length, -1);
-      await SecureStore.setItemAsync("pushToken", pushToken);
-      console.log("Expo 알림 토큰:", pushToken);
-    };
-
-    registerForPushNotificationsAsync();
-  }, []);
 
   // 카카오 로그인 진행하는 화면
   const KakaoLoginWebView = (url: string) => {
