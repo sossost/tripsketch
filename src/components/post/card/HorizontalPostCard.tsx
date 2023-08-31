@@ -3,10 +3,12 @@ import { Post } from "../../../types/Post";
 import { colors } from "../../../constants/color";
 import { useGetUserByNickname } from "../../../hooks/useUserQuery";
 import { View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import UserAvatar from "../user/UserAvatar";
 import LikesCount from "../LikesCount";
 import CommentsCount from "../CommentsCount";
+import { StackNavigation } from "../../../types/RootStack";
 
 interface HorizontalPostCardProps {
   post: Post;
@@ -16,8 +18,13 @@ const HorizontalPostCard = ({ post }: HorizontalPostCardProps) => {
   const userProfileImage = useGetUserByNickname(post.nickname).data
     ?.profileImageUrl;
 
+  const navigation = useNavigation<StackNavigation>();
+  const handlePostDetailPress = () => {
+    navigation.navigate("TripDetail", { postId: post.id });
+  };
+
   return (
-    <Container>
+    <Container onPress={handlePostDetailPress}>
       <ThumbnailImage
         source={{
           uri: post.images[0],
@@ -49,7 +56,7 @@ const HorizontalPostCard = ({ post }: HorizontalPostCardProps) => {
 
 export default HorizontalPostCard;
 
-const Container = styled.View`
+const Container = styled.TouchableOpacity`
   display: flex;
   flex-direction: row;
   width: 100%;

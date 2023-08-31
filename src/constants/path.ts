@@ -29,4 +29,16 @@ export const API_PATH = {
       RECOMMENT: `/comment/:parentId/:id`,
     },
   },
+  TRIP: {
+    GET: {
+      // TripId로 게시물 조회하기
+      TRIP_ID: `/trip/guest/:id`,
+    },
+    POST: {
+      // 좋아요 추가하기
+      TRIP_LIKE: `/trip/like`,
+      // 좋아요 해제하기
+      TRIP_UNLIKE: `/trip/unlike`,
+    },
+  },
 };
