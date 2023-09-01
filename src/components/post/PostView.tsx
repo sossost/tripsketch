@@ -51,32 +51,24 @@ const PostView = ({ postId }: { postId: string }) => {
         style={styles.image_bg}
       >
         <View style={styles.opacity}></View>
-        <View style={styles.wrap}>
-          <View style={styles.title_container}>
-            <Text style={styles.title} numberOfLines={3}>
-              {postData.title}
-            </Text>
-            <View style={styles.ellipsis}>
-              <TouchableOpacity onPress={settingBox}>
-                <Ionicons name="ellipsis-vertical" size={18} color="#9f9f9f" />
-              </TouchableOpacity>
-              {isSettingOpen && (
-                <View style={styles.setting_box}>
-                  <Text style={styles.setting_box_text}>수정하기</Text>
-                </View>
-              )}
-            </View>
-          </View>
-          <View style={styles.tag_container}>
-            {postData.hashtag.map((item, index) => (
-              <View style={styles.tag} key={index}>
-                <Text style={styles.tag_text}>{item}</Text>
+
+        <View style={styles.title_container}>
+          <Text style={styles.title} numberOfLines={3}>
+            {postData.title}
+          </Text>
+          <View style={styles.ellipsis}>
+            <TouchableOpacity onPress={settingBox}>
+              <Ionicons name="ellipsis-vertical" size={18} color="#9f9f9f" />
+            </TouchableOpacity>
+            {isSettingOpen && (
+              <View style={styles.setting_box}>
+                <Text style={styles.setting_box_text}>수정하기</Text>
               </View>
-            ))}
+            )}
           </View>
-          <View style={styles.writer_container}>
-            <Text style={styles.writer}>by {postData.nickname}</Text>
-          </View>
+        </View>
+        <View style={styles.writer_container}>
+          <Text style={styles.writer}>by {postData.nickname}</Text>
         </View>
       </ImageBackground>
       <View style={styles.wrap}>
@@ -108,6 +100,15 @@ const PostView = ({ postId }: { postId: string }) => {
       <View style={styles.content_container}>
         <Text style={styles.content_text}>{postData.content}</Text>
       </View>
+      <View style={styles.wrap}>
+        <View style={styles.tag_container}>
+          {postData.hashtag.map((item, index) => (
+            <View style={styles.tag} key={index}>
+              <Text style={styles.tag_text}>{item}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
     </View>
   );
 };
@@ -134,6 +135,7 @@ const styles = StyleSheet.create({
   },
   title_container: {
     position: "relative",
+    paddingHorizontal: 20,
   },
   title: {
     fontSize: 22,
@@ -143,7 +145,7 @@ const styles = StyleSheet.create({
   },
   ellipsis: {
     position: "absolute",
-    right: 0,
+    right: 20,
   },
   setting_box: {
     position: "absolute",
@@ -161,7 +163,8 @@ const styles = StyleSheet.create({
     marginTop: 15,
     display: "flex",
     flexDirection: "row",
-    gap: 3,
+    flexWrap: "wrap",
+    gap: 5,
   },
   tag: {
     borderColor: "#73BBFB",
@@ -177,7 +180,7 @@ const styles = StyleSheet.create({
   },
   writer_container: {
     position: "absolute",
-    bottom: -43,
+    bottom: 30,
     right: 20,
   },
   writer: {
