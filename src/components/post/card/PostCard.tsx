@@ -1,27 +1,21 @@
-import {
-  Image,
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
+import { Dimensions } from "react-native";
 import React from "react";
 import { Post } from "../../../types/Post";
 import { useNavigation } from "@react-navigation/native";
+import { styled } from "styled-components/native";
+import { colors } from "../../../constants/color";
 
-const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get("window");
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 interface PostCardProps {
   post: Post;
 }
 
-const PostCard = (props: PostCardProps) => {
-  const { post } = props;
+const PostCard = ({ post }: PostCardProps) => {
   // const isLiked = post.likes.find((like) => like === currentUser.id)
   //   ? true
   //   : false;
-  const isLiked = true;
+  const isLiked = post.isLiked;
   const likeButtonImgPath =
     isLiked === true
       ? require("../../../assets/images/isLikedIcon.png")
@@ -34,110 +28,119 @@ const PostCard = (props: PostCardProps) => {
   };
 
   return (
-    <View style={styles.postCard}>
-      <TouchableOpacity style={styles.touchables} onPress={postHandler}>
-        {/* <Image source={{ uri: post.images[0] }} style={styles.postImg} /> */}
-      </TouchableOpacity>
+    <PostCardLayout>
+      <ImageWrapper onPress={postHandler}>
+        <Thumnail source={{ uri: post.images[0] }} />
+      </ImageWrapper>
 
-      <View style={styles.textArea}>
-        <View style={styles.upperArea}>
-          <Text style={styles.titleArea}>{post.title}</Text>
+      <MetaDataContainer>
+        <PostMetaDataContainer>
+          <PostTitle>{post.title}</PostTitle>
+          <PostLocation>{post.location}</PostLocation>
+        </PostMetaDataContainer>
 
-          <Text style={styles.locationArea}>{post.location}</Text>
-        </View>
-        <View style={styles.lowerArea}>
-          <View style={styles.userArea}>
-            <Image source={userProfilePath} style={styles.profilePic} />
-            <Text style={styles.userName}>{post.nickname}</Text>
-          </View>
-          <Image source={likeButtonImgPath} style={styles.likeBtn} />
-        </View>
-      </View>
-    </View>
+        <ProfileContainer>
+          <ProfileWrapper>
+            <ProfileImage source={userProfilePath} />
+            <UserNickname>{post.nickname}</UserNickname>
+          </ProfileWrapper>
+
+          <LikeButton source={likeButtonImgPath} />
+        </ProfileContainer>
+      </MetaDataContainer>
+    </PostCardLayout>
   );
 };
 
 export default PostCard;
 
-const styles = StyleSheet.create({
-  postCard: {
-    width: SCREEN_WIDTH - 40,
-    height: SCREEN_HEIGHT - SCREEN_HEIGHT / 2.5,
-    backgroundColor: "white",
-    marginVertical: 10,
-    borderRadius: 30,
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    overflow: "hidden",
-  },
-  touchables: {
-    width: "100%",
-    height: "70%",
-  },
-  postImg: {
-    width: "100%",
-    height: "100%",
-    backgroundColor: "gray",
-  },
-  textArea: {
-    width: "100%",
-    height: "30%",
-    padding: 10,
-  },
-  upperArea: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    width: "100%",
-    height: "50%",
-    padding: 10,
-    paddingTop: 0,
-    borderBottomColor: "#dedede",
-    borderBottomWidth: 0.5,
-  },
-  titleArea: {
-    width: "100%",
-    fontSize: 18,
-    fontWeight: "900",
-    marginBottom: 5,
-  },
-  locationArea: {
-    width: "100%",
-    fontSize: 16,
-    color: "#73BBFB",
-  },
-  lowerArea: {
-    marginTop: 5,
-    width: "100%",
-    height: "50%",
-    padding: 8,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  userArea: {
-    width: "70%",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  profilePic: {
-    borderRadius: 100,
-    borderColor: "#cccccc",
-    borderWidth: 0.5,
-    backgroundColor: "gray",
-    width: 45,
-    height: 45,
-  },
-  userName: {
-    fontSize: 16,
-    fontStyle: "italic",
-    marginLeft: 15,
-  },
-  likeBtn: {
-    width: 25,
-    height: 25,
-    resizeMode: "contain",
-  },
-});
+const PostCardLayout = styled.View`
+  position: relative;
+  width: ${SCREEN_WIDTH - 42}px;
+  background-color: white;
+  margin: 0 auto;
+  border-radius: 30px;
+  shadow-color: #000;
+  shadow-opacity: 0.25;
+  shadow-radius: 3px;
+  shadow-offset: 0px 2px;
+  elevation: 2;
+  flex-direction: column;
+  overflow: hidden;
+  margin-bottom: 30px;
+`;
+
+const ImageWrapper = styled.TouchableOpacity`
+  width: 100%;
+  aspect-ratio: 1.1;
+`;
+
+const Thumnail = styled.Image`
+  width: 100%;
+  height: 100%;
+  background-color: gray;
+`;
+
+const MetaDataContainer = styled.View`
+  width: 100%;
+  padding: 10px 15px 15px 15px;
+`;
+
+const PostMetaDataContainer = styled.View`
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding: 5px 5px 10px 5px;
+  gap: 3px;
+  border-bottom-color: #dedede;
+  border-bottom-width: 0.5px;
+`;
+
+const PostTitle = styled.Text`
+  width: 100%;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 20px;
+  color: ${colors.mainFont};
+`;
+
+const PostLocation = styled.Text`
+  width: 100%;
+  font-size: 16px;
+  font-weight: 500;
+  color: #73bbfb;
+`;
+
+const ProfileContainer = styled.View`
+  width: 100%;
+  margin-top: 15px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ProfileWrapper = styled.View`
+  flex-direction: row;
+  align-items: center;
+`;
+
+const ProfileImage = styled.Image`
+  width: 45px;
+  height: 45px;
+  border-radius: 100px;
+  border-color: #cccccc;
+  border-width: 0.5px;
+  background-color: gray;
+`;
+
+const UserNickname = styled.Text`
+  font-size: 16px;
+  font-weight: 600;
+  margin-left: 10px;
+`;
+
+const LikeButton = styled.Image`
+  width: 25px;
+  height: 25px;
+  resize-mode: contain;
+`;
