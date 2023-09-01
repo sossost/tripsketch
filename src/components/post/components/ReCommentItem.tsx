@@ -1,4 +1,11 @@
-import { Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { Comment } from "../../../types/comment";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
@@ -6,25 +13,44 @@ import { useState } from "react";
 import CommentInput from "./CommentInput";
 import { User } from "../../../types/user";
 
+type ReplyCommentProps = {
+  recomment: Comment;
+  userData: User;
+  likeReplyComment?: (
+    likeCommentId: string,
+    parentId: string,
+    isLikeStatus: boolean
+  ) => void;
+  updateReplyComment?: (
+    updateReplyCommentId: string,
+    parentId: string,
+    content: string
+  ) => void;
+  deleteReplyComment?: (id: string, parentId: string) => void;
+};
+
 const ReCommentItem = ({
   recomment,
   userData,
-}: {
-  recomment: Comment;
-  userData: User;
-}) => {
+  likeReplyComment,
+  updateReplyComment,
+  deleteReplyComment,
+}: ReplyCommentProps) => {
   const [likes, setLikes] = useState(recomment.isLiked);
   const [likeNum, setLikeNum] = useState(recomment.numberOfLikes);
   const [isButton, setIsButton] = useState(false);
   const [isUpdateInput, setIsUpdateInput] = useState(false);
 
+  const likeReplyCommentId = recomment.id;
+  const parentId = recomment.parentId;
+  const isLikeStatus = likes;
+
   const handleLike = () => {
-    if (likes) {
-      setLikes(false);
-      setLikeNum(likeNum - 1);
-    } else {
-      setLikes(true);
-      setLikeNum(likeNum + 1);
+    if (likeReplyComment) {
+      const updatedLikeStatus = !likes;
+      likeReplyComment(likeReplyCommentId, parentId, isLikeStatus);
+      setLikes(updatedLikeStatus);
+      setLikeNum(updatedLikeStatus ? likeNum + 1 : likeNum - 1);
     }
   };
 
@@ -35,6 +61,26 @@ const ReCommentItem = ({
 
   const handleUpdate = () => {
     isUpdateInput ? setIsUpdateInput(false) : setIsUpdateInput(true);
+  };
+
+  // 댓글 삭제 핸들러
+  const handleDelete = () => {
+    if (deleteReplyComment) {
+      Alert.alert("알림", "정말 삭제하시겠습니까?", [
+        {
+          text: "괜찮습니다.",
+          style: "cancel",
+        },
+        {
+          text: "삭제",
+          onPress: () => {
+            deleteReplyComment(recomment.id, recomment.parentId);
+          },
+        },
+      ]),
+        { cancelable: false };
+      setIsButton(false);
+    }
   };
 
   return (
@@ -52,35 +98,45 @@ const ReCommentItem = ({
               <Text style={styles.nickname}>{recomment.userNickName}</Text>
               <Text style={styles.comment}>{recomment.content}</Text>
             </View>
-            {userData && userData.email === recomment.userEmail ? (
+            {userData &&
+            userData.nickname === recomment.userNickName &&
+            recomment.isDeleted === false ? (
               <TouchableOpacity onPress={handleButton}>
                 <Entypo name="dots-three-vertical" size={14} color="#c5c5c5" />
               </TouchableOpacity>
             ) : null}
           </View>
-          <View style={styles.likes}>
-            <Text>
-              <TouchableOpacity onPress={handleLike}>
-                <Ionicons
-                  name={likes ? "md-heart-sharp" : "md-heart-outline"}
-                  size={18}
-                  color={likes ? "#ec6565" : "#777"}
-                />
-              </TouchableOpacity>
-            </Text>
-            <Text style={styles.likes_text}>{likeNum}</Text>
-          </View>
+          {recomment.isDeleted ? null : (
+            <View style={styles.likes}>
+              <Text>
+                <TouchableOpacity onPress={handleLike}>
+                  <Ionicons
+                    name={likes ? "md-heart-sharp" : "md-heart-outline"}
+                    size={18}
+                    color={likes ? "#ec6565" : "#777"}
+                  />
+                </TouchableOpacity>
+              </Text>
+              <Text style={styles.likes_text}>{likeNum}</Text>
+            </View>
+          )}
         </View>
       </View>
       <View>
         {isUpdateInput ? (
           <View>
-            <CommentInput />
+            <CommentInput
+              updateReplyComment={updateReplyComment}
+              updateId={recomment.id}
+              parentReplyCommentId={recomment.parentId}
+            />
           </View>
-        ) : null}
+        ) : (
+          <View style={styles.deleteLikeMargin}></View>
+        )}
       </View>
       <View>
-        {userData && isButton && userData.email === recomment.userEmail ? (
+        {userData && isButton ? (
           <View style={styles.button_container}>
             <TouchableOpacity
               style={styles.button_update}
@@ -89,7 +145,9 @@ const ReCommentItem = ({
               <Text style={styles.update_txt}>수정하기</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button_delete}>
-              <Text style={styles.update_txt}>삭제하기</Text>
+              <Text style={styles.update_txt} onPress={handleDelete}>
+                삭제하기
+              </Text>
             </TouchableOpacity>
           </View>
         ) : null}
@@ -144,6 +202,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginLeft: 2,
     color: "#777",
+  },
+  deleteLikeMargin: {
+    marginBottom: 7,
   },
   button_container: {
     display: "flex",
