@@ -3,6 +3,7 @@ import CommentItem from "./CommentItem";
 import { getPostCommentListByTripId } from "../../../hooks/useCommentQuery";
 import CommentNone from "./CommentNone";
 import CommentSkeleton from "./CommentSkeleton";
+import { Comment } from "../../../types/comment";
 
 type CommentProps = {
   onReplySubmit?: (
@@ -37,8 +38,9 @@ const CommentList = ({
   deleteComment,
   deleteReplyComment,
 }: CommentProps) => {
-  const { commentData, isLoading, isError } =
-    getPostCommentListByTripId("1234");
+  const { commentData, isLoading, isError } = getPostCommentListByTripId(
+    "64f15ea2a98a5d1cdf488584"
+  );
 
   if (isLoading) {
     return <CommentSkeleton />;
@@ -48,11 +50,24 @@ const CommentList = ({
     return <Text>error</Text>;
   }
 
+  // 댓글, 대댓글 카운트 함수
+  const countComment = (commentData: Comment[]): number => {
+    const commentCounts = commentData.length;
+    const reCommentCounts = commentData
+      .map((item) => {
+        return item.children.length !== 0 ? item.children.length : 0;
+      })
+      .reduce((acc, cur) => (acc += cur), 0);
+    return commentCounts + reCommentCounts;
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.comment_title}>
         <Text>댓글</Text>
-        <Text style={styles.comment_title_number}>{commentData.length}</Text>
+        <Text style={styles.comment_title_number}>
+          {countComment(commentData)}
+        </Text>
       </View>
       {commentData.length !== 0 ? (
         <View>

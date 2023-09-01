@@ -23,7 +23,7 @@ const Comment = () => {
   const handleSubmit = async (comment: string) => {
     try {
       const commentData = {
-        tripId: "1234",
+        tripId: "64f15ea2a98a5d1cdf488584",
         content: comment,
       };
       await createCommentMutation.mutateAsync(commentData);
@@ -44,7 +44,7 @@ const Comment = () => {
   ) => {
     try {
       const replyCommentData = {
-        tripId: "1234",
+        tripId: "64f15ea2a98a5d1cdf488584",
         content: comment,
         replyToNickname: replyToNickname,
         parentId: parentId,

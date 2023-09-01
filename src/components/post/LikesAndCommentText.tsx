@@ -6,6 +6,7 @@ import { useGetPostsById } from "../../hooks/usePostQuery";
 import { usePostLike, usePostUnlike } from "../../hooks/usePostQuery";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
+import LikeAndCommentSkeleton from "./components/LikesAndCommentSkeleton";
 import Toast from "react-native-toast-message";
 
 interface LikesAndCommentTextProps {
@@ -52,7 +53,7 @@ const LikesAndCommentText = ({
   };
 
   if (isLoading) {
-    return <Text>loading</Text>;
+    return <LikeAndCommentSkeleton />;
   }
 
   if (!postData) {
@@ -60,7 +61,7 @@ const LikesAndCommentText = ({
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.icon_container}>
         <TouchableOpacity onPress={handleLike}>
           <Ionicons
@@ -94,6 +95,7 @@ const LikesAndCommentText = ({
 };
 
 const styles = StyleSheet.create({
+  container: {},
   icon_container: {
     display: "flex",
     flexDirection: "row",

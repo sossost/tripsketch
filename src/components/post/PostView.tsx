@@ -7,10 +7,10 @@ import {
   ImageBackground,
 } from "react-native";
 import { useState } from "react";
-import { Post } from "../../types/Post";
 import { Ionicons } from "@expo/vector-icons";
-import Slick from "react-native-slick";
 import { useGetPostsById } from "../../hooks/usePostQuery";
+import PostViewSkeleton from "./components/PostViewSkeleton";
+import Slick from "react-native-slick";
 
 const PostView = ({ postId }: { postId: string }) => {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
@@ -21,7 +21,7 @@ const PostView = ({ postId }: { postId: string }) => {
   const { postData, isLoading, isError } = useGetPostsById(postId);
 
   if (isLoading) {
-    return <Text>loading</Text>;
+    return <PostViewSkeleton />;
   }
 
   if (isError) {
