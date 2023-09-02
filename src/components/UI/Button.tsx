@@ -15,6 +15,7 @@ interface ButtonProps {
 const Button = ({ style, onPress, title, ...rest }: ButtonProps) => {
   const buttonColor: string = style.color === "blue" ? "#73BBFB" : "white";
   const textColor: string = style.color === "blue" ? "white" : "#73BBFB";
+  const borderColor: string = style.color === "blue" ? "white" : "#73BBFB";
 
   return (
     <TouchableOpacity
@@ -24,6 +25,8 @@ const Button = ({ style, onPress, title, ...rest }: ButtonProps) => {
           height: style.height ? style.height : "auto",
           backgroundColor: buttonColor,
           borderRadius: 15,
+          borderColor: borderColor,
+          borderWidth: 1,
           justifyContent: "center",
           alignItems: "center",
           paddingVertical: 7,
