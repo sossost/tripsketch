@@ -1,11 +1,13 @@
 import { axiosBase } from "./axios";
 import * as SecureStore from "expo-secure-store";
 import { User } from "../types/user";
+import { getDataFromSecureStore } from "../utils/secureStore";
+import { STORE_KEY } from "../constants/store";
 
 /** 유저 정보 get 요청하는 함수 (230728 updated) */
 export const getCurrentUser = async () => {
-  const accessToken = await SecureStore.getItemAsync("accessToken");
-  const pushToken = await SecureStore.getItemAsync("pushToken");
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const pushToken = await getDataFromSecureStore(STORE_KEY.PUSH_TOKEN);
 
   try {
     if (accessToken) {

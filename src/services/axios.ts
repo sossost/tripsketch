@@ -1,8 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
-import * as SecureStore from "expo-secure-store";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 import { API_BASE_URL } from "@env";
+import {
+  getDataFromSecureStore,
+  setDataToSecureStore,
+} from "../utils/secureStore";
+import { STORE_KEY } from "../constants/store";
 
 /** axiosBase 인스턴스 생성 */
 export const axiosBase = axios.create({
@@ -12,7 +16,7 @@ export const axiosBase = axios.create({
 
 /** 액세스 토큰 가져오는 함수 */
 const getAccessToken = async () => {
-  return await SecureStore.getItemAsync("accessToken");
+  return await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
 };
 
 /** 액세스 토큰 만료 여부 판단하는 함수 */
@@ -51,7 +55,7 @@ const isTokenExpired = async () => {
 export const tokenRefresh = async () => {
   try {
     // 기존의 리프레시 토큰으로 액세스 토큰 갱신 요청
-    const refreshToken = await SecureStore.getItemAsync("refreshToken");
+    const refreshToken = await getDataFromSecureStore(STORE_KEY.REFRESH_TOKEN);
     const response = await axiosBase.post("oauth/kakao/refreshToken", {
       ourRefreshToken: refreshToken,
     });
@@ -59,11 +63,11 @@ export const tokenRefresh = async () => {
 
     // 새로운 액세스 토큰 저장
     const newAccessToken = response.headers.accesstoken;
-    await SecureStore.setItemAsync("accessToken", newAccessToken);
+    await setDataToSecureStore(STORE_KEY.ACCESS_TOKEN, newAccessToken);
 
     // 새로운 리프레시 토큰 저장
     const newRefreshToken = response.headers.refreshtoken;
-    await SecureStore.setItemAsync("refreshToken", newRefreshToken);
+    await setDataToSecureStore(STORE_KEY.REFRESH_TOKEN, newRefreshToken);
   } catch (error) {
     console.log("리프레시 토큰 갱신 요청 중 발생한 에러는...🤔", error);
 
