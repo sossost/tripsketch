@@ -2,8 +2,8 @@ import React from "react";
 import { FlatList, Text } from "react-native";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { queryKeys } from "../react-query/constants";
-import { getPostsByNickname } from "../services/diary";
+import { QUERY_KEY } from "../react-query/queryKey";
+import { getPostsByNickname } from "../services/post";
 import { styled } from "styled-components/native";
 
 import VariantSelector from "./UI/VariantSelector";
@@ -19,7 +19,7 @@ const ExplorePageComponent = () => {
     data: posts,
     isLoading,
     isError,
-  } = useQuery([queryKeys.posts], () =>
+  } = useQuery([QUERY_KEY.POSTS], () =>
     getPostsByNickname("박짱구", "전체보기")
   );
 
@@ -64,4 +64,5 @@ const ExplorePageLayout = styled.View`
   background-color: #fff;
   padding: 20px;
   padding-top: 40px;
+  gap: 15px;
 `;

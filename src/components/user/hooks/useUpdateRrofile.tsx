@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { StackNavigation } from "../../../types/RootStack";
 import { patchCurrentUser } from "../../../services/user";
-import { queryKeys } from "../../../react-query/constants";
+import { QUERY_KEY } from "../../../react-query/queryKey";
 
 import Toast from "react-native-toast-message";
 
@@ -29,7 +29,7 @@ const useUpdateRrofile = (
         navigation.goBack();
 
         // 프로필이 변경되었으므로, currentUser 쿼리를 다시 가져오도록 갱신
-        queryClient.invalidateQueries([queryKeys.currentUser]);
+        queryClient.invalidateQueries([QUERY_KEY.CURRENT_USER]);
       },
       onError: (error) => {
         Toast.show({ type: "error", text1: "프로필 변경에 실패하였습니다." });

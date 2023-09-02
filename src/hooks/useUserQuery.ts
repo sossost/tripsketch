@@ -7,7 +7,7 @@ import {
   getUserByNickname,
   unfollowUser,
 } from "../services/user";
-import { queryKeys } from "../react-query/constants";
+import { QUERY_KEY } from "../react-query/queryKey";
 import { User } from "../types/user";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../types/RootStack";
@@ -19,7 +19,7 @@ export const useGetCurrentUser = () => {
     data = fallback as User | null,
     isLoading,
     isError,
-  } = useQuery<User | null>([queryKeys.currentUser], getCurrentUser);
+  } = useQuery<User | null>([QUERY_KEY.CURRENT_USER], getCurrentUser);
 
   return { data, isLoading, isError };
 };
@@ -39,7 +39,7 @@ export const useGetUserByNickname = (nickname: string) => {
     data = fallback as User,
     isLoading,
     isError,
-  } = useQuery<User>([queryKeys.user, nickname], () =>
+  } = useQuery<User>([QUERY_KEY.USER, nickname], () =>
     getUserByNickname(nickname)
   );
 
@@ -51,7 +51,7 @@ export const useGetSocialList = (
   nickname: string
 ) => {
   const queryKey = [
-    variant === "팔로워" ? queryKeys.followers : queryKeys.following,
+    variant === "팔로워" ? QUERY_KEY.FOLLOWERS : QUERY_KEY.FOLLOWING,
     nickname,
   ];
 
@@ -102,13 +102,13 @@ export const useSocialController = (currentUser: User | null) => {
         await followMutation.mutateAsync(nickname);
       }
 
-      queryClient.invalidateQueries([queryKeys.currentUser]);
+      queryClient.invalidateQueries([QUERY_KEY.CURRENT_USER]);
       queryClient.invalidateQueries([
-        queryKeys.following,
+        QUERY_KEY.FOLLOWING,
         currentUser.nickname,
       ]);
-      queryClient.invalidateQueries([queryKeys.user, nickname]);
-      queryClient.invalidateQueries([queryKeys.followers, nickname]);
+      queryClient.invalidateQueries([QUERY_KEY.USER, nickname]);
+      queryClient.invalidateQueries([QUERY_KEY.FOLLOWERS, nickname]);
     } catch (error) {
       console.log(error);
     }

@@ -7,7 +7,7 @@ import { getCurrentUser, getUserInfo } from "../../services/user";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 import axios from "axios";
 import { useQueryClient } from "@tanstack/react-query";
-import { queryKeys } from "../../react-query/constants";
+import { QUERY_KEY } from "../../react-query/queryKey";
 import { KAKAO_CLIENT_ID } from "@env";
 import {
   getDataFromSecureStore,
@@ -62,7 +62,7 @@ const KaKaoLogin = () => {
 
       // 유저 정보를 SecureStore에 저장
       const userInfo = await getCurrentUser();
-      queryClient.setQueryData([queryKeys.currentUser], userInfo);
+      queryClient.setQueryData([QUERY_KEY.CURRENT_USER], userInfo);
       const userInfoFromSecureStore = await getUserInfo();
 
       // 토큰 정상 발급되고, 유저 정보 저장 성공 후 메인 페이지로 이동
