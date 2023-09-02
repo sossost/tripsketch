@@ -1,7 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
 import { QUERY_KEY } from "../react-query/queryKey";
+import {
+  getPostsByNickname,
+  getPostsById,
+  postLike,
+  postUnlike,
+} from "../services/post";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Post } from "../types/Post";
-import { getPostsByNickname } from "../services/post";
 
 export const useGetPostsByNickname = (nickname: string, category: string) => {
   const fallback: Post[] = [];
@@ -15,4 +20,22 @@ export const useGetPostsByNickname = (nickname: string, category: string) => {
   );
 
   return { data, isLoading, isError };
+};
+
+export const useGetPostsById = (id: string) => {
+  const {
+    data: postData,
+    isLoading,
+    isError,
+  } = useQuery<Post | undefined>(["postId", id], () => getPostsById(id));
+
+  return { postData, isLoading, isError };
+};
+
+export const usePostLike = () => {
+  return useMutation(postLike);
+};
+
+export const usePostUnlike = () => {
+  return useMutation(postUnlike);
 };
