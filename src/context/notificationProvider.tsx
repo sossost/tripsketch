@@ -1,9 +1,11 @@
-import React, { ReactNode, useEffect, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 import * as Notifications from "expo-notifications";
-import { Platform } from "react-native";
 import * as Device from "expo-device";
-import * as SecureStore from "expo-secure-store";
+import { Platform } from "react-native";
 import { Subscription } from "expo-modules-core";
+import { setDataToSecureStore } from "../utils/secureStore";
+import { STORE_KEY } from "../constants/store";
+import { updateNotification } from "../utils/updateNotification";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -16,31 +18,36 @@ Notifications.setNotificationHandler({
 const NotificationProvider = ({ children }: { children: ReactNode }) => {
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
+  const lastNotificationResponse = Notifications.useLastNotificationResponse();
 
   useEffect(() => {
-    notificationListener.current =
-      Notifications.addNotificationReceivedListener(
-        (notification: Notifications.Notification) => {
-          console.log("알림:" + notification);
-        }
-      );
-
-    responseListener.current =
-      Notifications.addNotificationResponseReceivedListener((response) => {
-        console.log("리스폰스:" + response);
-      });
-
-    return () => {
-      if (
-        typeof notificationListener.current !== "undefined" &&
-        typeof responseListener.current !== "undefined"
-      ) {
-        Notifications.removeNotificationSubscription(
-          notificationListener.current
+    if (Device.isDevice) {
+      notificationListener.current =
+        Notifications.addNotificationReceivedListener(
+          async (notification: Notifications.Notification) => {
+            await updateNotification(notification);
+          }
         );
-        Notifications.removeNotificationSubscription(responseListener.current);
-      }
-    };
+
+      responseListener.current =
+        Notifications.addNotificationResponseReceivedListener((response) => {
+          console.log("리스폰스:" + response);
+        });
+
+      return () => {
+        if (
+          typeof notificationListener.current !== "undefined" &&
+          typeof responseListener.current !== "undefined"
+        ) {
+          Notifications.removeNotificationSubscription(
+            notificationListener.current
+          );
+          Notifications.removeNotificationSubscription(
+            responseListener.current
+          );
+        }
+      };
+    }
   }, []);
 
   // 로그인 시 Expo 알림 토큰 요청
@@ -77,7 +84,7 @@ const NotificationProvider = ({ children }: { children: ReactNode }) => {
           })
         ).data;
         const pushToken = token.slice("ExponentPushToken[".length, -1);
-        await SecureStore.setItemAsync("pushToken", pushToken);
+        await setDataToSecureStore(STORE_KEY.PUSH_TOKEN, pushToken);
       } else {
         alert("Must use physical device for Push Notifications");
       }

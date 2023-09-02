@@ -8,8 +8,8 @@ interface SocialButtonProps {
 
 const SocialButton = ({ isFollowing, onPress }: SocialButtonProps) => {
   return (
-    <SocialButtonWrapper onPress={onPress} isFollowing={true}>
-      <SocialButtonText isFollowing={true}>
+    <SocialButtonWrapper onPress={onPress} isFollowing={isFollowing}>
+      <SocialButtonText isFollowing={isFollowing}>
         {isFollowing ? "팔로잉" : "팔로우"}
       </SocialButtonText>
     </SocialButtonWrapper>
@@ -23,10 +23,11 @@ const SocialButtonWrapper = styled.TouchableOpacity<{ isFollowing: boolean }>`
   height: 30px;
   border-radius: 9999px;
   background-color: ${({ isFollowing }) =>
-    isFollowing ? colors.primary : colors.lightGrey};
+    isFollowing ? colors.primary : colors.white};
   border: 1px solid
-    ${({ isFollowing }) => (isFollowing ? colors.primary : colors.lightGrey)};
-  color: ${({ isFollowing }) => (isFollowing ? colors.white : colors.primary)};
+    ${({ isFollowing }) => (isFollowing ? colors.white : colors.primary)};
+  color: ${({ isFollowing }) =>
+    isFollowing ? colors.primary : colors.primary};
   display: flex;
   justify-content: center;
   align-items: center;

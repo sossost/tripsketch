@@ -4,7 +4,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 import Home from "../screens/Home";
 import MyPage from "../screens/MyPage";
-import Notice from "../screens/Notice";
+import NotificationPage from "../components/notification/NotificationPageComponent";
 import CreatePost from "../screens/CreatePost";
 import Header from "../components/UI/header/Header";
 import Title from "../components/UI/header/Title";
@@ -53,7 +53,7 @@ export default function BottomTab() {
       />
       <Tabs.Screen
         name="Notice"
-        component={Notice}
+        component={NotificationPage}
         options={{
           title: "알림",
           tabBarIcon: ({ color, size }) => (

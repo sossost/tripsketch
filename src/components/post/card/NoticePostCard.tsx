@@ -1,30 +1,18 @@
 import { styled } from "styled-components/native";
 import { colors } from "../../../constants/color";
-import { Text, View } from "react-native";
-import { Notification } from "../../../types/Notification";
 import React, { useEffect, useState } from "react";
 
 interface NotificationProps {
-  notice: Notification;
+  notification: any;
 }
 
-const NoticePostCard = (props: NotificationProps) => {
+const NoticePostCard = ({ notification }: any) => {
   const [timeAgo, setTimeAgo] = useState("");
-  const {
-    notificationId,
-    userId,
-    targetUserId,
-    type,
-    notContentId,
-    content,
-    contentUrl,
-    notDateTime,
-    notReadDateTime,
-  } = props.notice;
+  const { title, data, date } = notification;
 
   useEffect(() => {
     const today: Date = new Date();
-    const notificationDate: Date = new Date(notDateTime);
+    const notificationDate: Date = new Date(date);
 
     const diffTime: number = today.getTime() - notificationDate.getTime();
     const diffInSeconds = Math.floor(diffTime / 1000);
@@ -41,17 +29,16 @@ const NoticePostCard = (props: NotificationProps) => {
       const diffInDays = Math.floor(diffInSeconds / 86400);
       setTimeAgo(`${diffInDays}일 전`);
     }
-  }, [notDateTime]);
+  }, [date]);
 
   return (
     <Container>
       <ProfileImage></ProfileImage>
       <TextContainer>
         <NotDescript numberOfLines={1} ellipsizeMode="tail">
-          <HighLight>{targetUserId}</HighLight>님이 회원님 글에 댓글을
-          남겼습니다.
+          <HighLight>{title}</HighLight>님이 회원님 글에 댓글을 남겼습니다.
         </NotDescript>
-        <NotContent>{content}</NotContent>
+        <NotContent>{title}</NotContent>
         <CreateNotification>
           <CreateDate>{timeAgo}</CreateDate>
         </CreateNotification>
@@ -69,7 +56,6 @@ const Container = styled.View`
   background-color: #fff;
   shadow-color: #000;
   shadow-opacity: 0.25;
-  shadow-radius: 3;
   elevation: 2;
 
   position: relative;
