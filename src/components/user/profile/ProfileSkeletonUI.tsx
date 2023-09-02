@@ -56,20 +56,22 @@ const SkeletonSocialItem = styled.View`
   height: 20px;
   background-color: ${colors.skeleton};
   border-radius: 9999px;
+  margin-bottom: 2px;
 `;
 
 const ProfileSkeletonWrapper = styled(ProfileTextWrapper)``;
 
 const UserNameText = styled.Text`
   width: 110px;
-  height: 24px;
+  height: 22px;
   background-color: ${colors.skeleton};
   border-radius: 9999px;
+  margin-bottom: 6px;
 `;
 
 const IntroductionText = styled.Text`
   width: 200px;
-  height: 20px;
+  height: 18px;
   background-color: ${colors.skeleton};
   border-radius: 9999px;
 `;
@@ -78,5 +80,5 @@ const SkeletonButton = styled.View`
   width: 100%;
   height: 35px;
   background-color: ${colors.skeleton};
-  border-radius: 9999px;
+  border-radius: 15px;
 `;

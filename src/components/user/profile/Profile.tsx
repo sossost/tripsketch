@@ -55,7 +55,7 @@ const Profile = ({ variant, onPress, isFollowing, user }: ProfileProps) => {
           </ProfileTextWrapper>
           <Button
             title={buttonTitle}
-            style={{ color: "blue", fontSize: 14 }}
+            style={{ color: isFollowing ? "white" : "blue", fontSize: 14 }}
             onPress={onPress}
           />
         </ProfileRightWrapper>

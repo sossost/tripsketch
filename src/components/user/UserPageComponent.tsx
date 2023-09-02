@@ -11,11 +11,13 @@ import {
 import { User } from "../../types/user";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../types/RootStack";
+import { Post } from "../../types/Post";
 
 import Profile from "./profile/Profile";
 import Category from "./category/Category";
 import UserPageSkeletonUI from "./UserPageSkeletonUI";
-import PostList from "../post/PostList";
+import Spacing from "../UI/header/Spacing";
+import PostCard from "../post/card/PostCard";
 
 interface UserPageComponentProps {
   nickname?: string;
@@ -58,42 +60,55 @@ const UserPageComponent = ({ nickname, variant }: UserPageComponentProps) => {
   // 닉네임을 통해 해당 유저의 게시글을 가져옴
   const posts = useGetPostsByNickname(user.data!.nickname, selectedCategory);
 
-  // 유저데이터 상태에 따라 UI 분기처리
-  if (user.isLoading) {
-    return <UserPageSkeletonUI />;
-  }
-
-  if (user.isError) {
-    return <UserPageSkeletonUI />;
-  }
-
-  if (!user.data) {
-    return <UserPageSkeletonUI />;
-  }
-
   return (
-    <UserPageLayout>
-      <Profile
-        variant={variant}
-        user={user.data}
-        onPress={handleButtonClick}
-        isFollowing={isFollowing}
-      />
+    <UserPageLayout
+      data={posts.data}
+      renderItem={({ item }) => {
+        return <PostCard key={(item as Post).id} post={item as Post} />;
+      }}
+      alwaysBounceVertical={false}
+      ListHeaderComponent={() => {
+        // 유저데이터 상태에 따라 UI 분기처리
+        if (user.isLoading) {
+          return <UserPageSkeletonUI />;
+        }
 
-      <Category
-        categoryList={category}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
+        if (user.isError) {
+          return <UserPageSkeletonUI />;
+        }
 
-      {/* <PostList posts={posts.data} /> */}
-    </UserPageLayout>
+        if (!user.data) {
+          return <UserPageSkeletonUI />;
+        }
+
+        return (
+          <>
+            <Profile
+              variant={variant}
+              user={user.data}
+              onPress={handleButtonClick}
+              isFollowing={isFollowing}
+            />
+
+            <Spacing direction="vertical" size={15} />
+
+            <Category
+              categoryList={category}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+            />
+
+            <Spacing direction="vertical" size={15} />
+          </>
+        );
+      }}
+    />
   );
 };
 
 export default UserPageComponent;
 
-export const UserPageLayout = styled.View`
+const UserPageLayout = styled.FlatList`
   display: flex;
   flex-direction: column;
   width: 100%;

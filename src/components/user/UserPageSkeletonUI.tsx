@@ -1,14 +1,15 @@
-import { UserPageLayout } from "./UserPageComponent";
-
+import Spacing from "../UI/header/Spacing";
 import CategorySkeletonUI from "./category/CategorySkeletonUI";
 import ProfileSkeletonUI from "./profile/ProfileSkeletonUI";
 
 const UserPageSkeletonUI = () => {
   return (
-    <UserPageLayout>
+    <>
       <ProfileSkeletonUI />
+      <Spacing direction="vertical" size={15} />
       <CategorySkeletonUI />
-    </UserPageLayout>
+      <Spacing direction="vertical" size={15} />
+    </>
   );
 };
 
