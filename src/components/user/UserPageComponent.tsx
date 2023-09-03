@@ -6,12 +6,12 @@ import {
   useGetCurrentUser,
   useGetSocialList,
   useGetUserByNickname,
-  useSocialController,
 } from "../../hooks/useUserQuery";
 import { User } from "../../types/user";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../types/RootStack";
 import { Post } from "../../types/Post";
+import { useSocialControllerInUserPage } from "../../hooks/useFollowQuery";
 
 import Profile from "./profile/Profile";
 import Category from "./category/Category";
@@ -20,11 +20,14 @@ import Spacing from "../UI/header/Spacing";
 import PostCard from "../post/card/PostCard";
 
 interface UserPageComponentProps {
-  nickname?: string;
+  pageOwnerNickname?: string;
   variant: "myPage" | "userPage";
 }
 
-const UserPageComponent = ({ nickname, variant }: UserPageComponentProps) => {
+const UserPageComponent = ({
+  pageOwnerNickname,
+  variant,
+}: UserPageComponentProps) => {
   const navigation = useNavigation<StackNavigation>();
   const [selectedCategory, setSelectedCategory] = useState<string>("전체보기");
 
@@ -32,33 +35,42 @@ const UserPageComponent = ({ nickname, variant }: UserPageComponentProps) => {
   const currentUser = useGetCurrentUser();
 
   // 닉네임이 있으면 해당 유저의 정보를 가져오고, 없으면 현재 로그인한 유저의 정보를 할당
-  const user = nickname ? useGetUserByNickname(nickname) : currentUser;
+  const pageOwner = pageOwnerNickname
+    ? useGetUserByNickname(pageOwnerNickname)
+    : currentUser;
 
   // 로그인한 유저정보를 통해 팔로잉 리스트를 가져옴
   const currentUserFollowingList =
     currentUser.data &&
     useGetSocialList("팔로잉", currentUser.data.nickname).data;
 
+  console.log(pageOwner);
+
   // 현재 로그인한 유저가 해당 유저를 팔로잉하고 있는지 확인
   const isFollowing =
     currentUserFollowingList?.some(
-      (following: User) => following.nickname === user.data?.nickname
+      (following: User) => following.nickname === pageOwner.data?.nickname
     ) || false;
 
-  // 리액트 쿼리 뮤테이션 처리한 팔로우 버튼 핸들러
-  const followBtnHandler = useSocialController(currentUser.data);
+  const followBtnHandler = useSocialControllerInUserPage({
+    currentUser: currentUser.data,
+    pageOwner: pageOwner.data!,
+  });
 
   // 마이페이지 인경우 프로필 편집 페이지로 이동, 유저페이지 인경우 팔로우 버튼 핸들러 실행
   const handleButtonClick = () => {
     if (variant === "myPage") {
       navigation.navigate("EditProfilePage");
     } else {
-      followBtnHandler(user.data!.nickname, isFollowing);
+      followBtnHandler(isFollowing);
     }
   };
 
   // 닉네임을 통해 해당 유저의 게시글을 가져옴
-  const posts = useGetPostsByNickname(user.data!.nickname, selectedCategory);
+  const posts = useGetPostsByNickname(
+    pageOwner.data!.nickname,
+    selectedCategory
+  );
 
   return (
     <UserPageLayout
@@ -69,15 +81,15 @@ const UserPageComponent = ({ nickname, variant }: UserPageComponentProps) => {
       alwaysBounceVertical={false}
       ListHeaderComponent={() => {
         // 유저데이터 상태에 따라 UI 분기처리
-        if (user.isLoading) {
+        if (pageOwner.isLoading) {
           return <UserPageSkeletonUI />;
         }
 
-        if (user.isError) {
+        if (pageOwner.isError) {
           return <UserPageSkeletonUI />;
         }
 
-        if (!user.data) {
+        if (!pageOwner.data) {
           return <UserPageSkeletonUI />;
         }
 
@@ -85,7 +97,7 @@ const UserPageComponent = ({ nickname, variant }: UserPageComponentProps) => {
           <>
             <Profile
               variant={variant}
-              user={user.data}
+              user={pageOwner.data}
               onPress={handleButtonClick}
               isFollowing={isFollowing}
             />
