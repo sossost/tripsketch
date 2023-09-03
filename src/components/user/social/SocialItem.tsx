@@ -7,13 +7,13 @@ import { StackNavigation } from "../../../types/RootStack";
 
 type SocialItemProps = {
   user: User;
-  isFollowing: boolean;
+  isFollowing: boolean | undefined;
   followBtnHandler: (nickname: string, isFollowing: boolean) => Promise<void>;
 };
 
 const SocialItem = ({
   user,
-  isFollowing,
+  isFollowing = false,
   followBtnHandler,
 }: SocialItemProps) => {
   const navigation = useNavigation<StackNavigation>();

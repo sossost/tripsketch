@@ -8,12 +8,15 @@ type UserScreenRouteProp = RouteProp<RootStackParamList, "SocialPage">;
 
 const SocialPage = () => {
   const route = useRoute<UserScreenRouteProp>();
-  const nickname = route.params.nickname!;
+  const pageOwnerNickname = route.params.nickname!;
   const variant = route.params.variant;
 
   return (
     <AuthGuard>
-      <SocialPageComponent nickname={nickname} initialVariant={variant} />
+      <SocialPageComponent
+        pageOwnerNickname={pageOwnerNickname}
+        initialVariant={variant}
+      />
     </AuthGuard>
   );
 };

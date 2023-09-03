@@ -1,11 +1,8 @@
 import { Text } from "react-native";
 import { useState } from "react";
 
-import {
-  useGetCurrentUser,
-  useGetSocialList,
-  useSocialController,
-} from "../../hooks/useUserQuery";
+import { useGetCurrentUser, useGetSocialList } from "../../hooks/useUserQuery";
+import { useSocialControllerInSocialPage } from "../../hooks/useFollowQuery";
 import { styled } from "styled-components/native";
 import { colors } from "../../constants/color";
 
@@ -14,12 +11,12 @@ import SocialList from "./social/SocialList";
 import BackButton from "../UI/header/BackButton";
 
 interface SocialPageComponentProps {
-  nickname: string;
+  pageOwnerNickname: string;
   initialVariant: "팔로워" | "팔로잉";
 }
 
 const SocialPageComponent = ({
-  nickname,
+  pageOwnerNickname,
   initialVariant,
 }: SocialPageComponentProps) => {
   // 페이지의 variant 상태를 관리하는 state
@@ -28,26 +25,24 @@ const SocialPageComponent = ({
   // 현재 로그인한 유저의 정보를 가져옴
   const currentUser = useGetCurrentUser().data!;
 
-  // 현재 로그인한 유저의 팔로잉 리스트를 가져옴
-  const currentUserFollowingList = useGetSocialList(
-    "팔로잉",
-    currentUser.nickname
-  ).data;
-
   // 현재 페이지의 유저 리스트를 가져옴
-  const users = useGetSocialList(variant, nickname);
+  const userList = useGetSocialList(variant, pageOwnerNickname);
 
   // 팔로우 버튼을 눌렀을 때의 핸들러
-  const followBtnHandler = useSocialController(currentUser);
+  const followBtnHandler = useSocialControllerInSocialPage({
+    currentUser,
+    pageOwnerNickname,
+    variant,
+  });
 
   return (
     <Layout>
       <SocialHeader>
         <BackButton />
         <SocialHeaderText>
-          <ColoredText>{nickname}</ColoredText>님
+          <ColoredText>{pageOwnerNickname}</ColoredText>님
           {variant === "팔로워" ? "을" : "이"} 구독하는&nbsp;
-          <ColoredText>{users.data.length}</ColoredText>명
+          <ColoredText>{userList.data.length}</ColoredText>명
         </SocialHeaderText>
         <Spacing />
       </SocialHeader>
@@ -60,14 +55,13 @@ const SocialPageComponent = ({
         setVariant={setVariant}
       />
 
-      {users.isLoading ? (
+      {userList.isLoading ? (
         <Text>Loading...</Text>
-      ) : users.isError ? (
+      ) : userList.isError ? (
         <Text>Error Page</Text>
       ) : (
         <SocialList
-          userList={users.data}
-          currentUserFollowingList={currentUserFollowingList}
+          userList={userList.data}
           followBtnHandler={followBtnHandler}
         />
       )}

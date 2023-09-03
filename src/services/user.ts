@@ -77,7 +77,7 @@ export const patchCurrentUser = async (data: PatchUserProps) => {
 export const getFollowerList = async (nickname: string) => {
   try {
     const response = await axiosBase.get(
-      `follow/followers?nickname=${nickname}`
+      `follow/user/followers?nickname=${nickname}`
     );
     return response.data;
   } catch (error: any) {
@@ -88,7 +88,7 @@ export const getFollowerList = async (nickname: string) => {
 export const getFollowingList = async (nickname: string) => {
   try {
     const response = await axiosBase.get(
-      `follow/followings?nickname=${nickname}`
+      `follow/user/followings?nickname=${nickname}`
     );
     return response.data;
   } catch (error: any) {
