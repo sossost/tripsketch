@@ -1,6 +1,7 @@
 import { Post } from "../types/Post";
 import { API_PATH } from "../constants/path";
 import axiosBase from "./axios";
+import { PostsData } from "../hooks/usePostQuery";
 
 export const getAllDiaries = async () => {
   return;
@@ -8,12 +9,14 @@ export const getAllDiaries = async () => {
 
 export const getPostsByNickname = async (
   nickname: string,
-  category: string
+  category: string,
+  page: number,
+  size: number
 ) => {
   if (category === "전체보기") {
     try {
-      const response = await axiosBase.get<Post[]>(
-        `trip/nickname?nickname=${nickname}`
+      const response = await axiosBase.get<PostsData>(
+        `trip/nickname/tripsWithPagination/categories?nickname=${nickname}&page=${page}&pageSize=${size}`
       );
       return response.data;
     } catch (error: any) {
@@ -22,7 +25,9 @@ export const getPostsByNickname = async (
   }
 
   try {
-    const response = await axiosBase.get<Post[]>(`trips/${nickname}`);
+    const response = await axiosBase.get<PostsData>(
+      `trip/nickname/tripsWithPagination/country/${category}?nickname=${nickname}&page=${page}&size=${size}`
+    );
     return response.data;
   } catch (error: any) {
     console.log("error :" + error);

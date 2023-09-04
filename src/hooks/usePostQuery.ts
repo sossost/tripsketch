@@ -5,21 +5,43 @@ import {
   postLike,
   postUnlike,
 } from "../services/post";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { Post } from "../types/Post";
 
-export const useGetPostsByNickname = (nickname: string, category: string) => {
-  const fallback: Post[] = [];
+export interface PostsData {
+  posts: Post[];
+  currentPage: number;
+  totalPage: number;
+  postsPerPage: number;
+}
 
-  const {
-    data = fallback as Post[],
-    isLoading,
-    isError,
-  } = useQuery<Post[] | undefined>([QUERY_KEY.POSTS, nickname, category], () =>
-    getPostsByNickname(nickname, category)
+export interface InfinitePostsData {
+  pages: PostsData;
+  pageParams: number[];
+}
+
+export const useGetPostsByNickname = (nickname: string, category: string) => {
+  const postsPerPage = 5;
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
+    [QUERY_KEY.POSTS, nickname, category],
+    ({ pageParam = 1 }) => {
+      return getPostsByNickname(nickname, category, pageParam, postsPerPage);
+    },
+    {
+      enabled: !!nickname,
+      getNextPageParam: (lastPage: PostsData | undefined) => {
+        if (!lastPage) return undefined;
+        if (lastPage.totalPage === 0) return undefined;
+        if (lastPage.totalPage === lastPage.currentPage) return undefined;
+
+        return lastPage.currentPage + 1;
+      },
+    }
   );
 
-  return { data, isLoading, isError };
+  const posts = data?.pages.flatMap((page) => page?.posts) || [];
+
+  return { posts, fetchNextPage, hasNextPage };
 };
 
 export const useGetPostsById = (id: string) => {
