@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { styled } from "styled-components/native";
 import { category } from "../../../data/mockdata";
 import { useGetPostsByNickname } from "../../hooks/usePostQuery";
@@ -44,8 +44,6 @@ const UserPageComponent = ({
     currentUser.data &&
     useGetSocialList("팔로잉", currentUser.data.nickname).data;
 
-  console.log(pageOwner);
-
   // 현재 로그인한 유저가 해당 유저를 팔로잉하고 있는지 확인
   const isFollowing =
     currentUserFollowingList?.some(
@@ -67,18 +65,26 @@ const UserPageComponent = ({
   };
 
   // 닉네임을 통해 해당 유저의 게시글을 가져옴
-  const posts = useGetPostsByNickname(
+  const { posts, hasNextPage, fetchNextPage } = useGetPostsByNickname(
     pageOwner.data!.nickname,
     selectedCategory
   );
 
+  const handleEndReached = useCallback(() => {
+    if (hasNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage]);
+
   return (
     <UserPageLayout
-      data={posts.data}
+      data={posts}
       renderItem={({ item }) => {
         return <PostCard key={(item as Post).id} post={item as Post} />;
       }}
       alwaysBounceVertical={false}
+      onEndReached={handleEndReached}
+      onEndReachedThreshold={0.1}
       ListHeaderComponent={() => {
         // 유저데이터 상태에 따라 UI 분기처리
         if (pageOwner.isLoading) {
