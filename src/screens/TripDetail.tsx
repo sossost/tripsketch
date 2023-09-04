@@ -53,7 +53,7 @@ const TripDetail = () => {
             activeOpacity={0.8}
             onPress={() => handleSnapPress(1)}
           >
-            <CommentBest />
+            <CommentBest postId={postId} />
           </TouchableOpacity>
         </ScrollView>
         {sheetIndex >= 1 && (
@@ -70,7 +70,7 @@ const TripDetail = () => {
         style={styles.sheet}
       >
         <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
-          <Comment />
+          <Comment postId={postId} />
         </BottomSheetScrollView>
       </BottomSheet>
     </View>

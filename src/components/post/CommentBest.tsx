@@ -1,10 +1,10 @@
 import { StyleSheet, View } from "react-native";
 import CommentList from "./components/CommentList";
 
-const CommentBest = () => {
+const CommentBest = ({ postId }: { postId: string }) => {
   return (
     <View style={styles.container}>
-      <CommentList sort={"best"} />
+      <CommentList sort={"best"} postId={postId} />
     </View>
   );
 };

@@ -6,11 +6,13 @@ import {
   updateCommentLike,
   updateReplyCommentLike,
   getCommentByTripId,
+  getGuestCommentByTripId,
   updateComment,
   updateReplyComment,
   deleteComment,
   deleteReplyComment,
 } from "../services/comment";
+import { Comment } from "../types/comment";
 
 export const getPostCommentList = () => {
   const {
@@ -24,12 +26,26 @@ export const getPostCommentList = () => {
 
 export const getPostCommentListByTripId = (tripId: string) => {
   const {
-    data: commentData,
+    data: commentData = [],
     isLoading,
     isError,
-  } = useQuery(["commentTripId", tripId], () => getCommentByTripId(tripId));
+  } = useQuery<Comment[]>(["commentTripId", tripId], () =>
+    getCommentByTripId(tripId)
+  );
 
   return { commentData, isLoading, isError };
+};
+
+export const getPostCommentGuestListByTripId = (tripId: string) => {
+  const {
+    data: commentGuestData = [],
+    isLoading,
+    isError,
+  } = useQuery<Comment[]>(["commentGuestTripId", tripId], () =>
+    getGuestCommentByTripId(tripId)
+  );
+
+  return { commentGuestData, isLoading, isError };
 };
 
 export const getCreateComment = () => {

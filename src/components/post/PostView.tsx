@@ -7,10 +7,11 @@ import {
   ImageBackground,
 } from "react-native";
 import { useState } from "react";
-import { Post } from "../../types/Post";
 import { Ionicons } from "@expo/vector-icons";
-import Slick from "react-native-slick";
 import { useGetPostsById } from "../../hooks/usePostQuery";
+import { useGetCurrentUser } from "../../hooks/useUserQuery";
+import PostViewSkeleton from "./components/PostViewSkeleton";
+import Slick from "react-native-slick";
 
 const PostView = ({ postId }: { postId: string }) => {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
@@ -19,9 +20,10 @@ const PostView = ({ postId }: { postId: string }) => {
   };
 
   const { postData, isLoading, isError } = useGetPostsById(postId);
+  const { data: userData } = useGetCurrentUser();
 
   if (isLoading) {
-    return <Text>loading</Text>;
+    return <PostViewSkeleton />;
   }
 
   if (isError) {
@@ -51,32 +53,27 @@ const PostView = ({ postId }: { postId: string }) => {
         style={styles.image_bg}
       >
         <View style={styles.opacity}></View>
-        <View style={styles.wrap}>
-          <View style={styles.title_container}>
-            <Text style={styles.title} numberOfLines={3}>
-              {postData.title}
-            </Text>
-            <View style={styles.ellipsis}>
+
+        <View style={styles.title_container}>
+          <Text style={styles.title} numberOfLines={3}>
+            {postData.title}
+          </Text>
+          <View style={styles.ellipsis}>
+            {userData?.nickname === postData.nickname ? (
               <TouchableOpacity onPress={settingBox}>
                 <Ionicons name="ellipsis-vertical" size={18} color="#9f9f9f" />
               </TouchableOpacity>
-              {isSettingOpen && (
-                <View style={styles.setting_box}>
-                  <Text style={styles.setting_box_text}>수정하기</Text>
-                </View>
-              )}
-            </View>
-          </View>
-          <View style={styles.tag_container}>
-            {postData.hashtag.map((item, index) => (
-              <View style={styles.tag} key={index}>
-                <Text style={styles.tag_text}>{item}</Text>
+            ) : null}
+            {isSettingOpen && (
+              <View style={styles.setting_box}>
+                <Text style={styles.setting_box_text}>수정하기</Text>
+                <Text style={styles.setting_box_text}>삭제하기</Text>
               </View>
-            ))}
+            )}
           </View>
-          <View style={styles.writer_container}>
-            <Text style={styles.writer}>by {postData.nickname}</Text>
-          </View>
+        </View>
+        <View style={styles.writer_container}>
+          <Text style={styles.writer}>by {postData.nickname}</Text>
         </View>
       </ImageBackground>
       <View style={styles.wrap}>
@@ -108,6 +105,15 @@ const PostView = ({ postId }: { postId: string }) => {
       <View style={styles.content_container}>
         <Text style={styles.content_text}>{postData.content}</Text>
       </View>
+      <View style={styles.wrap}>
+        <View style={styles.tag_container}>
+          {postData.hashtag.map((item, index) => (
+            <View style={styles.tag} key={index}>
+              <Text style={styles.tag_text}>{item}</Text>
+            </View>
+          ))}
+        </View>
+      </View>
     </View>
   );
 };
@@ -134,6 +140,7 @@ const styles = StyleSheet.create({
   },
   title_container: {
     position: "relative",
+    paddingHorizontal: 20,
   },
   title: {
     fontSize: 22,
@@ -143,25 +150,27 @@ const styles = StyleSheet.create({
   },
   ellipsis: {
     position: "absolute",
-    right: 0,
+    right: 20,
   },
   setting_box: {
     position: "absolute",
-    width: 80,
+    width: 100,
     right: 5,
     top: 22,
     backgroundColor: "#ddd",
+    borderRadius: 5,
   },
   setting_box_text: {
     textAlign: "center",
-    paddingVertical: 5,
+    paddingVertical: 8,
     fontSize: 12,
   },
   tag_container: {
     marginTop: 15,
     display: "flex",
     flexDirection: "row",
-    gap: 3,
+    flexWrap: "wrap",
+    gap: 5,
   },
   tag: {
     borderColor: "#73BBFB",
@@ -177,7 +186,7 @@ const styles = StyleSheet.create({
   },
   writer_container: {
     position: "absolute",
-    bottom: -43,
+    bottom: 30,
     right: 20,
   },
   writer: {
