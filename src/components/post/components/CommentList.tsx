@@ -1,9 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import CommentItem from "./CommentItem";
-import { getPostCommentListByTripId } from "../../../hooks/useCommentQuery";
+import {
+  getPostCommentListByTripId,
+  getPostCommentGuestListByTripId,
+} from "../../../hooks/useCommentQuery";
 import CommentNone from "./CommentNone";
 import CommentSkeleton from "./CommentSkeleton";
 import { Comment } from "../../../types/comment";
+import { useGetCurrentUser } from "../../../hooks/useUserQuery";
 
 type CommentProps = {
   onReplySubmit?: (
@@ -40,16 +44,42 @@ const CommentList = ({
   deleteComment,
   deleteReplyComment,
 }: CommentProps) => {
-  const { commentData, isLoading, isError } =
-    getPostCommentListByTripId(postId);
+  // 유저 정보 불러와 로그인 확인하기
+  const { data: userData } = useGetCurrentUser();
+  const userDataPresent = userData ? true : false;
 
-  if (isLoading) {
+  // 회원 접근 시 사용하는 Comment 데이터
+  const {
+    commentData,
+    isLoading: isUserDataLoading,
+    isError: isUserDataError,
+  } = getPostCommentListByTripId(postId);
+
+  // 게스트로 접근 시 사용하는 Comment 데이터
+  const {
+    commentGuestData,
+    isLoading: isGuestDataLoading,
+    isError: isGuestDataError,
+  } = getPostCommentGuestListByTripId(postId);
+
+  // CommentData 로딩 시
+  if (
+    (userDataPresent && isUserDataLoading) ||
+    (!userDataPresent && isGuestDataLoading)
+  ) {
     return <CommentSkeleton />;
   }
 
-  if (isError) {
+  // CommentData 에러 시
+  if (
+    (userDataPresent && isUserDataError) ||
+    (!userDataPresent && isGuestDataError)
+  ) {
     return <Text>error</Text>;
   }
+
+  // userData에 따라 적절한 commentData를 선택
+  const selectedCommentData = userDataPresent ? commentData : commentGuestData;
 
   // 댓글, 대댓글 카운트 함수
   const countComment = (commentData: Comment[]): number => {
@@ -67,14 +97,14 @@ const CommentList = ({
       <View style={styles.comment_title}>
         <Text>댓글</Text>
         <Text style={styles.comment_title_number}>
-          {countComment(commentData)}
+          {countComment(selectedCommentData)}
         </Text>
       </View>
       {commentData.length !== 0 ? (
         <View>
           {sort === "all" ? (
             <View style={styles.comment}>
-              {commentData.map((item: any) => (
+              {selectedCommentData.map((item: any) => (
                 <View key={item.id}>
                   <CommentItem
                     comment={item}
@@ -92,7 +122,7 @@ const CommentList = ({
             </View>
           ) : (
             <View style={styles.comment}>
-              {commentData.slice(0, 1).map((item: any) => (
+              {selectedCommentData.slice(0, 1).map((item: any) => (
                 <View key={item.id}>
                   <CommentItem comment={item} sort={"best"} />
                 </View>
