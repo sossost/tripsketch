@@ -27,6 +27,20 @@ export const getCommentByTripId = async (tripId: string) => {
   }
 };
 
+export const getGuestCommentByTripId = async (tripId: string) => {
+  try {
+    const response = await axiosBase.get(
+      `${API_PATH.COMMENT.GET.COMMENT_GUEST_ID.replace(":tripId", tripId)}`
+    );
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
+    }
+    return response.data;
+  } catch (error) {
+    throw new Error("Error");
+  }
+};
+
 interface CommentData {
   tripId: string;
   content: string;

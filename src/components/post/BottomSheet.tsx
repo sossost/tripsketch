@@ -2,15 +2,12 @@ import React, { useEffect, useRef } from "react";
 import {
   View,
   StyleSheet,
-  Text,
   Modal,
   Animated,
   TouchableWithoutFeedback,
   Dimensions,
   PanResponder,
-  ScrollView,
 } from "react-native";
-import Comment from "./Comment";
 
 const BottomSheet = (props: any) => {
   const { modalVisible, setModalVisible } = props;
@@ -79,11 +76,7 @@ const BottomSheet = (props: any) => {
             transform: [{ translateY: translateY }],
           }}
           {...panResponders.panHandlers}
-        >
-          <ScrollView>
-            <Comment />
-          </ScrollView>
-        </Animated.View>
+        ></Animated.View>
       </View>
     </Modal>
   );
