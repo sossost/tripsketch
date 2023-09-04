@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useGetPostsById } from "../../hooks/usePostQuery";
+import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import PostViewSkeleton from "./components/PostViewSkeleton";
 import Slick from "react-native-slick";
 
@@ -19,6 +20,7 @@ const PostView = ({ postId }: { postId: string }) => {
   };
 
   const { postData, isLoading, isError } = useGetPostsById(postId);
+  const { data: userData } = useGetCurrentUser();
 
   if (isLoading) {
     return <PostViewSkeleton />;
@@ -57,12 +59,15 @@ const PostView = ({ postId }: { postId: string }) => {
             {postData.title}
           </Text>
           <View style={styles.ellipsis}>
-            <TouchableOpacity onPress={settingBox}>
-              <Ionicons name="ellipsis-vertical" size={18} color="#9f9f9f" />
-            </TouchableOpacity>
+            {userData?.nickname === postData.nickname ? (
+              <TouchableOpacity onPress={settingBox}>
+                <Ionicons name="ellipsis-vertical" size={18} color="#9f9f9f" />
+              </TouchableOpacity>
+            ) : null}
             {isSettingOpen && (
               <View style={styles.setting_box}>
                 <Text style={styles.setting_box_text}>수정하기</Text>
+                <Text style={styles.setting_box_text}>삭제하기</Text>
               </View>
             )}
           </View>
@@ -149,14 +154,15 @@ const styles = StyleSheet.create({
   },
   setting_box: {
     position: "absolute",
-    width: 80,
+    width: 100,
     right: 5,
     top: 22,
     backgroundColor: "#ddd",
+    borderRadius: 5,
   },
   setting_box_text: {
     textAlign: "center",
-    paddingVertical: 5,
+    paddingVertical: 8,
     fontSize: 12,
   },
   tag_container: {

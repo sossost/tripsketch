@@ -12,6 +12,7 @@ type CommentProps = {
     replyToNickname: string
   ) => void;
   sort: string;
+  postId: string;
   likeComment?: (likeCommentId: string, isLikeStatus: boolean) => void;
   likeReplyComment?: (
     likeCommentId: string,
@@ -30,6 +31,7 @@ type CommentProps = {
 
 const CommentList = ({
   sort,
+  postId,
   onReplySubmit,
   likeComment,
   likeReplyComment,
@@ -38,9 +40,8 @@ const CommentList = ({
   deleteComment,
   deleteReplyComment,
 }: CommentProps) => {
-  const { commentData, isLoading, isError } = getPostCommentListByTripId(
-    "64f15ea2a98a5d1cdf488584"
-  );
+  const { commentData, isLoading, isError } =
+    getPostCommentListByTripId(postId);
 
   if (isLoading) {
     return <CommentSkeleton />;
