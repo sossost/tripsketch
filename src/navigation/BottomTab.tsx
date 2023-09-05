@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { LINK } from "../constants/link";
 
 import Home from "../screens/Home";
 import MyPage from "../screens/MyPage";
@@ -15,14 +16,14 @@ const Tabs = createBottomTabNavigator();
 export default function BottomTab() {
   return (
     <Tabs.Navigator
-      initialRouteName="Home"
+      initialRouteName={LINK.HOME}
       screenOptions={{
         tabBarActiveTintColor: "#167DD8",
         tabBarShowLabel: false,
       }}
     >
       <Tabs.Screen
-        name="Home"
+        name={LINK.HOME}
         component={Home}
         options={{
           title: "홈",
@@ -32,7 +33,7 @@ export default function BottomTab() {
         }}
       />
       <Tabs.Screen
-        name="ExplorePage"
+        name={LINK.EXPLORE_PAGE}
         component={ExplorePage}
         options={{
           headerShown: false,
@@ -42,7 +43,7 @@ export default function BottomTab() {
         }}
       />
       <Tabs.Screen
-        name="CreatePost"
+        name={LINK.CREATE_POST_PAGE}
         component={CreatePost}
         options={{
           title: "작성하기",
@@ -52,7 +53,7 @@ export default function BottomTab() {
         }}
       />
       <Tabs.Screen
-        name="Notice"
+        name={LINK.NOTIFICATION_PAGE}
         component={NotificationPage}
         options={{
           title: "알림",
@@ -62,7 +63,7 @@ export default function BottomTab() {
         }}
       />
       <Tabs.Screen
-        name="MyPage"
+        name={LINK.MY_PAGE}
         component={MyPage}
         options={{
           header: () => <Header left={<Title title="마이페이지" />} />,

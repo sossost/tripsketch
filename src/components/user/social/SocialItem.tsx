@@ -1,9 +1,10 @@
 import { User } from "../../../types/user";
 import { styled } from "styled-components/native";
-
-import SocialButton from "./SocialButton";
+import { LINK } from "../../../constants/link";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../types/RootStack";
+
+import SocialButton from "./SocialButton";
 
 type SocialItemProps = {
   user: User;
@@ -22,7 +23,7 @@ const SocialItem = ({
     <SocialItemContainer>
       <ProfileWrapper
         onPress={() =>
-          navigation.navigate("UserPage", {
+          navigation.navigate(LINK.USER_PAGE, {
             nickname: user.nickname,
           })
         }
