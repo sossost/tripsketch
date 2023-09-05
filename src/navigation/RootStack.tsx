@@ -1,6 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { LINK } from "../constants/link";
 
 import TripDetail from "../screens/TripDetail";
 import KakaoLoginPage from "../components/auth/KakaoLoginPage";
@@ -11,7 +12,6 @@ import CreatePost from "../screens/CreatePost";
 import Header from "../components/UI/header/Header";
 import UserPage from "../screens/UserPage";
 import EditProfilePage from "../screens/EditProfilePage";
-
 import CommonHeaderLeft from "../components/UI/header/HeaderLeft";
 import Toast from "react-native-toast-message";
 import SocialPage from "../screens/SocialPage";
@@ -23,7 +23,7 @@ export default function RootStack() {
     <>
       <NavigationContainer>
         <SplashScreen>
-          <Stack.Navigator initialRouteName="Home">
+          <Stack.Navigator initialRouteName={LINK.HOME}>
             <Stack.Screen
               name="홈"
               component={BottomTab}
@@ -33,10 +33,13 @@ export default function RootStack() {
               name="KakaoLoginButton"
               component={KakaoLoginButton}
             />
-            <Stack.Screen name="KakaoLoginPage" component={KakaoLoginPage} />
-            <Stack.Screen name="TripDetail" component={TripDetail} />
             <Stack.Screen
-              name="UserPage"
+              name={LINK.KAKAO_LOGIN_PAGE}
+              component={KakaoLoginPage}
+            />
+            <Stack.Screen name={LINK.TRIP_DETAIL_PAGE} component={TripDetail} />
+            <Stack.Screen
+              name={LINK.USER_PAGE}
               component={UserPage}
               options={({ route }: any) => ({
                 header: () => (
@@ -46,23 +49,23 @@ export default function RootStack() {
                 ),
               })}
             />
-            <Stack.Screen name="CreatePost" component={CreatePost} />
+            <Stack.Screen name={LINK.CREATE_POST_PAGE} component={CreatePost} />
             <Stack.Screen
-              name="FollowerPage"
+              name={LINK.FOLLOWER_PAGE}
               component={SocialPage}
               options={{
                 headerShown: false,
               }}
             />
             <Stack.Screen
-              name="FollowingPage"
+              name={LINK.FOLLOWING_PAGE}
               component={SocialPage}
               options={{
                 headerShown: false,
               }}
             />
             <Stack.Screen
-              name="EditProfilePage"
+              name={LINK.EDIT_PROFILE_PAGE}
               component={EditProfilePage}
               options={{
                 headerShown: false,
