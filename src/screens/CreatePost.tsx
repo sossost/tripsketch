@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   Button,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import styled from "styled-components/native";
@@ -22,6 +23,13 @@ type Suggestion = {
   display_name: string;
   lat: string;
   lon: string;
+};
+
+type Region = {
+  latitude: number;
+  longitude: number;
+  latitudeDelta?: number;
+  longitudeDelta?: number;
 };
 
 type ImagePickerResult = {
@@ -96,6 +104,12 @@ const CreatePost: React.FC = () => {
     latitude: 0,
     longitude: 0,
   });
+  const [region, setRegion] = useState<Region>({
+    latitude: 35.08997195649197,
+    longitude: 129.5864013209939,
+    latitudeDelta: 46.13261634755955,
+    longitudeDelta: 38.48174795508386,
+  });
 
   const [showModal, setShowModal] = useState(false);
   const [markedDates, setMarkedDates] = useState<RangeKeyDict>({});
@@ -152,7 +166,7 @@ const CreatePost: React.FC = () => {
 
   useEffect(() => {
     setQuery(address.display_name);
-  }, [address]);
+  }, [address, region]);
 
   /** 입력에 따라 도시를 찾는 핸들러 */
 
@@ -176,22 +190,33 @@ const CreatePost: React.FC = () => {
     }
   };
 
+  /** 선택한 도시 받아오는 핸들러 */
   const handleSuggestionClick = async (suggestion: Suggestion) => {
-    fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=json&lat=${suggestion.lat}&lon=${suggestion.lon}&zoom=18&addressdetails=1`
-    )
-      .then((response) => response.json())
-      .then((data) =>
-        setAddress({
-          country: data.address.country,
-          city: data.address.city,
-          town: data.address.town,
-          road: data.address.road,
-          display_name: data.display_name,
-          latitude: Number(suggestion.lat),
-          longitude: Number(suggestion.lon),
-        })
-      );
+    setTimeout(() => {
+      fetch(
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${suggestion.lat}&lon=${suggestion.lon}&zoom=18&addressdetails=1`
+      )
+        .then((response) => response.json())
+        .then((data) =>
+          setAddress({
+            country: data.address.country,
+            city: data.address.city,
+            town: data.address.town,
+            road: data.address.road,
+            display_name: data.display_name,
+            latitude: Number(suggestion.lat),
+            longitude: Number(suggestion.lon),
+          })
+        );
+
+      setSuggestions([]);
+      setRegion({
+        latitude: Number(suggestion.lat),
+        longitude: Number(suggestion.lon),
+        latitudeDelta: 1.0,
+        longitudeDelta: 1.0,
+      });
+    }, 1000); // 1초 후에 실행
   };
 
   const pickImage = async () => {
@@ -200,6 +225,7 @@ const CreatePost: React.FC = () => {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
+      //allowsMultipleSelection: true,
     });
 
     console.log(result);
@@ -399,7 +425,7 @@ const CreatePost: React.FC = () => {
                 <LocationSuggestions>
                   {suggestions.map((e) => {
                     return (
-                      <TouchableOpacity
+                      <TouchableWithoutFeedback
                         style={{
                           width: "100%",
                           height: 50,
@@ -409,13 +435,17 @@ const CreatePost: React.FC = () => {
                           borderRadius: 10,
                           marginTop: 10,
                         }}
+                        onPress={(event) => {
+                          event.stopPropagation(); // 이벤트 전파 중단
+                          handleSuggestionClick(e);
+                        }}
                       >
                         <LocationSuggestionsFields>
                           <LocationSuggestionsTexts>
                             {e.display_name}
                           </LocationSuggestionsTexts>
                         </LocationSuggestionsFields>
-                      </TouchableOpacity>
+                      </TouchableWithoutFeedback>
                     );
                   })}
                 </LocationSuggestions>
@@ -432,6 +462,8 @@ const CreatePost: React.FC = () => {
                   position: "absolute",
                   height: 500,
                 }}
+                region={region}
+                onRegionChangeComplete={(region) => setRegion(region)}
                 onPress={handlePressLocation}
               >
                 <UrlTile
@@ -462,13 +494,13 @@ const CreatePost: React.FC = () => {
             <ContentPhotoBox>
               <Title>내용</Title>
 
-              <PhotoIcon name="photo" onPress={pickImage} />
+              {/* <PhotoIcon name="photo" onPress={pickImage} />
               {image && (
                 <Image
                   source={{ uri: image }}
                   style={{ width: 200, height: 200 }}
                 />
-              )}
+              )} */}
             </ContentPhotoBox>
             {/* <ScrollView
             contentContainerStyle={{ flexGrow: 1 }}
@@ -481,6 +513,18 @@ const CreatePost: React.FC = () => {
               //   onSubmitEditing={hideKeyboard}
             />
             {/* </ScrollView> */}
+
+            {/* 이미지 업로드 */}
+            <Title>이미지</Title>
+            <PickImageButton onPress={pickImage}>
+              <Text>추가 버튼</Text>
+            </PickImageButton>
+            {image && (
+              <Image
+                source={{ uri: image }}
+                style={{ width: 30, height: 30 }}
+              />
+            )}
 
             {/* 태그 */}
             <Title>태그</Title>
@@ -660,6 +704,18 @@ const ContentInput = styled.TextInput`
   color: #6f6f6f;
 `;
 
+/* 이미지 업로드 */
+const PickImageButton = styled.TouchableOpacity`
+  width: 70px;
+  height: 40px;
+`;
+
+const ProfileImage = styled.Image`
+  width: 100%;
+  height: 37px;
+  border: 1px solid #999;
+`;
+
 /** 전체 공개, 비공개 설정 묶는 View */
 const VisibilityBox = styled.View`
   flex-direction: row;
@@ -733,7 +789,7 @@ const SelectLocation = styled.View`
   z-index: 3;
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
   border-width: 0.5px;
   border-color: #dddddd;
