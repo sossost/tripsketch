@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { Suspense, useCallback, useState } from "react";
 import { styled } from "styled-components/native";
 import { category } from "../../../data/mockdata";
 import { useGetPostsByNickname } from "../../hooks/usePostQuery";
@@ -12,12 +12,14 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../types/RootStack";
 import { Post } from "../../types/Post";
 import { useSocialControllerInUserPage } from "../../hooks/useFollowQuery";
+import { LINK } from "../../constants/link";
 
 import Profile from "./profile/Profile";
 import Category from "./category/Category";
 import UserPageSkeletonUI from "./UserPageSkeletonUI";
 import Spacing from "../UI/header/Spacing";
 import PostCard from "../post/card/PostCard";
+import { useGetCategoriesByNickname } from "../../hooks/useCategoryQuery";
 
 interface UserPageComponentProps {
   pageOwnerNickname?: string;
@@ -39,6 +41,9 @@ const UserPageComponent = ({
     ? useGetUserByNickname(pageOwnerNickname)
     : currentUser;
 
+  // 닉네임을 통해 해당 유저의 카테고리를 가져옴
+  const categoryList = useGetCategoriesByNickname(pageOwner.data!.nickname);
+
   // 로그인한 유저정보를 통해 팔로잉 리스트를 가져옴
   const currentUserFollowingList =
     currentUser.data &&
@@ -50,7 +55,8 @@ const UserPageComponent = ({
       (following: User) => following.nickname === pageOwner.data?.nickname
     ) || false;
 
-  const followBtnHandler = useSocialControllerInUserPage({
+  /** 팔로우 버튼 핸들러 */
+  const handleFollowBtn = useSocialControllerInUserPage({
     currentUser: currentUser.data,
     pageOwner: pageOwner.data!,
   });
@@ -58,9 +64,9 @@ const UserPageComponent = ({
   // 마이페이지 인경우 프로필 편집 페이지로 이동, 유저페이지 인경우 팔로우 버튼 핸들러 실행
   const handleButtonClick = () => {
     if (variant === "myPage") {
-      navigation.navigate("EditProfilePage");
+      navigation.navigate(LINK.EDIT_PROFILE_PAGE);
     } else {
-      followBtnHandler(isFollowing);
+      handleFollowBtn(isFollowing);
     }
   };
 
@@ -70,6 +76,7 @@ const UserPageComponent = ({
     selectedCategory
   );
 
+  /** 스크롤 끝까지 내렸을때 다음페이지 패치하는 핸들러 */
   const handleEndReached = useCallback(() => {
     if (hasNextPage) {
       fetchNextPage();
@@ -87,18 +94,9 @@ const UserPageComponent = ({
       onEndReachedThreshold={0.1}
       ListHeaderComponent={() => {
         // 유저데이터 상태에 따라 UI 분기처리
-        if (pageOwner.isLoading) {
+        if (!pageOwner.data || !categoryList.data) {
           return <UserPageSkeletonUI />;
         }
-
-        if (pageOwner.isError) {
-          return <UserPageSkeletonUI />;
-        }
-
-        if (!pageOwner.data) {
-          return <UserPageSkeletonUI />;
-        }
-
         return (
           <>
             <Profile
@@ -111,7 +109,7 @@ const UserPageComponent = ({
             <Spacing direction="vertical" size={15} />
 
             <Category
-              categoryList={category}
+              categoryList={categoryList.data}
               selectedCategory={selectedCategory}
               setSelectedCategory={setSelectedCategory}
             />
