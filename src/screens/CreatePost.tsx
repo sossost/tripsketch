@@ -150,8 +150,6 @@ const CreatePost: React.FC = () => {
     title !== "" &&
     content !== "";
 
-  console.log(isCheckEmpty);
-
   // title 유효성 검사
   const validateTitle = (title: string) => {
     let error = "";
@@ -1067,8 +1065,8 @@ const TagContainer = styled.View`
 `;
 
 const TagSelectButton = styled.TouchableOpacity`
-  width: 25px;
-  height: 25px;
+  width: 28px;
+  height: 28px;
   background-color: ${colors.lightGrey};
   border-radius: 5px;
   justify-content: center;
@@ -1076,7 +1074,7 @@ const TagSelectButton = styled.TouchableOpacity`
   position: absolute;
   right: 10px;
   top: 50%;
-  margin-top: -12.5px;
+  margin-top: -14px;
 `;
 
 const TagList = styled.View`
@@ -1084,7 +1082,8 @@ const TagList = styled.View`
   flex-direction: row;
   gap: 3px;
   flex-wrap: wrap;
-  margin-top: 10px;
+
+  margin-bottom: 15px;
 `;
 const TagItem = styled.View`
   background-color: #ececec;
