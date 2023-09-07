@@ -9,5 +9,5 @@ export const LINK = {
   FOLLOWER_PAGE: "FollowerPage",
   FOLLOWING_PAGE: "FollowingPage",
   EDIT_PROFILE_PAGE: "EditProfilePage",
-  NOTICE_PAGE: "NoticePage",
+  NOTIFICATION_PAGE: "NotificationPage",
 };
