@@ -34,9 +34,7 @@ const isTokenExpired = async () => {
       const currentTimestampInSeconds = Math.floor(Date.now() / 1000);
 
       if (currentTimestampInSeconds >= decodedToken.exp) {
-        console.log("액세스 토큰이 만료되었습니다!");
       } else {
-        console.log("액세스 토큰이 유효합니다");
       }
 
       // 현재 시간과 토큰의 만료 시간 비교
@@ -62,6 +60,7 @@ export const tokenRefresh = async () => {
     console.log("액세스 토큰 갱신 요청에 대한 res...", response);
 
     // 새로운 액세스 토큰 저장
+    console.log(response);
     const newAccessToken = response.headers.accesstoken;
     await setDataToSecureStore(STORE_KEY.ACCESS_TOKEN, newAccessToken);
 
@@ -91,15 +90,12 @@ axiosBase.interceptors.response.use(
   async (error) => {
     // 응답 상태 코드가 401 (Unauthorized)인 경우
     if (error.response?.status === 401) {
-      console.log("401에러!!!");
       if (await isTokenExpired()) await tokenRefresh(); // 토큰이 만료되었다면 토큰을 갱신합니다.
 
       const accessToken = await getAccessToken(); // 갱신된 토큰을 가져옵니다.
-      console.log("갱신된 accessToken은...", accessToken);
 
       // 에러가 발생한 요청의 헤더를 갱신된 토큰으로 업데이트합니다.
       error.config.headers = {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       };
 

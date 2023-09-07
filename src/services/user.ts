@@ -1,4 +1,6 @@
+import axios from "axios";
 import { axiosBase } from "./axios";
+import { API_BASE_URL } from "@env";
 import * as SecureStore from "expo-secure-store";
 import { User } from "../types/user";
 import { getDataFromSecureStore } from "../utils/secureStore";
@@ -51,26 +53,27 @@ export const getUserInfo = async () => {
 /** 유저 정보 patch 요청하는 함수 (230728 updated)
  * data = {nickname: "닉네임", profileImageUrl: "프로필 이미지 링크", introduction:"소개글"} 형식으로 넣어줘야함
  */
-interface PatchUserProps {
-  nickname: string;
-  profileImageUrl: string;
-  introduction: string;
-}
 
-export const patchCurrentUser = async (data: PatchUserProps) => {
-  const accessToken = await SecureStore.getItemAsync("accessToken");
+export const patchCurrentUser = async (data: any) => {
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
   try {
     if (accessToken) {
-      const response = await axiosBase.patch("user", data, {
+      const response = await axios.patch(`${API_BASE_URL}user`, data, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "multipart/form-data",
         },
       });
+      console.log("유저 정보 patch 요청 성공!", response.data);
       return response.data;
     }
     return;
   } catch (error: any) {
-    console.log("유저 정보 patch 요청과 관련한 오류는...🤔", error);
+    console.log(
+      "유저 정보 patch 요청과 관련한 오류는...🤔",
+      error.response?.data || error.message
+    );
+    throw error;
   }
 };
 
