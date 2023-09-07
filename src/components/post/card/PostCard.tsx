@@ -4,7 +4,7 @@ import { Post } from "../../../types/Post";
 import { useNavigation } from "@react-navigation/native";
 import { styled } from "styled-components/native";
 import { colors } from "../../../constants/color";
-
+import { StackNavigation } from "../../../types/RootStack";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 interface PostCardProps {
@@ -21,10 +21,10 @@ const PostCard = ({ post }: PostCardProps) => {
       ? require("../../../assets/images/isLikedIcon.png")
       : require("../../../assets/images/isNotLikedIcon.png");
   const userProfilePath = require("../../../assets/images/test_user.png");
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigation>();
 
   const postHandler = () => {
-    (navigation.navigate as (route: string) => void)("TripDetail");
+    navigation.navigate("TripDetail", { postId: post.id });
   };
 
   return (

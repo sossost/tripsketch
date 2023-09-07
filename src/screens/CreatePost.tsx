@@ -126,8 +126,6 @@ const CreatePost: React.FC = () => {
     longitudeDelta: 38.48174795508386,
   });
 
-  //console.log(address);
-
   const [showModal, setShowModal] = useState(false);
   const [markedDates, setMarkedDates] = useState<RangeKeyDict>({});
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
@@ -140,12 +138,49 @@ const CreatePost: React.FC = () => {
   const [hashtagList, setHashtagList] = useState<string[]>([]);
   const [isPublic, setIsPublic] = useState<boolean>(true);
 
+  const [errors, setErrors] = useState({
+    title: "",
+    content: "",
+  });
+
+  const isCheckEmpty =
+    Object.values(errors).every((error) => error === "") &&
+    startDate !== null &&
+    locationName !== "" &&
+    title !== "" &&
+    content !== "";
+
+  console.log(isCheckEmpty);
+
+  // title 유효성 검사
+  const validateTitle = (title: string) => {
+    let error = "";
+    if (title.length > 0 && title.trim().length < 5) {
+      error = "5글자 이상 입력하세요.";
+      setErrors((prevState) => ({ ...prevState, title: error }));
+    } else {
+      setErrors((prevState) => ({ ...prevState, title: "" }));
+    }
+  };
+
+  // content 유효성 검사
+  const validateContent = (content: string) => {
+    let error = "";
+    if (content.length > 0 && content.trim().length < 5) {
+      error = "5글자 이상 입력하세요.";
+      setErrors((prevState) => ({ ...prevState, content: error }));
+    } else {
+      setErrors((prevState) => ({ ...prevState, content: "" }));
+    }
+  };
+
   // 상태변수 초기화
   const resetState = () => {
     setQuery("");
     setMapViewOn(false);
     setLocationName("");
     setShowModal(false);
+    setSuggestions([]);
     setMarkedDates({});
     setSelectedDates([]);
     setStartDate(null);
@@ -156,6 +191,19 @@ const CreatePost: React.FC = () => {
     setHashtag("");
     setHashtagList([]);
     setIsPublic(true);
+    setAddress({
+      countryCode: "",
+      address: "",
+      municipality: "",
+      name: "",
+      country: "",
+      city: "",
+      town: "",
+      road: "",
+      display_name: "",
+      latitude: 0,
+      longitude: 0,
+    });
   };
 
   const navigation = useNavigation<StackNavigation>();
@@ -168,8 +216,10 @@ const CreatePost: React.FC = () => {
   const inputChangeHandler = (name: string, value: string) => {
     if (name === "title") {
       setTitle(value);
+      validateTitle(value);
     } else if (name === "content") {
       setContent(value);
+      validateContent(value);
     } else if (name === "hashtag") {
       setHashtag(value);
     }
@@ -447,16 +497,19 @@ const CreatePost: React.FC = () => {
   /* 게시물 등록 함수 */
   const createPostMutation = useCreatePost();
   const submitPost = async () => {
-    const uploadedImages = await submitImage(image);
+    let uploadedImages;
 
-    console.log(uploadedImages);
+    if (image.length > 0) {
+      uploadedImages = await submitImage(image);
+    }
+
     try {
       const postData = {
         title: title,
         content: content,
         location: address.country,
-        startedAt: startDateISO,
-        endAt: endDateISO,
+        startedAt: startDateISO.toISOString(),
+        endAt: endDateISO.toISOString(),
         latitude: address.latitude,
         longitude: address.longitude,
         hashtagInfo: {
@@ -474,7 +527,6 @@ const CreatePost: React.FC = () => {
         images: uploadedImages,
       };
 
-      console.log(postData);
       await createPostMutation.mutateAsync(postData);
       Toast.show({ type: "success", text1: "게시글 생성이 완료되었습니다." });
       resetState(); // 상태변수 초기화
@@ -694,7 +746,14 @@ const CreatePost: React.FC = () => {
         <ScrollView>
           <BodyInfo>
             {/* 제목 */}
-            <Title>제목</Title>
+            <ValidateTitleContainer>
+              <Title>제목</Title>
+              <Text>
+                {errors.title !== "" ? (
+                  <ValidationText>{errors.title}</ValidationText>
+                ) : null}
+              </Text>
+            </ValidateTitleContainer>
             <TitleInput
               name="title"
               value={title}
@@ -704,8 +763,14 @@ const CreatePost: React.FC = () => {
 
             {/* 내용 */}
             <ContentPhotoBox>
-              <Title>내용</Title>
-              <PhotoIcon name="photo" onPress={pickImage} />
+              <ValidateTitleContainer>
+                <Title>내용</Title>
+                <Text>
+                  {errors.content !== "" ? (
+                    <ValidationText>{errors.content}</ValidationText>
+                  ) : null}
+                </Text>
+              </ValidateTitleContainer>
             </ContentPhotoBox>
             {/* <ScrollView
             contentContainerStyle={{ flexGrow: 1 }}
@@ -790,7 +855,12 @@ const CreatePost: React.FC = () => {
             <ActionButton cancel={true} onPress={cancelPost}>
               <ActionButtonText cancel={true}>취소</ActionButtonText>
             </ActionButton>
-            <ActionButton cancel={false} onPress={submitPost}>
+            <ActionButton
+              cancel={false}
+              onPress={submitPost}
+              disabled={!isCheckEmpty}
+              style={{ opacity: isCheckEmpty ? 1 : 0.5 }}
+            >
               <ActionButtonText cancel={false}>등록</ActionButtonText>
             </ActionButton>
           </BottomInfo>
@@ -840,6 +910,18 @@ const Title = styled.Text`
   font-weight: 600;
   color: #73bbfb;
   margin-right: 8px;
+`;
+
+/** Validation을 포함하는 주제 View */
+const ValidateTitleContainer = styled.View`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+`;
+
+const ValidationText = styled.Text`
+  font-size: 12px;
+  color: #999;
 `;
 
 /** 달력 아이콘 */
