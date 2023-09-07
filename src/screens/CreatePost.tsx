@@ -8,6 +8,7 @@ import {
   Button,
   TouchableWithoutFeedback,
   Dimensions,
+  Alert,
 } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import styled from "styled-components/native";
@@ -16,6 +17,8 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { colors } from "../constants/color";
 import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "../types/RootStack";
 import * as ImagePicker from "expo-image-picker";
 
 import MapView, { Marker, UrlTile } from "react-native-maps";
@@ -24,6 +27,7 @@ import Toast from "react-native-toast-message";
 // 테스트 추가 - 정리 필요
 import axios from "axios";
 import { useCreatePost } from "../hooks/usePostQuery";
+import DeleteXbutton from "../components/common/DeleteXbutton";
 
 type Suggestion = {
   place_id: string;
@@ -35,8 +39,8 @@ type Suggestion = {
 type Region = {
   latitude: number;
   longitude: number;
-  latitudeDelta?: number;
-  longitudeDelta?: number;
+  latitudeDelta: number;
+  longitudeDelta: number;
 };
 
 type ImagePickerResult = {
@@ -98,7 +102,6 @@ interface RangeKeyDict {
 
 /** 여행 글쓰기 */
 const CreatePost: React.FC = () => {
-  const [isPublic, setIsPublic] = useState(true);
   const [query, setQuery] = useState<string>("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [mapViewOn, setMapViewOn] = useState(false);
@@ -131,9 +134,73 @@ const CreatePost: React.FC = () => {
   const [startDate, setStartDate] = useState<string | null>(null);
   const [endDate, setEndDate] = useState<string | null>(null);
   const [image, setImage] = useState<string[]>([]);
+  const [title, setTitle] = useState<string>("");
+  const [content, setContent] = useState<string>("");
+  const [hashtag, setHashtag] = useState<string>("");
+  const [hashtagList, setHashtagList] = useState<string[]>([]);
+  const [isPublic, setIsPublic] = useState<boolean>(true);
+
+  // 상태변수 초기화
+  const resetState = () => {
+    setQuery("");
+    setMapViewOn(false);
+    setLocationName("");
+    setShowModal(false);
+    setMarkedDates({});
+    setSelectedDates([]);
+    setStartDate(null);
+    setEndDate(null);
+    setImage([]);
+    setTitle("");
+    setContent("");
+    setHashtag("");
+    setHashtagList([]);
+    setIsPublic(true);
+  };
+
+  const navigation = useNavigation<StackNavigation>();
+
+  // 게시물 생성 시 ISO 8601 형식으로 변환
+  const startDateISO: Date = startDate ? new Date(startDate) : new Date();
+  const endDateISO: Date = endDate ? new Date(endDate) : new Date();
+
+  // 입력 필드 값이 변경될 때 호출하는 함수
+  const inputChangeHandler = (name: string, value: string) => {
+    if (name === "title") {
+      setTitle(value);
+    } else if (name === "content") {
+      setContent(value);
+    } else if (name === "hashtag") {
+      setHashtag(value);
+    }
+  };
+
+  // 해시태그 추가 핸들러
+  const maxTagCount = 5;
+  const addHashtagHandler = () => {
+    if (hashtag.trim() !== "" && hashtagList.length < maxTagCount) {
+      if (hashtagList.includes(hashtag)) {
+        alert(`중복된 태그입니다.`);
+        setHashtag("");
+      } else {
+        setHashtagList([...hashtagList, hashtag]);
+        setHashtag(""); // 입력 필드를 초기화
+      }
+    } else if (hashtagList.length === maxTagCount) {
+      alert(`최대 태그 개수는 ${maxTagCount}개입니다.`);
+      setHashtag("");
+    } else {
+      alert("태그를 입력해주세요.");
+    }
+  };
+
+  // 해시태그 삭제 핸들러
+  const deleteHashtagHandler = (deleteTag: string) => {
+    const updatedList = hashtagList.filter((item) => item !== deleteTag);
+    setHashtagList(updatedList);
+  };
 
   // 230728
-
   /** 공개 설정 핸들러 */
   const publicToggleHandler = () => {
     setIsPublic(true);
@@ -187,7 +254,6 @@ const CreatePost: React.FC = () => {
   }, [address, region]);
 
   /** 입력에 따라 도시를 찾는 핸들러 */
-
   const handleInputChange = async (value: string) => {
     setQuery(value);
     await searchCity(value);
@@ -284,21 +350,17 @@ const CreatePost: React.FC = () => {
   };
 
   const submitImage = async (image: string[]) => {
-    console.log(image);
     try {
       const formData: any = new FormData();
-
       for (let index = 0; index < image.length; index++) {
         const item = image[index];
         formData.append("files", {
           uri: item,
           name: `image${index}.jpg`,
           type: "multipart/form-data",
-          //type: "image/jpeg",
         });
       }
 
-      console.log(formData);
       const response = await axios.post(
         "https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/user/uploads?dir=tripsketch",
         formData,
@@ -310,7 +372,8 @@ const CreatePost: React.FC = () => {
       );
 
       console.log("Upload response:", response.data);
-      return response.data;
+      const imageUrls = response.data.map((imageInfo: any) => imageInfo.url);
+      return imageUrls;
     } catch (error) {
       console.error("Image upload error:", error);
     }
@@ -364,68 +427,61 @@ const CreatePost: React.FC = () => {
     return rangeDates;
   };
 
+  const cancelPost = () => {
+    Alert.alert("알림", "작성을 취소하고 이전 페이지로 돌아가시겠습니까?", [
+      {
+        text: "계속 작성할래요",
+        style: "cancel",
+      },
+      {
+        text: "네!",
+        onPress: () => {
+          resetState();
+          navigation.goBack();
+        },
+      },
+    ]),
+      { cancelable: false };
+  };
+
   /* 게시물 등록 함수 */
   const createPostMutation = useCreatePost();
-
   const submitPost = async () => {
-    try {
-      // const postData = {
-      //   title: "안녕하세요!!",
-      //   content: "담백한~ 크래커 헣흐허허",
-      //   location: locationName,
-      //   startedAt: startDate,
-      //   endAt: endDate,
-      //   latitude: address.latitude,
-      //   longitude: address.longitude,
-      //   hashtagInfo: {
-      //     countryCode: "string",
-      //     country: "string",
-      //     city: "string",
-      //     municipality: "string",
-      //     name: "string",
-      //     displayName: "string",
-      //     road: "string",
-      //     address: "string",
-      //     etc: ["string"],
-      //   },
-      //   isPublic: true,
-      //   images: [
-      //     "https://images.unsplash.com/photo-1691938670117-5c65ae4c19fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY5Mzk5MTEwMg&ixlib=rb-4.0.3&q=80&w=1080",
-      //   ],
-      // };
+    const uploadedImages = await submitImage(image);
 
+    console.log(uploadedImages);
+    try {
       const postData = {
-        id: "",
-        title: "당근서연",
-        content: "안녕",
-        location: "대한민국",
-        startedAt: "2023-08-30T07:52:04.492Z",
-        endAt: "2023-08-30T07:52:04.492Z",
-        latitude: 37.5642135,
-        longitude: 127.0016985,
+        title: title,
+        content: content,
+        location: address.country,
+        startedAt: startDateISO,
+        endAt: endDateISO,
+        latitude: address.latitude,
+        longitude: address.longitude,
         hashtagInfo: {
-          countryCode: "kr",
-          country: "대한민국",
-          city: "서울",
-          municipality: "",
-          name: "",
-          displayName:
-            "퇴계로51길, 오장동, 광희동, 중구, 서울, 04618, 대한민국",
-          road: "퇴계로51길",
-          address: "",
-          etc: ["한국도착", "국내여행", "퇴사기념"],
+          countryCode: address.countryCode,
+          country: address.country,
+          city: address.city,
+          municipality: address.municipality,
+          name: address.name,
+          displayName: address.display_name,
+          road: address.road,
+          address: address.address,
+          etc: hashtagList,
         },
-        isPublic: true,
-        updatedAt: "2023-08-30T07:52:04.492Z",
-        images: [
-          "https://images.unsplash.com/photo-1691938670117-5c65ae4c19fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY5Mzk5MTEwMg&ixlib=rb-4.0.3&q=80&w=1080",
-        ],
+        isPublic: isPublic,
+        images: uploadedImages,
       };
+
+      console.log(postData);
       await createPostMutation.mutateAsync(postData);
-      Toast.show({ type: "success", text1: "댓글 생성이 완료되었습니다." });
+      Toast.show({ type: "success", text1: "게시글 생성이 완료되었습니다." });
+      resetState(); // 상태변수 초기화
+      navigation.goBack();
     } catch (error) {
       console.error("게시물 생성 중 오류 발생:", error);
-      Toast.show({ type: "error", text1: "게시물 생성을 실패하였습니다." });
+      Toast.show({ type: "error", text1: "게시글 생성을 실패하였습니다." });
     }
   };
 
@@ -639,7 +695,12 @@ const CreatePost: React.FC = () => {
           <BodyInfo>
             {/* 제목 */}
             <Title>제목</Title>
-            <TitleInput placeholder="여행기의 제목을 작성해주세요" />
+            <TitleInput
+              name="title"
+              value={title}
+              onChangeText={(value) => inputChangeHandler("title", value)}
+              placeholder="여행기의 제목을 작성해주세요"
+            />
 
             {/* 내용 */}
             <ContentPhotoBox>
@@ -653,16 +714,26 @@ const CreatePost: React.FC = () => {
             <ContentInput
               multiline
               placeholder="내용을 자유롭게 작성해주세요"
+              name="content"
+              value={content}
+              onChangeText={(value) => inputChangeHandler("content", value)}
               //   returnKeyType="done"
               //   onSubmitEditing={hideKeyboard}
             />
             {/* </ScrollView> */}
 
             {/* 이미지 업로드 */}
-            <Title>이미지</Title>
-            <PickImageButton onPress={pickImage}>
-              <PickImageButtonText>추가</PickImageButtonText>
-            </PickImageButton>
+            <ImageTitleContainer>
+              <Title>
+                이미지 <ImageInnerText>* 최대 10장</ImageInnerText>
+              </Title>
+              <PickImageButton onPress={pickImage}>
+                <PickImageButtonText>
+                  <PhotoIcon name="photo" onPress={pickImage} />
+                  <Text style={{ marginLeft: 10 }}> 추가</Text>
+                </PickImageButtonText>
+              </PickImageButton>
+            </ImageTitleContainer>
             <ImageViewContainer imageCount={image.length}>
               {image.map((imageUri, index) => (
                 <Image
@@ -672,16 +743,30 @@ const CreatePost: React.FC = () => {
                 />
               ))}
             </ImageViewContainer>
-            <TouchableOpacity
-              style={{ width: 50, height: 20, backgroundColor: "#a85757" }}
-              onPress={() => submitImage(image)}
-            >
-              <Text>임시 전송 버튼</Text>
-            </TouchableOpacity>
 
             {/* 태그 */}
             <Title>태그</Title>
-            <TitleInput placeholder="ex) #프랑스, #해외여행" />
+            <TagContainer>
+              <TitleInput
+                name="hashtag"
+                value={hashtag}
+                onChangeText={(value) => inputChangeHandler("hashtag", value)}
+                placeholder="ex) 프랑스"
+              />
+              <TagSelectButton onPress={addHashtagHandler}>
+                <Text>+</Text>
+              </TagSelectButton>
+            </TagContainer>
+            {hashtagList.length > 0 ? (
+              <TagList>
+                {hashtagList.map((item, index) => (
+                  <TagItem key={index}>
+                    <TagItemText>{item}</TagItemText>
+                    <DeleteXbutton onPress={() => deleteHashtagHandler(item)} />
+                  </TagItem>
+                ))}
+              </TagList>
+            ) : null}
 
             {/* 공개 설정 */}
             <Title>공개 설정</Title>
@@ -702,7 +787,7 @@ const CreatePost: React.FC = () => {
           </BodyInfo>
 
           <BottomInfo>
-            <ActionButton cancel={true}>
+            <ActionButton cancel={true} onPress={cancelPost}>
               <ActionButtonText cancel={true}>취소</ActionButtonText>
             </ActionButton>
             <ActionButton cancel={false} onPress={submitPost}>
@@ -811,9 +896,8 @@ const SelectText = styled.Text`
 
 /** 사진 첨부 아이콘 */
 const PhotoIcon = styled(FontAwesome)`
-  color: #73bbfb;
-  font-size: 28px;
-  margin-right: 20px;
+  color: #fff;
+  font-size: 12px;
 `;
 
 /** 내용, 사진 업로드 묶는 View */
@@ -828,8 +912,8 @@ const TitleInput = styled.TextInput`
   font-size: 16px;
   border: 1.2px solid #e8e8e8;
   border-radius: 5px;
-  margin-top: 10px;
-  margin-bottom: 15px;
+  margin-top: 12px;
+  margin-bottom: 12px;
   color: #6f6f6f;
 `;
 
@@ -858,6 +942,17 @@ const ContentInput = styled.TextInput`
 `;
 
 /* 이미지 업로드 */
+const ImageTitleContainer = styled.View`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const ImageInnerText = styled.Text`
+  font-size: 10px;
+  color: #999;
+`;
+
 const ImageViewContainer = styled.View<{ imageCount: number }>`
   display: flex;
   flex-direction: row;
@@ -867,6 +962,7 @@ const ImageViewContainer = styled.View<{ imageCount: number }>`
       ? "space-between"
       : "flex-start"};
   gap: 3px;
+  margin: 10px 0px;
 `;
 
 const PickImageButton = styled.TouchableOpacity`
@@ -882,16 +978,60 @@ const PickImageButtonText = styled.Text`
   text-align: center;
 `;
 
+/* Tag */
+const TagContainer = styled.View`
+  width: 100%;
+  position: relative;
+`;
+
+const TagSelectButton = styled.TouchableOpacity`
+  width: 25px;
+  height: 25px;
+  background-color: ${colors.lightGrey};
+  border-radius: 5px;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  margin-top: -12.5px;
+`;
+
+const TagList = styled.View`
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+`;
+const TagItem = styled.View`
+  background-color: #ececec;
+  padding: 3px 7px;
+  border-radius: 5px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+const TagItemText = styled.Text`
+  color: #888;
+  font-size: 13px;
+  margin-right: 5px;
+`;
+
 /** 전체 공개, 비공개 설정 묶는 View */
 const VisibilityBox = styled.View`
+  display: flex;
   flex-direction: row;
   justify-content: space-between;
   margin-top: 10px;
+  gap: 3px;
 `;
 
 /** 전체 공개 버튼 */
 const VisibilityButton = styled.TouchableOpacity<{ isSelected: boolean }>`
-  width: 170px;
+  width: 49.3%;
   height: 37px;
   border-radius: 5px;
   justify-content: center;
