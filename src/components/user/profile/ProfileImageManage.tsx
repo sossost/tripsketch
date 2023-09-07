@@ -4,7 +4,6 @@ import React, { Dispatch } from "react";
 import * as ImagePicker from "expo-image-picker";
 
 import ProfileImage from "./ProfileImage";
-import uploadImage from "../../../services/aws";
 
 type ProfileImageManageProps = {
   image: string;
@@ -17,16 +16,11 @@ const ProfileImageManage = ({ image, setImage }: ProfileImageManageProps) => {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 1,
+      quality: 0.3,
     });
 
     if (!result.canceled) {
-      try {
-        const imageUrl = await uploadImage(result.assets[0].uri);
-        setImage(imageUrl);
-      } catch (error: any) {
-        console.log(error);
-      }
+      setImage(result.assets[0].uri);
     }
   };
 

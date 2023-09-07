@@ -3,7 +3,7 @@ import { styled } from "styled-components/native";
 import { colors } from "../../../constants/color";
 
 type CategoryProps = {
-  categoryList: string[];
+  categoryList: { categoryName: string; postsLenght: number }[];
   selectedCategory: string;
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
 };
@@ -13,9 +13,13 @@ const Category = ({
   selectedCategory,
   setSelectedCategory,
 }: CategoryProps) => {
+  const categoryNameList = Object.values(categoryList).map(
+    (item) => item.categoryName
+  );
+
   return (
     <CategoryContainer>
-      {categoryList.map((item, index) => {
+      {["전체보기", ...categoryNameList].map((item, index) => {
         const isClicked = item === selectedCategory;
 
         return (
