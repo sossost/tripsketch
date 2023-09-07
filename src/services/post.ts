@@ -2,6 +2,8 @@ import { Post } from "../types/Post";
 import { API_PATH } from "../constants/path";
 import axiosBase from "./axios";
 import { PostsData } from "../hooks/usePostQuery";
+import { getDataFromSecureStore } from "../utils/secureStore";
+import { STORE_KEY } from "../constants/store";
 
 export const getAllDiaries = async () => {
   return;
@@ -49,9 +51,14 @@ export const getPostsById = async (id: string) => {
 };
 
 export const createPost = async (postData: Post) => {
-  console.log(postData);
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
   try {
-    const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP, postData);
+    const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP, postData, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
     return response.data;
   } catch (error: any) {
     throw new Error(error);
