@@ -2,6 +2,7 @@ import { QUERY_KEY } from "../react-query/queryKey";
 import {
   getPostsByNickname,
   getPostsById,
+  createPost,
   postLike,
   postUnlike,
 } from "../services/post";
@@ -52,6 +53,10 @@ export const useGetPostsById = (id: string) => {
   } = useQuery<Post | undefined>(["postId", id], () => getPostsById(id));
 
   return { postData, isLoading, isError };
+};
+
+export const useCreatePost = () => {
+  return useMutation(createPost);
 };
 
 export const usePostLike = () => {

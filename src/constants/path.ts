@@ -37,10 +37,18 @@ export const API_PATH = {
       TRIP_ID: `/trip/guest/:id`,
     },
     POST: {
+      // 게시물 생성하기
+      TRIP: `/trip`,
       // 좋아요 추가하기
       TRIP_LIKE: `/trip/like`,
       // 좋아요 해제하기
       TRIP_UNLIKE: `/trip/unlike`,
+    },
+  },
+  GEOCODING: {
+    POST: {
+      // 위도, 경도로 Location 데이터 생성하기
+      GEOCODE: `/geocode`,
     },
   },
 };

@@ -48,6 +48,16 @@ export const getPostsById = async (id: string) => {
   }
 };
 
+export const createPost = async (postData: Post) => {
+  console.log(postData);
+  try {
+    const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP, postData);
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
 export const postLike = async (id: string) => {
   try {
     const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP_LIKE, {
@@ -57,8 +67,8 @@ export const postLike = async (id: string) => {
       throw new Error("Network response was not ok");
     }
     return response.data;
-  } catch (error) {
-    throw new Error("Error");
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
@@ -71,7 +81,7 @@ export const postUnlike = async (id: string) => {
       throw new Error("Network response was not ok");
     }
     return response.data;
-  } catch (error) {
-    throw new Error("Error");
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
