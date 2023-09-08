@@ -99,6 +99,16 @@ interface RangeKeyDict {
   };
 }
 
+/* TitleInput Type 추가 */
+interface TitleInputProps {
+  name: string;
+}
+
+/* ContentInput Type 추가 */
+interface ContentInputProps {
+  name: string;
+}
+
 /** 여행 글쓰기 */
 const CreatePost: React.FC = () => {
   const [query, setQuery] = useState<string>("");
@@ -780,6 +790,7 @@ const CreatePost: React.FC = () => {
               name="content"
               value={content}
               onChangeText={(value) => inputChangeHandler("content", value)}
+              style={{ textAlignVertical: "top" }}
               //   returnKeyType="done"
               //   onSubmitEditing={hideKeyboard}
             />
@@ -806,6 +817,9 @@ const CreatePost: React.FC = () => {
                 />
               ))}
             </ImageViewContainer>
+            {/* <TouchableOpacity onPress={() => submitImage(image)}>
+              <Text>버튼</Text>
+            </TouchableOpacity> */}
 
             {/* 태그 */}
             <Title>태그</Title>
@@ -987,7 +1001,7 @@ const ContentPhotoBox = styled.View`
 `;
 
 /** 제목 TextInput */
-const TitleInput = styled.TextInput`
+const TitleInput = styled.TextInput<TitleInputProps>`
   padding: 15px 12px;
   font-size: 16px;
   border: 1.2px solid #e8e8e8;
@@ -1010,7 +1024,7 @@ const LocationInput = styled.TextInput`
 `;
 
 /** 여행 내용 TextInput */
-const ContentInput = styled.TextInput`
+const ContentInput = styled.TextInput<ContentInputProps>`
   height: 300px;
   padding: 15px 12px;
   font-size: 16px;

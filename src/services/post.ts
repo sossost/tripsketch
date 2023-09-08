@@ -1,4 +1,5 @@
 import { Post } from "../types/Post";
+import { CreatePost } from "../types/Post";
 import { API_PATH } from "../constants/path";
 import axiosBase from "./axios";
 import { PostsData } from "../hooks/usePostQuery";
@@ -50,8 +51,9 @@ export const getPostsById = async (id: string) => {
   }
 };
 
-export const createPost = async (postData: Post) => {
+export const createPost = async (postData: CreatePost) => {
   const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+
   try {
     const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP, postData, {
       headers: {
