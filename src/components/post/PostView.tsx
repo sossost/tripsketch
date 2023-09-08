@@ -95,13 +95,17 @@ const PostView = ({ postId }: { postId: string }) => {
           </View>
         </View>
       </View>
-      <Slick showsButtons={false} style={styles.slick}>
-        {postData.images.map((item, index) => (
-          <View key={index} style={styles.slide_container}>
-            <Image source={{ uri: item }} style={styles.slide_image} />
-          </View>
-        ))}
-      </Slick>
+      {postData.images.length > 0 ? (
+        <Slick showsButtons={false} style={styles.slick}>
+          {postData.images.map((item, index) => (
+            <View key={index} style={styles.slide_container}>
+              <Image source={{ uri: item }} style={styles.slide_image} />
+            </View>
+          ))}
+        </Slick>
+      ) : (
+        <View style={{ height: 25 }}></View>
+      )}
       <View style={styles.content_container}>
         <Text style={styles.content_text}>{postData.content}</Text>
       </View>

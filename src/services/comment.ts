@@ -1,4 +1,6 @@
 import { API_PATH } from "../constants/path";
+import { getDataFromSecureStore } from "../utils/secureStore";
+import { STORE_KEY } from "../constants/store";
 import axiosBase from "./axios";
 
 export const getCommentData = async () => {
@@ -14,16 +16,19 @@ export const getCommentData = async () => {
 };
 
 export const getCommentByTripId = async (tripId: string) => {
-  try {
-    const response = await axiosBase.get(
-      `${API_PATH.COMMENT.GET.COMMENT_ID.replace(":tripId", tripId)}`
-    );
-    if (response.status !== 200) {
-      throw new Error("Network response was not ok");
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  if (accessToken) {
+    try {
+      const response = await axiosBase.get(
+        `${API_PATH.COMMENT.GET.COMMENT_ID.replace(":tripId", tripId)}`
+      );
+      if (response.status !== 200) {
+        throw new Error("Network response was not ok");
+      }
+      return response.data;
+    } catch (error: any) {
+      throw new Error("Error");
     }
-    return response.data;
-  } catch (error: any) {
-    throw new Error("Error");
   }
 };
 
@@ -47,17 +52,23 @@ interface CommentData {
 }
 
 export const createComment = async (commentData: CommentData) => {
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
   try {
     const response = await axiosBase.post(
       API_PATH.COMMENT.POST.COMMENT,
-      commentData
+      commentData,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
     );
     if (response.status !== 200) {
       throw new Error("Network response was not ok");
     }
     return response.data;
-  } catch (error) {
-    throw new Error("Error");
+  } catch (error: any) {
+    throw new Error(error);
   }
 };
 
@@ -71,6 +82,7 @@ interface ReplyCommentData {
 export const createReplyComment = async (
   replyCommentData: ReplyCommentData
 ) => {
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
   try {
     const updatedCommentData = {
       tripId: replyCommentData.tripId,
@@ -82,7 +94,12 @@ export const createReplyComment = async (
         ":parentId",
         replyCommentData.parentId
       )}`,
-      updatedCommentData
+      updatedCommentData,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
     );
     if (response.status !== 200) {
       throw new Error("Network response was not ok");
