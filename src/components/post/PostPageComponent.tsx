@@ -109,8 +109,12 @@ interface ContentInputProps {
   name: string;
 }
 
+interface PostPageProps {
+  updateId?: string;
+}
+
 /** 여행 글쓰기 */
-const PostPageComponent: React.FC = () => {
+const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
   const [query, setQuery] = useState<string>("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [mapViewOn, setMapViewOn] = useState(false);
