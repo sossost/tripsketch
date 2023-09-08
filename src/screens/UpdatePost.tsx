@@ -1,7 +1,7 @@
 import AuthGuard from "../components/auth/AuthGuard";
 import PostPageComponent from "../components/post/PostPageComponent";
 
-const CreatePost = () => {
+const UpdatePost = () => {
   return (
     <AuthGuard>
       <PostPageComponent />
@@ -9,4 +9,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default UpdatePost;
