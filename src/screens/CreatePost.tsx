@@ -5,7 +5,6 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  Button,
   TouchableWithoutFeedback,
   Dimensions,
   Alert,
@@ -148,7 +147,8 @@ const CreatePost: React.FC = () => {
     startDate !== null &&
     locationName !== "" &&
     title !== "" &&
-    content !== "";
+    content !== "" &&
+    image.length !== 0;
 
   // title 유효성 검사
   const validateTitle = (title: string) => {
