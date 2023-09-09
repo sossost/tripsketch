@@ -3,8 +3,21 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { StackNavigation } from "../../../types/RootStack";
 import { patchCurrentUser } from "../../../services/user";
 import { QUERY_KEY } from "../../../react-query/queryKey";
+import validationCheck from "../../../utils/validationCheck";
+import {
+  VALIDATION,
+  VALIDATION_ERROR_MESSAGE,
+} from "../../../constants/validation";
 
 import Toast from "react-native-toast-message";
+
+/**
+ * @설명 : 리액트 쿼리 뮤테이션을 사용한 유저 프로필 수정 커스텀 훅
+ * @작성자 : 장윤수
+ * @작성일 : 2023-09-10
+ * @version 1.0, 발리데이션 체크 추가
+ * @see None
+ */
 
 const useUpdateRrofile = (
   profileImageUrl: string,
@@ -30,6 +43,21 @@ const useUpdateRrofile = (
 
   /** 프로필 수정 제출 함수 */
   const handleProfileSubmit = async () => {
+    if (!validationCheck({ value: nickname, regex: VALIDATION.NICKNAME })) {
+      Toast.show({ type: "error", text1: VALIDATION_ERROR_MESSAGE.NICKNAME });
+      return;
+    }
+
+    if (
+      !validationCheck({ value: introduction, regex: VALIDATION.INTRODUCTION })
+    ) {
+      Toast.show({
+        type: "error",
+        text1: VALIDATION_ERROR_MESSAGE.INTRODUCTION,
+      });
+      return;
+    }
+
     const formData: any = new FormData();
     formData.append("nickname", nickname);
     formData.append("introduction", introduction);
