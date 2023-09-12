@@ -78,6 +78,15 @@ export const tokenRefresh = async () => {
   }
 };
 
+axiosBase.interceptors.request.use(
+  (config) => {
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 // 응답 인터셉터: 모든 응답 전에 실행되는 함수
 axiosBase.interceptors.response.use(
   (response) => {
