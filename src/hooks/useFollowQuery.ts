@@ -60,10 +60,8 @@ export const useSocialControllerInSocialPage = ({
         });
         queryClient.setQueryData([queryKey, pageOwnerNickname], newData);
       },
-      onSuccess: () => {
-        successToastMessage(
-          `${pageOwnerNickname}님을 ${SUCCESS_MESSAGE.FOLLOW}`
-        );
+      onSuccess: (_, targetNickname) => {
+        successToastMessage(`${targetNickname}님을 ${SUCCESS_MESSAGE.FOLLOW}`);
       },
       onError: (error: unknown) => {
         errorToastMessage(ERROR_MESSAGE.FOLLOW);
@@ -92,10 +90,8 @@ export const useSocialControllerInSocialPage = ({
         });
         queryClient.setQueryData([queryKey, pageOwnerNickname], newData);
       },
-      onSuccess: () => {
-        successToastMessage(
-          `${pageOwnerNickname}님 ${SUCCESS_MESSAGE.UNFOLLOW}`
-        );
+      onSuccess: (_, targetNickname) => {
+        successToastMessage(`${targetNickname}님 ${SUCCESS_MESSAGE.UNFOLLOW}`);
       },
       onError: (error: unknown) => {
         errorToastMessage(ERROR_MESSAGE.UNFOLLOW);
@@ -173,7 +169,7 @@ export const useSocialControllerInUserPage = ({
       },
       onSuccess: () => {
         successToastMessage(
-          `${pageOwner?.nickname}님을 ${SUCCESS_MESSAGE.FOLLOW}}`
+          `${pageOwner?.nickname}님을 ${SUCCESS_MESSAGE.FOLLOW}`
         );
       },
       onError: (error: unknown) => {
@@ -205,7 +201,7 @@ export const useSocialControllerInUserPage = ({
       },
       onSuccess: () => {
         successToastMessage(
-          `${pageOwner?.nickname}님 ${SUCCESS_MESSAGE.UNFOLLOW}}`
+          `${pageOwner?.nickname}님 ${SUCCESS_MESSAGE.UNFOLLOW}`
         );
       },
       onError: (error: unknown) => {
