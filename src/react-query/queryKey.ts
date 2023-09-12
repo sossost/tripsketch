@@ -7,4 +7,5 @@ export const QUERY_KEY = {
   USERS: "users",
   FOLLOWERS: "followers",
   FOLLOWING: "following",
+  NOTIFICATIONS: "notifications",
 };
