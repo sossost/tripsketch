@@ -1,20 +1,41 @@
+// export type Post = {
+//   id: string;
+//   nickname: string;
+//   title: string;
+//   content: string;
+//   likes: number;
+//   views: number;
+//   location: string[];
+//   startedAt: string;
+//   endAt: string;
+//   hashtag: string[];
+//   hidden: boolean;
+//   createdAt: string;
+//   tripLikes: string[];
+//   images: string[];
+//   isLiked: boolean;
+//   public: boolean;
+// };
+
 export type Post = {
+  isLiked: boolean;
   id: string;
-  nickname: string;
   title: string;
+  image: string[];
   content: string;
-  likes: number;
+  likes: string[];
   views: number;
   location: string[];
-  startedAt: string;
+  startAt: string;
   endAt: string;
   hashtag: string[];
-  hidden: boolean;
   createdAt: string;
-  tripLikes: string[];
-  images: string[];
-  isLiked: boolean;
-  public: boolean;
+  hidden: boolean;
+  user: {
+    id: string;
+    nickName: string;
+    profile_img: string;
+  };
 };
 
 export type CreatePost = {
