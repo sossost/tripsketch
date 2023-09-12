@@ -30,7 +30,7 @@ const PostCard = ({ post }: PostCardProps) => {
   return (
     <PostCardLayout>
       <ImageWrapper onPress={postHandler}>
-        <Thumnail source={{ uri: post.images[0] }} />
+        <Thumnail source={{ uri: post.image[0] }} />
       </ImageWrapper>
 
       <MetaDataContainer>
@@ -42,7 +42,7 @@ const PostCard = ({ post }: PostCardProps) => {
         <ProfileContainer>
           <ProfileWrapper>
             <ProfileImage source={userProfilePath} />
-            <UserNickname>{post.nickname}</UserNickname>
+            <UserNickname>{post.user.nickName}</UserNickname>
           </ProfileWrapper>
 
           <LikeButton source={likeButtonImgPath} />

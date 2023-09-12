@@ -19,7 +19,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": ["android.permission.RECORD_AUDIO"],
+      "package": "kr.kro.tripsketch"
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
@@ -35,6 +37,11 @@
     "notification": {
       "handler": "BackgroundNotificationHandler",
       "experienceId": "@yourusername/tripsketch"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f8190d6c-4843-4990-8bbb-f70715ad169f"
+      }
     }
   }
 }
