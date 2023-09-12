@@ -19,14 +19,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../types/RootStack";
 import * as ImagePicker from "expo-image-picker";
-
 import MapView, { Marker, UrlTile } from "react-native-maps";
-import Toast from "react-native-toast-message";
 
-// 테스트 추가 - 정리 필요
-import axios from "axios";
-import { useCreatePost } from "../../hooks/usePostQuery";
 import DeleteXbutton from "../../components/common/DeleteXbutton";
+import usePostTrip from "./hooks/usePostTrip";
 
 type Suggestion = {
   place_id: string;
@@ -411,36 +407,6 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
     }
   };
 
-  const submitImage = async (image: string[]) => {
-    try {
-      const formData: any = new FormData();
-      for (let index = 0; index < image.length; index++) {
-        const item = image[index];
-        formData.append("files", {
-          uri: item,
-          name: `image${index}.jpg`,
-          type: "multipart/form-data",
-        });
-      }
-
-      const response = await axios.post(
-        "https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/user/uploads?dir=tripsketch",
-        formData,
-        {
-          headers: {
-            "content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      console.log("Upload response:", response.data);
-      const imageUrls = response.data.map((imageInfo: any) => imageInfo.url);
-      return imageUrls;
-    } catch (error) {
-      console.error("Image upload error:", error);
-    }
-  };
-
   // react-native-calendars 패키지를 사용하여 달력을 구현 --------
   /** 날짜 클릭 핸들러 */
   const dayPressHandler = (day: { dateString: string }) => {
@@ -506,48 +472,19 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
       { cancelable: false };
   };
 
-  /* 게시물 등록 함수 */
-  const createPostMutation = useCreatePost();
-  const submitPost = async () => {
-    let uploadedImages;
-
-    if (image.length > 0) {
-      uploadedImages = await submitImage(image);
-    }
-
-    try {
-      const postData = {
-        title: title,
-        content: content,
-        location: address.country,
-        startedAt: startDateISO.toISOString(),
-        endAt: endDateISO.toISOString(),
-        latitude: address.latitude,
-        longitude: address.longitude,
-        hashtagInfo: {
-          countryCode: address.countryCode,
-          country: address.country,
-          city: address.city,
-          municipality: address.municipality,
-          name: address.name,
-          displayName: address.display_name,
-          road: address.road,
-          address: address.address,
-          etc: hashtagList,
-        },
-        isPublic: isPublic,
-        images: uploadedImages,
-      };
-
-      await createPostMutation.mutateAsync(postData);
-      Toast.show({ type: "success", text1: "게시글 생성이 완료되었습니다." });
-      resetState(); // 상태변수 초기화
-      navigation.goBack();
-    } catch (error) {
-      console.error("게시물 생성 중 오류 발생:", error);
-      Toast.show({ type: "error", text1: "게시글 생성을 실패하였습니다." });
-    }
+  const postTripData = {
+    image: image,
+    title: title,
+    content: content,
+    address: address,
+    startDate: startDate || "",
+    endDate: endDate || "",
+    isPublic: isPublic,
+    hashtagList: hashtagList,
+    resetState: resetState,
   };
+
+  const submitPost = usePostTrip(postTripData);
 
   return (
     <>
