@@ -1,14 +1,15 @@
 import React from "react";
 import { styled } from "styled-components/native";
 import { colors } from "../../../constants/color";
+import { Category } from "../../../types/category";
 
 type CategoryProps = {
-  categoryList: { categoryName: string; postsLenght: number }[];
+  categoryList: Category[];
   selectedCategory: string;
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const Category = ({
+const CategoryList = ({
   categoryList,
   selectedCategory,
   setSelectedCategory,
@@ -36,7 +37,7 @@ const Category = ({
   );
 };
 
-export default Category;
+export default CategoryList;
 
 export const CategoryContainer = styled.View`
   flex-direction: row;

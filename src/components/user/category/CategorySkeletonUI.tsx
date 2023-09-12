@@ -1,5 +1,5 @@
 import { styled } from "styled-components/native";
-import { CategoryContainer } from "./Category";
+import { CategoryContainer } from "./CategoryList";
 import { colors } from "../../../constants/color";
 
 const CategorySkeletonUI = () => {
