@@ -15,7 +15,10 @@ import { QUERY_KEY } from "../react-query/queryKey";
 export const useGetCategoriesByNickname = (nickname: string | undefined) => {
   const { data, isLoading, isError } = useQuery(
     [QUERY_KEY.CATEGORIES, nickname],
-    () => getCategoriesByNickname(nickname)
+    () => getCategoriesByNickname(nickname),
+    {
+      enabled: !!nickname,
+    }
   );
 
   return { data, isLoading, isError };

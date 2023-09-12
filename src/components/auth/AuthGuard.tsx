@@ -11,13 +11,13 @@ const AuthGuard = ({ children }: { children: ReactNode }) => {
 
   // 유저정보가 없으면 로그인 페이지로 이동
   useEffect(() => {
-    if (currentUser.data === null) {
+    if (currentUser.data === undefined) {
       navigation.navigate("KakaoLoginPage");
     }
   }, []);
 
   // 유저정보가 없으면 아무것도 렌더링하지 않음
-  if (currentUser.data === null) {
+  if (currentUser.data === undefined) {
     return null;
   }
 

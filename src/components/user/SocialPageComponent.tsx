@@ -10,6 +10,7 @@ import VariantSelector from "../UI/VariantSelector";
 import SocialList from "./social/SocialList";
 import BackButton from "../UI/header/BackButton";
 import ErrorBoundary from "react-native-error-boundary";
+import ErrorFallback from "../UI/ErrorFallback";
 
 interface SocialPageComponentProps {
   pageOwnerNickname: string;
