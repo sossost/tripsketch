@@ -21,7 +21,21 @@ export interface InfinitePostsData {
   pageParams: number[];
 }
 
-export const useGetPostsByNickname = (nickname: string, category: string) => {
+/**
+ * @description : 닉네임과 카테고리로 페이지네이션 처리된 게시글 리스트를 요청하는 리액트 쿼리 훅
+ *
+ * @param nickname : 유저닉네임
+ * @param category : 카테고리
+ *
+ * @author : 장윤수
+ * @update : 2023-09-12,
+ * @version 1.0.1, 닉네임 undefined일 경우 분기처리 추가
+ * @see None,
+ */
+export const useGetPostsByNickname = (
+  nickname: string | undefined,
+  category: string
+) => {
   const postsPerPage = 5;
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
     [QUERY_KEY.POSTS, nickname, category],

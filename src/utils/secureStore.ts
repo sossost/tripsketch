@@ -1,5 +1,5 @@
 import * as SecureStore from "expo-secure-store";
-import { throwErrorMessage } from "./getErrorMessage";
+import { errorLoging } from "./errorHandler";
 
 /**
  * @description : 시큐어 스토어에 데이터를 저장하는 함수
@@ -15,7 +15,7 @@ export const setDataToSecureStore = async <T>(key: string, data: T) => {
     const jsonData = JSON.stringify(data);
     await SecureStore.setItemAsync(key, jsonData);
   } catch (error: unknown) {
-    throwErrorMessage(error, "SecureStore 데이터 저장 실패 오류는 🤔");
+    errorLoging(error, "SecureStore 데이터 저장 실패 오류는 🤔");
   }
 };
 
@@ -32,7 +32,7 @@ export const getDataFromSecureStore = async (key: string) => {
     const jsonData = await SecureStore.getItemAsync(key);
     return jsonData && JSON.parse(jsonData);
   } catch (error: unknown) {
-    throwErrorMessage(error, "SecureStore 데이터 가져오기 실패 오류는 🤔");
+    errorLoging(error, "SecureStore 데이터 가져오기 실패 오류는 🤔");
   }
 };
 
@@ -48,6 +48,6 @@ export const resetDataInSecureStore = async (key: string) => {
   try {
     await SecureStore.deleteItemAsync(key);
   } catch (error: unknown) {
-    throwErrorMessage(error, "SecureStore 데이터 삭제 실패 오류는 🤔");
+    errorLoging(error, "SecureStore 데이터 삭제 실패 오류는 🤔");
   }
 };
