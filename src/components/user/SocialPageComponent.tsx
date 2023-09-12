@@ -9,12 +9,24 @@ import { colors } from "../../constants/color";
 import VariantSelector from "../UI/VariantSelector";
 import SocialList from "./social/SocialList";
 import BackButton from "../UI/header/BackButton";
+import ErrorBoundary from "react-native-error-boundary";
 
 interface SocialPageComponentProps {
   pageOwnerNickname: string;
   initialVariant: "팔로워" | "팔로잉";
 }
 
+/**
+ * @description : 소셜 페이지 컴포넌트
+ *
+ * @param pageOwnerNickname : 해당 페이지 주인의 닉네임
+ * @param initialVariant : 페이지의 초기 variant 상태 (팔로워, 팔로잉)
+ *
+ * @author : 장윤수
+ * @update : 2023-09-12,
+ * @version 1.0.1, 데이터 falsy 값일 때 분기처리 추가
+ * @see None,
+ */
 const SocialPageComponent = ({
   pageOwnerNickname,
   initialVariant,
@@ -23,7 +35,7 @@ const SocialPageComponent = ({
   const [variant, setVariant] = useState<"팔로워" | "팔로잉">(initialVariant);
 
   // 현재 로그인한 유저의 정보를 가져옴
-  const currentUser = useGetCurrentUser().data!;
+  const currentUser = useGetCurrentUser().data;
 
   // 현재 페이지의 유저 리스트를 가져옴
   const userList = useGetSocialList(variant, pageOwnerNickname);
@@ -37,34 +49,36 @@ const SocialPageComponent = ({
 
   return (
     <Layout>
-      <SocialHeader>
-        <BackButton />
-        <SocialHeaderText>
-          <ColoredText>{pageOwnerNickname}</ColoredText>님
-          {variant === "팔로워" ? "을" : "이"} 구독하는&nbsp;
-          <ColoredText>{userList.data.length}</ColoredText>명
-        </SocialHeaderText>
-        <Spacing />
-      </SocialHeader>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <SocialHeader>
+          <BackButton />
+          <SocialHeaderText>
+            <ColoredText>{pageOwnerNickname}</ColoredText>님
+            {variant === "팔로워" ? "을" : "이"} 구독하는&nbsp;
+            <ColoredText>{userList.data?.length || 0}</ColoredText>명
+          </SocialHeaderText>
+          <Spacing />
+        </SocialHeader>
 
-      <VariantSelector<"팔로워" | "팔로잉">
-        variant1="팔로워"
-        variant2="팔로잉"
-        initialVariant={initialVariant}
-        variant={variant}
-        setVariant={setVariant}
-      />
-
-      {userList.isLoading ? (
-        <Text>Loading...</Text>
-      ) : userList.isError ? (
-        <Text>Error Page</Text>
-      ) : (
-        <SocialList
-          userList={userList.data}
-          followBtnHandler={followBtnHandler}
+        <VariantSelector<"팔로워" | "팔로잉">
+          variant1="팔로워"
+          variant2="팔로잉"
+          initialVariant={initialVariant}
+          variant={variant}
+          setVariant={setVariant}
         />
-      )}
+
+        {userList.isLoading ? (
+          <Text>Loading...</Text>
+        ) : userList.isError ? (
+          <Text>에러</Text>
+        ) : (
+          <SocialList
+            userList={userList.data || []}
+            followBtnHandler={followBtnHandler}
+          />
+        )}
+      </ErrorBoundary>
     </Layout>
   );
 };
