@@ -78,8 +78,9 @@ export const users = [
 export const diaries = [
   {
     id: "1",
-    title: "타이틀",
+    title: "콜롬비아 여행기 1. 자연이 아름다운 콜롬비아 호호호",
     image: ["https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png"],
+    isLiked: true,
     content: "컨텐츠",
     likes: ["1", "user3"],
     views: 149,
@@ -109,49 +110,11 @@ export const diaries = [
     hashtag: ["#프랑스", "#파리"],
     createdAt: "2021-07-02",
     hidden: false,
+    isLiked: true,
+
     user: {
       id: "2",
       nickName: "user2",
-      profile_img:
-        "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
-    },
-  },
-  {
-    id: "3",
-    title: "타이틀",
-    image: ["https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png"],
-    content: "컨텐츠",
-    likes: ["1", "user3"],
-    views: 149,
-    location: ["프랑스", "파리"],
-    startAt: "2021-07-02",
-    endAt: "2021-07-05",
-    hashtag: ["#프랑스", "#파리"],
-    createdAt: "2021-07-02",
-    hidden: false,
-    user: {
-      id: "3",
-      nickName: "user1",
-      profile_img:
-        "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
-    },
-  },
-  {
-    id: "4",
-    title: "타이틀",
-    image: ["https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png"],
-    content: "컨텐츠",
-    likes: ["1", "user3"],
-    views: 149,
-    location: ["프랑스", "파리"],
-    startAt: "2021-07-02",
-    endAt: "2021-07-05",
-    hashtag: ["#프랑스", "#파리"],
-    createdAt: "2021-07-02",
-    hidden: false,
-    user: {
-      id: "4",
-      nickName: "user1",
       profile_img:
         "https://eliceproject.s3.ap-northeast-2.amazonaws.com/dongs.png",
     },
