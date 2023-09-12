@@ -1,3 +1,5 @@
+import { errorToastMessage } from "./toastMessage";
+
 type ErrorWithMessage = {
   message: string;
 };
@@ -33,4 +35,19 @@ export function getErrorMessage(error: unknown) {
 export function errorLoging(error: unknown, message: string) {
   const errorMessage = getErrorMessage(error);
   console.log(message, errorMessage);
+}
+
+/**
+ * @description : 캐치 문 내에서 에러를 받아 문자열로 변환후 토스트 메시지로 띄우는 함수
+ *
+ * @param error : 에러 unknown 타입
+ *
+ * @author : 장윤수
+ * @update : 2023-09-12,
+ * @version 1.0.0,
+ * @see None,
+ */
+export function errorToastMessageInCatch(error: unknown) {
+  const errorMessage = getErrorMessage(error);
+  errorToastMessage(errorMessage);
 }

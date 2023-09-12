@@ -1,5 +1,4 @@
 import axios from "axios";
-import * as SecureStore from "expo-secure-store";
 import { axiosBase } from "./axios";
 import { API_BASE_URL } from "@env";
 import { User } from "../types/user";
@@ -8,7 +7,12 @@ import {
   resetDataInSecureStore,
 } from "../utils/secureStore";
 import { STORE_KEY } from "../constants/store";
-import { throwErrorMessage } from "../utils/getErrorMessage";
+import {
+  errorLoging,
+  errorToastMessageInCatch,
+  getErrorMessage,
+} from "../utils/errorHandler";
+import { errorToastMessage } from "../utils/toastMessage";
 
 /**
  * @description : 로그인한 유저의 정보를 요청하는 함수
@@ -30,28 +34,11 @@ export const getCurrentUser = async () => {
       });
       return response.data as User;
     }
-    throw new Error("로그인 해주시길 바랍니다.");
   } catch (error: unknown) {
     await resetDataInSecureStore(STORE_KEY.ACCESS_TOKEN);
     await resetDataInSecureStore(STORE_KEY.REFRESH_TOKEN);
-    throwErrorMessage(error, "로그인한 유저 정보 요청 에러는🤔");
-  }
-};
-
-/** 유저 정보 SecureStore에서 불러오는 함수 */
-export const getUserInfo = async () => {
-  try {
-    const userInfoJSON = await SecureStore.getItemAsync("userProfile");
-    if (userInfoJSON) {
-      const userInfo = JSON.parse(userInfoJSON);
-      console.log("SecureStore에 저장된 유저정보!", userInfo);
-      return userInfo as User;
-    } else {
-      console.log("유저 정보가 없습니다..");
-      return null;
-    }
-  } catch (error: unknown) {
-    throwErrorMessage(error, "시큐어 스토어 유저정보 요청 에러는🤔");
+    errorToastMessageInCatch(error);
+    errorLoging(error, "로그인한 유저 정보 요청 에러는🤔");
   }
 };
 
@@ -76,7 +63,7 @@ export const patchCurrentUser = async (data: any) => {
     }
     return;
   } catch (error: unknown) {
-    throwErrorMessage(error, "프로필 수정 요청 에러는🤔");
+    errorLoging(error, "프로필 수정 요청 에러는🤔");
   }
 };
 
@@ -94,7 +81,8 @@ export const getFollowerList = async (nickname: string) => {
     );
     return response.data;
   } catch (error: unknown) {
-    throwErrorMessage(error, "팔로우리스트 요청 에러는🤔");
+    errorToastMessageInCatch(error);
+    errorLoging(error, "팔로우리스트 요청 에러는🤔");
   }
 };
 
@@ -112,7 +100,8 @@ export const getFollowingList = async (nickname: string) => {
     );
     return response.data;
   } catch (error: unknown) {
-    throwErrorMessage(error, "팔로잉리스트 요청 에러는🤔");
+    errorToastMessageInCatch(error);
+    errorLoging(error, "팔로잉리스트 요청 에러는🤔");
   }
 };
 
@@ -128,7 +117,8 @@ export const getUserByNickname = async (nickname: string) => {
     const response = await axiosBase.get(`user/nickname?nickname=${nickname}`);
     return response.data;
   } catch (error: unknown) {
-    throwErrorMessage(error, "닉네임으로 유저 정보 요청 에러는🤔");
+    errorToastMessageInCatch(error);
+    errorLoging(error, "닉네임으로 유저 정보 요청 에러는🤔");
   }
 };
 
@@ -136,24 +126,26 @@ export const getUserByNickname = async (nickname: string) => {
  * @description : 닉네임으로 해당 유저를 팔로우하는 함수
  * @author : 장윤수
  * @update : 2023-09-12, 장윤수, 에러 핸들링 추가
- * @version 1.01, 에러 핸들링 추가
+ * @version 1.1.1, 엑세스 토큰 가져오는 로직 수정
  * @see None
  */
 export const followUser = async (nickname: string) => {
-  const accessToken = await SecureStore.getItemAsync("accessToken");
-
-  const data = { nickname: nickname };
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
 
   if (accessToken) {
     try {
-      const response = await axiosBase.post("follow", data, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axiosBase.post(
+        "follow",
+        { nickname },
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
       return response.data;
     } catch (error: unknown) {
-      throwErrorMessage(error, "유저 팔로우 요청 에러는🤔");
+      errorLoging(error, "유저 팔로우 요청 에러는🤔");
     }
   }
 
@@ -164,11 +156,11 @@ export const followUser = async (nickname: string) => {
  * @description : 닉네임으로 해당 유저를 언팔로우하는 함수
  * @author : 장윤수
  * @update : 2023-09-12, 장윤수, 에러 핸들링 추가
- * @version 1.01, 에러 핸들링 추가
+ * @version 1.1.1, 엑세스 토큰 가져오는 로직 수정
  * @see None
  */
 export const unfollowUser = async (nickname: string) => {
-  const accessToken = await SecureStore.getItemAsync("accessToken");
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
 
   const data = { nickname: nickname };
 
@@ -182,7 +174,7 @@ export const unfollowUser = async (nickname: string) => {
       });
       return response.data;
     } catch (error: unknown) {
-      throwErrorMessage(error, "언팔로우 요청 에러는🤔");
+      errorLoging(error, "언팔로우 요청 에러는🤔");
     }
   }
 

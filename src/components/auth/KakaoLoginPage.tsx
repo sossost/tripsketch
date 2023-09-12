@@ -9,10 +9,10 @@ import { QUERY_KEY } from "../../react-query/queryKey";
 import { KAKAO_CLIENT_ID } from "@env";
 import { setDataToSecureStore } from "../../utils/secureStore";
 import { STORE_KEY } from "../../constants/store";
+import { errorLoging } from "../../utils/errorHandler";
 
 import ErrorBoundary from "react-native-error-boundary";
 import ErrorFallback from "../UI/ErrorFallback";
-import { throwErrorMessage } from "../../utils/getErrorMessage";
 
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 const OAUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao/callback&response_type=code`;
@@ -49,7 +49,7 @@ const KaKaoLogin = () => {
         refreshTokenExpiryDate
       );
     } catch (error: unknown) {
-      throwErrorMessage(error, "토큰 발급 요청 실패 에러는");
+      errorLoging(error, "토큰 발급 요청 실패 에러는");
     }
   };
 
