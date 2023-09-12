@@ -1,13 +1,19 @@
 type NotificationType = "Comment" | "Comment-Comment" | "Notice";
 
-export type Notification = {
-  notificationId: string;
-  userId: string;
-  targetUserId: string;
-  type: NotificationType;
-  notContentId: string;
-  content: string;
-  contentUrl: string;
-  notDateTime: string;
-  notReadDateTime: string;
-};
+export interface Notification {
+  id: string;
+  profileUrl: string;
+  title: string;
+  body: string;
+  createdAt: string;
+  nickname: string;
+  commentId: string;
+  receiverId: string;
+  tripId: string;
+}
+export interface NotificationResponse {
+  notifications: Notification[];
+  notificationsPerPage: number;
+  currentPage: number;
+  totalPage: number;
+}
