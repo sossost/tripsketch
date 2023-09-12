@@ -1,3 +1,5 @@
+// @ts-ignore
+
 import React, { useRef } from "react";
 import { StyleSheet, View, ScrollView } from "react-native";
 import PostCard from "../components/post/card/PostCard";
@@ -23,9 +25,11 @@ const Home = ({ navigation }: any) => {
     console.log("userInfo", userInfo);
   };
 
+  const countryCode = "kr";
+
   return (
     <View style={styles.container}>
-      {loggedIn ? (
+      {/* {loggedIn ? (
         <View style={styles.greetings}>
           <Text>로그인되었습니다.</Text>
         </View>
@@ -34,43 +38,34 @@ const Home = ({ navigation }: any) => {
           <Text style={styles.greetingText}>트립스케치를 시작하세요.</Text>
           <KakaoLoginButton />
         </View>
-      )}
-      <ScrollView ref={scrollViewRef} style={styles.scrollView} />
-      {/* 액세스 토큰 갱신 */}
+      )} */}
 
-      <TouchableOpacity onPress={getUserInfoHandler}>
+      {/* <TouchableOpacity onPress={getUserInfoHandler}>
         <Text>유저 정보 요청</Text>
-      </TouchableOpacity>
-
-      {/* <ScrollView ref={scrollViewRef} style={styles.scrollView}>
+      </TouchableOpacity> */}
+      <ScrollView ref={scrollViewRef} style={styles.scrollView}>
         <View style={styles.sectionDescView}>
           <View style={styles.centerLine}></View>
-          <Text style={styles.sectionDesc}>요즘 뜨는 스케치</Text>
+          <Text style={styles.sectionDesc}>실시간 HOT 여행 스케치</Text>
         </View>
         {diaries.map((diary) => (
           <PostCard post={diary} />
         ))}
 
-        <View style={styles.sectionDescView}>
-          <View style={styles.centerLine}></View>
-          <Text style={styles.sectionDesc}>새로운 스케치</Text>
-        </View>
-        {diaries.map((diary) => (
-          <PostCard post={diary} />
-        ))}
-      </ScrollView> */}
-      <View style={styles.buttonItself}>
-        <TouchableOpacity onPress={onPress}>
-          <Text style={styles.buttonText}>맨 위로</Text>
-        </TouchableOpacity>
-      </View>
+        {/* <View style={styles.buttonItself}>
+          <TouchableOpacity onPress={onPress}>
+            <Text style={styles.buttonText}>맨 위로</Text>
+          </TouchableOpacity>
+        </View> */}
+      </ScrollView>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#eee",
+    height: "100%",
+    backgroundColor: "#fff",
     color: "black",
     flexDirection: "column",
     alignItems: "center",
@@ -104,20 +99,20 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionDesc: {
-    color: "#777",
+    color: "#68A6FF",
     paddingHorizontal: 18,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "600",
     position: "absolute",
     textAlign: "center",
-    backgroundColor: "#eee",
+    backgroundColor: "#fff",
   },
   centerLine: {
     width: "100%",
     top: "50%",
-    borderBottomWidth: 1,
+    borderBottomWidth: 0.5,
     position: "absolute",
-    borderColor: "#CCC",
+    borderColor: "#68A6FF",
   },
 
   greetingText: {

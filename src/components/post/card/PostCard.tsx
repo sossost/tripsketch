@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { styled } from "styled-components/native";
 import { colors } from "../../../constants/color";
 import { StackNavigation } from "../../../types/RootStack";
+import Flag from "react-native-flags";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 interface PostCardProps {
@@ -12,15 +13,14 @@ interface PostCardProps {
 }
 
 const PostCard = ({ post }: PostCardProps) => {
-  // const isLiked = post.likes.find((like) => like === currentUser.id)
-  //   ? true
-  //   : false;
+  // @ts-ignore
   const isLiked = post.isLiked;
   const likeButtonImgPath =
     isLiked === true
       ? require("../../../assets/images/isLikedIcon.png")
       : require("../../../assets/images/isNotLikedIcon.png");
-  const userProfilePath = require("../../../assets/images/test_user.png");
+  const commentButtonImgPath = require("../../../assets/comment.png");
+
   const navigation = useNavigation<StackNavigation>();
 
   const postHandler = () => {
@@ -30,22 +30,38 @@ const PostCard = ({ post }: PostCardProps) => {
   return (
     <PostCardLayout>
       <ImageWrapper onPress={postHandler}>
-        <Thumnail source={{ uri: post.images[0] }} />
+        <Thumnail source={{ uri: post.image }}>
+          <ThumnailText>{post.createdAt.slice(0, 10)}</ThumnailText>
+        </Thumnail>
       </ImageWrapper>
 
       <MetaDataContainer>
         <PostMetaDataContainer>
-          <PostTitle>{post.title}</PostTitle>
-          <PostLocation>{post.location}</PostLocation>
+          <PostTitle>
+            {post.title.length > 26
+              ? post.title.substring(0, 26) + ".."
+              : post.title}
+          </PostTitle>
+
+          <RowContainer>
+            <Flag code={post.countryCode.toUpperCase()} size={32} />
+            <PostLocation>{post.country}</PostLocation>
+          </RowContainer>
         </PostMetaDataContainer>
 
         <ProfileContainer>
           <ProfileWrapper>
-            <ProfileImage source={userProfilePath} />
+            <ProfileImage source={{ uri: post.profileImage }} />
             <UserNickname>{post.nickname}</UserNickname>
           </ProfileWrapper>
 
-          <LikeButton source={likeButtonImgPath} />
+          <RowContainer>
+            <LikeButton source={likeButtonImgPath} />
+            <UserLikes>{post.likes}</UserLikes>
+
+            <CommentButton source={commentButtonImgPath} />
+            <UserComments>{post.comments}</UserComments>
+          </RowContainer>
         </ProfileContainer>
       </MetaDataContainer>
     </PostCardLayout>
@@ -56,29 +72,41 @@ export default PostCard;
 
 const PostCardLayout = styled.View`
   position: relative;
-  width: ${SCREEN_WIDTH - 42}px;
+  width: ${SCREEN_WIDTH - 40}px;
   background-color: white;
   margin: 0 auto;
   border-radius: 30px;
+  flex-direction: column;
+  margin-bottom: 30px;
   shadow-color: #000;
   shadow-opacity: 0.25;
   shadow-radius: 3px;
   shadow-offset: 0px 2px;
   elevation: 2;
-  flex-direction: column;
-  overflow: hidden;
-  margin-bottom: 30px;
 `;
 
 const ImageWrapper = styled.TouchableOpacity`
   width: 100%;
   aspect-ratio: 1.1;
+  border-radius: 30px;
 `;
 
-const Thumnail = styled.Image`
+const Thumnail = styled.ImageBackground`
   width: 100%;
   height: 100%;
-  background-color: gray;
+  background-color: #bbe7f4;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+`;
+
+const ThumnailText = styled.Text`
+  font-weight: 400;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+  position: absolute;
+  bottom: 10;
+  right: 10;
 `;
 
 const MetaDataContainer = styled.View`
@@ -98,17 +126,17 @@ const PostMetaDataContainer = styled.View`
 
 const PostTitle = styled.Text`
   width: 100%;
-  font-size: 18px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   line-height: 20px;
   color: ${colors.mainFont};
 `;
 
 const PostLocation = styled.Text`
-  width: 100%;
   font-size: 16px;
   font-weight: 500;
   color: #73bbfb;
+  margin-left: 5px;
 `;
 
 const ProfileContainer = styled.View`
@@ -130,17 +158,44 @@ const ProfileImage = styled.Image`
   border-radius: 100px;
   border-color: #cccccc;
   border-width: 0.5px;
-  background-color: gray;
+  background-color: white;
 `;
 
 const UserNickname = styled.Text`
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   margin-left: 10px;
+  color: ${colors.subFont};
+`;
+
+const UserLikes = styled.Text`
+  font-size: 15px;
+  font-weight: 500;
+  margin-left: 5px;
+  margin-right: 10px;
+  color: ${colors.subFont};
+`;
+
+const UserComments = styled.Text`
+  font-size: 15px;
+  font-weight: 500;
+  margin-left: 5px;
+  color: ${colors.subFont};
 `;
 
 const LikeButton = styled.Image`
   width: 25px;
   height: 25px;
   resize-mode: contain;
+`;
+
+const CommentButton = styled.Image`
+  width: 25px;
+  height: 25px;
+  resize-mode: contain;
+`;
+
+const RowContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
 `;
