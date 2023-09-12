@@ -1,6 +1,6 @@
 import axiosBase from "./axios";
 
-import { errorLoging } from "../utils/getErrorMessage";
+import { errorLoging } from "../utils/errorHandler";
 import { Category } from "../types/category";
 
 /**

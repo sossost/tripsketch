@@ -4,7 +4,7 @@ import { StackNavigation } from "../types/RootStack";
 import { QUERY_KEY } from "../react-query/queryKey";
 import { followUser, unfollowUser } from "../services/user";
 import { User } from "../types/user";
-import { errorLoging } from "../utils/getErrorMessage";
+import { errorLoging } from "../utils/errorHandler";
 import { errorToastMessage, successToastMessage } from "../utils/toastMessage";
 import { LINK } from "../constants/link";
 import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../constants/message";

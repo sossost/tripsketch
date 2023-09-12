@@ -5,7 +5,7 @@ import axiosBase from "./axios";
 import { PostsData } from "../hooks/usePostQuery";
 import { getDataFromSecureStore } from "../utils/secureStore";
 import { STORE_KEY } from "../constants/store";
-import { errorLoging } from "../utils/getErrorMessage";
+import { errorLoging } from "../utils/errorHandler";
 
 /**
  * @description : 닉네임과 카테고리로 해당 유저의 카테고리에 해당하는 게시글 리스트를 요청하는 함수
