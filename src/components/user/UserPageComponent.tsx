@@ -1,6 +1,5 @@
-import React, { Suspense, useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { styled } from "styled-components/native";
-import { category } from "../../../data/mockdata";
 import { useGetPostsByNickname } from "../../hooks/usePostQuery";
 import {
   useGetCurrentUser,
@@ -13,19 +12,32 @@ import { StackNavigation } from "../../types/RootStack";
 import { Post } from "../../types/Post";
 import { useSocialControllerInUserPage } from "../../hooks/useFollowQuery";
 import { LINK } from "../../constants/link";
+import { useGetCategoriesByNickname } from "../../hooks/useCategoryQuery";
 
 import Profile from "./profile/Profile";
-import Category from "./category/Category";
+import CategoryList from "./category/CategoryList";
 import UserPageSkeletonUI from "./UserPageSkeletonUI";
 import Spacing from "../UI/header/Spacing";
 import PostCard from "../post/card/PostCard";
-import { useGetCategoriesByNickname } from "../../hooks/useCategoryQuery";
+import ErrorBoundary from "react-native-error-boundary";
+import ErrorFallback from "../UI/ErrorFallback";
 
 interface UserPageComponentProps {
   pageOwnerNickname?: string;
   variant: "myPage" | "userPage";
 }
 
+/**
+ * @description : 유저 페이지 컴포넌트
+ *
+ * @param pageOwnerNickname : 해당 페이지 주인의 닉네임
+ * @param variant : 페이지 종류 (마이페이지, 유저페이지)
+ *
+ * @author : 장윤수
+ * @update : 2023-09-12,
+ * @version 1.1.1,  에러바운더리 및 데이터 값이 없을때 분기처리 추가
+ * @see None,
+ */
 const UserPageComponent = ({
   pageOwnerNickname,
   variant,
@@ -42,7 +54,7 @@ const UserPageComponent = ({
     : currentUser;
 
   // 닉네임을 통해 해당 유저의 카테고리를 가져옴
-  const categoryList = useGetCategoriesByNickname(pageOwner.data!.nickname);
+  const categoryList = useGetCategoriesByNickname(pageOwner.data?.nickname);
 
   // 로그인한 유저정보를 통해 팔로잉 리스트를 가져옴
   const currentUserFollowingList =
@@ -58,7 +70,7 @@ const UserPageComponent = ({
   /** 팔로우 버튼 핸들러 */
   const handleFollowBtn = useSocialControllerInUserPage({
     currentUser: currentUser.data,
-    pageOwner: pageOwner.data!,
+    pageOwner: pageOwner.data,
   });
 
   // 마이페이지 인경우 프로필 편집 페이지로 이동, 유저페이지 인경우 팔로우 버튼 핸들러 실행
@@ -72,7 +84,7 @@ const UserPageComponent = ({
 
   // 닉네임을 통해 해당 유저의 게시글을 가져옴
   const { posts, hasNextPage, fetchNextPage } = useGetPostsByNickname(
-    pageOwner.data!.nickname,
+    pageOwner.data?.nickname,
     selectedCategory
   );
 
@@ -84,41 +96,43 @@ const UserPageComponent = ({
   }, [fetchNextPage, hasNextPage]);
 
   return (
-    <UserPageLayout
-      data={posts}
-      renderItem={({ item }) => {
-        return <PostCard key={(item as Post).id} post={item as Post} />;
-      }}
-      alwaysBounceVertical={false}
-      onEndReached={handleEndReached}
-      onEndReachedThreshold={0.1}
-      ListHeaderComponent={() => {
-        // 유저데이터 상태에 따라 UI 분기처리
-        if (!pageOwner.data || !categoryList.data) {
-          return <UserPageSkeletonUI />;
-        }
-        return (
-          <>
-            <Profile
-              variant={variant}
-              user={pageOwner.data}
-              onPress={handleButtonClick}
-              isFollowing={isFollowing}
-            />
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <UserPageLayout
+        data={posts}
+        renderItem={({ item }) => {
+          return <PostCard key={(item as Post).id} post={item as Post} />;
+        }}
+        alwaysBounceVertical={false}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.1}
+        ListHeaderComponent={() => {
+          // 유저데이터 상태에 따라 UI 분기처리
+          if (!pageOwner.data || !categoryList?.data) {
+            return <UserPageSkeletonUI />;
+          }
+          return (
+            <>
+              <Profile
+                variant={variant}
+                user={pageOwner.data}
+                onPress={handleButtonClick}
+                isFollowing={isFollowing}
+              />
 
-            <Spacing direction="vertical" size={15} />
+              <Spacing direction="vertical" size={15} />
 
-            <Category
-              categoryList={categoryList.data}
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
-            />
+              <CategoryList
+                categoryList={categoryList.data}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+              />
 
-            <Spacing direction="vertical" size={15} />
-          </>
-        );
-      }}
-    />
+              <Spacing direction="vertical" size={15} />
+            </>
+          );
+        }}
+      />
+    </ErrorBoundary>
   );
 };
 
