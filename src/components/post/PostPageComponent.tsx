@@ -216,10 +216,6 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
 
   const navigation = useNavigation<StackNavigation>();
 
-  // 게시물 생성 시 ISO 8601 형식으로 변환
-  const startDateISO: Date = startDate ? new Date(startDate) : new Date();
-  const endDateISO: Date = endDate ? new Date(endDate) : new Date();
-
   // 입력 필드 값이 변경될 때 호출하는 함수
   const inputChangeHandler = (name: string, value: string) => {
     if (name === "title") {

@@ -1,6 +1,7 @@
 import { useCreatePost } from "../../../hooks/usePostQuery";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../types/RootStack";
+import React, { useEffect } from "react";
 import Toast from "react-native-toast-message";
 
 type PostDataProps = {
@@ -40,6 +41,12 @@ const usePostTrip = ({
 }: PostDataProps) => {
   const createPostMutation = useCreatePost();
   const navigation = useNavigation<StackNavigation>();
+
+  useEffect(() => {
+    if (createPostMutation.isLoading) {
+      Toast.show({ type: "info", text1: "데이터 전송 중입니다." });
+    }
+  }, [createPostMutation.isLoading]);
 
   const submitPost = async () => {
     try {
