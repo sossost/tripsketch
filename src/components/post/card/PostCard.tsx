@@ -31,7 +31,7 @@ const PostCard = ({ post }: PostCardProps) => {
   const navigation = useNavigation<StackNavigation>();
 
   const postHandler = () => {
-    navigation.navigate("TripDetail", { postId: post.id });
+    navigation.navigate("PostDetail", { postId: post.id });
   };
 
   return (

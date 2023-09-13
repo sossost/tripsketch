@@ -7,20 +7,12 @@ import {
   TouchableOpacity,
 } from "react-native";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import PostView from "../components/post/PostView";
-import Comment from "../components/post/Comment";
-import CommentBest from "../components/post/CommentBest";
-import LikesAndCommentText from "../components/post/LikesAndCommentText";
-import { useRoute, RouteProp } from "@react-navigation/native";
-import { RootStackParamList } from "../types/RootStack";
+import PostView from "./PostView";
+import Comment from "./Comment";
+import CommentBest from "./CommentBest";
+import LikesAndCommentText from "./LikesAndCommentText";
 
-type TripDetailScreenRouteProp = RouteProp<RootStackParamList, "TripDetail">;
-
-const TripDetail = () => {
-  // 라우터에서 받아온 파라미터 값 저장
-  const route = useRoute<TripDetailScreenRouteProp>();
-  const { postId } = route.params;
-
+const PostDetailPageComponent = ({ postId }: { postId: string }) => {
   // 바텀시트 높이 조절하는 변수
   const sheetRef = useRef<BottomSheet>(null);
   const snapPoints = useMemo(() => ["3%", "50%", "90%"], []);
@@ -111,4 +103,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TripDetail;
+export default PostDetailPageComponent;
