@@ -15,6 +15,7 @@ import EditProfilePage from "../screens/EditProfilePage";
 import CommonHeaderLeft from "../components/UI/header/HeaderLeft";
 import Toast from "react-native-toast-message";
 import SocialPage from "../screens/SocialPage";
+import AuthConfirmModal from "../components/auth/AuthConfirmModal";
 import UpdatePost from "../screens/UpdatePost";
 
 const Stack = createStackNavigator();
@@ -69,6 +70,13 @@ export default function RootStack() {
             <Stack.Screen
               name={LINK.EDIT_PROFILE_PAGE}
               component={EditProfilePage}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={LINK.AUTH_CONFIRM_MODAL}
+              component={AuthConfirmModal}
               options={{
                 headerShown: false,
               }}

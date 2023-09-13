@@ -10,7 +10,7 @@ import { LINK } from "../constants/link";
 import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../constants/message";
 
 interface SocialControllerInSocialPageProps {
-  currentUser: User | undefined;
+  currentUser: User | null;
   pageOwnerNickname: string;
   variant: "팔로워" | "팔로잉";
 }
@@ -126,8 +126,8 @@ export const useSocialControllerInSocialPage = ({
 };
 
 interface SocialControllerInUserPageProps {
-  currentUser: User | undefined;
-  pageOwner: User | undefined;
+  currentUser: User | null;
+  pageOwner: User | null;
 }
 
 /**
@@ -138,7 +138,7 @@ interface SocialControllerInUserPageProps {
  *
  * @author : 장윤수
  * @update : 2023-09-12, 장윤수,
- * @version 1.1.0, 로직 성공, 에러 메시지 상수화
+ * @version 1.1.1, 데이터 falsy타입 undefined 대신 null 로 수정
  * @see None,
  */
 export const useSocialControllerInUserPage = ({
@@ -156,7 +156,7 @@ export const useSocialControllerInUserPage = ({
     },
     {
       onMutate: (pageOwner) => {
-        const prevData: User[] | undefined = queryClient.getQueryData([
+        const prevData: User[] | null | undefined = queryClient.getQueryData([
           QUERY_KEY.FOLLOWING,
           currentUser!.nickname,
         ]);
@@ -186,7 +186,7 @@ export const useSocialControllerInUserPage = ({
     },
     {
       onMutate: (pageOwner) => {
-        const prevData: User[] | undefined = queryClient.getQueryData([
+        const prevData: User[] | null | undefined = queryClient.getQueryData([
           QUERY_KEY.FOLLOWING,
           currentUser!.nickname,
         ]);
