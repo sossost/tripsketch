@@ -21,7 +21,7 @@ export default function BottomTab() {
       }}
     >
       <Tabs.Screen
-        name={LINK.HOME}
+        name={LINK.MAIN}
         component={Home}
         options={{
           title: "홈",

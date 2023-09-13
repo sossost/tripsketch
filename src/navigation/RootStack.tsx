@@ -5,7 +5,6 @@ import { LINK } from "../constants/link";
 
 import TripDetail from "../screens/TripDetail";
 import KakaoLoginPage from "../components/auth/KakaoLoginPage";
-import KakaoLoginButton from "../components/auth/KakaoLoginButton";
 import BottomTab from "./BottomTab";
 import SplashScreen from "../components/common/SplashScreen";
 import CreatePost from "../screens/CreatePost";
@@ -15,7 +14,6 @@ import EditProfilePage from "../screens/EditProfilePage";
 import CommonHeaderLeft from "../components/UI/header/HeaderLeft";
 import Toast from "react-native-toast-message";
 import SocialPage from "../screens/SocialPage";
-import AuthConfirmModal from "../components/auth/AuthConfirmModal";
 import UpdatePost from "../screens/UpdatePost";
 
 const Stack = createStackNavigator();
@@ -27,13 +25,9 @@ export default function RootStack() {
         <SplashScreen>
           <Stack.Navigator initialRouteName={LINK.HOME}>
             <Stack.Screen
-              name="홈"
+              name={LINK.HOME}
               component={BottomTab}
               options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="KakaoLoginButton"
-              component={KakaoLoginButton}
             />
             <Stack.Screen
               name={LINK.KAKAO_LOGIN_PAGE}
@@ -70,13 +64,6 @@ export default function RootStack() {
             <Stack.Screen
               name={LINK.EDIT_PROFILE_PAGE}
               component={EditProfilePage}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name={LINK.AUTH_CONFIRM_MODAL}
-              component={AuthConfirmModal}
               options={{
                 headerShown: false,
               }}
