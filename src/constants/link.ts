@@ -10,4 +10,5 @@ export const LINK = {
   FOLLOWING_PAGE: "FollowingPage",
   EDIT_PROFILE_PAGE: "EditProfilePage",
   NOTIFICATION_PAGE: "NotificationPage",
+  AUTH_CONFIRM_MODAL: "AuthConfirmModal",
 };
