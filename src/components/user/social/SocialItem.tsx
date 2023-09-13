@@ -10,12 +10,25 @@ type SocialItemProps = {
   user: User;
   isFollowing: boolean | undefined;
   followBtnHandler: (nickname: string, isFollowing: boolean) => Promise<void>;
+  isMe?: boolean;
 };
 
+/**
+ * @description : 소셜(팔로잉,팔로우) 아이템 컴포넌트
+ *
+ * @param userList : 팔로잉 or 팔로우 유저 리스트
+ * @param followBtnHandler : 팔로우 버튼 핸들러
+ *
+ * @author : 장윤수
+ * @update : 2023-09-13,
+ * @version 1.1.0, 소셜리스트에 유저가 나일 경우 팔로우 버튼이 보이지 않도록 수정
+ * @see None,
+ */
 const SocialItem = ({
   user,
   isFollowing = false,
   followBtnHandler,
+  isMe,
 }: SocialItemProps) => {
   const navigation = useNavigation<StackNavigation>();
 
@@ -36,10 +49,12 @@ const SocialItem = ({
           <Introduction>{user.introduction}</Introduction>
         </ProfileTextWrapper>
       </ProfileWrapper>
-      <SocialButton
-        isFollowing={isFollowing}
-        onPress={() => followBtnHandler(user.nickname, isFollowing)}
-      />
+      {!isMe && (
+        <SocialButton
+          isFollowing={isFollowing}
+          onPress={() => followBtnHandler(user.nickname, isFollowing)}
+        />
+      )}
     </SocialItemContainer>
   );
 };
