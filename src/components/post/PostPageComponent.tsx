@@ -403,6 +403,12 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
     }
   };
 
+  // 선택한 이미지 리스트에서 제거하기
+  const deleteImage = (deleteImageUrl: string) => {
+    const updatedImageList = image.filter((item) => item !== deleteImageUrl);
+    setImage(updatedImageList);
+  };
+
   // react-native-calendars 패키지를 사용하여 달력을 구현 --------
   /** 날짜 클릭 핸들러 */
   const dayPressHandler = (day: { dateString: string }) => {
@@ -747,11 +753,19 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
             </ImageTitleContainer>
             <ImageViewContainer imageCount={image.length}>
               {image.map((imageUri, index) => (
-                <Image
-                  key={index}
-                  source={{ uri: imageUri }}
-                  style={{ width: imageWidth, height: imageWidth }}
-                />
+                <ImageInnerContainer>
+                  <Image
+                    key={index}
+                    source={{ uri: imageUri }}
+                    style={{ width: imageWidth, height: imageWidth }}
+                  />
+                  <DeleteBox>
+                    <DeleteXbutton
+                      onPress={() => deleteImage(imageUri)}
+                      color={"white"}
+                    ></DeleteXbutton>
+                  </DeleteBox>
+                </ImageInnerContainer>
               ))}
             </ImageViewContainer>
             {/* <TouchableOpacity onPress={() => submitImage(image)}>
@@ -996,6 +1010,20 @@ const ImageViewContainer = styled.View<{ imageCount: number }>`
   margin: 10px 0px;
 `;
 
+const ImageInnerContainer = styled.View`
+  position: relative;
+`;
+
+const DeleteBox = styled.View`
+  position: absolute;
+  /* width: 15px;
+  height: 15px;
+  background-color: rgba(0, 0, 0, 0.4); */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const PickImageButton = styled.TouchableOpacity`
   width: 60px;
   background-color: ${colors.primary};
@@ -1038,7 +1066,7 @@ const TagList = styled.View`
 `;
 const TagItem = styled.View`
   background-color: #ececec;
-  padding: 3px 7px;
+  padding: 3px 3px 3px 7px;
   border-radius: 5px;
 
   display: flex;
@@ -1049,7 +1077,7 @@ const TagItem = styled.View`
 const TagItemText = styled.Text`
   color: #888;
   font-size: 13px;
-  margin-right: 5px;
+  margin-right: 0px;
 `;
 
 /** 전체 공개, 비공개 설정 묶는 View */
