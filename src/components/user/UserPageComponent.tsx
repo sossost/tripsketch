@@ -21,6 +21,10 @@ import Spacing from "../UI/header/Spacing";
 import PostCard from "../post/card/PostCard";
 import ErrorBoundary from "react-native-error-boundary";
 import ErrorFallback from "../UI/ErrorFallback";
+import { errorToastMessage } from "../../utils/toastMessage";
+import NonePosts from "../post/NonePosts";
+import Header from "../UI/header/Header";
+import Title from "../UI/header/Title";
 
 interface UserPageComponentProps {
   pageOwnerNickname?: string;
@@ -34,8 +38,8 @@ interface UserPageComponentProps {
  * @param variant : 페이지 종류 (마이페이지, 유저페이지)
  *
  * @author : 장윤수
- * @update : 2023-09-12,
- * @version 1.1.1,  에러바운더리 및 데이터 값이 없을때 분기처리 추가
+ * @update : 2023-09-13,
+ * @version 1.2.1, 커스텀 헤더 적용, 데이터 없을시 분기처리 추가
  * @see None,
  */
 const UserPageComponent = ({
@@ -83,10 +87,8 @@ const UserPageComponent = ({
   };
 
   // 닉네임을 통해 해당 유저의 게시글을 가져옴
-  const { posts, hasNextPage, fetchNextPage } = useGetPostsByNickname(
-    pageOwner.data?.nickname,
-    selectedCategory
-  );
+  const { posts, hasNextPage, fetchNextPage, postsIsLoading } =
+    useGetPostsByNickname(pageOwner.data?.nickname, selectedCategory);
 
   /** 스크롤 끝까지 내렸을때 다음페이지 패치하는 핸들러 */
   const handleEndReached = useCallback(() => {
@@ -95,8 +97,13 @@ const UserPageComponent = ({
     }
   }, [fetchNextPage, hasNextPage]);
 
+  if (pageOwner.isError) {
+    errorToastMessage("유저 정보를 가져오는데 실패했습니다.");
+  }
+
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Header left={<Title title={"마이페이지"} />} />
       <UserPageLayout
         data={posts}
         renderItem={({ item }) => {
@@ -128,6 +135,8 @@ const UserPageComponent = ({
               />
 
               <Spacing direction="vertical" size={15} />
+
+              {!postsIsLoading && posts.length === 0 && <NonePosts />}
             </>
           );
         }}
