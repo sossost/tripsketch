@@ -1,5 +1,6 @@
 export const LINK = {
   HOME: "Home",
+  MAIN: "Main",
   KAKAO_LOGIN_PAGE: "KakaoLoginPage",
   EXPLORE_PAGE: "ExplorePage",
   TRIP_DETAIL_PAGE: "TripDetail",
@@ -10,5 +11,5 @@ export const LINK = {
   FOLLOWING_PAGE: "FollowingPage",
   EDIT_PROFILE_PAGE: "EditProfilePage",
   NOTIFICATION_PAGE: "NotificationPage",
-  AUTH_CONFIRM_MODAL: "AuthConfirmModal",
+  AUTH_CONFIRM: "AuthConfirm",
 };
