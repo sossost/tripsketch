@@ -14,6 +14,8 @@ import EditProfilePage from "../screens/EditProfilePage";
 import CommonHeaderLeft from "../components/UI/header/HeaderLeft";
 import Toast from "react-native-toast-message";
 import SocialPage from "../screens/SocialPage";
+import UpdatePost from "../screens/UpdatePost";
+
 const Stack = createStackNavigator();
 
 export default function RootStack() {
@@ -44,6 +46,7 @@ export default function RootStack() {
               })}
             />
             <Stack.Screen name={LINK.CREATE_POST_PAGE} component={CreatePost} />
+            <Stack.Screen name={LINK.UPDATE_POST_PAGE} component={UpdatePost} />
             <Stack.Screen
               name={LINK.FOLLOWER_PAGE}
               component={SocialPage}

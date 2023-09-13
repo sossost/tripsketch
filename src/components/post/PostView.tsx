@@ -10,17 +10,16 @@ import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useGetPostsById } from "../../hooks/usePostQuery";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "../../types/RootStack";
 import PostViewSkeleton from "./components/PostViewSkeleton";
 import Slick from "react-native-slick";
 
 const PostView = ({ postId }: { postId: string }) => {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
-  const settingBox = () => {
-    setIsSettingOpen(!isSettingOpen);
-  };
-
   const { postData, isLoading, isError } = useGetPostsById(postId);
   const { data: userData } = useGetCurrentUser();
+  const navigation = useNavigation<StackNavigation>();
 
   if (isLoading) {
     return <PostViewSkeleton />;
@@ -34,6 +33,10 @@ const PostView = ({ postId }: { postId: string }) => {
     return <Text>Data not available.</Text>;
   }
 
+  const settingBox = () => {
+    setIsSettingOpen(!isSettingOpen);
+  };
+
   // ISO 날짜, 시간 형식에서 날짜형으로 변환
   const convertDate = (getDate: string) => {
     const dateObject = new Date(getDate);
@@ -43,6 +46,11 @@ const PostView = ({ postId }: { postId: string }) => {
       .toString()
       .padStart(2, "0")}-${dateObject.getDate().toString().padStart(2, "0")}`;
     return customFormattedDate;
+  };
+
+  const postUpdateHandler = () => {
+    navigation.navigate("UpdatePost", { postId: postData.id });
+    setIsSettingOpen(!isSettingOpen);
   };
 
   return (
@@ -66,7 +74,9 @@ const PostView = ({ postId }: { postId: string }) => {
             ) : null}
             {isSettingOpen && (
               <View style={styles.setting_box}>
-                <Text style={styles.setting_box_text}>수정하기</Text>
+                <TouchableOpacity onPress={postUpdateHandler}>
+                  <Text style={styles.setting_box_text}>수정하기</Text>
+                </TouchableOpacity>
                 <Text style={styles.setting_box_text}>삭제하기</Text>
               </View>
             )}
