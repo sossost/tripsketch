@@ -15,7 +15,7 @@ interface PostCardProps {
 /**
  * @description : 여행일기 카드 컴포넌트
  * @author : 이수현
- * @update : 2023-09-13, 장윤수 : 스타일 에러 수정
+ * @update : 2023-09-14, 장윤수 : 스타일 에러 수정
  * @version 1.0.1,
  * @see None,
  */
@@ -117,8 +117,8 @@ const ThumnailText = styled.Text`
   color: rgba(255, 255, 255, 0.7);
   text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
   position: absolute;
-  bottom: 10;
-  right: 10;
+  bottom: 10px;
+  right: 10px;
 `;
 
 const MetaDataContainer = styled.View`
