@@ -127,7 +127,7 @@ export const useSocialControllerInSocialPage = ({
 
 interface SocialControllerInUserPageProps {
   currentUser: User | null;
-  pageOwner: User | null;
+  profileUser: User | null;
 }
 
 /**
@@ -138,12 +138,12 @@ interface SocialControllerInUserPageProps {
  *
  * @author : 장윤수
  * @update : 2023-09-12, 장윤수,
- * @version 1.1.1, 데이터 falsy타입 undefined 대신 null 로 수정
+ * @version 1.1.2, 변수명 좀더 명확하게 수정
  * @see None,
  */
 export const useSocialControllerInUserPage = ({
   currentUser,
-  pageOwner,
+  profileUser,
 }: SocialControllerInUserPageProps) => {
   const queryClient = useQueryClient();
 
@@ -151,17 +151,17 @@ export const useSocialControllerInUserPage = ({
 
   /** 팔로우 옵티미스틱 업데이트하는 뮤테이션 훅 */
   const followMutation = useMutation(
-    async (pageOwner: User) => {
-      await followUser(pageOwner.nickname);
+    async (profileUser: User) => {
+      await followUser(profileUser.nickname);
     },
     {
-      onMutate: (pageOwner) => {
+      onMutate: (profileUser) => {
         const prevData: User[] | null | undefined = queryClient.getQueryData([
           QUERY_KEY.FOLLOWING,
           currentUser!.nickname,
         ]);
 
-        const newData = [...(prevData ?? []), pageOwner];
+        const newData = [...(prevData ?? []), profileUser];
         queryClient.setQueryData(
           [QUERY_KEY.FOLLOWING, currentUser!.nickname],
           newData
@@ -169,7 +169,7 @@ export const useSocialControllerInUserPage = ({
       },
       onSuccess: () => {
         successToastMessage(
-          `${pageOwner?.nickname}님을 ${SUCCESS_MESSAGE.FOLLOW}`
+          `${profileUser?.nickname}님을 ${SUCCESS_MESSAGE.FOLLOW}`
         );
       },
       onError: (error: unknown) => {
@@ -181,18 +181,18 @@ export const useSocialControllerInUserPage = ({
 
   /** 언팔로우 옵티미스틱 업데이트하는 뮤테이션 훅 */
   const unfollowMutation = useMutation(
-    async (pageOwner: User) => {
-      await unfollowUser(pageOwner.nickname);
+    async (profileUser: User) => {
+      await unfollowUser(profileUser.nickname);
     },
     {
-      onMutate: (pageOwner) => {
+      onMutate: (profileUser) => {
         const prevData: User[] | null | undefined = queryClient.getQueryData([
           QUERY_KEY.FOLLOWING,
           currentUser!.nickname,
         ]);
 
         const newData = prevData?.filter((user) => {
-          return user.nickname !== pageOwner.nickname;
+          return user.nickname !== profileUser.nickname;
         });
         queryClient.setQueryData(
           [QUERY_KEY.FOLLOWING, currentUser!.nickname],
@@ -201,7 +201,7 @@ export const useSocialControllerInUserPage = ({
       },
       onSuccess: () => {
         successToastMessage(
-          `${pageOwner?.nickname}님 ${SUCCESS_MESSAGE.UNFOLLOW}`
+          `${profileUser?.nickname}님 ${SUCCESS_MESSAGE.UNFOLLOW}`
         );
       },
       onError: (error: unknown) => {
@@ -214,7 +214,7 @@ export const useSocialControllerInUserPage = ({
   /** 팔로우 버튼 핸들러 */
   const followBtnHandler = async (isFollowing: boolean) => {
     // 페이지 주인의 데이터 없으면 리턴
-    if (!pageOwner) return;
+    if (!profileUser) return;
 
     // 인증정보 없으면 로그인 페이지로 이동
     if (!currentUser) {
@@ -225,13 +225,13 @@ export const useSocialControllerInUserPage = ({
 
     // 팔로우 여부에따라 팔로우, 언팔로우 뮤테이션 실행
     if (isFollowing) {
-      await unfollowMutation.mutateAsync(pageOwner);
+      await unfollowMutation.mutateAsync(profileUser);
     } else {
-      await followMutation.mutateAsync(pageOwner);
+      await followMutation.mutateAsync(profileUser);
     }
 
     // 관련 데이터 캐시 무효화
-    queryClient.invalidateQueries([QUERY_KEY.USER, pageOwner.nickname]);
+    queryClient.invalidateQueries([QUERY_KEY.USER, profileUser.nickname]);
     queryClient.invalidateQueries([QUERY_KEY.FOLLOWING, currentUser.nickname]);
   };
 
