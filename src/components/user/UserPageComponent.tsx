@@ -39,7 +39,7 @@ interface UserPageComponentProps {
  *
  * @author : 장윤수
  * @update : 2023-09-13,
- * @version 1.2.1, 커스텀 헤더 적용, 데이터 없을시 분기처리 추가
+ * @version 1.2.2, 커스텀 헤더 롤백
  * @see None,
  */
 const UserPageComponent = ({
@@ -103,7 +103,6 @@ const UserPageComponent = ({
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Header left={<Title title={"마이페이지"} />} />
       <UserPageLayout
         data={posts}
         renderItem={({ item }) => {
