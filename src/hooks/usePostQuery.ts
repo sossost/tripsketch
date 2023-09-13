@@ -29,7 +29,7 @@ export interface InfinitePostsData {
  *
  * @author : 장윤수
  * @update : 2023-09-12,
- * @version 1.0.1, 닉네임 undefined일 경우 분기처리 추가
+ * @version 1.1.1, isLoading, isError 추가
  * @see None,
  */
 export const useGetPostsByNickname = (
@@ -37,7 +37,13 @@ export const useGetPostsByNickname = (
   category: string
 ) => {
   const postsPerPage = 5;
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isLoading: postsIsLoading,
+    isError: postsIsError,
+  } = useInfiniteQuery(
     [QUERY_KEY.POSTS, nickname, category],
     ({ pageParam = 1 }) => {
       return getPostsByNickname(nickname, category, pageParam, postsPerPage);
@@ -56,7 +62,7 @@ export const useGetPostsByNickname = (
 
   const posts = data?.pages.flatMap((page) => page?.posts) || [];
 
-  return { posts, fetchNextPage, hasNextPage };
+  return { posts, fetchNextPage, hasNextPage, postsIsLoading, postsIsError };
 };
 
 export const useGetPostsById = (id: string) => {
