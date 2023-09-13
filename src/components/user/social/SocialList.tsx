@@ -2,6 +2,7 @@ import { FlatList } from "react-native";
 import { User } from "../../../types/user";
 
 import SocialItem from "./SocialItem";
+import { styled } from "styled-components/native";
 
 interface SocialListProps {
   userList: User[];
@@ -17,7 +18,7 @@ interface SocialListProps {
  *
  * @author : 장윤수
  * @update : 2023-09-13,
- * @version 1.1.1, 소셜리스트에 유저가 나일 경우 팔로우 버튼이 보이지 않도록 수정
+ * @version 1.1.2, FlatList 사용할경우 렌더링 누락되는 버그 있어서 map으로 변경
  * @see None,
  */
 const SocialList = ({
@@ -26,11 +27,9 @@ const SocialList = ({
   currentUserNickname,
 }: SocialListProps) => {
   return (
-    <FlatList
-      data={userList}
-      renderItem={(userData) => {
-        const user = userData.item;
-        const isFollowing = userData.item.isFollowing;
+    <SocialItemContainer>
+      {userList.map((user) => {
+        const isFollowing = user.isFollowing;
         const isMe = user.nickname === currentUserNickname ? true : false;
         return (
           <SocialItem
@@ -40,10 +39,14 @@ const SocialList = ({
             isMe={isMe}
           />
         );
-      }}
-      alwaysBounceVertical={false}
-    />
+      })}
+    </SocialItemContainer>
   );
 };
 
 export default SocialList;
+
+const SocialItemContainer = styled.ScrollView`
+  flex-direction: column;
+  margin-top: 10px;
+`;
