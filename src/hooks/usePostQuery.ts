@@ -2,12 +2,14 @@ import { QUERY_KEY } from "../react-query/queryKey";
 import {
   getPostsByNickname,
   getPostsById,
+  getPostsAndComments,
+  getPostsAndCommentsForGuest,
   createPost,
   postLike,
   postUnlike,
 } from "../services/post";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
-import { Post } from "../types/Post";
+import { Post, GetPost } from "../types/Post";
 
 export interface PostsData {
   posts: Post[];
@@ -73,6 +75,30 @@ export const useGetPostsById = (id: string) => {
   } = useQuery<Post | undefined>(["postId", id], () => getPostsById(id));
 
   return { postData, isLoading, isError };
+};
+
+export const useGetPostAndComments = (postId: string) => {
+  const {
+    data: postAndCommentData,
+    isLoading,
+    isError,
+  } = useQuery<GetPost | undefined>(["postAndComment", postId], () =>
+    getPostsAndComments(postId)
+  );
+
+  return { postAndCommentData, isLoading, isError };
+};
+
+export const useGetPostAndCommentsForGuest = (postId: string) => {
+  const {
+    data: postAndCommentGuestData,
+    isLoading,
+    isError,
+  } = useQuery<GetPost | undefined>(["postAndCommentGuest", postId], () =>
+    getPostsAndCommentsForGuest(postId)
+  );
+
+  return { postAndCommentGuestData, isLoading, isError };
 };
 
 export const useCreatePost = () => {

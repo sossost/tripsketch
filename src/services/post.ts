@@ -1,4 +1,4 @@
-import { Post } from "../types/Post";
+import { Post, GetPost } from "../types/Post";
 import { CreatePost } from "../types/Post";
 import { API_PATH } from "../constants/path";
 import axiosBase from "./axios";
@@ -63,9 +63,43 @@ export const getPostsById = async (id: string) => {
   }
 };
 
-export const createPost = async (postData: CreatePost) => {
+export const getPostsAndComments = async (postId: string) => {
   const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
 
+  try {
+    const response = await axiosBase.get<GetPost>(
+      `${API_PATH.TRIP.GET.TRIP_AND_COMMENT.replace(":tripId", postId)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
+    }
+    return response.data;
+  } catch (error: unknown) {
+    errorLoging(error, "게시글 상세페이지 요청 에러는🤔");
+  }
+};
+
+export const getPostsAndCommentsForGuest = async (postId: string) => {
+  try {
+    const response = await axiosBase.get<GetPost>(
+      `${API_PATH.TRIP.GET.TRIP_AND_COMMENT_GUEST.replace(":tripId", postId)}`
+    );
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
+    }
+    return response.data;
+  } catch (error: unknown) {
+    errorLoging(error, "게시글 상세페이지 요청 에러는🤔");
+  }
+};
+
+export const createPost = async (postData: CreatePost) => {
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
   try {
     const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP, postData, {
       headers: {
