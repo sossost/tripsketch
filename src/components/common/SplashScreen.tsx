@@ -8,13 +8,23 @@ import React, {
 import { Animated, Dimensions, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import SplashBack, { splashBackProps } from "./SplashBack";
+import SplashBack from "./SplashBack";
 import KakaoLoginButton from "../auth/KakaoLoginButton";
 import CustomButton from "./CustomButton";
 import { FadeOutContext } from "../../context/fadeOutContext";
+import { useGetCurrentUser } from "../../hooks/useUserQuery";
 const splashBgColor = "#fff";
 
+/**
+ * @description : 소셜 페이지 컴포넌트
+ * @author : 황반석
+ * @update : 2023-09-13,
+ * @version 1.1.0, 스플래쉬 스크린 중에 로그인 되어있으면 바로 넘어가도록 수정
+ * @see None,
+ */
 const SplashScreen = ({ children }: { children: ReactNode }) => {
+  const currentUser = useGetCurrentUser();
+
   const { fadeOut, setFadeOut } = useContext(FadeOutContext);
   const [isGone, setIsGone] = useState(false);
 
@@ -35,6 +45,16 @@ const SplashScreen = ({ children }: { children: ReactNode }) => {
   const opacityTitle = useRef(new Animated.Value(1)).current;
   const opacityContent = useRef(new Animated.Value(0)).current;
   const startDisappear = useRef(new Animated.Value(1)).current;
+
+  // 로그인 되어있으면 버튼 없이 바로 넘어가기
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (currentUser.data) {
+        setFadeOut(true);
+      }
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [currentUser.data]);
 
   useEffect(() => {
     setTimeout(() => {
