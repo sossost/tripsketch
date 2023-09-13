@@ -9,18 +9,34 @@ type CategoryProps = {
   setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
 };
 
+/**
+ * @description : 카테고리 리스트 컴포넌트
+ *
+ * @param categoryList : 카테고리 리스트 배열
+ * @param selectedCategory : 현재 선택된 카테고리
+ * @param setSelectedCategory : 현재 선택된 카테고리를 변경하는 함수
+ *
+ * @author : 장윤수
+ * @update : 2023-09-13,
+ * @version 1.0.1, 카테고리 데이터 없을시 렌더링 안되도록 수정
+ * @see None,
+ */
 const CategoryList = ({
   categoryList,
   selectedCategory,
   setSelectedCategory,
 }: CategoryProps) => {
-  const categoryNameList = Object.values(categoryList).map(
-    (item) => item.categoryName
-  );
+  const categoryNameList =
+    categoryList.length !== 0
+      ? [
+          "전체보기",
+          ...Object.values(categoryList).map((item) => item.categoryName),
+        ]
+      : [];
 
   return (
     <CategoryContainer>
-      {["전체보기", ...categoryNameList].map((item, index) => {
+      {categoryNameList.map((item, index) => {
         const isClicked = item === selectedCategory;
 
         return (
