@@ -10,6 +10,8 @@ import { KAKAO_CLIENT_ID } from "@env";
 import { setDataToSecureStore } from "../../utils/secureStore";
 import { STORE_KEY } from "../../constants/store";
 import { errorLoging } from "../../utils/errorHandler";
+import { StackNavigation } from "../../types/RootStack";
+import { LINK } from "../../constants/link";
 
 import ErrorBoundary from "react-native-error-boundary";
 import ErrorFallback from "../UI/ErrorFallback";
@@ -20,13 +22,13 @@ const OAUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLI
 /**
  * @description : 카카오 OAuth 로그인 페이지 컴포넌트
  * @author : 이수현
- * @update : 2023-09-12, 장윤수, 필요없는 로직 삭제 리팩토링
- * @version 1.0.1,
+ * @update : 2023-09-12,
+ * @version 1.0.2, 장윤수 : 비동기 처리 누락 수정
  * @see None,
  */
 
 const KaKaoLogin = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigation>();
   const queryClient = useQueryClient();
 
   /** 토큰 발급받는 함수 */
@@ -56,14 +58,14 @@ const KaKaoLogin = () => {
   // 카카오 로그인 진행하는 화면
   const KakaoLoginWebView = async (url: string) => {
     // OAuth url에서 토근 발급 받은 후 스토어에 저장
-    requestToken(OAUTH_URL);
+    await requestToken(OAUTH_URL);
 
     // 현재 로그인한 유저 정보 요청 후 쿼리에 저장
     const userInfo = await getCurrentUser();
     queryClient.setQueryData([QUERY_KEY.CURRENT_USER], userInfo);
 
     // 홈 화면으로 이동
-    (navigation.navigate as (route: string) => void)("Home");
+    navigation.push(LINK.HOME);
   };
 
   return (

@@ -21,9 +21,10 @@ export default function BottomTab() {
       }}
     >
       <Tabs.Screen
-        name={LINK.HOME}
+        name={LINK.MAIN}
         component={Home}
         options={{
+          headerShown: false,
           title: "홈",
           tabBarIcon: ({ color, size }) => (
             <Feather name="home" color={color} size={size} />

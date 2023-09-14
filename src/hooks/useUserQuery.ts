@@ -31,7 +31,7 @@ export const useGetCurrentUser = () => {
  * @param nickname : 유저닉네임
  *
  * @author : 장윤수
- * @update : 2023-09-13,  쿼리데이터 undefined대신 null 반환하도록 수정
+ * @update : 2023-09-14,  쿼리 옵션 추가
  * @version 1.0.1,
  * @see None,
  */
@@ -40,8 +40,14 @@ export const useGetUserByNickname = (nickname: string) => {
     data = null,
     isLoading,
     isError,
-  } = useQuery<User | null>([QUERY_KEY.USER, nickname], () =>
-    getUserByNickname(nickname)
+  } = useQuery<User | null>(
+    [QUERY_KEY.USER, nickname],
+    () => getUserByNickname(nickname),
+    {
+      enabled: !!nickname,
+      suspense: true,
+      useErrorBoundary: true,
+    }
   );
 
   return { data, isLoading, isError };
@@ -54,7 +60,7 @@ export const useGetUserByNickname = (nickname: string) => {
  * @param pageUserNickname : 페이지 유저의 닉네임
  *
  * @author : 장윤수
- * @update : 2023-09-12,  쿼리데이터 undefined대신 null 반환하도록 수정
+ * @update : 2023-09-14,  쿼리 옵션 추가
  * @version 1.0.1,
  * @see None,
  */
@@ -81,7 +87,11 @@ export const useGetSocialList = (
     data = null,
     isLoading,
     isError,
-  } = useQuery<User[] | null>(queryKey, queryFn);
+  } = useQuery<User[] | null>(queryKey, queryFn, {
+    enabled: !!pageUserNickname,
+    suspense: true,
+    useErrorBoundary: true,
+  });
 
   return { data, isLoading, isError };
 };

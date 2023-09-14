@@ -17,8 +17,8 @@ interface SocialListProps {
  * @param followBtnHandler : 팔로우 버튼 핸들러
  *
  * @author : 장윤수
- * @update : 2023-09-13,
- * @version 1.1.2, FlatList 사용할경우 렌더링 누락되는 버그 있어서 map으로 변경
+ * @update : 2023-09-14,
+ * @version 1.1.3, 키값 누락 추가
  * @see None,
  */
 const SocialList = ({
@@ -33,6 +33,7 @@ const SocialList = ({
         const isMe = user.nickname === currentUserNickname ? true : false;
         return (
           <SocialItem
+            key={user.nickname}
             user={user}
             isFollowing={isFollowing}
             followBtnHandler={followBtnHandler}

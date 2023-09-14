@@ -2,32 +2,28 @@ import React from "react";
 import { styled } from "styled-components/native";
 import { colors } from "../../../constants/color";
 import { Category } from "../../../types/category";
-
-type CategoryProps = {
-  categoryList: Category[];
-  selectedCategory: string;
-  setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
-};
+import { useGetCategoriesByNickname } from "../../../hooks/useCategoryQuery";
+import { useRecoilState } from "recoil";
+import { categoryState } from "../../../store/categoryAtom";
 
 /**
  * @description : 카테고리 리스트 컴포넌트
  *
- * @param categoryList : 카테고리 리스트 배열
- * @param selectedCategory : 현재 선택된 카테고리
- * @param setSelectedCategory : 현재 선택된 카테고리를 변경하는 함수
- *
  * @author : 장윤수
  * @update : 2023-09-13,
- * @version 1.0.1, 카테고리 데이터 없을시 렌더링 안되도록 수정
+ * @version 1.1.1, 유저 페이지 컴포넌트 카테고리 로직 분리
  * @see None,
  */
-const CategoryList = ({
-  categoryList,
-  selectedCategory,
-  setSelectedCategory,
-}: CategoryProps) => {
+const CategoryList = ({ nickname }: { nickname: string }) => {
+  // 현재 선택된 카테고리를 관리하는 상태
+  const [selectedCategory, setSelectedCategory] = useRecoilState(categoryState);
+
+  // 닉네임을 통해 해당 유저의 카테고리를 가져옴
+  const { data: categoryList } = useGetCategoriesByNickname(nickname);
+
+  // 카테고리 리스트를 가져와서 카테고리 이름만 뽑아서 배열로 만듦
   const categoryNameList =
-    categoryList.length !== 0
+    categoryList && categoryList.length > 0
       ? [
           "전체보기",
           ...Object.values(categoryList).map((item) => item.categoryName),
@@ -37,6 +33,7 @@ const CategoryList = ({
   return (
     <CategoryContainer>
       {categoryNameList.map((item, index) => {
+        // 현재 클릭된 카테고리인지 확인
         const isClicked = item === selectedCategory;
 
         return (
