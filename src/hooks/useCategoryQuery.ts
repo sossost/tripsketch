@@ -8,16 +8,22 @@ import { QUERY_KEY } from "../react-query/queryKey";
  * @param nickname : 유저닉네임
  *
  * @author : 장윤수
- * @update : 2023-09-12,
- * @version 1.0.0,
+ * @update : 2023-09-14,
+ * @version 1.0.1, 폴백데이터 null 추가
  * @see None,
  */
-export const useGetCategoriesByNickname = (nickname: string | undefined) => {
-  const { data, isLoading, isError } = useQuery(
+export const useGetCategoriesByNickname = (nickname: string) => {
+  const {
+    data = null,
+    isLoading,
+    isError,
+  } = useQuery(
     [QUERY_KEY.CATEGORIES, nickname],
     () => getCategoriesByNickname(nickname),
     {
       enabled: !!nickname,
+      suspense: true,
+      useErrorBoundary: true,
     }
   );
 

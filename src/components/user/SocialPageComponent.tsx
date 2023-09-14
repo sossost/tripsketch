@@ -11,6 +11,7 @@ import SocialList from "./social/SocialList";
 import BackButton from "../UI/header/BackButton";
 import ErrorBoundary from "react-native-error-boundary";
 import ErrorFallback from "../UI/ErrorFallback";
+import Loading from "../UI/Loading";
 
 interface SocialPageComponentProps {
   pageOwnerNickname: string;
@@ -25,7 +26,7 @@ interface SocialPageComponentProps {
  *
  * @author : 장윤수
  * @update : 2023-09-12,
- * @version 1.0.1, 데이터 falsy 값일 때 분기처리 추가
+ * @version 1.1.1, 소셜리스트에 유저가 나일 경우 팔로우 버튼이 보이지 않도록 수정
  * @see None,
  */
 const SocialPageComponent = ({
@@ -70,13 +71,14 @@ const SocialPageComponent = ({
         />
 
         {userList.isLoading ? (
-          <Text>Loading...</Text>
+          <Loading />
         ) : userList.isError ? (
           <Text>에러</Text>
         ) : (
           <SocialList
             userList={userList.data || []}
             followBtnHandler={followBtnHandler}
+            currentUserNickname={currentUser?.nickname || null}
           />
         )}
       </ErrorBoundary>

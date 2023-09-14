@@ -12,6 +12,13 @@ interface PostCardProps {
   post: Post;
 }
 
+/**
+ * @description : 여행일기 카드 컴포넌트
+ * @author : 이수현
+ * @update : 2023-09-14, 장윤수 : 스타일 에러 수정
+ * @version 1.0.1,
+ * @see None,
+ */
 const PostCard = ({ post }: PostCardProps) => {
   // @ts-ignore
   const isLiked = post.isLiked;
@@ -44,14 +51,19 @@ const PostCard = ({ post }: PostCardProps) => {
           </PostTitle>
 
           <RowContainer>
-            <Flag code={post.countryCode.toUpperCase()} size={32} />
+            <Flag
+              code={post.countryCode?.toUpperCase() || "FRANCE"}
+              size={32}
+            />
             <PostLocation>{post.country}</PostLocation>
           </RowContainer>
         </PostMetaDataContainer>
 
         <ProfileContainer>
           <ProfileWrapper>
-            <ProfileImage source={{ uri: post.profileImage }} />
+            <ProfileImageWrapper>
+              <ProfileImage source={{ uri: post.profileImage }} />
+            </ProfileImageWrapper>
             <UserNickname>{post.nickname}</UserNickname>
           </ProfileWrapper>
 
@@ -105,8 +117,8 @@ const ThumnailText = styled.Text`
   color: rgba(255, 255, 255, 0.7);
   text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
   position: absolute;
-  bottom: 10;
-  right: 10;
+  bottom: 10px;
+  right: 10px;
 `;
 
 const MetaDataContainer = styled.View`
@@ -152,13 +164,19 @@ const ProfileWrapper = styled.View`
   align-items: center;
 `;
 
-const ProfileImage = styled.Image`
+const ProfileImageWrapper = styled.View`
   width: 45px;
   height: 45px;
   border-radius: 100px;
-  border-color: #cccccc;
   border-width: 0.5px;
+  border-color: #ccc;
+  overflow: hidden;
   background-color: white;
+`;
+
+const ProfileImage = styled.Image`
+  width: 100%;
+  height: 100%;
 `;
 
 const UserNickname = styled.Text`

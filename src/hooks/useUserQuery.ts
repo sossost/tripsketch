@@ -11,15 +11,16 @@ import { User } from "../types/user";
 /**
  * @description : 현재 로그인한 유저의 정보를 요청하는 리액트 쿼리 훅
  * @author : 장윤수
- * @update : 2023-09-12,
- * @version 1.0.0,
+ * @update : 2023-09-13, 쿼리데이터 undefined대신 null 반환하도록 수정
+ * @version 1.0.1,
  * @see None,
  */
 export const useGetCurrentUser = () => {
-  const { data, isLoading, isError } = useQuery<User | undefined>(
-    [QUERY_KEY.CURRENT_USER],
-    getCurrentUser
-  );
+  const {
+    data = null,
+    isLoading,
+    isError,
+  } = useQuery<User | null>([QUERY_KEY.CURRENT_USER], getCurrentUser);
 
   return { data, isLoading, isError };
 };
@@ -30,14 +31,23 @@ export const useGetCurrentUser = () => {
  * @param nickname : 유저닉네임
  *
  * @author : 장윤수
- * @update : 2023-09-12,
- * @version 1.0.0,
+ * @update : 2023-09-14,  쿼리 옵션 추가
+ * @version 1.0.1,
  * @see None,
  */
 export const useGetUserByNickname = (nickname: string) => {
-  const { data, isLoading, isError } = useQuery<User>(
+  const {
+    data = null,
+    isLoading,
+    isError,
+  } = useQuery<User | null>(
     [QUERY_KEY.USER, nickname],
-    () => getUserByNickname(nickname)
+    () => getUserByNickname(nickname),
+    {
+      enabled: !!nickname,
+      suspense: true,
+      useErrorBoundary: true,
+    }
   );
 
   return { data, isLoading, isError };
@@ -50,8 +60,8 @@ export const useGetUserByNickname = (nickname: string) => {
  * @param pageUserNickname : 페이지 유저의 닉네임
  *
  * @author : 장윤수
- * @update : 2023-09-12,
- * @version 1.0.0,
+ * @update : 2023-09-14,  쿼리 옵션 추가
+ * @version 1.0.1,
  * @see None,
  */
 export const useGetSocialList = (
@@ -70,12 +80,18 @@ export const useGetSocialList = (
     if (variant === "팔로잉") {
       return getFollowingList(pageUserNickname);
     }
+    return null;
   };
 
-  const { data, isLoading, isError } = useQuery<User[] | undefined>(
-    queryKey,
-    queryFn
-  );
+  const {
+    data = null,
+    isLoading,
+    isError,
+  } = useQuery<User[] | null>(queryKey, queryFn, {
+    enabled: !!pageUserNickname,
+    suspense: true,
+    useErrorBoundary: true,
+  });
 
   return { data, isLoading, isError };
 };

@@ -9,7 +9,7 @@ import {
 } from "./Profile.style";
 import { colors } from "../../../constants/color";
 
-const Profile = () => {
+const ProfileSkeletonUI = () => {
   return (
     <SkeletonLayout>
       <SkeletonContainer>
@@ -32,7 +32,7 @@ const Profile = () => {
 
 /* 부모컴포넌트의 리렌더링은 대부분 카테고리가 변경될때 이므로
 프로필 컴포넌트는 메모이제이션하여 불필요한 리렌더링을 막음 */
-export default Profile;
+export default ProfileSkeletonUI;
 
 const SkeletonLayout = styled(ProfileLayout)``;
 

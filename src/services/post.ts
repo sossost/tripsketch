@@ -49,6 +49,59 @@ export const getPostsByNickname = async (
   }
 };
 
+/**
+ * @description : 구독한 유저들의 게시글 리스트를 요청하는 함수
+ *
+ * @param page : 요청할 페이지
+ * @param size : 페이지당 게시물 수
+ *
+ * @author : 장윤수
+ * @update : 2023-09-14,
+ * @version 1.0.0,
+ * @see None,
+ */
+export const getSubscribedUsersPosts = async (page: number, size: number) => {
+  try {
+    const response = await axiosBase.get(
+      `trip/list/following?page=${page}&size=${size}`
+    );
+    return response.data;
+  } catch (error: unknown) {
+    errorLoging(error, "구독한 유저의 게시물 리스트 요청 에러는🤔");
+  }
+};
+
+/**
+ * @description : 검색어와 정렬기준으로 게시글 리스트를 요청하는 함수
+ *
+ * @param keward : 검색 키워드
+ * @param sorting : 정렬 기준
+ *
+ * @author : 장윤수
+ * @update : 2023-09-12,
+ * @version 1.0.0, 기능 구현
+ * @see None,
+ */
+export const getSortedPostsBySearchKeyword = async (
+  keward: string,
+  sorting: "최신순" | "인기순" | "오래된순"
+) => {
+  const sortingType = {
+    최신순: 1,
+    인기순: 2,
+    오래된순: -1,
+  };
+
+  try {
+    const response = await axiosBase.get<PostsData>(
+      `trip/search?keyword=${keward}`
+    );
+    return response.data;
+  } catch (error: unknown) {
+    errorLoging(error, "검색 게시글 리스트 요청 에러는🤔");
+  }
+};
+
 export const getPostsById = async (id: string) => {
   try {
     const response = await axiosBase.get<Post>(
@@ -70,6 +123,7 @@ export const createPost = async (postData: CreatePost) => {
     const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP, postData, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "multipart/form-data",
       },
     });
 

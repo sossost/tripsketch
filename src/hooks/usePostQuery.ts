@@ -5,6 +5,7 @@ import {
   createPost,
   postLike,
   postUnlike,
+  getSubscribedUsersPosts,
 } from "../services/post";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { Post } from "../types/Post";
@@ -13,6 +14,13 @@ export interface PostsData {
   posts: Post[];
   currentPage: number;
   totalPage: number;
+  postsPerPage: number;
+}
+
+export interface TripsData {
+  trips: Post[];
+  currentPage: number;
+  totalPages: number;
   postsPerPage: number;
 }
 
@@ -29,7 +37,7 @@ export interface InfinitePostsData {
  *
  * @author : 장윤수
  * @update : 2023-09-12,
- * @version 1.0.1, 닉네임 undefined일 경우 분기처리 추가
+ * @version 1.1.1, isLoading, isError 추가
  * @see None,
  */
 export const useGetPostsByNickname = (
@@ -37,7 +45,13 @@ export const useGetPostsByNickname = (
   category: string
 ) => {
   const postsPerPage = 5;
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isLoading: postsIsLoading,
+    isError: postsIsError,
+  } = useInfiniteQuery(
     [QUERY_KEY.POSTS, nickname, category],
     ({ pageParam = 1 }) => {
       return getPostsByNickname(nickname, category, pageParam, postsPerPage);
@@ -55,6 +69,42 @@ export const useGetPostsByNickname = (
   );
 
   const posts = data?.pages.flatMap((page) => page?.posts) || [];
+
+  return { posts, fetchNextPage, hasNextPage, postsIsLoading, postsIsError };
+};
+
+/**
+ * @description : 구독한 유저들을 기준으로 페이지네이션 처리된 게시글 리스트를 요청하는 리액트 쿼리 훅
+ * @author : 장윤수
+ * @update : 2023-09-14,
+ * @version 1.0.0,
+ * @see None,
+ */
+export const useGetSubscribedUsersPosts = () => {
+  const postsPerPage = 5;
+  const {
+    data = null,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    [QUERY_KEY.POSTS, QUERY_KEY.SUBSCRIPTED_USERS],
+    ({ pageParam = 1 }) => {
+      return getSubscribedUsersPosts(pageParam, postsPerPage);
+    },
+    {
+      suspense: true,
+      useErrorBoundary: true,
+      getNextPageParam: (lastPage: TripsData | undefined) => {
+        if (!lastPage) return undefined;
+        if (lastPage.totalPages === 0) return undefined;
+        if (lastPage.totalPages === lastPage.currentPage) return undefined;
+
+        return lastPage.currentPage + 1;
+      },
+    }
+  );
+
+  const posts = data?.pages.flatMap((page) => page!.trips) || [];
 
   return { posts, fetchNextPage, hasNextPage };
 };

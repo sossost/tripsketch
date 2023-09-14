@@ -7,18 +7,13 @@ import {
   resetDataInSecureStore,
 } from "../utils/secureStore";
 import { STORE_KEY } from "../constants/store";
-import {
-  errorLoging,
-  errorToastMessageInCatch,
-  getErrorMessage,
-} from "../utils/errorHandler";
-import { errorToastMessage } from "../utils/toastMessage";
+import { errorLoging, errorToastMessageInCatch } from "../utils/errorHandler";
 
 /**
  * @description : 로그인한 유저의 정보를 요청하는 함수
  * @author : 이수현
- * @update : 2023-09-12, 장윤수, 에러 핸들링 추가
- * @version 1.01, 에러 핸들링 추가
+ * @update : 2023-09-13, 데이터 패치 실패 시 null 반환하도록 수정
+ * @version 1.1.1,
  * @see None
  */
 export const getCurrentUser = async () => {
@@ -34,19 +29,21 @@ export const getCurrentUser = async () => {
       });
       return response.data as User;
     }
+    return null;
   } catch (error: unknown) {
     await resetDataInSecureStore(STORE_KEY.ACCESS_TOKEN);
     await resetDataInSecureStore(STORE_KEY.REFRESH_TOKEN);
     errorToastMessageInCatch(error);
     errorLoging(error, "로그인한 유저 정보 요청 에러는🤔");
+    return null;
   }
 };
 
 /**
  * @description : 유저 정보 patch 요청하는 함수
  * @author : 장윤수
- * @update : 2023-09-12, 장윤수, 에러 핸들링 추가
- * @version 1.01, 에러 핸들링 추가
+ * @update : 2023-09-13, 데이터 패치 실패 시 null 반환하도록 수정
+ * @version 1.1.1,
  * @see None
  */
 export const patchCurrentUser = async (data: any) => {
@@ -70,8 +67,8 @@ export const patchCurrentUser = async (data: any) => {
 /**
  * @description : 닉네임으로 해당 유저의 팔로우 리스트를 가져오는 함수
  * @author : 장윤수
- * @update : 2023-09-12, 장윤수, 에러 핸들링 추가
- * @version 1.01, 에러 핸들링 추가
+ * @update : 2023-09-13, 데이터 패치 실패 시 null 반환하도록 수정
+ * @version 1.1.1,
  * @see None
  */
 export const getFollowerList = async (nickname: string) => {
@@ -83,14 +80,15 @@ export const getFollowerList = async (nickname: string) => {
   } catch (error: unknown) {
     errorToastMessageInCatch(error);
     errorLoging(error, "팔로우리스트 요청 에러는🤔");
+    return null;
   }
 };
 
 /**
  * @description : 닉네임으로 해당 유저의 팔로잉 리스트를 가져오는 함수
  * @author : 장윤수
- * @update : 2023-09-12, 장윤수, 에러 핸들링 추가
- * @version 1.01, 에러 핸들링 추가
+ * @update : 2023-09-13, 데이터 패치 실패 시 null 반환하도록 수정
+ * @version 1.1.1,
  * @see None
  */
 export const getFollowingList = async (nickname: string) => {
@@ -102,14 +100,15 @@ export const getFollowingList = async (nickname: string) => {
   } catch (error: unknown) {
     errorToastMessageInCatch(error);
     errorLoging(error, "팔로잉리스트 요청 에러는🤔");
+    return null;
   }
 };
 
 /**
  * @description : 닉네임으로 해당 유저의 정보를 가져오는 함수
  * @author : 장윤수
- * @update : 2023-09-12, 장윤수, 에러 핸들링 추가
- * @version 1.01, 에러 핸들링 추가
+ * @update : 2023-09-13, 데이터 패치 실패 시 null 반환하도록 수정
+ * @version 1.1.1,
  * @see None
  */
 export const getUserByNickname = async (nickname: string) => {
@@ -119,6 +118,7 @@ export const getUserByNickname = async (nickname: string) => {
   } catch (error: unknown) {
     errorToastMessageInCatch(error);
     errorLoging(error, "닉네임으로 유저 정보 요청 에러는🤔");
+    return null;
   }
 };
 

@@ -5,11 +5,9 @@ import { LINK } from "../constants/link";
 
 import Home from "../screens/Home";
 import MyPage from "../screens/MyPage";
-import NotificationPage from "../components/notification/NotificationPageComponent";
 import CreatePost from "../screens/CreatePost";
-import Header from "../components/UI/header/Header";
-import Title from "../components/UI/header/Title";
 import ExplorePage from "../screens/ExplorePage";
+import NotificationPage from "../screens/NotificationPage";
 
 const Tabs = createBottomTabNavigator();
 
@@ -23,9 +21,10 @@ export default function BottomTab() {
       }}
     >
       <Tabs.Screen
-        name={LINK.HOME}
+        name={LINK.MAIN}
         component={Home}
         options={{
+          headerShown: false,
           title: "홈",
           tabBarIcon: ({ color, size }) => (
             <Feather name="home" color={color} size={size} />
@@ -56,7 +55,7 @@ export default function BottomTab() {
         name={LINK.NOTIFICATION_PAGE}
         component={NotificationPage}
         options={{
-          title: "알림",
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Feather name="bell" color={color} size={size} />
           ),
@@ -66,7 +65,7 @@ export default function BottomTab() {
         name={LINK.MY_PAGE}
         component={MyPage}
         options={{
-          header: () => <Header left={<Title title="마이페이지" />} />,
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Feather name="user" color={color} size={size} />
           ),

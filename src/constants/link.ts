@@ -1,13 +1,16 @@
 export const LINK = {
   HOME: "Home",
+  MAIN: "Main",
   KAKAO_LOGIN_PAGE: "KakaoLoginPage",
   EXPLORE_PAGE: "ExplorePage",
   TRIP_DETAIL_PAGE: "TripDetail",
   CREATE_POST_PAGE: "CreatePost",
+  UPDATE_POST_PAGE: "UpdatePost",
   USER_PAGE: "UserPage",
   MY_PAGE: "MyPage",
   FOLLOWER_PAGE: "FollowerPage",
   FOLLOWING_PAGE: "FollowingPage",
   EDIT_PROFILE_PAGE: "EditProfilePage",
   NOTIFICATION_PAGE: "NotificationPage",
+  AUTH_CONFIRM: "AuthConfirm",
 };

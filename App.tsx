@@ -2,11 +2,14 @@ import RootStack from "./src/navigation/RootStack";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import SplashScreen from "./src/components/common/SplashScreen";
 import StyledTheme from "./src/context/themeContext";
 import { StatusBar } from "expo-status-bar";
 import { RecoilRoot } from "recoil";
 import NotificationProvider from "./src/context/notificationProvider";
+import FadeOutContextProvider from "./src/context/fadeOutContext";
+import { LogBox } from "react-native";
+
+// LogBox.ignoreAllLogs(true);
 
 const queryClient = new QueryClient();
 
@@ -17,8 +20,10 @@ export default function App() {
         <StyledTheme>
           <SafeAreaProvider>
             <NotificationProvider>
-              <StatusBar style="auto" />
-              <RootStack />
+              <FadeOutContextProvider>
+                <StatusBar style="auto" />
+                <RootStack />
+              </FadeOutContextProvider>
             </NotificationProvider>
           </SafeAreaProvider>
         </StyledTheme>
