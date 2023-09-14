@@ -24,6 +24,7 @@ export default function BottomTab() {
         name={LINK.MAIN}
         component={Home}
         options={{
+          headerShown: false,
           title: "홈",
           tabBarIcon: ({ color, size }) => (
             <Feather name="home" color={color} size={size} />

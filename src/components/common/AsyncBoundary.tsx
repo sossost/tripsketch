@@ -13,8 +13,8 @@ interface AsyncBoundaryProps {
 /**
  * @description : 비동기 로직 바운더리 컴포넌트
  *
- * @param suspenseFallback : 로딩시 보여줄 폴백 컴포넌트
- * @param errorFallback : 에러시 보여줄 폴백 컴포넌트
+ * @param suspenseFallback : 로딩시 보여줄 폴백 컴포넌트 (기본값 : Loading.tsx 컴포넌트)
+ * @param errorFallback : 에러시 보여줄 폴백 컴포넌트 (기본값 : ErrorFallback.tsx 컴포넌트)
  *
  * @author : 장윤수
  * @update : 2023-09-14,

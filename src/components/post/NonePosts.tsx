@@ -1,7 +1,15 @@
 import { styled } from "styled-components/native";
 import { colors } from "../../constants/color";
-import { View } from "react-native";
 
+/**
+ * @description : 플랫리스트 내에서 포스트 데이터 없을시 띄워줄 컴포넌트
+
+ *
+ * @author : 장윤수
+ * @update : 2023-09-13,
+ * @version 1.0.0, 
+ * @see None,
+ */
 const NonePosts = () => {
   return (
     <NonePostContainer>
