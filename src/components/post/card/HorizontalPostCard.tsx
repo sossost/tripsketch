@@ -20,7 +20,7 @@ const HorizontalPostCard = ({ post }: HorizontalPostCardProps) => {
 
   const navigation = useNavigation<StackNavigation>();
   const handlePostDetailPress = () => {
-    navigation.navigate("TripDetail", { postId: post.id });
+    navigation.navigate("PostDetail", { postId: post.id });
   };
 
   return (

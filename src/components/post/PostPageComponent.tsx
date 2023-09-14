@@ -23,6 +23,7 @@ import MapView, { Marker, UrlTile } from "react-native-maps";
 
 import DeleteXbutton from "../../components/common/DeleteXbutton";
 import usePostTrip from "./hooks/usePostTrip";
+import useUpdatePost from "./hooks/useUpdatePost";
 
 type Suggestion = {
   place_id: string;
@@ -107,26 +108,32 @@ interface ContentInputProps {
 
 interface PostPageProps {
   updateId?: string;
+  updateData?: any;
 }
 
 /** 여행 글쓰기 */
-const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
+const PostPageComponent: React.FC<PostPageProps> = ({
+  updateId,
+  updateData,
+}) => {
   const [query, setQuery] = useState<string>("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [mapViewOn, setMapViewOn] = useState(false);
-  const [locationName, setLocationName] = useState("");
+  const [locationName, setLocationName] = useState(
+    updateId ? updateData.hashtagInfo.displayName : ""
+  );
   const [address, setAddress] = useState({
-    countryCode: "",
-    address: "",
-    municipality: "",
-    name: "",
-    country: "",
-    city: "",
+    countryCode: updateId ? updateData.hashtagInfo.countryCode : "",
+    address: updateId ? updateData.hashtagInfo.address : "",
+    municipality: updateId ? updateData.hashtagInfo.municipality : "",
+    name: updateId ? updateData.hashtagInfo.name : "",
+    country: updateId ? updateData.hashtagInfo.country : "",
+    city: updateId ? updateData.hashtagInfo.city : "",
     town: "",
-    road: "",
-    display_name: "",
-    latitude: 0,
-    longitude: 0,
+    road: updateId ? updateData.hashtagInfo.road : "",
+    display_name: updateId ? updateData.hashtagInfo.displayName : "",
+    latitude: updateId ? updateData.latitude : 0,
+    longitude: updateId ? updateData.longitude : 0,
   });
   const [region, setRegion] = useState<Region>({
     latitude: 35.08997195649197,
@@ -138,14 +145,28 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
   const [showModal, setShowModal] = useState(false);
   const [markedDates, setMarkedDates] = useState<RangeKeyDict>({});
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
-  const [startDate, setStartDate] = useState<string | null>(null);
-  const [endDate, setEndDate] = useState<string | null>(null);
-  const [image, setImage] = useState<string[]>([]);
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
+  const [startDate, setStartDate] = useState<string | null>(
+    updateId ? updateData.startedAt : null
+  );
+  const [endDate, setEndDate] = useState<string | null>(
+    updateId ? updateData.endAt : null
+  );
+  const [image, setImage] = useState<string[]>(
+    updateId ? updateData.images : []
+  );
+  const [deleteUpdateImage, setDeleteUpdateImage] = useState<string[]>([]);
+  const [addUpdateImage, setAddUpdateImage] = useState<string[]>([]);
+  const [title, setTitle] = useState<string>(updateId ? updateData.title : "");
+  const [content, setContent] = useState<string>(
+    updateId ? updateData.content : ""
+  );
   const [hashtag, setHashtag] = useState<string>("");
-  const [hashtagList, setHashtagList] = useState<string[]>([]);
-  const [isPublic, setIsPublic] = useState<boolean>(true);
+  const [hashtagList, setHashtagList] = useState<string[]>(
+    updateId ? updateData.hashtagInfo.etc : []
+  );
+  const [isPublic, setIsPublic] = useState<boolean>(
+    updateId ? updateData.isPublic : true
+  );
 
   const [errors, setErrors] = useState({
     title: "",
@@ -373,6 +394,12 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
   const windowWidth = Dimensions.get("window").width - 40;
   const imageWidth = windowWidth * 0.19;
 
+  // 이미지 업데이트 시 사용 - 기존 데이터 카피
+  let copyImageData: string[] = [];
+  if (updateId) {
+    copyImageData = [...updateData.images];
+  }
+
   const pickImage = async () => {
     // 이미지 초과 시 알림
     if (image.length >= maxImageCount) {
@@ -384,7 +411,7 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: false,
       aspect: [4, 3],
-      quality: 0.4,
+      quality: 1,
       allowsMultipleSelection: true,
       selectionLimit: maxImageCount,
     });
@@ -399,7 +426,23 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
         );
       } else {
         setImage(newImages);
+        if (updateId) {
+          setAddUpdateImage(selectedUris);
+        }
       }
+    }
+  };
+
+  // 선택한 이미지 리스트에서 제거하기
+  const deleteImage = (deleteImageUrl: string) => {
+    const updatedImageList = image.filter((item) => item !== deleteImageUrl);
+    const updatedModifyImageList = addUpdateImage.filter(
+      (item) => item !== deleteImageUrl
+    );
+    setImage(updatedImageList);
+    setAddUpdateImage(updatedModifyImageList);
+    if (copyImageData.includes(deleteImageUrl)) {
+      setDeleteUpdateImage([...deleteUpdateImage, deleteImageUrl]);
     }
   };
 
@@ -469,7 +512,8 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
   };
 
   const postTripData = {
-    image: image,
+    id: updateId || "",
+    image: !updateId ? image : addUpdateImage,
     title: title,
     content: content,
     address: address,
@@ -478,9 +522,13 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
     isPublic: isPublic,
     hashtagList: hashtagList,
     resetState: resetState,
+    deletedImageUrls: deleteUpdateImage,
   };
 
+  //console.log(postTripData);
+
   const submitPost = usePostTrip(postTripData);
+  const submitUpdatePost = useUpdatePost(postTripData);
 
   return (
     <>
@@ -747,11 +795,19 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
             </ImageTitleContainer>
             <ImageViewContainer imageCount={image.length}>
               {image.map((imageUri, index) => (
-                <Image
-                  key={index}
-                  source={{ uri: imageUri }}
-                  style={{ width: imageWidth, height: imageWidth }}
-                />
+                <ImageInnerContainer>
+                  <Image
+                    key={index}
+                    source={{ uri: imageUri }}
+                    style={{ width: imageWidth, height: imageWidth }}
+                  />
+                  <DeleteBox>
+                    <DeleteXbutton
+                      onPress={() => deleteImage(imageUri)}
+                      color={"white"}
+                    ></DeleteXbutton>
+                  </DeleteBox>
+                </ImageInnerContainer>
               ))}
             </ImageViewContainer>
             {/* <TouchableOpacity onPress={() => submitImage(image)}>
@@ -806,7 +862,7 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
             </ActionButton>
             <ActionButton
               cancel={false}
-              onPress={submitPost}
+              onPress={updateId ? submitUpdatePost : submitPost}
               disabled={!isCheckEmpty}
               style={{ opacity: isCheckEmpty ? 1 : 0.5 }}
             >
@@ -996,6 +1052,20 @@ const ImageViewContainer = styled.View<{ imageCount: number }>`
   margin: 10px 0px;
 `;
 
+const ImageInnerContainer = styled.View`
+  position: relative;
+`;
+
+const DeleteBox = styled.View`
+  position: absolute;
+  /* width: 15px;
+  height: 15px;
+  background-color: rgba(0, 0, 0, 0.4); */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const PickImageButton = styled.TouchableOpacity`
   width: 60px;
   background-color: ${colors.primary};
@@ -1038,7 +1108,7 @@ const TagList = styled.View`
 `;
 const TagItem = styled.View`
   background-color: #ececec;
-  padding: 3px 7px;
+  padding: 3px 3px 3px 7px;
   border-radius: 5px;
 
   display: flex;
@@ -1049,7 +1119,7 @@ const TagItem = styled.View`
 const TagItemText = styled.Text`
   color: #888;
   font-size: 13px;
-  margin-right: 5px;
+  margin-right: 0px;
 `;
 
 /** 전체 공개, 비공개 설정 묶는 View */

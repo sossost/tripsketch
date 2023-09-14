@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { LINK } from "../constants/link";
 
-import TripDetail from "../screens/TripDetail";
+import PostDetail from "../screens/PostDetail";
 import KakaoLoginPage from "../components/auth/KakaoLoginPage";
 import BottomTab from "./BottomTab";
 import SplashScreen from "../components/common/SplashScreen";
@@ -33,7 +33,7 @@ export default function RootStack() {
               name={LINK.KAKAO_LOGIN_PAGE}
               component={KakaoLoginPage}
             />
-            <Stack.Screen name={LINK.TRIP_DETAIL_PAGE} component={TripDetail} />
+            <Stack.Screen name={LINK.TRIP_DETAIL_PAGE} component={PostDetail} />
             <Stack.Screen
               name={LINK.USER_PAGE}
               component={UserPage}

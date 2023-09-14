@@ -5,21 +5,39 @@ import {
   ScrollView,
   Animated,
   TouchableOpacity,
+  Text,
 } from "react-native";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import PostView from "../components/post/PostView";
-import Comment from "../components/post/Comment";
-import CommentBest from "../components/post/CommentBest";
-import LikesAndCommentText from "../components/post/LikesAndCommentText";
-import { useRoute, RouteProp } from "@react-navigation/native";
-import { RootStackParamList } from "../types/RootStack";
+import PostView from "./PostView";
+import Comment from "./Comment";
+import CommentBest from "./CommentBest";
+import LikesAndCommentText from "./LikesAndCommentText";
+import {
+  useGetPostAndComments,
+  useGetPostAndCommentsForGuest,
+} from "../../hooks/usePostQuery";
+import { useGetCurrentUser } from "../../hooks/useUserQuery";
+import PostViewSkeleton from "./components/PostViewSkeleton";
 
-type TripDetailScreenRouteProp = RouteProp<RootStackParamList, "TripDetail">;
+const PostDetailPageComponent = ({ postId }: { postId: string }) => {
+  // const { data: userData } = useGetCurrentUser();
 
-const TripDetail = () => {
-  // 라우터에서 받아온 파라미터 값 저장
-  const route = useRoute<TripDetailScreenRouteProp>();
-  const { postId } = route.params;
+  // // 유저 로그인 시 보여지는 데이터
+  // const { postAndCommentData, isLoading, isError } =
+  //   useGetPostAndComments(postId);
+
+  // // 게스트 접속 시 보여지는 데이터
+  // const {
+  //   postAndCommentGuestData,
+  //   isLoading: isDataGuestLoading,
+  //   isError: isDataGuestError,
+  // } = useGetPostAndCommentsForGuest(postId);
+
+  // let checkUser = userData ? postAndCommentData : postAndCommentGuestData;
+
+  // if (isLoading || isDataGuestLoading) {
+  //   return <PostViewSkeleton />;
+  // }
 
   // 바텀시트 높이 조절하는 변수
   const sheetRef = useRef<BottomSheet>(null);
@@ -70,7 +88,10 @@ const TripDetail = () => {
         style={styles.sheet}
       >
         <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
-          <Comment postId={postId} />
+          <Comment
+            postId={postId}
+            // postData={checkUser.tripAndCommentPairDataByTripId.second}
+          />
         </BottomSheetScrollView>
       </BottomSheet>
     </View>
@@ -111,4 +132,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TripDetail;
+export default PostDetailPageComponent;

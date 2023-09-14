@@ -8,12 +8,13 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { useGetPostsById } from "../../hooks/usePostQuery";
+import { useGetPostsById, usePostDelete } from "../../hooks/usePostQuery";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../types/RootStack";
 import PostViewSkeleton from "./components/PostViewSkeleton";
 import Slick from "react-native-slick";
+import useDeletePost from "./hooks/useDeletePost";
 
 const PostView = ({ postId }: { postId: string }) => {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
@@ -53,6 +54,11 @@ const PostView = ({ postId }: { postId: string }) => {
     setIsSettingOpen(!isSettingOpen);
   };
 
+  // 게시물 삭제하기
+  const postDeleteHandler = (id: string) => {
+    useDeletePost(id);
+  };
+
   return (
     <View style={[styles.container]}>
       <ImageBackground
@@ -77,7 +83,9 @@ const PostView = ({ postId }: { postId: string }) => {
                 <TouchableOpacity onPress={postUpdateHandler}>
                   <Text style={styles.setting_box_text}>수정하기</Text>
                 </TouchableOpacity>
-                <Text style={styles.setting_box_text}>삭제하기</Text>
+                <TouchableOpacity onPress={postDeleteHandler}>
+                  <Text style={styles.setting_box_text}>삭제하기</Text>
+                </TouchableOpacity>
               </View>
             )}
           </View>
