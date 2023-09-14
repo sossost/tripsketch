@@ -18,8 +18,8 @@ const splashBgColor = "#fff";
 /**
  * @description : 소셜 페이지 컴포넌트
  * @author : 황반석
- * @update : 2023-09-13,
- * @version 1.1.0, 스플래쉬 스크린 중에 로그인 되어있으면 바로 넘어가도록 수정
+ * @update : 2023-09-14,
+ * @version 1.2.0, 장윤수 : 애니메이션 fade out으로 통일
  * @see None,
  */
 const SplashScreen = ({ children }: { children: ReactNode }) => {
@@ -133,7 +133,6 @@ const SplashScreen = ({ children }: { children: ReactNode }) => {
             flex: 1,
             backgroundColor: splashBgColor,
             zIndex: 5,
-            transform: fadeOut === true ? [{ translateY: startAnimation }] : [],
             opacity: fadeOut === true ? startDisappear : 1,
             overflow: "hidden",
           }}
@@ -153,13 +152,6 @@ const SplashScreen = ({ children }: { children: ReactNode }) => {
                 width: 250,
                 height: 54,
                 marginBottom: 20,
-                transform:
-                  fadeOut === true
-                    ? [
-                        { translateY: moveLogo.y },
-                        //{ scale: scaleLogo }
-                      ]
-                    : [],
               }}
             ></Animated.Image>
             <Animated.Text
@@ -167,7 +159,6 @@ const SplashScreen = ({ children }: { children: ReactNode }) => {
                 fontSize: 15,
                 color: "white",
                 opacity: fadeOut === true ? opacityTitle : 1,
-                transform: fadeOut === true ? [{ translateY: moveLogo.y }] : [],
               }}
             >
               당신의 여행을 스케치하세요.

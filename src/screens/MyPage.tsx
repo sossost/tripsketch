@@ -17,7 +17,7 @@ const MyPage = () => {
   return (
     <AuthGuard>
       <Header left={<Title title={"마이페이지"} />} />
-      <UserPageComponent variant="myPage" />
+      <UserPageComponent />
     </AuthGuard>
   );
 };

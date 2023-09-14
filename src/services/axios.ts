@@ -57,10 +57,8 @@ export const tokenRefresh = async () => {
     const response = await axiosBase.post("oauth/kakao/refreshToken", {
       ourRefreshToken: refreshToken,
     });
-    console.log("액세스 토큰 갱신 요청에 대한 res...", response);
 
     // 새로운 액세스 토큰 저장
-    console.log(response);
     const newAccessToken = response.headers.accesstoken;
     await setDataToSecureStore(STORE_KEY.ACCESS_TOKEN, newAccessToken);
 
