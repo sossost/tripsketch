@@ -1,6 +1,7 @@
 import { usePostUpdate } from "../../../hooks/usePostQuery";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../types/RootStack";
+import { useQueryClient } from "@tanstack/react-query";
 import React, { useEffect } from "react";
 import Toast from "react-native-toast-message";
 
@@ -45,6 +46,7 @@ const useUpdatePost = ({
 }: PostDataProps) => {
   const createPostUpdateMutation = usePostUpdate();
   const navigation = useNavigation<StackNavigation>();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (createPostUpdateMutation.isLoading) {
@@ -88,6 +90,8 @@ const useUpdatePost = ({
 
       await createPostUpdateMutation.mutateAsync(formData);
       Toast.show({ type: "success", text1: "게시글 수정이 완료되었습니다." });
+      queryClient.invalidateQueries(["postId"]);
+      queryClient.invalidateQueries(["updatePost"]);
       resetState(); // 상태변수 초기화
       navigation.goBack();
     } catch (error) {

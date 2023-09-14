@@ -1,7 +1,8 @@
 import { useCreatePost } from "../../../hooks/usePostQuery";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../types/RootStack";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 
 type PostDataProps = {
@@ -40,6 +41,7 @@ const usePostTrip = ({
   resetState,
 }: PostDataProps) => {
   const createPostMutation = useCreatePost();
+  const queryClient = useQueryClient();
   const navigation = useNavigation<StackNavigation>();
 
   useEffect(() => {
@@ -80,9 +82,12 @@ const usePostTrip = ({
       formData.append("etc", hashtagList);
       formData.append("public", true);
 
+      console.log("데이터", formData._parts);
+
       await createPostMutation.mutateAsync(formData);
       Toast.show({ type: "success", text1: "게시글 생성이 완료되었습니다." });
       resetState(); // 상태변수 초기화
+      queryClient.invalidateQueries(["posts"]);
       navigation.goBack();
     } catch (error) {
       console.error("게시물 생성 중 오류 발생:", error);

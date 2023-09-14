@@ -155,6 +155,7 @@ const PostPageComponent: React.FC<PostPageProps> = ({
     updateId ? updateData.images : []
   );
   const [deleteUpdateImage, setDeleteUpdateImage] = useState<string[]>([]);
+  const [addUpdateImage, setAddUpdateImage] = useState<string[]>([]);
   const [title, setTitle] = useState<string>(updateId ? updateData.title : "");
   const [content, setContent] = useState<string>(
     updateId ? updateData.content : ""
@@ -393,6 +394,12 @@ const PostPageComponent: React.FC<PostPageProps> = ({
   const windowWidth = Dimensions.get("window").width - 40;
   const imageWidth = windowWidth * 0.19;
 
+  // 이미지 업데이트 시 사용 - 기존 데이터 카피
+  let copyImageData: string[] = [];
+  if (updateId) {
+    copyImageData = [...updateData.images];
+  }
+
   const pickImage = async () => {
     // 이미지 초과 시 알림
     if (image.length >= maxImageCount) {
@@ -404,7 +411,7 @@ const PostPageComponent: React.FC<PostPageProps> = ({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: false,
       aspect: [4, 3],
-      quality: 0.4,
+      quality: 1,
       allowsMultipleSelection: true,
       selectionLimit: maxImageCount,
     });
@@ -419,26 +426,25 @@ const PostPageComponent: React.FC<PostPageProps> = ({
         );
       } else {
         setImage(newImages);
+        if (updateId) {
+          setAddUpdateImage(selectedUris);
+        }
       }
     }
   };
 
   // 선택한 이미지 리스트에서 제거하기
-  // 업데이트 시 사용 - 기존 데이터 카피
-  let copyImageData: string[] = [];
-  if (updateId) {
-    copyImageData = [...updateData.images];
-  }
   const deleteImage = (deleteImageUrl: string) => {
     const updatedImageList = image.filter((item) => item !== deleteImageUrl);
+    const updatedModifyImageList = addUpdateImage.filter(
+      (item) => item !== deleteImageUrl
+    );
     setImage(updatedImageList);
+    setAddUpdateImage(updatedModifyImageList);
     if (copyImageData.includes(deleteImageUrl)) {
       setDeleteUpdateImage([...deleteUpdateImage, deleteImageUrl]);
     }
   };
-
-  // console.log(image);
-  // console.log(deleteUpdateImage);
 
   // react-native-calendars 패키지를 사용하여 달력을 구현 --------
   /** 날짜 클릭 핸들러 */
@@ -507,7 +513,7 @@ const PostPageComponent: React.FC<PostPageProps> = ({
 
   const postTripData = {
     id: updateId || "",
-    image: image,
+    image: !updateId ? image : addUpdateImage,
     title: title,
     content: content,
     address: address,
@@ -519,7 +525,7 @@ const PostPageComponent: React.FC<PostPageProps> = ({
     deletedImageUrls: deleteUpdateImage,
   };
 
-  // console.log(postTripData);
+  //console.log(postTripData);
 
   const submitPost = usePostTrip(postTripData);
   const submitUpdatePost = useUpdatePost(postTripData);

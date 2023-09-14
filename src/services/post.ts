@@ -160,6 +160,8 @@ export const postUnlike = async (id: string) => {
 export const postUpdate = async (updateData: any) => {
   const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
 
+  console.log("데이터", updateData._parts);
+
   // 수정할 id updateData에서 추출
   const idValue = updateData["_parts"].find(([key]: string) => key === "id");
   const id = idValue ? idValue[1] : null;
@@ -178,5 +180,16 @@ export const postUpdate = async (updateData: any) => {
     return response.data;
   } catch (error: any) {
     throw new Error(error);
+  }
+};
+
+export const deletePostById = async (id: string) => {
+  try {
+    const response = await axiosBase.post(
+      `${API_PATH.TRIP.DELETE.TRIP.replace(":id", id)}`
+    );
+    return response.data;
+  } catch (error: any) {
+    errorLoging(error, "게시글 삭제 요청 에러는🤔");
   }
 };

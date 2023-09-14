@@ -54,6 +54,10 @@ export const API_PATH = {
       // 게시물 수정하기
       TRIP: `/trip/:id`,
     },
+    DELETE: {
+      // 게시물 삭제하기
+      TRIP: `/trip/:id`,
+    },
   },
   GEOCODING: {
     POST: {

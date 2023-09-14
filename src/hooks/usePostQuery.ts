@@ -9,6 +9,7 @@ import {
   postLike,
   postUnlike,
   postUpdate,
+  deletePostById,
 } from "../services/post";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { Post, GetPost, PostUpdate } from "../types/Post";
@@ -129,4 +130,8 @@ export const usePostUnlike = () => {
 
 export const usePostUpdate = () => {
   return useMutation(postUpdate);
+};
+
+export const usePostDelete = () => {
+  return useMutation(deletePostById);
 };
