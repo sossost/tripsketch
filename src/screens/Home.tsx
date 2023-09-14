@@ -29,7 +29,7 @@ const Home = ({ navigation }: any) => {
 
   return (
     <View style={styles.container}>
-      {/* {loggedIn ? (
+      {loggedIn ? (
         <View style={styles.greetings}>
           <Text>로그인되었습니다.</Text>
         </View>
@@ -38,11 +38,12 @@ const Home = ({ navigation }: any) => {
           <Text style={styles.greetingText}>트립스케치를 시작하세요.</Text>
           <KakaoLoginButton />
         </View>
-      )} */}
+      )}
 
       {/* <TouchableOpacity onPress={getUserInfoHandler}>
         <Text>유저 정보 요청</Text>
       </TouchableOpacity> */}
+
       <ScrollView ref={scrollViewRef} style={styles.scrollView}>
         <View style={styles.sectionDescView}>
           <View style={styles.centerLine}></View>
