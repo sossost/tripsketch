@@ -23,6 +23,7 @@ import MapView, { Marker, UrlTile } from "react-native-maps";
 
 import DeleteXbutton from "../../components/common/DeleteXbutton";
 import usePostTrip from "./hooks/usePostTrip";
+import useUpdatePost from "./hooks/useUpdatePost";
 
 type Suggestion = {
   place_id: string;
@@ -107,26 +108,32 @@ interface ContentInputProps {
 
 interface PostPageProps {
   updateId?: string;
+  updateData?: any;
 }
 
 /** 여행 글쓰기 */
-const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
+const PostPageComponent: React.FC<PostPageProps> = ({
+  updateId,
+  updateData,
+}) => {
   const [query, setQuery] = useState<string>("");
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [mapViewOn, setMapViewOn] = useState(false);
-  const [locationName, setLocationName] = useState("");
+  const [locationName, setLocationName] = useState(
+    updateId ? updateData.hashtagInfo.displayName : ""
+  );
   const [address, setAddress] = useState({
-    countryCode: "",
-    address: "",
-    municipality: "",
-    name: "",
-    country: "",
-    city: "",
+    countryCode: updateId ? updateData.hashtagInfo.countryCode : "",
+    address: updateId ? updateData.hashtagInfo.address : "",
+    municipality: updateId ? updateData.hashtagInfo.municipality : "",
+    name: updateId ? updateData.hashtagInfo.name : "",
+    country: updateId ? updateData.hashtagInfo.country : "",
+    city: updateId ? updateData.hashtagInfo.city : "",
     town: "",
-    road: "",
-    display_name: "",
-    latitude: 0,
-    longitude: 0,
+    road: updateId ? updateData.hashtagInfo.road : "",
+    display_name: updateId ? updateData.hashtagInfo.displayName : "",
+    latitude: updateId ? updateData.latitude : 0,
+    longitude: updateId ? updateData.longitude : 0,
   });
   const [region, setRegion] = useState<Region>({
     latitude: 35.08997195649197,
@@ -138,14 +145,27 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
   const [showModal, setShowModal] = useState(false);
   const [markedDates, setMarkedDates] = useState<RangeKeyDict>({});
   const [selectedDates, setSelectedDates] = useState<string[]>([]);
-  const [startDate, setStartDate] = useState<string | null>(null);
-  const [endDate, setEndDate] = useState<string | null>(null);
-  const [image, setImage] = useState<string[]>([]);
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
+  const [startDate, setStartDate] = useState<string | null>(
+    updateId ? updateData.startedAt : null
+  );
+  const [endDate, setEndDate] = useState<string | null>(
+    updateId ? updateData.endAt : null
+  );
+  const [image, setImage] = useState<string[]>(
+    updateId ? updateData.images : []
+  );
+  const [deleteUpdateImage, setDeleteUpdateImage] = useState<string[]>([]);
+  const [title, setTitle] = useState<string>(updateId ? updateData.title : "");
+  const [content, setContent] = useState<string>(
+    updateId ? updateData.content : ""
+  );
   const [hashtag, setHashtag] = useState<string>("");
-  const [hashtagList, setHashtagList] = useState<string[]>([]);
-  const [isPublic, setIsPublic] = useState<boolean>(true);
+  const [hashtagList, setHashtagList] = useState<string[]>(
+    updateId ? updateData.hashtagInfo.etc : []
+  );
+  const [isPublic, setIsPublic] = useState<boolean>(
+    updateId ? updateData.isPublic : true
+  );
 
   const [errors, setErrors] = useState({
     title: "",
@@ -404,10 +424,21 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
   };
 
   // 선택한 이미지 리스트에서 제거하기
+  // 업데이트 시 사용 - 기존 데이터 카피
+  let copyImageData: string[] = [];
+  if (updateId) {
+    copyImageData = [...updateData.images];
+  }
   const deleteImage = (deleteImageUrl: string) => {
     const updatedImageList = image.filter((item) => item !== deleteImageUrl);
     setImage(updatedImageList);
+    if (copyImageData.includes(deleteImageUrl)) {
+      setDeleteUpdateImage([...deleteUpdateImage, deleteImageUrl]);
+    }
   };
+
+  // console.log(image);
+  // console.log(deleteUpdateImage);
 
   // react-native-calendars 패키지를 사용하여 달력을 구현 --------
   /** 날짜 클릭 핸들러 */
@@ -475,6 +506,7 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
   };
 
   const postTripData = {
+    id: updateId || "",
     image: image,
     title: title,
     content: content,
@@ -484,9 +516,13 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
     isPublic: isPublic,
     hashtagList: hashtagList,
     resetState: resetState,
+    deletedImageUrls: deleteUpdateImage,
   };
 
+  // console.log(postTripData);
+
   const submitPost = usePostTrip(postTripData);
+  const submitUpdatePost = useUpdatePost(postTripData);
 
   return (
     <>
@@ -820,7 +856,7 @@ const PostPageComponent: React.FC<PostPageProps> = ({ updateId }) => {
             </ActionButton>
             <ActionButton
               cancel={false}
-              onPress={submitPost}
+              onPress={updateId ? submitUpdatePost : submitPost}
               disabled={!isCheckEmpty}
               style={{ opacity: isCheckEmpty ? 1 : 0.5 }}
             >

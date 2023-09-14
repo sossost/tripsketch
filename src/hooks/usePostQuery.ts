@@ -4,12 +4,14 @@ import {
   getPostsById,
   getPostsAndComments,
   getPostsAndCommentsForGuest,
+  getUpdatePost,
   createPost,
   postLike,
   postUnlike,
+  postUpdate,
 } from "../services/post";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
-import { Post, GetPost } from "../types/Post";
+import { Post, GetPost, PostUpdate } from "../types/Post";
 
 export interface PostsData {
   posts: Post[];
@@ -101,6 +103,18 @@ export const useGetPostAndCommentsForGuest = (postId: string) => {
   return { postAndCommentGuestData, isLoading, isError };
 };
 
+export const useGetUpdatePost = (id: string) => {
+  const {
+    data: updateData = {},
+    isLoading: postsUpdateIsLoading,
+    isError: postsUpdateIsError,
+  } = useQuery<PostUpdate | undefined>(["updatePost", id], () =>
+    getUpdatePost(id)
+  );
+
+  return { updateData, postsUpdateIsLoading, postsUpdateIsError };
+};
+
 export const useCreatePost = () => {
   return useMutation(createPost);
 };
@@ -111,4 +125,8 @@ export const usePostLike = () => {
 
 export const usePostUnlike = () => {
   return useMutation(postUnlike);
+};
+
+export const usePostUpdate = () => {
+  return useMutation(postUpdate);
 };

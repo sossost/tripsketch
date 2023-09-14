@@ -1,4 +1,4 @@
-import { Post, GetPost } from "../types/Post";
+import { Post, GetPost, PostUpdate } from "../types/Post";
 import { CreatePost } from "../types/Post";
 import { API_PATH } from "../constants/path";
 import axiosBase from "./axios";
@@ -98,6 +98,21 @@ export const getPostsAndCommentsForGuest = async (postId: string) => {
   }
 };
 
+export const getUpdatePost = async (id: string) => {
+  try {
+    const response = await axiosBase.get<PostUpdate>(
+      `${API_PATH.TRIP.GET.TRIP_UPDATE_DATA.replace(":id", id)}`
+    );
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
+    }
+    return response.data;
+  } catch (error: any) {
+    console.error("게시글 상세페이지 요청 에러:", error);
+    throw error;
+  }
+};
+
 export const createPost = async (postData: CreatePost) => {
   const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
   try {
@@ -136,6 +151,30 @@ export const postUnlike = async (id: string) => {
     if (response.status !== 200) {
       throw new Error("Network response was not ok");
     }
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const postUpdate = async (updateData: any) => {
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+
+  // 수정할 id updateData에서 추출
+  const idValue = updateData["_parts"].find(([key]: string) => key === "id");
+  const id = idValue ? idValue[1] : null;
+
+  try {
+    const response = await axiosBase.put(
+      `${API_PATH.TRIP.PUT.TRIP.replace(":id", id)}`,
+      updateData,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return response.data;
   } catch (error: any) {
     throw new Error(error);
