@@ -2,13 +2,18 @@ import { QUERY_KEY } from "../react-query/queryKey";
 import {
   getPostsByNickname,
   getPostsById,
+  getPostsAndComments,
+  getPostsAndCommentsForGuest,
+  getUpdatePost,
   createPost,
   postLike,
   postUnlike,
+  postUpdate,
+  deletePostById,
   getSubscribedUsersPosts,
 } from "../services/post";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
-import { Post } from "../types/Post";
+import { Post, GetPost, PostUpdate } from "../types/Post";
 
 export interface PostsData {
   posts: Post[];
@@ -119,6 +124,42 @@ export const useGetPostsById = (id: string) => {
   return { postData, isLoading, isError };
 };
 
+export const useGetPostAndComments = (postId: string) => {
+  const {
+    data: postAndCommentData,
+    isLoading,
+    isError,
+  } = useQuery<GetPost | undefined>(["postAndComment", postId], () =>
+    getPostsAndComments(postId)
+  );
+
+  return { postAndCommentData, isLoading, isError };
+};
+
+export const useGetPostAndCommentsForGuest = (postId: string) => {
+  const {
+    data: postAndCommentGuestData,
+    isLoading,
+    isError,
+  } = useQuery<GetPost | undefined>(["postAndCommentGuest", postId], () =>
+    getPostsAndCommentsForGuest(postId)
+  );
+
+  return { postAndCommentGuestData, isLoading, isError };
+};
+
+export const useGetUpdatePost = (id: string) => {
+  const {
+    data: updateData = {},
+    isLoading: postsUpdateIsLoading,
+    isError: postsUpdateIsError,
+  } = useQuery<PostUpdate | undefined>(["updatePost", id], () =>
+    getUpdatePost(id)
+  );
+
+  return { updateData, postsUpdateIsLoading, postsUpdateIsError };
+};
+
 export const useCreatePost = () => {
   return useMutation(createPost);
 };
@@ -129,4 +170,12 @@ export const usePostLike = () => {
 
 export const usePostUnlike = () => {
   return useMutation(postUnlike);
+};
+
+export const usePostUpdate = () => {
+  return useMutation(postUpdate);
+};
+
+export const usePostDelete = () => {
+  return useMutation(deletePostById);
 };

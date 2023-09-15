@@ -34,3 +34,65 @@ export type CreatePost = {
   isPublic: boolean;
   images: [];
 };
+
+export type PostUpdate = {
+  id: string;
+  nickname: string;
+  title: string;
+  content: string;
+  likes: number;
+  views: number;
+  location: string[];
+  startedAt: string;
+  endAt: string;
+  hashtag: string[];
+  hidden: boolean;
+  createdAt: string;
+  tripLikes: string[];
+  images: string[];
+  isLiked: boolean;
+  public: boolean;
+};
+
+export type GetPost = {
+  tripAndCommentPairDataByTripId: {
+    first: {
+      id: string;
+      nickname: string;
+      title: string;
+      content: string;
+      likes: number;
+      views: number;
+      location: string;
+      startedAt: string;
+      endAt: string;
+      hashtag: string[];
+      latitude: number;
+      longitude: number;
+      isPublic: boolean;
+      isHidden: boolean;
+      createdAt: string;
+      updatedAt: string;
+      deletedAt: string;
+      images: string[];
+      isLiked: boolean;
+    };
+    second: [
+      {
+        id: string;
+        userNickName: string;
+        userProfileUrl: string;
+        tripId: string;
+        parentId: string;
+        content: string;
+        createdAt: string;
+        updatedAt: string;
+        replyToNickname: string;
+        isDeleted: boolean;
+        isLiked: boolean;
+        numberOfLikes: 0;
+        children: string[];
+      }
+    ];
+  };
+};

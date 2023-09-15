@@ -1,4 +1,4 @@
-import { Post } from "../types/Post";
+import { Post, GetPost, PostUpdate } from "../types/Post";
 import { CreatePost } from "../types/Post";
 import { API_PATH } from "../constants/path";
 import axiosBase from "./axios";
@@ -116,9 +116,58 @@ export const getPostsById = async (id: string) => {
   }
 };
 
-export const createPost = async (postData: CreatePost) => {
+export const getPostsAndComments = async (postId: string) => {
   const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
 
+  try {
+    const response = await axiosBase.get<GetPost>(
+      `${API_PATH.TRIP.GET.TRIP_AND_COMMENT.replace(":tripId", postId)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
+    }
+    return response.data;
+  } catch (error: unknown) {
+    errorLoging(error, "게시글 상세페이지 요청 에러는🤔");
+  }
+};
+
+export const getPostsAndCommentsForGuest = async (postId: string) => {
+  try {
+    const response = await axiosBase.get<GetPost>(
+      `${API_PATH.TRIP.GET.TRIP_AND_COMMENT_GUEST.replace(":tripId", postId)}`
+    );
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
+    }
+    return response.data;
+  } catch (error: unknown) {
+    errorLoging(error, "게시글 상세페이지 요청 에러는🤔");
+  }
+};
+
+export const getUpdatePost = async (id: string) => {
+  try {
+    const response = await axiosBase.get<PostUpdate>(
+      `${API_PATH.TRIP.GET.TRIP_UPDATE_DATA.replace(":id", id)}`
+    );
+    if (response.status !== 200) {
+      throw new Error("Network response was not ok");
+    }
+    return response.data;
+  } catch (error: any) {
+    console.error("게시글 상세페이지 요청 에러:", error);
+    throw error;
+  }
+};
+
+export const createPost = async (postData: CreatePost) => {
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
   try {
     const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP, postData, {
       headers: {
@@ -158,5 +207,42 @@ export const postUnlike = async (id: string) => {
     return response.data;
   } catch (error: any) {
     throw new Error(error);
+  }
+};
+
+export const postUpdate = async (updateData: any) => {
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+
+  console.log("데이터", updateData._parts);
+
+  // 수정할 id updateData에서 추출
+  const idValue = updateData["_parts"].find(([key]: string) => key === "id");
+  const id = idValue ? idValue[1] : null;
+
+  try {
+    const response = await axiosBase.put(
+      `${API_PATH.TRIP.PUT.TRIP.replace(":id", id)}`,
+      updateData,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+
+export const deletePostById = async (id: string) => {
+  try {
+    const response = await axiosBase.post(
+      `${API_PATH.TRIP.DELETE.TRIP.replace(":id", id)}`
+    );
+    return response.data;
+  } catch (error: any) {
+    errorLoging(error, "게시글 삭제 요청 에러는🤔");
   }
 };

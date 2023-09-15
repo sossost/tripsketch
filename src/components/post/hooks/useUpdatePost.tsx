@@ -1,11 +1,12 @@
-import { useCreatePost } from "../../../hooks/usePostQuery";
+import { usePostUpdate } from "../../../hooks/usePostQuery";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../types/RootStack";
-import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import React, { useEffect } from "react";
 import Toast from "react-native-toast-message";
 
 type PostDataProps = {
+  id: string;
   image: string[];
   title: string;
   content: string;
@@ -27,9 +28,11 @@ type PostDataProps = {
   isPublic: boolean;
   hashtagList: string[];
   resetState: () => void;
+  deletedImageUrls: string[];
 };
 
-const usePostTrip = ({
+const useUpdatePost = ({
+  id,
   image,
   title,
   content,
@@ -39,18 +42,19 @@ const usePostTrip = ({
   isPublic,
   hashtagList,
   resetState,
+  deletedImageUrls,
 }: PostDataProps) => {
-  const createPostMutation = useCreatePost();
-  const queryClient = useQueryClient();
+  const createPostUpdateMutation = usePostUpdate();
   const navigation = useNavigation<StackNavigation>();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
-    if (createPostMutation.isLoading) {
+    if (createPostUpdateMutation.isLoading) {
       Toast.show({ type: "info", text1: "데이터 전송 중입니다." });
     }
-  }, [createPostMutation.isLoading]);
+  }, [createPostUpdateMutation.isLoading]);
 
-  const submitPost = async () => {
+  const submitPostUpdate = async () => {
     try {
       const formData: any = new FormData();
 
@@ -63,6 +67,7 @@ const usePostTrip = ({
         });
       }
 
+      formData.append("id", id);
       formData.append("title", title);
       formData.append("content", content);
       formData.append("location", address.country);
@@ -81,21 +86,21 @@ const usePostTrip = ({
       formData.append("address", address.address);
       formData.append("etc", hashtagList);
       formData.append("public", true);
+      formData.append("deletedImageUrls", deletedImageUrls);
 
-      console.log("데이터", formData._parts);
-
-      await createPostMutation.mutateAsync(formData);
-      Toast.show({ type: "success", text1: "게시글 생성이 완료되었습니다." });
+      await createPostUpdateMutation.mutateAsync(formData);
+      Toast.show({ type: "success", text1: "게시글 수정이 완료되었습니다." });
+      queryClient.invalidateQueries(["postId"]);
+      queryClient.invalidateQueries(["updatePost"]);
       resetState(); // 상태변수 초기화
-      queryClient.invalidateQueries(["posts"]);
       navigation.goBack();
     } catch (error) {
-      console.error("게시물 생성 중 오류 발생:", error);
-      Toast.show({ type: "error", text1: "게시글 생성을 실패하였습니다." });
+      console.error("게시물 수정 중 오류 발생:", error);
+      Toast.show({ type: "error", text1: "게시글 수정을 실패하였습니다." });
     }
   };
 
-  return submitPost;
+  return submitPostUpdate;
 };
 
-export default usePostTrip;
+export default useUpdatePost;

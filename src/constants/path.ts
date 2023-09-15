@@ -35,6 +35,12 @@ export const API_PATH = {
     GET: {
       // TripId로 게시물 조회하기
       TRIP_ID: `/trip/guest/:id`,
+      // Comment와 Trip 함께 조회하기
+      TRIP_AND_COMMENT: `/trip/user/tripAndComments/:tripId`,
+      // Comment와 Trip 함께 조회하기 :: 게스트
+      TRIP_AND_COMMENT_GUEST: `/trip/guest/tripAndComments/:tripId`,
+      // 업데이트 기존 데이터 조회하기
+      TRIP_UPDATE_DATA: `/trip/modify/:id`,
     },
     POST: {
       // 게시물 생성하기
@@ -43,6 +49,14 @@ export const API_PATH = {
       TRIP_LIKE: `/trip/like`,
       // 좋아요 해제하기
       TRIP_UNLIKE: `/trip/unlike`,
+    },
+    PUT: {
+      // 게시물 수정하기
+      TRIP: `/trip/:id`,
+    },
+    DELETE: {
+      // 게시물 삭제하기
+      TRIP: `/trip/:id`,
     },
   },
   GEOCODING: {

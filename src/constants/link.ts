@@ -3,7 +3,7 @@ export const LINK = {
   MAIN: "Main",
   KAKAO_LOGIN_PAGE: "KakaoLoginPage",
   EXPLORE_PAGE: "ExplorePage",
-  TRIP_DETAIL_PAGE: "TripDetail",
+  TRIP_DETAIL_PAGE: "PostDetail",
   CREATE_POST_PAGE: "CreatePost",
   UPDATE_POST_PAGE: "UpdatePost",
   USER_PAGE: "UserPage",
