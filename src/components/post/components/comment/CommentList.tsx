@@ -3,11 +3,11 @@ import CommentItem from "./CommentItem";
 import {
   getPostCommentListByTripId,
   getPostCommentGuestListByTripId,
-} from "../../../hooks/useCommentQuery";
+} from "../../../../hooks/useCommentQuery";
 import CommentNone from "./CommentNone";
 import CommentSkeleton from "./CommentSkeleton";
-import { Comment } from "../../../types/comment";
-import { useGetCurrentUser } from "../../../hooks/useUserQuery";
+import { Comment } from "../../../../types/comment";
+import { useGetCurrentUser } from "../../../../hooks/useUserQuery";
 
 type CommentProps = {
   onReplySubmit?: (

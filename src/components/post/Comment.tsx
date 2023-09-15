@@ -1,8 +1,8 @@
 import { StyleSheet, View } from "react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import { CommonStyles } from "../../styles/CommonStyles";
-import CommentList from "./components/CommentList";
-import CommentInput from "./components/CommentInput";
+import CommentList from "./components/comment/CommentList";
+import CommentInput from "./components/comment/CommentInput";
 import Toast from "react-native-toast-message";
 import {
   getCreateComment,

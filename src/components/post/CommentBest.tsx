@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import CommentList from "./components/CommentList";
+import CommentList from "./components/comment/CommentList";
 
 const CommentBest = ({ postId }: { postId: string }) => {
   return (

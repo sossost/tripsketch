@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { Comment } from "../../../types/comment";
+import { Comment } from "../../../../types/comment";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
-import { useGetCurrentUser } from "../../../hooks/useUserQuery";
+import { useGetCurrentUser } from "../../../../hooks/useUserQuery";
 import ReCommentItem from "./ReCommentItem";
 import CommentInput from "./CommentInput";
 

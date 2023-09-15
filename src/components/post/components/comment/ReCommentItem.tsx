@@ -6,12 +6,12 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import { Comment } from "../../../types/comment";
+import { Comment } from "../../../../types/comment";
 import { Ionicons } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { useState } from "react";
 import CommentInput from "./CommentInput";
-import { User } from "../../../types/user";
+import { User } from "../../../../types/user";
 
 type ReplyCommentProps = {
   recomment: Comment;

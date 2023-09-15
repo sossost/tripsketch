@@ -8,13 +8,13 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { useGetPostsById } from "../../../hooks/usePostQuery";
-import { useGetCurrentUser } from "../../../hooks/useUserQuery";
+import { useGetPostsById } from "../../../../hooks/usePostQuery";
+import { useGetCurrentUser } from "../../../../hooks/useUserQuery";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigation } from "../../../types/RootStack";
+import { StackNavigation } from "../../../../types/RootStack";
 import PostViewSkeleton from "./PostViewSkeleton";
 import Slick from "react-native-slick";
-import useDeleteAlert from "../hooks/useDeleteAlert";
+import useDeleteAlert from "../../hooks/useDeleteAlert";
 
 type PostViewProps = {
   postId: string;

@@ -17,7 +17,7 @@ import {
   useGetPostAndCommentsForGuest,
 } from "../../hooks/usePostQuery";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
-import PostViewSkeleton from "./components/PostViewSkeleton";
+import PostViewSkeleton from "./components/post/PostViewSkeleton";
 
 const PostDetailPageComponent = ({ postId }: { postId: string }) => {
   // const { data: userData } = useGetCurrentUser();

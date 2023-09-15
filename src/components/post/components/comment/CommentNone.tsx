@@ -1,5 +1,5 @@
 import { styled } from "styled-components/native";
-import { useGetCurrentUser } from "../../../hooks/useUserQuery";
+import { useGetCurrentUser } from "../../../../hooks/useUserQuery";
 
 const CommentNone = () => {
   const { data: userData } = useGetCurrentUser();

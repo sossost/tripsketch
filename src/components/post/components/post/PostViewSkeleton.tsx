@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "styled-components/native";
-import SkeletonGradientOverlay from "./SkeletonGradientOverlay";
+import SkeletonGradientOverlay from "../SkeletonGradientOverlay";
 
 const PostViewSkeleton = () => {
   return (

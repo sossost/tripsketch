@@ -137,11 +137,13 @@ const PostPageComponent: React.FC<PostPageProps> = ({
     latitude: updateId ? updateData.latitude : 0,
     longitude: updateId ? updateData.longitude : 0,
   });
+
+  // Map 위치 저장 - default 한국 지도(서울)에서 시작하기
   const [region, setRegion] = useState<Region>({
-    latitude: 35.08997195649197,
-    longitude: 129.5864013209939,
-    latitudeDelta: 46.13261634755955,
-    longitudeDelta: 38.48174795508386,
+    latitude: 37.5665,
+    longitude: 126.978,
+    latitudeDelta: 0.05,
+    longitudeDelta: 0.05,
   });
 
   const [showModal, setShowModal] = useState(false);
@@ -378,8 +380,8 @@ const PostPageComponent: React.FC<PostPageProps> = ({
       setRegion({
         latitude: Number(suggestion.lat),
         longitude: Number(suggestion.lon),
-        latitudeDelta: 1.0,
-        longitudeDelta: 1.0,
+        latitudeDelta: 0.5,
+        longitudeDelta: 0.5,
       });
     }, 1000); // 1초 후에 실행
   };

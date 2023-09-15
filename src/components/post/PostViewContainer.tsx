@@ -1,4 +1,4 @@
-import PostView from "./components/PostView";
+import PostView from "./components/post/PostView";
 import { useQueryClient } from "@tanstack/react-query";
 import { usePostDelete } from "../../hooks/usePostQuery";
 import { useNavigation } from "@react-navigation/native";
