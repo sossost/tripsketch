@@ -54,7 +54,7 @@ export const tokenRefresh = async () => {
   try {
     // 기존의 리프레시 토큰으로 액세스 토큰 갱신 요청
     const refreshToken = await getDataFromSecureStore(STORE_KEY.REFRESH_TOKEN);
-    const response = await axiosBase.post("oauth/kakao/refreshToken", {
+    const response = await axiosBase.post("oauth/kakao/refresh-token", {
       ourRefreshToken: refreshToken,
     });
 
