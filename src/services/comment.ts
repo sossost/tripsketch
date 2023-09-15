@@ -154,11 +154,17 @@ interface updateData {
 }
 
 export const updateComment = async (updateData: updateData) => {
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
   try {
     const response = await axiosBase.patch(
       `${API_PATH.COMMENT.PATCH.COMMENT_CONTENT.replace(":id", updateData.id)}`,
       {
         content: updateData.content,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       }
     );
     if (response.status !== 200) {
@@ -177,6 +183,7 @@ interface updateReplyData {
 }
 
 export const updateReplyComment = async (updateReplyData: updateReplyData) => {
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
   try {
     const response = await axiosBase.patch(
       `${API_PATH.COMMENT.PATCH.RECOMMENT_CONTENT.replace(
@@ -185,6 +192,11 @@ export const updateReplyComment = async (updateReplyData: updateReplyData) => {
       ).replace(":parentId", updateReplyData.parentId)}`,
       {
         content: updateReplyData.content,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       }
     );
     if (response.status !== 200) {
@@ -197,9 +209,15 @@ export const updateReplyComment = async (updateReplyData: updateReplyData) => {
 };
 
 export const deleteComment = async (id: string) => {
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
   try {
     const response = await axiosBase.delete(
-      `${API_PATH.COMMENT.DELETE.COMMENT.replace(":id", id)}`
+      `${API_PATH.COMMENT.DELETE.COMMENT.replace(":id", id)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
     );
     if (response.status !== 200) {
       throw new Error("Network response was not ok");
@@ -216,12 +234,18 @@ interface deleteData {
 }
 
 export const deleteReplyComment = async (deleteData: deleteData) => {
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
   try {
     const response = await axiosBase.delete(
       `${API_PATH.COMMENT.DELETE.RECOMMENT.replace(
         ":id",
         deleteData.id
-      ).replace(":parentId", deleteData.parentId)}`
+      ).replace(":parentId", deleteData.parentId)}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
     );
     if (response.status !== 200) {
       throw new Error("Network response was not ok");
