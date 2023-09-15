@@ -20,11 +20,11 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../types/RootStack";
 import * as ImagePicker from "expo-image-picker";
 import MapView, { Marker, UrlTile } from "react-native-maps";
+import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 
 import DeleteXbutton from "../../components/common/DeleteXbutton";
 import usePostTrip from "./hooks/usePostTrip";
 import useUpdatePost from "./hooks/useUpdatePost";
-import EditProfileComponent from "../user/EditProfileComponent";
 import Loading from "../UI/Loading";
 
 type Suggestion = {
@@ -419,7 +419,29 @@ const PostPageComponent: React.FC<PostPageProps> = ({
     });
 
     if (!result.canceled) {
-      const selectedUris = result.assets.map((asset) => asset.uri);
+      const compressedUris = await Promise.all(
+        result.assets.map(async (asset) => {
+          // 이미지 압축을 수행
+          if (asset.width > 960) {
+            const compressedUri = await manipulateAsync(
+              asset.uri,
+              [{ resize: { width: 1080 } }],
+              { compress: 0.8, format: SaveFormat.JPEG }
+            );
+            return compressedUri;
+          } else {
+            const compressedUri = await manipulateAsync(
+              asset.uri,
+              [{ resize: { width: 640 } }],
+              { compress: 0.8, format: SaveFormat.JPEG }
+            );
+            return compressedUri;
+          }
+        })
+      );
+
+      const selectedUris = compressedUris.map((asset) => asset.uri);
+      console.log(selectedUris);
       const newImages = [...image, ...selectedUris];
 
       if (newImages.length > maxImageCount) {
