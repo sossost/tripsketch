@@ -2,7 +2,7 @@ import { usePostUpdate } from "../../../hooks/usePostQuery";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../types/RootStack";
 import { useQueryClient } from "@tanstack/react-query";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
 
 type PostDataProps = {
@@ -47,14 +47,19 @@ const useUpdatePost = ({
   const createPostUpdateMutation = usePostUpdate();
   const navigation = useNavigation<StackNavigation>();
   const queryClient = useQueryClient();
+  const [isUpdateLoading, setIsUpdateLoading] = useState(false);
 
   useEffect(() => {
     if (createPostUpdateMutation.isLoading) {
+      // 데이터 전송 중일 때 isLoading 상태를 true로 설정
+      setIsUpdateLoading(true);
       Toast.show({ type: "info", text1: "데이터 전송 중입니다." });
+    } else {
+      setIsUpdateLoading(false);
     }
   }, [createPostUpdateMutation.isLoading]);
 
-  const submitPostUpdate = async () => {
+  const submitUpdatePost = async () => {
     try {
       const formData: any = new FormData();
 
@@ -100,7 +105,7 @@ const useUpdatePost = ({
     }
   };
 
-  return submitPostUpdate;
+  return { submitUpdatePost, isUpdateLoading };
 };
 
 export default useUpdatePost;

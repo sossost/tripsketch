@@ -1,7 +1,7 @@
 import { useCreatePost } from "../../../hooks/usePostQuery";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../types/RootStack";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 
@@ -43,10 +43,15 @@ const usePostTrip = ({
   const createPostMutation = useCreatePost();
   const queryClient = useQueryClient();
   const navigation = useNavigation<StackNavigation>();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (createPostMutation.isLoading) {
+      // 데이터 전송 중일 때 isLoading 상태를 true로 설정
+      setIsLoading(true);
       Toast.show({ type: "info", text1: "데이터 전송 중입니다." });
+    } else {
+      setIsLoading(false);
     }
   }, [createPostMutation.isLoading]);
 
@@ -82,8 +87,6 @@ const usePostTrip = ({
       formData.append("etc", hashtagList);
       formData.append("public", true);
 
-      console.log("데이터", formData._parts);
-
       await createPostMutation.mutateAsync(formData);
       Toast.show({ type: "success", text1: "게시글 생성이 완료되었습니다." });
       resetState(); // 상태변수 초기화
@@ -95,7 +98,7 @@ const usePostTrip = ({
     }
   };
 
-  return submitPost;
+  return { submitPost, isLoading };
 };
 
 export default usePostTrip;

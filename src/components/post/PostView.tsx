@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { useGetPostsById, usePostDelete } from "../../hooks/usePostQuery";
+import { useGetPostsById } from "../../hooks/usePostQuery";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../types/RootStack";
