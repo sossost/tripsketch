@@ -238,7 +238,7 @@ export const postUpdate = async (updateData: any) => {
 
 export const deletePostById = async (id: string) => {
   try {
-    const response = await axiosBase.post(
+    const response = await axiosBase.delete(
       `${API_PATH.TRIP.DELETE.TRIP.replace(":id", id)}`
     );
     return response.data;

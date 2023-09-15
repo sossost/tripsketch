@@ -8,7 +8,7 @@ import {
   Text,
 } from "react-native";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import PostView from "./PostView";
+import PostViewContainer from "./PostViewContainer";
 import Comment from "./Comment";
 import CommentBest from "./CommentBest";
 import LikesAndCommentText from "./LikesAndCommentText";
@@ -62,7 +62,7 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
     <View style={styles.container}>
       <View style={styles.containerInner}>
         <ScrollView>
-          <PostView postId={postId} />
+          <PostViewContainer postId={postId} />
           <LikesAndCommentText
             postId={postId}
             handleIconPress={(index) => handleSnapPress(index)}

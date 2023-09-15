@@ -8,15 +8,20 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { useGetPostsById } from "../../hooks/usePostQuery";
-import { useGetCurrentUser } from "../../hooks/useUserQuery";
+import { useGetPostsById } from "../../../hooks/usePostQuery";
+import { useGetCurrentUser } from "../../../hooks/useUserQuery";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigation } from "../../types/RootStack";
-import PostViewSkeleton from "./components/PostViewSkeleton";
+import { StackNavigation } from "../../../types/RootStack";
+import PostViewSkeleton from "./PostViewSkeleton";
 import Slick from "react-native-slick";
-import useDeletePost from "./hooks/useDeletePost";
+import useDeleteAlert from "../hooks/useDeleteAlert";
 
-const PostView = ({ postId }: { postId: string }) => {
+type PostViewProps = {
+  postId: string;
+  deletePost: (postId: string) => Promise<void>;
+};
+
+const PostView = ({ postId, deletePost }: PostViewProps) => {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
   const { postData, isLoading, isError } = useGetPostsById(postId);
   const { data: userData } = useGetCurrentUser();
@@ -31,7 +36,11 @@ const PostView = ({ postId }: { postId: string }) => {
   }
 
   if (!postData) {
-    return <Text>Data not available.</Text>;
+    return (
+      <View style={styles.none_postData}>
+        <Text>데이터가 존재하지 않습니다.</Text>
+      </View>
+    );
   }
 
   const settingBox = () => {
@@ -54,9 +63,13 @@ const PostView = ({ postId }: { postId: string }) => {
     setIsSettingOpen(!isSettingOpen);
   };
 
-  // 게시물 삭제하기
-  const postDeleteHandler = (id: string) => {
-    useDeletePost(id);
+  // 게시글 삭제 핸들러
+  const postDeleteHandler = (postId: string) => {
+    const deleteAlertFunction = useDeleteAlert({
+      id: postId,
+      deleteRequest: deletePost,
+    });
+    deleteAlertFunction();
   };
 
   return (
@@ -83,7 +96,7 @@ const PostView = ({ postId }: { postId: string }) => {
                 <TouchableOpacity onPress={postUpdateHandler}>
                   <Text style={styles.setting_box_text}>수정하기</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={postDeleteHandler}>
+                <TouchableOpacity onPress={() => postDeleteHandler(postId)}>
                   <Text style={styles.setting_box_text}>삭제하기</Text>
                 </TouchableOpacity>
               </View>
@@ -142,6 +155,12 @@ const PostView = ({ postId }: { postId: string }) => {
 
 const styles = StyleSheet.create({
   container: {},
+  none_postData: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 100,
+  },
   image_bg: {
     width: "100%",
     height: 200,
