@@ -8,7 +8,7 @@ import {
   Text,
 } from "react-native";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import PostView from "./PostView";
+import PostViewContainer from "./PostViewContainer";
 import Comment from "./Comment";
 import CommentBest from "./CommentBest";
 import LikesAndCommentText from "./LikesAndCommentText";
@@ -17,7 +17,7 @@ import {
   useGetPostAndCommentsForGuest,
 } from "../../hooks/usePostQuery";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
-import PostViewSkeleton from "./components/PostViewSkeleton";
+import PostViewSkeleton from "./components/post/PostViewSkeleton";
 
 const PostDetailPageComponent = ({ postId }: { postId: string }) => {
   // const { data: userData } = useGetCurrentUser();
@@ -62,7 +62,7 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
     <View style={styles.container}>
       <View style={styles.containerInner}>
         <ScrollView>
-          <PostView postId={postId} />
+          <PostViewContainer postId={postId} />
           <LikesAndCommentText
             postId={postId}
             handleIconPress={(index) => handleSnapPress(index)}
