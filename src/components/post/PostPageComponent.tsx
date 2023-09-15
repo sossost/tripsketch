@@ -113,6 +113,10 @@ interface PostPageProps {
   updateData?: any;
 }
 
+interface ViewProps {
+  height?: number;
+}
+
 /** 여행 글쓰기 */
 const PostPageComponent: React.FC<PostPageProps> = ({
   updateId,
@@ -398,6 +402,9 @@ const PostPageComponent: React.FC<PostPageProps> = ({
   const windowWidth = Dimensions.get("window").width - 40;
   const imageWidth = windowWidth * 0.19;
 
+  /* 화면 높이 가져오기 */
+  const windowHeight: number = Dimensions.get("window").height;
+
   // 이미지 업데이트 시 사용 - 기존 데이터 카피
   let copyImageData: string[] = [];
   if (updateId) {
@@ -558,7 +565,7 @@ const PostPageComponent: React.FC<PostPageProps> = ({
     <>
       <Container>
         {isLoading || isUpdateLoading ? (
-          <LoadingPopup>
+          <LoadingPopup height={windowHeight}>
             <LoadingBox>
               <Loading />
             </LoadingBox>
@@ -566,7 +573,6 @@ const PostPageComponent: React.FC<PostPageProps> = ({
         ) : null}
         <HeaderInfo>
           {/* 여행기간 */}
-
           <InfoBox>
             <CalendarIcon name="calendar" />
             <Title>여행기간</Title>
@@ -914,11 +920,11 @@ const Container = styled.View`
 `;
 
 /* 로딩 팝업 */
-const LoadingPopup = styled.View`
+const LoadingPopup = styled.View<ViewProps>`
   position: absolute;
   top: 0;
   width: 100%;
-  height: 100%;
+  height: ${(props) => props.height}px;
   background-color: rgba(20, 20, 20, 0.7);
   z-index: 1;
   display: flex;
