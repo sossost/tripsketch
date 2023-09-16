@@ -1,37 +1,50 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { styled } from "styled-components/native";
+import { colors } from "../../constants/color";
+import { ErrorFallbackProps } from "./ErrorBoundary";
 
-const ErrorFallback = (props: { error: Error; resetError: Function }) => {
-  console.log("에러폴백에서 잡힌에러는" + props.error);
-
+const ErrorFallback = (props: ErrorFallbackProps) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Something happened!</Text>
-      <Text style={styles.text}>{props.error.toString()}</Text>
-      <Button onPress={() => props.resetError} title={"Try again"} />
-    </View>
+    <ErrorFallbackContainer>
+      <ErrorMesageTitle>네트워크 오류가 발생했습니다.</ErrorMesageTitle>
+      <ErrorMessage>에러는 : {props.error.toString()}</ErrorMessage>
+      <RetryButton onPress={() => props.reset()}>
+        <ButtonText>다시시도</ButtonText>
+      </RetryButton>
+    </ErrorFallbackContainer>
   );
 };
 
 export default ErrorFallback;
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#ecf0f1",
-    padding: 8,
-    textAlign: "center",
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  icon: {
-    fontSize: 48,
-  },
-  text: {
-    marginVertical: 16,
-  },
-});
+const ErrorFallbackContainer = styled.View`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: ${colors.white};
+  padding: 20px;
+  border-radius: 10px;
+`;
+
+const RetryButton = styled.TouchableOpacity`
+  background-color: ${colors.primary};
+  padding: 10px 20px;
+  border-radius: 10px;
+`;
+
+const ButtonText = styled.Text`
+  color: ${colors.white};
+  font-size: 16px;
+`;
+
+const ErrorMesageTitle = styled.Text`
+  font-size: 18px;
+  font-weight: bold;
+  color: ${colors.mainFont};
+  padding-bottom: 10px;
+`;
+
+const ErrorMessage = styled.Text`
+  font-size: 16px;
+  color: ${colors.mainFont};
+  padding-bottom: 10px;
+`;
