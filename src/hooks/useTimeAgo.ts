@@ -16,7 +16,7 @@ const useTimeAgo = (date: string) => {
   const updateRelativeTime = () => {
     const today = new Date();
     const notificationDate = new Date(date);
-    const diffTime = today.getTime() - notificationDate.getTime();
+    const diffTime = today.getTime() - notificationDate.getTime() - 32400000;
     const diffInSeconds = Math.floor(diffTime / 1000);
 
     if (diffInSeconds < 60) {

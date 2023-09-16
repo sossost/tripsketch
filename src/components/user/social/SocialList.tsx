@@ -1,12 +1,12 @@
-import { FlatList } from "react-native";
-import { User } from "../../../types/user";
+import { styled } from "styled-components/native";
+import { useGetSocialList } from "../../../hooks/useUserQuery";
 
 import SocialItem from "./SocialItem";
-import { styled } from "styled-components/native";
 
 interface SocialListProps {
-  userList: User[];
+  variant: "팔로워" | "팔로잉";
   followBtnHandler: (nickname: string, isFollowing: boolean) => Promise<void>;
+  pageOwnerNickname: string;
   currentUserNickname: string | null;
 }
 
@@ -17,18 +17,22 @@ interface SocialListProps {
  * @param followBtnHandler : 팔로우 버튼 핸들러
  *
  * @author : 장윤수
- * @update : 2023-09-14,
- * @version 1.1.3, 키값 누락 추가
+ * @update : 2023-09-16,
+ * @version 1.2.3, 로직 안으로 변경
  * @see None,
  */
 const SocialList = ({
-  userList,
+  variant,
   followBtnHandler,
+  pageOwnerNickname,
   currentUserNickname,
 }: SocialListProps) => {
+  // 현재 페이지의 유저 리스트를 가져옴
+  const { data: userList } = useGetSocialList(variant, pageOwnerNickname);
+
   return (
     <SocialItemContainer>
-      {userList.map((user) => {
+      {userList?.map((user) => {
         const isFollowing = user.isFollowing;
         const isMe = user.nickname === currentUserNickname ? true : false;
         return (
