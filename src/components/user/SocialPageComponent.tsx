@@ -1,7 +1,8 @@
-import { Text } from "react-native";
 import { useState } from "react";
-
-import { useGetCurrentUser, useGetSocialList } from "../../hooks/useUserQuery";
+import {
+  useGetCurrentUser,
+  useGetUserByNickname,
+} from "../../hooks/useUserQuery";
 import { useSocialControllerInSocialPage } from "../../hooks/useFollowQuery";
 import { styled } from "styled-components/native";
 import { colors } from "../../constants/color";
@@ -9,9 +10,7 @@ import { colors } from "../../constants/color";
 import VariantSelector from "../UI/VariantSelector";
 import SocialList from "./social/SocialList";
 import BackButton from "../UI/header/BackButton";
-import ErrorBoundary from "react-native-error-boundary";
-import ErrorFallback from "../UI/ErrorFallback";
-import Loading from "../UI/Loading";
+import AsyncBoundary from "../common/AsyncBoundary";
 
 interface SocialPageComponentProps {
   pageOwnerNickname: string;
@@ -25,8 +24,8 @@ interface SocialPageComponentProps {
  * @param initialVariant : 페이지의 초기 variant 상태 (팔로워, 팔로잉)
  *
  * @author : 장윤수
- * @update : 2023-09-12,
- * @version 1.1.1, 소셜리스트에 유저가 나일 경우 팔로우 버튼이 보이지 않도록 수정
+ * @update : 2023-09-16,
+ * @version 1.2.1, 유저리스트 로직 분리
  * @see None,
  */
 const SocialPageComponent = ({
@@ -36,11 +35,13 @@ const SocialPageComponent = ({
   // 페이지의 variant 상태를 관리하는 state
   const [variant, setVariant] = useState<"팔로워" | "팔로잉">(initialVariant);
 
-  // 현재 로그인한 유저의 정보를 가져옴
-  const currentUser = useGetCurrentUser().data;
+  const isFollowerPage = variant === "팔로워" ? true : false;
 
-  // 현재 페이지의 유저 리스트를 가져옴
-  const userList = useGetSocialList(variant, pageOwnerNickname);
+  // 현재 로그인한 유저의 정보를 가져옴
+  const { data: currentUser } = useGetCurrentUser();
+
+  // 현재 페이지 주인의 정보를 가져옴
+  const { data: pageOwner } = useGetUserByNickname(pageOwnerNickname);
 
   // 팔로우 버튼을 눌렀을 때의 핸들러
   const followBtnHandler = useSocialControllerInSocialPage({
@@ -51,37 +52,37 @@ const SocialPageComponent = ({
 
   return (
     <Layout>
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <SocialHeader>
-          <BackButton />
-          <SocialHeaderText>
-            <ColoredText>{pageOwnerNickname}</ColoredText>님
-            {variant === "팔로워" ? "을" : "이"} 구독하는&nbsp;
-            <ColoredText>{userList.data?.length || 0}</ColoredText>명
-          </SocialHeaderText>
-          <Spacing />
-        </SocialHeader>
+      <SocialHeader>
+        <BackButton />
+        <SocialHeaderText>
+          <ColoredText>{pageOwnerNickname}</ColoredText>님
+          {isFollowerPage ? "을" : "이"} 구독하는&nbsp;
+          <ColoredText>
+            {isFollowerPage
+              ? pageOwner?.followersCount
+              : pageOwner?.followingCount || 0}
+          </ColoredText>
+          명
+        </SocialHeaderText>
+        <Spacing />
+      </SocialHeader>
 
-        <VariantSelector<"팔로워" | "팔로잉">
-          variant1="팔로워"
-          variant2="팔로잉"
-          initialVariant={initialVariant}
+      <VariantSelector<"팔로워" | "팔로잉">
+        variant1="팔로워"
+        variant2="팔로잉"
+        initialVariant={initialVariant}
+        variant={variant}
+        setVariant={setVariant}
+      />
+
+      <AsyncBoundary>
+        <SocialList
           variant={variant}
-          setVariant={setVariant}
+          pageOwnerNickname={pageOwnerNickname}
+          followBtnHandler={followBtnHandler}
+          currentUserNickname={currentUser?.nickname || null}
         />
-
-        {userList.isLoading ? (
-          <Loading />
-        ) : userList.isError ? (
-          <Text>에러</Text>
-        ) : (
-          <SocialList
-            userList={userList.data || []}
-            followBtnHandler={followBtnHandler}
-            currentUserNickname={currentUser?.nickname || null}
-          />
-        )}
-      </ErrorBoundary>
+      </AsyncBoundary>
     </Layout>
   );
 };

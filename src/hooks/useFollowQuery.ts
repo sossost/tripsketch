@@ -4,7 +4,6 @@ import { StackNavigation } from "../types/RootStack";
 import { QUERY_KEY } from "../react-query/queryKey";
 import { followUser, unfollowUser } from "../services/user";
 import { User } from "../types/user";
-import { errorLoging } from "../utils/errorHandler";
 import { errorToastMessage, successToastMessage } from "../utils/toastMessage";
 import { LINK } from "../constants/link";
 import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../constants/message";
@@ -63,10 +62,6 @@ export const useSocialControllerInSocialPage = ({
       onSuccess: (_, targetNickname) => {
         successToastMessage(`${targetNickname}님을 ${SUCCESS_MESSAGE.FOLLOW}`);
       },
-      onError: (error: unknown) => {
-        errorToastMessage(ERROR_MESSAGE.FOLLOW);
-        errorLoging(error, "팔로우 요청 에러는🤔");
-      },
     }
   );
 
@@ -92,10 +87,6 @@ export const useSocialControllerInSocialPage = ({
       },
       onSuccess: (_, targetNickname) => {
         successToastMessage(`${targetNickname}님 ${SUCCESS_MESSAGE.UNFOLLOW}`);
-      },
-      onError: (error: unknown) => {
-        errorToastMessage(ERROR_MESSAGE.UNFOLLOW);
-        errorLoging(error, "언팔로우 요청 에러는🤔");
       },
     }
   );
@@ -172,10 +163,6 @@ export const useSocialControllerInUserPage = ({
           `${profileUser?.nickname}님을 ${SUCCESS_MESSAGE.FOLLOW}`
         );
       },
-      onError: (error: unknown) => {
-        errorLoging(error, "팔로우 요청 에러는🤔");
-        errorToastMessage(ERROR_MESSAGE.FOLLOW);
-      },
     }
   );
 
@@ -203,10 +190,6 @@ export const useSocialControllerInUserPage = ({
         successToastMessage(
           `${profileUser?.nickname}님 ${SUCCESS_MESSAGE.UNFOLLOW}`
         );
-      },
-      onError: (error: unknown) => {
-        errorLoging(error, "언팔로우 요청 에러는🤔");
-        errorToastMessage(ERROR_MESSAGE.UNFOLLOW);
       },
     }
   );

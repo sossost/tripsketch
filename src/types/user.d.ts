@@ -4,5 +4,5 @@ export type User = {
   profileImageUrl: string;
   followersCount?: number;
   followingCount?: number;
-  isFollowing?: boolean;
+  isFollowing: boolean;
 };

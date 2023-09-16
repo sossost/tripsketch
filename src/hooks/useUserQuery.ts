@@ -4,6 +4,7 @@ import {
   getFollowerList,
   getFollowingList,
   getUserByNickname,
+  getUserByNicknameAuthed,
 } from "../services/user";
 import { QUERY_KEY } from "../react-query/queryKey";
 import { User } from "../types/user";
@@ -31,26 +32,24 @@ export const useGetCurrentUser = () => {
  * @param nickname : 유저닉네임
  *
  * @author : 장윤수
- * @update : 2023-09-14,  쿼리 옵션 추가
+ * @update : 2023-09-16, 쿼리옵션 전역 변경, 비동기 바운더리 사용
  * @version 1.0.1,
  * @see None,
  */
 export const useGetUserByNickname = (nickname: string) => {
-  const {
-    data = null,
-    isLoading,
-    isError,
-  } = useQuery<User | null>(
-    [QUERY_KEY.USER, nickname],
-    () => getUserByNickname(nickname),
-    {
-      enabled: !!nickname,
-      suspense: true,
-      useErrorBoundary: true,
-    }
-  );
+  const queryKey = [QUERY_KEY.USER, nickname];
 
-  return { data, isLoading, isError };
+  const { data: currentUser } = useGetCurrentUser();
+
+  const queryFn = currentUser
+    ? () => getUserByNicknameAuthed(nickname)
+    : () => getUserByNickname(nickname);
+
+  const { data = null } = useQuery<User | null>(queryKey, queryFn, {
+    enabled: !!nickname,
+  });
+
+  return { data };
 };
 
 /**
@@ -60,8 +59,8 @@ export const useGetUserByNickname = (nickname: string) => {
  * @param pageUserNickname : 페이지 유저의 닉네임
  *
  * @author : 장윤수
- * @update : 2023-09-14,  쿼리 옵션 추가
- * @version 1.0.1,
+ * @update : 2023-09-16, 비동기 바운더리로 처리
+ * @version 1.0.2,
  * @see None,
  */
 export const useGetSocialList = (
@@ -83,15 +82,9 @@ export const useGetSocialList = (
     return null;
   };
 
-  const {
-    data = null,
-    isLoading,
-    isError,
-  } = useQuery<User[] | null>(queryKey, queryFn, {
+  const { data = null } = useQuery<User[] | null>(queryKey, queryFn, {
     enabled: !!pageUserNickname,
-    suspense: true,
-    useErrorBoundary: true,
   });
 
-  return { data, isLoading, isError };
+  return { data };
 };
