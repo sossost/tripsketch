@@ -10,7 +10,6 @@ import {
 } from "./Profile.style";
 import {
   useGetCurrentUser,
-  useGetSocialList,
   useGetUserByNickname,
 } from "../../../hooks/useUserQuery";
 
@@ -37,8 +36,8 @@ export type RootStackParamList = {
  * @param nickname : 프로필 주인의 닉네임
  *
  * @author : 장윤수
- * @update : 2023-09-14,
- * @version 1.1.0, 유저 페이지 컴포넌트에서 로직 분리
+ * @update : 2023-09-16, isFollowing 체크로직 변경
+ * @version 1.2.0,
  * @see None,
  */
 const Profile = ({ nickname }: ProfileProps) => {
@@ -50,16 +49,6 @@ const Profile = ({ nickname }: ProfileProps) => {
   // 닉네임을 통해 해당 유저의 정보를 가져옴
   const { data: profileUser } = useGetUserByNickname(nickname);
 
-  // 로그인한 유저정보를 통해 팔로잉 리스트를 가져옴
-  const currentUserFollowingList =
-    currentUser && useGetSocialList("팔로잉", currentUser.nickname).data;
-
-  // 현재 유저가 해당 유저를 팔로잉하고 있는지 여부
-  const isFollowing =
-    currentUserFollowingList?.some((user) => {
-      return user.nickname === nickname;
-    }) || false;
-
   // 마이페이지인지 유저페이지인지 구분
   const pageVariant =
     nickname === currentUser?.nickname ? "myPage" : "userPage";
@@ -68,7 +57,7 @@ const Profile = ({ nickname }: ProfileProps) => {
   const buttonTitle =
     pageVariant === "myPage"
       ? "프로필 편집"
-      : isFollowing
+      : profileUser!.isFollowing
       ? "팔로잉"
       : "팔로우";
 
@@ -88,7 +77,7 @@ const Profile = ({ nickname }: ProfileProps) => {
 
     // 유저페이지면 팔로우 버튼 핸들러 실행
     if (pageVariant === "userPage") {
-      handleFollowBtn(isFollowing);
+      handleFollowBtn(profileUser!.isFollowing);
     }
   };
 
@@ -118,7 +107,7 @@ const Profile = ({ nickname }: ProfileProps) => {
           <Button
             title={buttonTitle}
             style={{
-              color: isFollowing ? "blue" : "white",
+              color: profileUser!.isFollowing ? "blue" : "white",
               fontSize: 14,
             }}
             onPress={handleOnPress}
