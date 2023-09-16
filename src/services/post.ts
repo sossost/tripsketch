@@ -16,36 +16,26 @@ import { errorLoging } from "../utils/errorHandler";
  * @param size : 페이지당 게시물수
  *
  * @author : 장윤수
- * @update : 2023-09-12,
- * @version 1.0.1, 닉네임 undefined일 경우 분기처리, 에러 로깅 변경
+ * @update : 2023-09-16,
+ * @version 1.0.2, 닉네임 타압 undefined 제거
  * @see None,
  */
 export const getPostsByNickname = async (
-  nickname: string | undefined,
+  nickname: string,
   category: string,
   page: number,
   size: number
 ) => {
-  if (!nickname) return;
-
   if (category === "전체보기") {
-    try {
-      const response = await axiosBase.get<PostsData>(
-        `trip/nickname/tripsWithPagination/categories?nickname=${nickname}&page=${page}&pageSize=${size}`
-      );
-      return response.data;
-    } catch (error: unknown) {
-      errorLoging(error, "게시글 리스트 요청 에러는🤔");
-    }
-  }
-
-  try {
+    const response = await axiosBase.get<PostsData>(
+      `trip/nickname/tripsWithPagination/categories?nickname=${nickname}&page=${page}&pageSize=${size}`
+    );
+    return response.data;
+  } else {
     const response = await axiosBase.get<PostsData>(
       `trip/nickname/tripsWithPagination/country/${category}?nickname=${nickname}&page=${page}&size=${size}`
     );
     return response.data;
-  } catch (error: unknown) {
-    errorLoging(error, "게시글 리스트 요청 에러는🤔");
   }
 };
 
@@ -56,19 +46,15 @@ export const getPostsByNickname = async (
  * @param size : 페이지당 게시물 수
  *
  * @author : 장윤수
- * @update : 2023-09-14,
+ * @update : 2023-09-16, try-catch -> 에러바운더리로 변경
  * @version 1.0.0,
  * @see None,
  */
 export const getSubscribedUsersPosts = async (page: number, size: number) => {
-  try {
-    const response = await axiosBase.get(
-      `trip/list/following?page=${page}&size=${size}`
-    );
-    return response.data;
-  } catch (error: unknown) {
-    errorLoging(error, "구독한 유저의 게시물 리스트 요청 에러는🤔");
-  }
+  const response = await axiosBase.get(
+    `trip/list/following?page=${page}&size=${size}`
+  );
+  return response.data;
 };
 
 /**

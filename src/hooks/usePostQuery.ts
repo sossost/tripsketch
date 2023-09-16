@@ -42,13 +42,10 @@ export interface InfinitePostsData {
  *
  * @author : 장윤수
  * @update : 2023-09-12,
- * @version 1.1.1, isLoading, isError 추가
+ * @version 1.1.2,
  * @see None,
  */
-export const useGetPostsByNickname = (
-  nickname: string | undefined,
-  category: string
-) => {
+export const useGetPostsByNickname = (nickname: string, category: string) => {
   const postsPerPage = 5;
   const {
     data,
@@ -81,8 +78,8 @@ export const useGetPostsByNickname = (
 /**
  * @description : 구독한 유저들을 기준으로 페이지네이션 처리된 게시글 리스트를 요청하는 리액트 쿼리 훅
  * @author : 장윤수
- * @update : 2023-09-14,
- * @version 1.0.0,
+ * @update : 2023-09-16,
+ * @version 1.0.1, 쿼리 옵션 전역으로 변경
  * @see None,
  */
 export const useGetSubscribedUsersPosts = () => {
@@ -97,8 +94,6 @@ export const useGetSubscribedUsersPosts = () => {
       return getSubscribedUsersPosts(pageParam, postsPerPage);
     },
     {
-      suspense: true,
-      useErrorBoundary: true,
       getNextPageParam: (lastPage: TripsData | undefined) => {
         if (!lastPage) return undefined;
         if (lastPage.totalPages === 0) return undefined;
@@ -109,7 +104,7 @@ export const useGetSubscribedUsersPosts = () => {
     }
   );
 
-  const posts = data?.pages.flatMap((page) => page!.trips) || [];
+  const posts = data?.pages.flatMap((page) => page?.trips) || [];
 
   return { posts, fetchNextPage, hasNextPage };
 };
