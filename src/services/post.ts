@@ -66,8 +66,33 @@ export const getSubscribedUsersPosts = async (page: number, size: number) => {
 /**
  * @description : 검색어와 정렬기준으로 게시글 리스트를 요청하는 함수
  *
+ * @param page : 요청할 페이지
+ * @param size : 페이지당 게시물 수
+ *
+ * @author : 장윤수
+ * @update : 2023-09-17,
+ * @version 1.1.0, 페이지 네이션 기능 추가
+ * @see None,
+ */
+export const getPostsByTrending = async (page: number, size: number) => {
+  try {
+    const response = await axiosBase.get(
+      `trip/guest/trips?page=${page}&size=${size}&sortType=2`
+    );
+    return response.data;
+  } catch (error: unknown) {
+    errorLoging(error, "검색 게시글 리스트 요청 에러는🤔");
+    throw new Error(ERROR_MESSAGE.GET_POSTS);
+  }
+};
+
+/**
+ * @description : 검색어와 정렬기준으로 게시글 리스트를 요청하는 함수
+ *
  * @param keward : 검색 키워드
  * @param sorting : 정렬 기준
+ * @param page : 요청할 페이지
+ * @param size : 페이지당 게시물 수
  *
  * @author : 장윤수
  * @update : 2023-09-17,

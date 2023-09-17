@@ -12,6 +12,7 @@ import {
   deletePostById,
   getSubscribedUsersPosts,
   getSortedPostsBySearchKeyword,
+  getPostsByTrending,
 } from "../services/post";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { Post, GetPost, PostUpdate } from "../types/Post";
@@ -136,6 +137,41 @@ export const useGetPostsBySearchQuery = (
         pageParam,
         postsPerPage
       );
+    },
+    {
+      getNextPageParam: (lastPage: TripsData | undefined) => {
+        if (!lastPage) return undefined;
+        if (lastPage.totalPages === 0) return undefined;
+        if (lastPage.totalPages === lastPage.currentPage) return undefined;
+
+        return lastPage.currentPage + 1;
+      },
+    }
+  );
+
+  const posts = data?.pages.flatMap((page) => page!.trips) || [];
+
+  return { posts, fetchNextPage, hasNextPage };
+};
+
+/**
+ * @description : 인기 게시글 리스트를 요청하는 리액트 쿼리 훅
+ * @author : 장윤수
+ * @update : 2023-09-18,
+ * @version 1.0.0,
+ * @see None,
+ */
+export const useGetPostsByTrendingQuery = () => {
+  const postsPerPage = 5;
+
+  const {
+    data = null,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    [QUERY_KEY.POSTS, QUERY_KEY.TRENDING],
+    ({ pageParam = 1 }) => {
+      return getPostsByTrending(pageParam, postsPerPage);
     },
     {
       getNextPageParam: (lastPage: TripsData | undefined) => {

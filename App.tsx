@@ -5,9 +5,10 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import StyledTheme from "./src/context/themeContext";
 import { StatusBar } from "expo-status-bar";
 import { RecoilRoot } from "recoil";
+import { LogBox } from "react-native";
+
 import NotificationProvider from "./src/context/notificationProvider";
 import FadeOutContextProvider from "./src/context/fadeOutContext";
-import { LogBox } from "react-native";
 import AsyncBoundary from "./src/components/common/AsyncBoundary";
 
 // LogBox.ignoreAllLogs(true);
@@ -28,7 +29,7 @@ export default function App() {
       <RecoilRoot>
         <StyledTheme>
           <SafeAreaProvider>
-            <AsyncBoundary>
+            <AsyncBoundary suspenseFallback={<></>}>
               <NotificationProvider>
                 <FadeOutContextProvider>
                   <StatusBar style="auto" />

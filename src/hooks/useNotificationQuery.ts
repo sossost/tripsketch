@@ -17,7 +17,7 @@ export interface InfinitePostsData {
  * @see None,
  */
 export const useGetNotifications = () => {
-  const postsPerPage = 20;
+  const postsPerPage = 10;
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
     [QUERY_KEY.NOTIFICATIONS],
     ({ pageParam = 0 }) => {
