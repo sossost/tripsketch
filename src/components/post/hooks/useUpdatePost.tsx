@@ -97,6 +97,7 @@ const useUpdatePost = ({
       Toast.show({ type: "success", text1: "게시글 수정이 완료되었습니다." });
       queryClient.invalidateQueries(["postId"]);
       queryClient.invalidateQueries(["updatePost"]);
+      queryClient.invalidateQueries(["postAndComment"]);
       resetState(); // 상태변수 초기화
       navigation.goBack();
     } catch (error) {

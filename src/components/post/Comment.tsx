@@ -14,8 +14,14 @@ import {
   getDeleteComment,
   getDeleteReplyComment,
 } from "../../hooks/useCommentQuery";
+import { GetPost } from "../../types/Post";
 
-const Comment = ({ postId }: { postId: string }) => {
+type CommentProps = {
+  postId: string;
+  commentData: GetPost["tripAndCommentPairDataByTripId"]["second"];
+};
+
+const Comment = ({ postId, commentData }: CommentProps) => {
   const createCommentMutation = getCreateComment();
   const queryClient = useQueryClient();
 
@@ -29,6 +35,7 @@ const Comment = ({ postId }: { postId: string }) => {
       await createCommentMutation.mutateAsync(commentData);
       Toast.show({ type: "success", text1: "댓글 생성이 완료되었습니다." });
       queryClient.invalidateQueries(["commentTripId"]);
+      queryClient.invalidateQueries(["postAndComment"]);
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 생성을 실패하였습니다." });
@@ -52,6 +59,7 @@ const Comment = ({ postId }: { postId: string }) => {
       await createReplyCommentMutation.mutateAsync(replyCommentData);
       Toast.show({ type: "success", text1: "댓글 생성이 완료되었습니다." });
       queryClient.invalidateQueries(["commentTripId"]);
+      queryClient.invalidateQueries(["postAndComment"]);
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 생성을 실패하였습니다." });
@@ -64,6 +72,7 @@ const Comment = ({ postId }: { postId: string }) => {
     try {
       await isLikeCommentMutation.mutateAsync(likeCommentId);
       queryClient.invalidateQueries(["commentTripId"]);
+      queryClient.invalidateQueries(["postAndComment"]);
       if (isLikeStatus) {
         Toast.show({ type: "success", text1: "좋아요가 해제되었습니다." });
       } else {
@@ -88,6 +97,7 @@ const Comment = ({ postId }: { postId: string }) => {
       };
       await isLikeReplyCommentMutation.mutateAsync(replyCommentData);
       queryClient.invalidateQueries(["commentTripId"]);
+      queryClient.invalidateQueries(["postAndComment"]);
       if (isLikeStatus) {
         Toast.show({ type: "success", text1: "좋아요가 해제되었습니다." });
       } else {
@@ -109,6 +119,7 @@ const Comment = ({ postId }: { postId: string }) => {
       await updateCommentMutation.mutateAsync(updateData);
       Toast.show({ type: "success", text1: "댓글 수정 완료!" });
       queryClient.invalidateQueries(["commentTripId"]);
+      queryClient.invalidateQueries(["postAndComment"]);
     } catch (error) {
       console.error("오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 수정 실패!" });
@@ -131,6 +142,7 @@ const Comment = ({ postId }: { postId: string }) => {
       await updateReplyCommentMutation.mutateAsync(updateReplyData);
       Toast.show({ type: "success", text1: "댓글 수정 완료!" });
       queryClient.invalidateQueries(["commentTripId"]);
+      queryClient.invalidateQueries(["postAndComment"]);
     } catch (error) {
       console.error("오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 수정 실패!" });
@@ -144,6 +156,7 @@ const Comment = ({ postId }: { postId: string }) => {
       await deleteCommentMutation.mutateAsync(id);
       Toast.show({ type: "success", text1: "댓글 삭제 완료!" });
       queryClient.invalidateQueries(["commentTripId"]);
+      queryClient.invalidateQueries(["postAndComment"]);
     } catch (error) {
       console.error("오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 삭제 실패!" });
@@ -161,6 +174,7 @@ const Comment = ({ postId }: { postId: string }) => {
       await deleteReplyCommentMutation.mutateAsync(deleteData);
       Toast.show({ type: "success", text1: "댓글 삭제 완료!" });
       queryClient.invalidateQueries(["commentTripId"]);
+      queryClient.invalidateQueries(["postAndComment"]);
     } catch (error) {
       console.error("오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 삭제 실패!" });
@@ -179,6 +193,7 @@ const Comment = ({ postId }: { postId: string }) => {
         updateReplyComment={updateReplyComment}
         deleteComment={deleteComment}
         deleteReplyComment={deleteReplyComment}
+        commentData={commentData}
       />
       <View style={CommonStyles.appContainer}>
         <CommentInput onSubmit={handleSubmit} />

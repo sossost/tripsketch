@@ -166,25 +166,25 @@ export const useGetPostsById = (id: string) => {
 export const useGetPostAndComments = (postId: string) => {
   const {
     data: postAndCommentData,
-    isLoading,
-    isError,
+    isLoading: isDataUserLoading,
+    isError: isDataUserError,
   } = useQuery<GetPost | undefined>(["postAndComment", postId], () =>
     getPostsAndComments(postId)
   );
 
-  return { postAndCommentData, isLoading, isError };
+  return { postAndCommentData, isDataUserLoading, isDataUserError };
 };
 
 export const useGetPostAndCommentsForGuest = (postId: string) => {
   const {
     data: postAndCommentGuestData,
-    isLoading,
-    isError,
+    isLoading: isDataGuestLoading,
+    isError: isDataGuestError,
   } = useQuery<GetPost | undefined>(["postAndCommentGuest", postId], () =>
     getPostsAndCommentsForGuest(postId)
   );
 
-  return { postAndCommentGuestData, isLoading, isError };
+  return { postAndCommentGuestData, isDataGuestLoading, isDataGuestError };
 };
 
 export const useGetUpdatePost = (id: string) => {

@@ -1,3 +1,5 @@
+import { Comment } from "./comment";
+
 export type Post = {
   id: string;
   nickname: string;
@@ -77,22 +79,6 @@ export type GetPost = {
       images: string[];
       isLiked: boolean;
     };
-    second: [
-      {
-        id: string;
-        userNickName: string;
-        userProfileUrl: string;
-        tripId: string;
-        parentId: string;
-        content: string;
-        createdAt: string;
-        updatedAt: string;
-        replyToNickname: string;
-        isDeleted: boolean;
-        isLiked: boolean;
-        numberOfLikes: 0;
-        children: string[];
-      }
-    ];
+    second: Comment[];
   };
 };

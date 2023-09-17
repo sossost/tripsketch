@@ -22,13 +22,19 @@ const LikesAndCommentText = ({
   const { data: userData } = useGetCurrentUser();
 
   // 리스트에서 좋아요 유/무 확인하는 로직
-  const checkLikeUser = () =>
-    Boolean(userData?.email && postData?.tripLikes.includes(userData.email));
+  // const checkLikeUser = () =>
+  //   Boolean(
+  //     userData?.nickname && postData?.tripLikes.includes(userData.nickname)
+  //   );
 
+  const checkLikeUser = postData?.isLiked;
   const [likes, setLikes] = useState(false);
   useEffect(() => {
-    setLikes(checkLikeUser());
+    setLikes(checkLikeUser);
   }, [userData, postData]);
+
+  // console.log(checkLikeUser);
+  // console.log(postData);
 
   const queryClient = useQueryClient();
   const postLikeMutation = usePostLike();

@@ -1,6 +1,6 @@
 export type Comment = {
   id: string;
-  userEmail: string;
+  // userEmail: string;
   userNickName: string;
   userProfileUrl: string;
   tripId: string;
@@ -8,7 +8,7 @@ export type Comment = {
   content: string;
   createdAt: string;
   updatedAt: string;
-  replyTo: string;
+  replyToNickname: string;
   isDeleted: boolean;
   isLiked: boolean;
   numberOfLikes: number;

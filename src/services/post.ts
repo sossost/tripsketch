@@ -173,10 +173,13 @@ export const createPost = async (postData: CreatePost) => {
 };
 
 export const postLike = async (id: string) => {
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
   try {
-    const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP_LIKE, {
-      id: id,
-    });
+    const response = await axiosBase.post(
+      API_PATH.TRIP.POST.TRIP_LIKE,
+      { id },
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
     if (response.status !== 200) {
       throw new Error("Network response was not ok");
     }
@@ -187,13 +190,13 @@ export const postLike = async (id: string) => {
 };
 
 export const postUnlike = async (id: string) => {
+  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
   try {
-    const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP_UNLIKE, {
-      id: id,
-    });
-    if (response.status !== 200) {
-      throw new Error("Network response was not ok");
-    }
+    const response = await axiosBase.post(
+      API_PATH.TRIP.POST.TRIP_UNLIKE,
+      { id },
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
     return response.data;
   } catch (error: any) {
     throw new Error(error);
@@ -202,8 +205,6 @@ export const postUnlike = async (id: string) => {
 
 export const postUpdate = async (updateData: any) => {
   const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
-
-  console.log("데이터", updateData._parts);
 
   // 수정할 id updateData에서 추출
   const idValue = updateData["_parts"].find(([key]: string) => key === "id");
