@@ -18,26 +18,18 @@ import {
 } from "../../hooks/usePostQuery";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import PostViewSkeleton from "./components/post/PostViewSkeleton";
+import { GetPost } from "../../types/Post";
 
 const PostDetailPageComponent = ({ postId }: { postId: string }) => {
-  // const { data: userData } = useGetCurrentUser();
+  const { data: userData } = useGetCurrentUser();
 
-  // // 유저 로그인 시 보여지는 데이터
-  // const { postAndCommentData, isLoading, isError } =
-  //   useGetPostAndComments(postId);
+  // 유저 로그인 시 보여지는 데이터
+  const { postAndCommentData, isDataUserLoading, isDataUserError } =
+    useGetPostAndComments(postId);
 
-  // // 게스트 접속 시 보여지는 데이터
-  // const {
-  //   postAndCommentGuestData,
-  //   isLoading: isDataGuestLoading,
-  //   isError: isDataGuestError,
-  // } = useGetPostAndCommentsForGuest(postId);
-
-  // let checkUser = userData ? postAndCommentData : postAndCommentGuestData;
-
-  // if (isLoading || isDataGuestLoading) {
-  //   return <PostViewSkeleton />;
-  // }
+  // 게스트 접속 시 보여지는 데이터
+  const { postAndCommentGuestData, isDataGuestLoading, isDataGuestError } =
+    useGetPostAndCommentsForGuest(postId);
 
   // 바텀시트 높이 조절하는 변수
   const sheetRef = useRef<BottomSheet>(null);
@@ -58,11 +50,28 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
     sheetRef.current?.snapToIndex(index);
   }, []);
 
+  const checkUser: GetPost | undefined = userData
+    ? postAndCommentData
+    : postAndCommentGuestData;
+
+  console.log(checkUser);
+
+  if (isDataUserLoading || isDataGuestLoading) {
+    return <PostViewSkeleton />;
+  }
+
+  if (isDataUserError || isDataGuestError) {
+    return <Text>에러</Text>;
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.containerInner}>
         <ScrollView>
-          <PostViewContainer postId={postId} />
+          <PostViewContainer
+            postId={postId}
+            postData={checkUser.tripAndCommentPairDataByTripId.first}
+          />
           <LikesAndCommentText
             postId={postId}
             handleIconPress={(index) => handleSnapPress(index)}
@@ -71,7 +80,10 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
             activeOpacity={0.8}
             onPress={() => handleSnapPress(1)}
           >
-            <CommentBest postId={postId} />
+            <CommentBest
+              postId={postId}
+              commentData={checkUser.tripAndCommentPairDataByTripId.second}
+            />
           </TouchableOpacity>
         </ScrollView>
         {sheetIndex >= 1 && (
@@ -88,10 +100,12 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
         style={styles.sheet}
       >
         <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
-          <Comment
-            postId={postId}
-            // postData={checkUser.tripAndCommentPairDataByTripId.second}
-          />
+          {checkUser && (
+            <Comment
+              postId={postId}
+              commentData={checkUser.tripAndCommentPairDataByTripId.second}
+            />
+          )}
         </BottomSheetScrollView>
       </BottomSheet>
     </View>

@@ -4,8 +4,14 @@ import { usePostDelete } from "../../hooks/usePostQuery";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../types/RootStack";
 import Toast from "react-native-toast-message";
+import { GetPost } from "../../types/Post";
 
-const PostViewContainer = ({ postId }: { postId: string }) => {
+type postViewProps = {
+  postId: string;
+  postData: GetPost["tripAndCommentPairDataByTripId"]["first"];
+};
+
+const PostViewContainer = ({ postId, postData }: postViewProps) => {
   const queryClient = useQueryClient();
   const navigation = useNavigation<StackNavigation>();
 
@@ -22,7 +28,9 @@ const PostViewContainer = ({ postId }: { postId: string }) => {
     }
   };
 
-  return <PostView postId={postId} deletePost={postDelete}></PostView>;
+  return (
+    <PostView postId={postId} deletePost={postDelete} postData={postData} />
+  );
 };
 
 export default PostViewContainer;

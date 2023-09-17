@@ -8,32 +8,23 @@ import {
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { useGetPostsById } from "../../../../hooks/usePostQuery";
 import { useGetCurrentUser } from "../../../../hooks/useUserQuery";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../../types/RootStack";
-import PostViewSkeleton from "./PostViewSkeleton";
 import Slick from "react-native-slick";
 import useDeleteAlert from "../../hooks/useDeleteAlert";
+import { GetPost } from "../../../../types/Post";
 
 type PostViewProps = {
   postId: string;
   deletePost: (postId: string) => Promise<void>;
+  postData: GetPost["tripAndCommentPairDataByTripId"]["first"];
 };
 
-const PostView = ({ postId, deletePost }: PostViewProps) => {
+const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
-  const { postData, isLoading, isError } = useGetPostsById(postId);
   const { data: userData } = useGetCurrentUser();
   const navigation = useNavigation<StackNavigation>();
-
-  if (isLoading) {
-    return <PostViewSkeleton />;
-  }
-
-  if (isError) {
-    return <Text>error</Text>;
-  }
 
   if (!postData) {
     return (

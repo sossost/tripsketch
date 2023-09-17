@@ -1,10 +1,16 @@
 import { StyleSheet, View } from "react-native";
 import CommentList from "./components/comment/CommentList";
+import { GetPost } from "../../types/Post";
 
-const CommentBest = ({ postId }: { postId: string }) => {
+type CommentBestProps = {
+  postId: string;
+  commentData: GetPost["tripAndCommentPairDataByTripId"]["second"];
+};
+
+const CommentBest = ({ postId, commentData }: CommentBestProps) => {
   return (
     <View style={styles.container}>
-      <CommentList sort={"best"} postId={postId} />
+      <CommentList sort={"best"} postId={postId} commentData={commentData} />
     </View>
   );
 };
