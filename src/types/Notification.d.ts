@@ -1,5 +1,3 @@
-type NotificationType = "Comment" | "Comment-Comment" | "Notice";
-
 export interface Notification {
   id: string;
   profileUrl: string;
