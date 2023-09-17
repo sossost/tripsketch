@@ -27,7 +27,7 @@ const HorizontalPostCard = ({ post }: HorizontalPostCardProps) => {
     <Container onPress={handlePostDetailPress}>
       <ThumbnailImage
         source={{
-          uri: post.image?.[0] || DEFAULT_IMAGE,
+          uri: post.image || DEFAULT_IMAGE,
         }}
       />
       <PostBody>

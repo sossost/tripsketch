@@ -1,27 +1,14 @@
-import React, { useCallback } from "react";
 import { useState } from "react";
 import { styled } from "styled-components/native";
-import { useGetPostsBySearchQuery } from "../../hooks/usePostQuery";
 
-import HorizontalPostFlatList from "../post/HorizontalPostFlatList";
 import VariantSelector from "../UI/VariantSelector";
 import SearchBar from "../UI/SearchBar";
 import AsyncBoundary from "../common/AsyncBoundary";
+import SearchPostList from "./SearchPostList";
 
 const ExplorePageComponent = () => {
   const [variant, setVariant] = useState<"인기순" | "최신순">("인기순");
   const [searchQuery, setSearchQuery] = useState<string>("");
-
-  const { posts, hasNextPage, fetchNextPage } = useGetPostsBySearchQuery(
-    searchQuery,
-    variant
-  );
-
-  const handleEndReached = useCallback(() => {
-    if (hasNextPage) {
-      fetchNextPage();
-    }
-  }, [fetchNextPage, hasNextPage]);
 
   return (
     <ExplorePageLayout>
@@ -39,10 +26,7 @@ const ExplorePageComponent = () => {
       />
 
       <AsyncBoundary>
-        <HorizontalPostFlatList
-          posts={posts}
-          handleEndReached={handleEndReached}
-        />
+        <SearchPostList searchQuery={searchQuery} variant={variant} />
       </AsyncBoundary>
     </ExplorePageLayout>
   );

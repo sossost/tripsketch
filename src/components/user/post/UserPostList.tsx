@@ -1,6 +1,8 @@
 import { useCallback } from "react";
 import { useGetPostsByNickname } from "../../../hooks/usePostQuery";
 import PostFlatList from "../../post/PostFlatList";
+import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEY } from "../../../react-query/queryKey";
 
 interface UserPostListProps {
   nickname: string;
@@ -15,6 +17,7 @@ interface UserPostListProps {
  * @see None,
  */
 const UserPostList = ({ nickname, category }: UserPostListProps) => {
+  const queryClient = useQueryClient();
   // 닉네임과 카테고리를 통해 해당 유저의 게시글을 가져옴
   const { posts, hasNextPage, fetchNextPage } = useGetPostsByNickname(
     nickname,
@@ -28,7 +31,17 @@ const UserPostList = ({ nickname, category }: UserPostListProps) => {
     }
   }, [fetchNextPage, hasNextPage]);
 
-  return <PostFlatList posts={posts} handleEndReached={handleEndReached} />;
+  const handleRefresh = () => {
+    queryClient.invalidateQueries([QUERY_KEY.POSTS, nickname, category]);
+  };
+
+  return (
+    <PostFlatList
+      posts={posts}
+      handleEndReached={handleEndReached}
+      handleRefresh={handleRefresh}
+    />
+  );
 };
 
 export default UserPostList;
