@@ -64,13 +64,15 @@ export const getSubscribedUsersPosts = async (page: number, size: number) => {
  * @param sorting : 정렬 기준
  *
  * @author : 장윤수
- * @update : 2023-09-12,
- * @version 1.0.0, 기능 구현
+ * @update : 2023-09-17,
+ * @version 1.1.0, 페이지 네이션 기능 추가
  * @see None,
  */
 export const getSortedPostsBySearchKeyword = async (
   keward: string,
-  sorting: "최신순" | "인기순" | "오래된순"
+  sorting: "최신순" | "인기순" | "오래된순",
+  page: number,
+  size: number
 ) => {
   const sortingType = {
     최신순: 1,
@@ -78,14 +80,10 @@ export const getSortedPostsBySearchKeyword = async (
     오래된순: -1,
   };
 
-  try {
-    const response = await axiosBase.get<PostsData>(
-      `trip/search?keyword=${keward}`
-    );
-    return response.data;
-  } catch (error: unknown) {
-    errorLoging(error, "검색 게시글 리스트 요청 에러는🤔");
-  }
+  const response = await axiosBase.get(
+    `trip/search?keyword=${keward}&page=${page}&size=${size}&sorting=${sortingType[sorting]}`
+  );
+  return response.data;
 };
 
 export const getPostsById = async (id: string) => {

@@ -11,6 +11,7 @@ import {
   postUpdate,
   deletePostById,
   getSubscribedUsersPosts,
+  getSortedPostsBySearchKeyword,
 } from "../services/post";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { Post, GetPost, PostUpdate } from "../types/Post";
@@ -70,7 +71,7 @@ export const useGetPostsByNickname = (nickname: string, category: string) => {
     }
   );
 
-  const posts = data?.pages.flatMap((page) => page?.posts) || [];
+  const posts = data?.pages.flatMap((page) => page!.posts) || [];
 
   return { posts, fetchNextPage, hasNextPage, postsIsLoading, postsIsError };
 };
@@ -104,7 +105,50 @@ export const useGetSubscribedUsersPosts = () => {
     }
   );
 
-  const posts = data?.pages.flatMap((page) => page?.trips) || [];
+  const posts = data?.pages.flatMap((page) => page!.trips) || [];
+
+  return { posts, fetchNextPage, hasNextPage };
+};
+
+/**
+ * @description : 검색어를 바탕으로 정렬 및 페이지네이션 처리된 게시글 리스트를 요청하는 리액트 쿼리 훅
+ * @author : 장윤수
+ * @update : 2023-09-17,
+ * @version 1.0.0,
+ * @see None,
+ */
+export const useGetPostsBySearchQuery = (
+  searchQuery: string,
+  variant: "인기순" | "최신순"
+) => {
+  const postsPerPage = 10;
+
+  const {
+    data = null,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery(
+    [QUERY_KEY.POSTS, searchQuery, variant],
+    ({ pageParam = 1 }) => {
+      return getSortedPostsBySearchKeyword(
+        searchQuery,
+        variant,
+        pageParam,
+        postsPerPage
+      );
+    },
+    {
+      getNextPageParam: (lastPage: TripsData | undefined) => {
+        if (!lastPage) return undefined;
+        if (lastPage.totalPages === 0) return undefined;
+        if (lastPage.totalPages === lastPage.currentPage) return undefined;
+
+        return lastPage.currentPage + 1;
+      },
+    }
+  );
+
+  const posts = data?.pages.flatMap((page) => page!.trips) || [];
 
   return { posts, fetchNextPage, hasNextPage };
 };
