@@ -3,7 +3,7 @@ import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { LINK } from "../constants/link";
 
-import Home from "../screens/Home";
+import MainPage from "../screens/MainPage";
 import MyPage from "../screens/MyPage";
 import CreatePost from "../screens/CreatePost";
 import ExplorePage from "../screens/ExplorePage";
@@ -22,7 +22,7 @@ export default function BottomTab() {
     >
       <Tabs.Screen
         name={LINK.MAIN}
-        component={Home}
+        component={MainPage}
         options={{
           headerShown: false,
           title: "홈",

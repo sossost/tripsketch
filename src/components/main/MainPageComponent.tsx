@@ -1,12 +1,10 @@
-import React, { useRef } from "react";
-import { ScrollView } from "react-native";
-import { useGetCurrentUser } from "../hooks/useUserQuery";
 import { styled } from "styled-components/native";
+import { useGetCurrentUser } from "../../hooks/useUserQuery";
 
-import SubscribedPostsList from "../components/main/SubscribedPostsList";
-import TrendingPosts from "../components/main/TrendingPosts";
-import AsyncBoundary from "../components/common/AsyncBoundary";
-import MainWelcome from "../components/main/MainWelcome";
+import MainWelcome from "./MainWelcome";
+import AsyncBoundary from "../common/AsyncBoundary";
+import TrendingPosts from "./TrendingPosts";
+import SubscribedPostsList from "./SubscribedPostsList";
 
 /**
  * @description : 메인 페이지 컴포넌트
@@ -15,7 +13,7 @@ import MainWelcome from "../components/main/MainWelcome";
  * @version 1.0.0,
  * @see None,
  */
-const Home = () => {
+const MainPageComponent = () => {
   const { data: currentUser } = useGetCurrentUser();
 
   return (
@@ -36,4 +34,4 @@ const MainPageLayout = styled.View`
   padding-top: 40px;
 `;
 
-export default Home;
+export default MainPageComponent;

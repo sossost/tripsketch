@@ -9,4 +9,5 @@ export const QUERY_KEY = {
   FOLLOWING: "following",
   NOTIFICATIONS: "notifications",
   SUBSCRIPTED_USERS: "subscriptedUsers",
+  TRENDING: "trending",
 };
