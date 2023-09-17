@@ -51,8 +51,6 @@ const CommentList = ({
   const { data: userData } = useGetCurrentUser();
   const userDataPresent = userData ? true : false;
 
-  console.log(commentData);
-
   // // 회원 접근 시 사용하는 Comment 데이터
   // const {
   //   commentData,

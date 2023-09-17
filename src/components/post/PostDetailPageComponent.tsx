@@ -54,8 +54,6 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
     ? postAndCommentData
     : postAndCommentGuestData;
 
-  console.log(checkUser);
-
   if (isDataUserLoading || isDataGuestLoading) {
     return <PostViewSkeleton />;
   }
