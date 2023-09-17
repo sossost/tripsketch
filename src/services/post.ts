@@ -6,6 +6,7 @@ import { PostsData } from "../hooks/usePostQuery";
 import { getDataFromSecureStore } from "../utils/secureStore";
 import { STORE_KEY } from "../constants/store";
 import { errorLoging } from "../utils/errorHandler";
+import { ERROR_MESSAGE } from "../constants/message";
 
 /**
  * @description : 닉네임과 카테고리로 해당 유저의 카테고리에 해당하는 게시글 리스트를 요청하는 함수
@@ -16,8 +17,8 @@ import { errorLoging } from "../utils/errorHandler";
  * @param size : 페이지당 게시물수
  *
  * @author : 장윤수
- * @update : 2023-09-16,
- * @version 1.0.2, 닉네임 타압 undefined 제거
+ * @update : 2023-09-17,
+ * @version 1.0.3, 로깅 및 에러메세지 수정
  * @see None,
  */
 export const getPostsByNickname = async (
@@ -26,16 +27,21 @@ export const getPostsByNickname = async (
   page: number,
   size: number
 ) => {
-  if (category === "전체보기") {
-    const response = await axiosBase.get<PostsData>(
-      `trip/nickname/tripsWithPagination/categories?nickname=${nickname}&page=${page}&pageSize=${size}`
-    );
-    return response.data;
-  } else {
-    const response = await axiosBase.get<PostsData>(
-      `trip/nickname/tripsWithPagination/country/${category}?nickname=${nickname}&page=${page}&size=${size}`
-    );
-    return response.data;
+  try {
+    if (category === "전체보기") {
+      const response = await axiosBase.get<PostsData>(
+        `trip/nickname/tripsWithPagination/categories?nickname=${nickname}&page=${page}&pageSize=${size}`
+      );
+      return response.data;
+    } else {
+      const response = await axiosBase.get<PostsData>(
+        `trip/nickname/tripsWithPagination/country/${category}?nickname=${nickname}&page=${page}&size=${size}`
+      );
+      return response.data;
+    }
+  } catch (error: unknown) {
+    errorLoging(error, "게시글 리스트 요청 에러는🤔");
+    throw new Error(ERROR_MESSAGE.GET_POSTS);
   }
 };
 
