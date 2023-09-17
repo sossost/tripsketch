@@ -6,6 +6,7 @@ import { PostsData } from "../hooks/usePostQuery";
 import { getDataFromSecureStore } from "../utils/secureStore";
 import { STORE_KEY } from "../constants/store";
 import { errorLoging } from "../utils/errorHandler";
+import { ERROR_MESSAGE } from "../constants/message";
 
 /**
  * @description : 닉네임과 카테고리로 해당 유저의 카테고리에 해당하는 게시글 리스트를 요청하는 함수
@@ -16,36 +17,31 @@ import { errorLoging } from "../utils/errorHandler";
  * @param size : 페이지당 게시물수
  *
  * @author : 장윤수
- * @update : 2023-09-12,
- * @version 1.0.1, 닉네임 undefined일 경우 분기처리, 에러 로깅 변경
+ * @update : 2023-09-17,
+ * @version 1.0.3, 로깅 및 에러메세지 수정
  * @see None,
  */
 export const getPostsByNickname = async (
-  nickname: string | undefined,
+  nickname: string,
   category: string,
   page: number,
   size: number
 ) => {
-  if (!nickname) return;
-
-  if (category === "전체보기") {
-    try {
+  try {
+    if (category === "전체보기") {
       const response = await axiosBase.get<PostsData>(
         `trip/nickname/tripsWithPagination/categories?nickname=${nickname}&page=${page}&pageSize=${size}`
       );
       return response.data;
-    } catch (error: unknown) {
-      errorLoging(error, "게시글 리스트 요청 에러는🤔");
+    } else {
+      const response = await axiosBase.get<PostsData>(
+        `trip/nickname/tripsWithPagination/country/${category}?nickname=${nickname}&page=${page}&size=${size}`
+      );
+      return response.data;
     }
-  }
-
-  try {
-    const response = await axiosBase.get<PostsData>(
-      `trip/nickname/tripsWithPagination/country/${category}?nickname=${nickname}&page=${page}&size=${size}`
-    );
-    return response.data;
   } catch (error: unknown) {
     errorLoging(error, "게시글 리스트 요청 에러는🤔");
+    throw new Error(ERROR_MESSAGE.GET_POSTS);
   }
 };
 
@@ -56,19 +52,15 @@ export const getPostsByNickname = async (
  * @param size : 페이지당 게시물 수
  *
  * @author : 장윤수
- * @update : 2023-09-14,
+ * @update : 2023-09-16, try-catch -> 에러바운더리로 변경
  * @version 1.0.0,
  * @see None,
  */
 export const getSubscribedUsersPosts = async (page: number, size: number) => {
-  try {
-    const response = await axiosBase.get(
-      `trip/list/following?page=${page}&size=${size}`
-    );
-    return response.data;
-  } catch (error: unknown) {
-    errorLoging(error, "구독한 유저의 게시물 리스트 요청 에러는🤔");
-  }
+  const response = await axiosBase.get(
+    `trip/list/following?page=${page}&size=${size}`
+  );
+  return response.data;
 };
 
 /**
@@ -78,13 +70,15 @@ export const getSubscribedUsersPosts = async (page: number, size: number) => {
  * @param sorting : 정렬 기준
  *
  * @author : 장윤수
- * @update : 2023-09-12,
- * @version 1.0.0, 기능 구현
+ * @update : 2023-09-17,
+ * @version 1.1.0, 페이지 네이션 기능 추가
  * @see None,
  */
 export const getSortedPostsBySearchKeyword = async (
   keward: string,
-  sorting: "최신순" | "인기순" | "오래된순"
+  sorting: "최신순" | "인기순" | "오래된순",
+  page: number,
+  size: number
 ) => {
   const sortingType = {
     최신순: 1,
@@ -92,14 +86,10 @@ export const getSortedPostsBySearchKeyword = async (
     오래된순: -1,
   };
 
-  try {
-    const response = await axiosBase.get<PostsData>(
-      `trip/search?keyword=${keward}`
-    );
-    return response.data;
-  } catch (error: unknown) {
-    errorLoging(error, "검색 게시글 리스트 요청 에러는🤔");
-  }
+  const response = await axiosBase.get(
+    `trip/search?keyword=${keward}&page=${page}&size=${size}&sorting=${sortingType[sorting]}`
+  );
+  return response.data;
 };
 
 export const getPostsById = async (id: string) => {

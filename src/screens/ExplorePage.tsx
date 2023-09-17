@@ -1,5 +1,4 @@
-import React from "react";
-import ExplorePageComponent from "../components/ExplorePageComponent";
+import ExplorePageComponent from "../components/explore/ExplorePageComponent";
 
 const ExplorePage = () => {
   return <ExplorePageComponent />;

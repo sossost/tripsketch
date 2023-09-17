@@ -8,10 +8,19 @@ import { RecoilRoot } from "recoil";
 import NotificationProvider from "./src/context/notificationProvider";
 import FadeOutContextProvider from "./src/context/fadeOutContext";
 import { LogBox } from "react-native";
+import AsyncBoundary from "./src/components/common/AsyncBoundary";
 
 // LogBox.ignoreAllLogs(true);
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 0,
+      suspense: true,
+      useErrorBoundary: true,
+    },
+  },
+});
 
 export default function App() {
   return (
@@ -19,12 +28,14 @@ export default function App() {
       <RecoilRoot>
         <StyledTheme>
           <SafeAreaProvider>
-            <NotificationProvider>
-              <FadeOutContextProvider>
-                <StatusBar style="auto" />
-                <RootStack />
-              </FadeOutContextProvider>
-            </NotificationProvider>
+            <AsyncBoundary>
+              <NotificationProvider>
+                <FadeOutContextProvider>
+                  <StatusBar style="auto" />
+                  <RootStack />
+                </FadeOutContextProvider>
+              </NotificationProvider>
+            </AsyncBoundary>
           </SafeAreaProvider>
         </StyledTheme>
       </RecoilRoot>

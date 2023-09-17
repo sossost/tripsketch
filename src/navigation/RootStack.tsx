@@ -37,13 +37,7 @@ export default function RootStack() {
             <Stack.Screen
               name={LINK.USER_PAGE}
               component={UserPage}
-              options={({ route }: any) => ({
-                header: () => (
-                  <Header
-                    left={<CommonHeaderLeft title={route.params?.nickname} />}
-                  />
-                ),
-              })}
+              options={{ headerShown: false }}
             />
             <Stack.Screen name={LINK.CREATE_POST_PAGE} component={CreatePost} />
             <Stack.Screen name={LINK.UPDATE_POST_PAGE} component={UpdatePost} />

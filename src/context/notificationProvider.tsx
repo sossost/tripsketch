@@ -80,7 +80,7 @@ const NotificationProvider = ({ children }: { children: ReactNode }) => {
 
         const token = (
           await Notifications.getExpoPushTokenAsync({
-            projectId: "f8190d6c-4843-4990-8bbb-f70715ad169f",
+            projectId: "29ddc7fe-a117-470b-8787-7c52553fa0fb",
           })
         ).data;
         const pushToken = token.slice("ExponentPushToken[".length, -1);

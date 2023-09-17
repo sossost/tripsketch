@@ -1,5 +1,5 @@
 import { ComponentProps, Suspense } from "react";
-import ErrorBoundary, { ErrorBoundaryProps } from "react-native-error-boundary";
+import ErrorBoundary, { ErrorFallbackType } from "../UI/ErrorBoundary";
 import ErrorFallback from "../UI/ErrorFallback";
 
 import Loading from "../UI/Loading";
@@ -7,7 +7,7 @@ import Loading from "../UI/Loading";
 interface AsyncBoundaryProps {
   children: React.ReactNode;
   suspenseFallback?: ComponentProps<typeof Suspense>["fallback"];
-  errorFallback?: ErrorBoundaryProps["FallbackComponent"];
+  errorFallback?: ErrorFallbackType;
 }
 
 /**
@@ -27,7 +27,7 @@ const AsyncBoundary = ({
   errorFallback = ErrorFallback,
 }: AsyncBoundaryProps) => {
   return (
-    <ErrorBoundary FallbackComponent={errorFallback}>
+    <ErrorBoundary errorFallback={errorFallback}>
       <Suspense fallback={suspenseFallback}>{children}</Suspense>
     </ErrorBoundary>
   );

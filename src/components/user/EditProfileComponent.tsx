@@ -40,13 +40,13 @@ const EditProfileComponent = () => {
             label="닉네임"
             text={newNickname}
             setText={SetNewNickname}
-            textLength={20}
+            textLength={12}
           />
           <InputBottomLine
             label="소개"
             text={newIntroduction}
             setText={setNewIntroduction}
-            textLength={60}
+            textLength={30}
           />
         </InputWrapper>
       </Layout>

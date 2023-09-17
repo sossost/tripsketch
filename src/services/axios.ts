@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 import { API_BASE_URL } from "@env";
@@ -7,6 +6,7 @@ import {
   setDataToSecureStore,
 } from "../utils/secureStore";
 import { STORE_KEY } from "../constants/store";
+import { errorLoging } from "../utils/errorHandler";
 
 /** axiosBase 인스턴스 생성 */
 export const axiosBase = axios.create({
@@ -41,6 +41,7 @@ const isTokenExpired = async () => {
       return currentTimestampInSeconds >= decodedToken.exp;
     } catch (error) {
       // 토큰 디코드 또는 처리 과정에서 에러가 발생한 경우 토큰 만료로 간주
+      errorLoging(error, "토큰이 만료되었습니다.");
       return true;
     }
   } else {
@@ -66,13 +67,7 @@ export const tokenRefresh = async () => {
     const newRefreshToken = response.headers.refreshtoken;
     await setDataToSecureStore(STORE_KEY.REFRESH_TOKEN, newRefreshToken);
   } catch (error) {
-    console.log("리프레시 토큰 갱신 요청 중 발생한 에러는...🤔", error);
-
-    console.log("리프레시 토큰이 만료되었습니다!");
-    // 리프레시 토큰이 만료된 경우 로그인 화면으로 이동
-    const navigation = useNavigation();
-    navigation.navigate as (route: string) => void;
-    ("Login");
+    errorLoging(error, "리프레시 토큰으로 액세스 토큰 갱신 에러는🤔");
   }
 };
 
@@ -97,7 +92,8 @@ axiosBase.interceptors.response.use(
   async (error) => {
     // 응답 상태 코드가 401 (Unauthorized)인 경우
     if (error.response?.status === 401) {
-      if (await isTokenExpired()) await tokenRefresh(); // 토큰이 만료되었다면 토큰을 갱신합니다.
+      const isExpired = await isTokenExpired(); // 토큰이 만료되었는지 확인합니다.
+      if (isExpired) await tokenRefresh(); // 토큰이 만료되었다면 토큰을 갱신합니다.
 
       const accessToken = await getAccessToken(); // 갱신된 토큰을 가져옵니다.
 
