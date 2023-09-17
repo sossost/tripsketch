@@ -1,4 +1,4 @@
-import { FlatList } from "react-native";
+import { FlatList, RefreshControl } from "react-native";
 import { Post } from "../../types/Post";
 import { ReactElement } from "react";
 
@@ -7,6 +7,7 @@ import PostCard from "./card/PostCard";
 interface DiaryListProps {
   posts: Post[];
   handleEndReached: () => void;
+  handleRefresh: () => void;
   listHeaderComponent?: ReactElement;
   listFooterComponent?: ReactElement;
 }
@@ -27,6 +28,7 @@ interface DiaryListProps {
 const PostFlatList = ({
   posts,
   handleEndReached,
+  handleRefresh,
   listHeaderComponent,
   listFooterComponent,
 }: DiaryListProps) => {
@@ -44,6 +46,9 @@ const PostFlatList = ({
       ListFooterComponent={listFooterComponent}
       contentContainerStyle={{ paddingBottom: 50, paddingTop: 20 }}
       showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={false} onRefresh={handleRefresh} />
+      }
     />
   );
 };

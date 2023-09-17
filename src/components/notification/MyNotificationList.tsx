@@ -1,9 +1,11 @@
 import { useCallback } from "react";
 import { useGetNotifications } from "../../hooks/useNotificationQuery";
-import { FlatList } from "react-native";
+import { FlatList, RefreshControl } from "react-native";
 import { Notification } from "../../types/Notification";
 
 import NotificationItem from "./NotificationItem";
+import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEY } from "../../react-query/queryKey";
 
 /**
  * @description : 알림 리스트 컴포넌트
@@ -13,6 +15,7 @@ import NotificationItem from "./NotificationItem";
  * @see None,
  */
 const MyNotificationList = () => {
+  const queryClient = useQueryClient();
   const { notifications, fetchNextPage, hasNextPage } = useGetNotifications();
 
   /** 알림 리스트 무한 스크롤 핸들함수 */
@@ -21,6 +24,10 @@ const MyNotificationList = () => {
       fetchNextPage();
     }
   }, [fetchNextPage, hasNextPage]);
+
+  const handleRefresh = () => {
+    queryClient.invalidateQueries([QUERY_KEY.NOTIFICATIONS]);
+  };
 
   return (
     <>
@@ -38,6 +45,9 @@ const MyNotificationList = () => {
           paddingHorizontal: 2,
         }}
         showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={false} onRefresh={handleRefresh} />
+        }
       />
     </>
   );

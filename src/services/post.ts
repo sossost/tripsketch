@@ -85,11 +85,22 @@ export const getSortedPostsBySearchKeyword = async (
     인기순: 2,
     오래된순: -1,
   };
-
-  const response = await axiosBase.get(
-    `trip/search?keyword=${keward}&page=${page}&size=${size}&sorting=${sortingType[sorting]}`
-  );
-  return response.data;
+  try {
+    if (keward === "") {
+      const response = await axiosBase.get(
+        `trip/guest/trips?page=${page}&size=${size}&sortType=${sortingType[sorting]}`
+      );
+      return response.data;
+    } else {
+      const response = await axiosBase.get(
+        `trip/guest/search?keyword=${keward}&page=${page}&size=${size}&sortType=${sortingType[sorting]}`
+      );
+      return response.data;
+    }
+  } catch (error: unknown) {
+    errorLoging(error, "검색 게시글 리스트 요청 에러는🤔");
+    throw new Error(ERROR_MESSAGE.GET_POSTS);
+  }
 };
 
 export const getPostsById = async (id: string) => {

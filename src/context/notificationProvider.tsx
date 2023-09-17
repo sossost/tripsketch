@@ -18,15 +18,12 @@ Notifications.setNotificationHandler({
 const NotificationProvider = ({ children }: { children: ReactNode }) => {
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
-  const lastNotificationResponse = Notifications.useLastNotificationResponse();
 
   useEffect(() => {
     if (Device.isDevice) {
       notificationListener.current =
         Notifications.addNotificationReceivedListener(
-          async (notification: Notifications.Notification) => {
-            await updateNotification(notification);
-          }
+          async (notification: Notifications.Notification) => {}
         );
 
       responseListener.current =

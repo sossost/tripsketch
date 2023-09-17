@@ -4,6 +4,8 @@ export const ERROR_MESSAGE = {
   FOLLOW: "팔로우를 실패하였습니다.",
   UNFOLLOW: "팔로우 취소를 실패 하였습니다.",
   GET_POSTS: "게시글을 가져오는데 실패하였습니다.",
+  EDIT_USER: "유저 정보 수정에 실패하였습니다.",
+  GET_NOTIFICATIONS: "알림 리스트를 가져오는데 실패하였습니다.",
 };
 
 export const SUCCESS_MESSAGE = {
