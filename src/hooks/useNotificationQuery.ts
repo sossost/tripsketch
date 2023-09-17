@@ -9,13 +9,11 @@ export interface InfinitePostsData {
 }
 
 /**
- * @description : 닉네임으로 해당 유저의 카테고리 리스트를 요청하는 리액트 쿼리 훅
- *
- * @param nickname : 유저닉네임
+ * @description : 내 알림 리스트를 가져오는 커스텀 훅
  *
  * @author : 장윤수
- * @update : 2023-09-12,
- * @version 1.0.0,
+ * @update : 2023-09-17,
+ * @version 1.0.1,
  * @see None,
  */
 export const useGetNotifications = () => {

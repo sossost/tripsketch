@@ -13,11 +13,11 @@ interface NotificationProps {
 /**
  * @description : 소셜 아이템 컴포넌트
  * @author : 장윤수
- * @update : 2023-09-13,
- * @version 1.0.0, 로그인 유저정보 로딩시 로딩 컴포넌트 추가
+ * @update : 2023-09-17,
+ * @version 1.0.1, 파일 이름 통일
  * @see None,
  */
-const NoticeItem = ({ notification }: NotificationProps) => {
+const NotificationItem = ({ notification }: NotificationProps) => {
   const navigation = useNavigation<StackNavigation>();
 
   const { profileUrl, title, body, createdAt, nickname, commentId, tripId } =
@@ -53,8 +53,7 @@ const NoticeItem = ({ notification }: NotificationProps) => {
 
       <TextContainer>
         <NotDescript numberOfLines={1} ellipsizeMode="tail">
-          <HighLight>{seperatedBody[0]}</HighLight>
-          님이 {seperatedBody[1]}
+          <HighLight>{seperatedBody[0]}</HighLight>님{seperatedBody[1]}
         </NotDescript>
 
         <NotContent>{title}</NotContent>
@@ -125,4 +124,4 @@ const CreateDate = styled.Text`
   color: ${colors.subFont};
 `;
 
-export default NoticeItem;
+export default NotificationItem;
