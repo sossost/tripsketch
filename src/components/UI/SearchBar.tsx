@@ -1,26 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components/native";
 
-type SearchBarProps = {
-  searchQuery: string;
+interface SearchBarProps {
   setSearchQuery: React.Dispatch<React.SetStateAction<string>>;
   style?: any;
   fontSize?: number;
   placeholder: string;
-};
+}
 
 const SearchBar = (props: SearchBarProps) => {
-  const { searchQuery, setSearchQuery, style, fontSize, placeholder } = props;
+  const { setSearchQuery, style, fontSize, placeholder } = props;
+  const [input, setInput] = useState<string>("");
 
   return (
     <Container style={style}>
       <SearchIcon source={require("../../assets/images/searchIcon.png")} />
       <SearchInput
         fontSize={fontSize ? fontSize : 18}
-        value={searchQuery}
+        value={input}
         placeholder={placeholder}
         placeholderTextColor="#bbb"
-        onChangeText={(text) => setSearchQuery(text)}
+        onChangeText={(text) => setInput(text)}
+        onSubmitEditing={() => setSearchQuery(input)}
       />
     </Container>
   );
