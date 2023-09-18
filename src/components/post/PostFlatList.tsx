@@ -48,7 +48,7 @@ const PostFlatList = ({
       contentContainerStyle={{
         paddingBottom: 50,
         paddingTop: 20,
-        paddingHorizontal: 10,
+        paddingHorizontal: 4,
       }}
       showsVerticalScrollIndicator={false}
       refreshControl={
