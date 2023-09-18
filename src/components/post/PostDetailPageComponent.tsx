@@ -18,6 +18,7 @@ import {
 } from "../../hooks/usePostQuery";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import PostViewSkeleton from "./components/post/PostViewSkeleton";
+import LikeAndCommentSkeleton from "./components/comment/LikesAndCommentSkeleton";
 import { GetPost } from "../../types/Post";
 
 const PostDetailPageComponent = ({ postId }: { postId: string }) => {
@@ -55,12 +56,19 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
     : postAndCommentGuestData;
 
   if (isDataUserLoading || isDataGuestLoading) {
-    return <PostViewSkeleton />;
+    return (
+      <View>
+        <PostViewSkeleton />
+        <LikeAndCommentSkeleton />
+      </View>
+    );
   }
 
   if (isDataUserError || isDataGuestError) {
     return <Text>에러</Text>;
   }
+
+  console.log(checkUser);
 
   return (
     <View style={styles.container}>
@@ -73,6 +81,7 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
           <LikesAndCommentText
             postId={postId}
             handleIconPress={(index) => handleSnapPress(index)}
+            postData={checkUser.tripAndCommentPairDataByTripId.first}
           />
           <TouchableOpacity
             activeOpacity={0.8}
