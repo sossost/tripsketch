@@ -686,9 +686,9 @@ const PostPageComponent: React.FC<PostPageProps> = ({
                   </View>
 
                   {/* 달력 모달 닫기 버튼 */}
-                  {/* <CloseButton onPress={modalCloseHandler}>
+                  <CloseButton onPress={modalCloseHandler}>
                     <CloseIcon name="x" />
-                  </CloseButton> */}
+                  </CloseButton>
                   <Calendar
                     style={{
                       borderRadius: 20,
@@ -863,10 +863,7 @@ const PostPageComponent: React.FC<PostPageProps> = ({
                 </Text>
               </ValidateTitleContainer>
             </ContentPhotoBox>
-            {/* <ScrollView
-            contentContainerStyle={{ flexGrow: 1 }}
-            keyboardShouldPersistTaps="handled"
-          > */}
+
             <ContentInput
               multiline
               placeholder="내용을 자유롭게 작성해주세요"
@@ -874,10 +871,7 @@ const PostPageComponent: React.FC<PostPageProps> = ({
               value={content}
               onChangeText={(value) => inputChangeHandler("content", value)}
               style={{ textAlignVertical: "top" }}
-              //   returnKeyType="done"
-              //   onSubmitEditing={hideKeyboard}
             />
-            {/* </ScrollView> */}
 
             {/* 이미지 업로드 */}
             <ImageTitleContainer>
@@ -908,9 +902,6 @@ const PostPageComponent: React.FC<PostPageProps> = ({
                 </ImageInnerContainer>
               ))}
             </ImageViewContainer>
-            {/* <TouchableOpacity onPress={() => submitImage(image)}>
-              <Text>버튼</Text>
-            </TouchableOpacity> */}
 
             {/* 태그 */}
             <Title>태그</Title>
@@ -1067,7 +1058,7 @@ const CalendarIcon = styled(Feather)`
 
 const CloseButton = styled.TouchableOpacity`
   position: absolute;
-  top: 190px;
+  top: 10px;
   right: 10px;
 `;
 
@@ -1103,7 +1094,6 @@ const ContentText = styled.Text`
   font-size: 16px;
   font-style: italic;
   text-decoration: underline #73bbfb;
-  word-wrap: break-word;
 `;
 
 /** 선택 Text */
@@ -1189,9 +1179,6 @@ const ImageInnerContainer = styled.View`
 
 const DeleteBox = styled.View`
   position: absolute;
-  /* width: 15px;
-  height: 15px;
-  background-color: rgba(0, 0, 0, 0.4); */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1431,11 +1418,6 @@ const SelectLocationLower = styled.View`
   align-items: center;
   margin: 10px;
   padding: 10px;
-`;
-
-const SelectLocationButtonText = styled.Text`
-  font-size: 16px;
-  color: white;
 `;
 
 export default PostPageComponent;
