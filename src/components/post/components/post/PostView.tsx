@@ -59,6 +59,9 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
     const deleteAlertFunction = useDeleteAlert({
       id: postId,
       deleteRequest: deletePost,
+      alertTitle: "정말 삭제하시겠습니까?",
+      alertCancel: "괜찮습니다.",
+      alertOk: "삭제",
     });
     deleteAlertFunction();
   };

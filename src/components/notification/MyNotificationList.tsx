@@ -42,25 +42,26 @@ const MyNotificationList = () => {
 
   return (
     <>
-      <FlatList
-        data={notifications}
-        renderItem={({ item }) => (
-          <NotificationItem notification={item as Notification} />
-        )}
-        keyExtractor={(item) => (item as Notification).id}
-        onEndReached={handleEndReached}
-        onEndReachedThreshold={0.1}
-        contentContainerStyle={{
-          gap: 10,
-          paddingVertical: 20,
-          paddingHorizontal: 2,
-        }}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={false} onRefresh={handleRefresh} />
-        }
-        ListFooterComponent={renderFooter}
-      />
+      <View>
+        <FlatList
+          data={notifications}
+          renderItem={({ item }) => (
+            <NotificationItem notification={item as Notification} />
+          )}
+          keyExtractor={(item) => (item as Notification).id}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.1}
+          contentContainerStyle={{
+            gap: 10,
+            paddingVertical: 20,
+            paddingHorizontal: 2,
+          }}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={false} onRefresh={handleRefresh} />
+          }
+        />
+      </View>
     </>
   );
 };

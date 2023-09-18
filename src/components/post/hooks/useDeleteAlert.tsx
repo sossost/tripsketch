@@ -3,21 +3,30 @@ import { Alert } from "react-native";
 type DeleteAlertProps = {
   id: string;
   deleteRequest: (postId: string) => Promise<void>;
+  alertTitle: string;
+  alertCancel: string;
+  alertOk: string;
 };
 
-const useDeleteAlert = ({ id, deleteRequest }: DeleteAlertProps) => {
+const useDeleteAlert = ({
+  id,
+  deleteRequest,
+  alertTitle,
+  alertCancel,
+  alertOk,
+}: DeleteAlertProps) => {
   const postDeleteHandler = () => {
     if (deleteRequest) {
       Alert.alert(
         "알림",
-        "정말 삭제하시겠습니까?",
+        alertTitle,
         [
           {
-            text: "괜찮습니다.",
+            text: alertCancel,
             style: "cancel",
           },
           {
-            text: "삭제",
+            text: alertOk,
             onPress: () => {
               deleteRequest(id);
             },
