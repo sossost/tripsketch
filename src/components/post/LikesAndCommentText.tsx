@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useState, useEffect } from "react";
 import { EvilIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import { usePostLike, usePostUnlike } from "../../hooks/usePostQuery";
+import { usePostLike } from "../../hooks/usePostQuery";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import { GetPost } from "../../types/Post";
@@ -29,14 +29,13 @@ const LikesAndCommentText = ({
 
   const queryClient = useQueryClient();
   const postLikeMutation = usePostLike();
-  const postUnlikeMutation = usePostUnlike();
 
   // 현재 게시글 좋아요 추가, 해제
   const handleLike = async () => {
     try {
       if (likes) {
         setLikes(false);
-        await postUnlikeMutation.mutateAsync(postId);
+        await postLikeMutation.mutateAsync(postId);
         Toast.show({ type: "success", text1: "좋아요가 해제되었습니다." });
       } else {
         setLikes(true);
