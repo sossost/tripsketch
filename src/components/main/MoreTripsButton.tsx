@@ -33,7 +33,7 @@ const StyledButton = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  background-color: ${colors.pastel};
+  background-color: #ffffff;
   width: 100%;
   height: 55px;
   border-radius: 10px;
