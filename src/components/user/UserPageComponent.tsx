@@ -3,6 +3,7 @@ import { styled } from "styled-components/native";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import { useRecoilState } from "recoil";
 import { categoryState } from "../../store/categoryAtom";
+import { FlatList } from "react-native";
 
 import Profile from "./profile/Profile";
 import CategoryList from "./category/CategoryList";
@@ -11,6 +12,7 @@ import UserPostList from "./post/UserPostList";
 import Header from "../UI/header/Header";
 import Title from "../UI/header/Title";
 import CommonHeaderLeft from "../UI/header/HeaderLeft";
+import PageLayout from "../common/PageLayout";
 
 interface UserPageComponentProps {
   nickname?: string;
@@ -48,38 +50,36 @@ const UserPageComponent = ({ nickname }: UserPageComponentProps) => {
 
   return (
     <AsyncBoundary>
-      <Header left={HeaderChildren} />
-      <UserPageLayout
-        data={null}
-        renderItem={null}
-        ListHeaderComponent={() => (
-          <UserPageContainer>
-            <Profile nickname={pageOwnerNickname} />
-            <CategoryList nickname={pageOwnerNickname} />
-            <AsyncBoundary>
-              <UserPostList
-                nickname={pageOwnerNickname}
-                category={selectedCategory}
-              />
-            </AsyncBoundary>
-          </UserPageContainer>
-        )}
-      />
+      <PageLayout>
+        <Header left={HeaderChildren} />
+        <FlatList
+          data={null}
+          renderItem={null}
+          contentContainerStyle={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            alignItems: "center",
+          }}
+          ListHeaderComponent={() => (
+            <UserPageContainer>
+              <Profile nickname={pageOwnerNickname} />
+              <CategoryList nickname={pageOwnerNickname} />
+              <AsyncBoundary>
+                <UserPostList
+                  nickname={pageOwnerNickname}
+                  category={selectedCategory}
+                />
+              </AsyncBoundary>
+            </UserPageContainer>
+          )}
+        />
+      </PageLayout>
     </AsyncBoundary>
   );
 };
 
 export default UserPageComponent;
-
-const UserPageLayout = styled.FlatList`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
-  padding: 0 20px;
-  gap: 20px;
-  background-color: white;
-`;
 
 const UserPageContainer = styled.View`
   display: flex;

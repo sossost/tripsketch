@@ -3,7 +3,6 @@ import { Post } from "../../types/Post";
 import { ReactElement } from "react";
 
 import PostCard from "./card/PostCard";
-import { styled } from "styled-components/native";
 
 interface DiaryListProps {
   posts: Post[];
@@ -22,8 +21,8 @@ interface DiaryListProps {
  * @param listFooterComponent : 리스트 푸터 컴포넌트
  *
  * @author : 장윤수
- * @update : 2023-09-14,
- * @version 1.0.0,
+ * @update : 2023-09-19,
+ * @version 1.0.1, 플랫리스트 패딩값 수정
  * @see None,
  */
 const PostFlatList = ({
@@ -48,7 +47,7 @@ const PostFlatList = ({
       contentContainerStyle={{
         paddingBottom: 50,
         paddingTop: 20,
-        paddingHorizontal: 4,
+        paddingHorizontal: 2,
       }}
       showsVerticalScrollIndicator={false}
       refreshControl={
