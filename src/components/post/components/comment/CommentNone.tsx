@@ -3,11 +3,17 @@ import { useGetCurrentUser } from "../../../../hooks/useUserQuery";
 
 const CommentNone = () => {
   const { data: userData } = useGetCurrentUser();
+  const DEFAULT_IMAGE =
+    "https://ax6izwmsuv9c.objectstorage.ap-osaka-1.oci.customer-oci.com/n/ax6izwmsuv9c/b/tripsketch/o/profile.png";
   return (
     <Container>
       <ContainerInner>
         <ImageContainer>
-          <Image source={{ uri: userData?.profileImageUrl }}></Image>
+          <Image
+            source={{
+              uri: userData?.profileImageUrl || DEFAULT_IMAGE,
+            }}
+          />
         </ImageContainer>
         <InputContainer>
           <InputText>첫 댓글을 남겨주세요.</InputText>

@@ -15,6 +15,7 @@ import {
   getDeleteReplyComment,
 } from "../../hooks/useCommentQuery";
 import { GetPost } from "../../types/Post";
+import { useGetCurrentUser } from "../../hooks/useUserQuery";
 
 type CommentProps = {
   postId: string;
@@ -22,6 +23,7 @@ type CommentProps = {
 };
 
 const Comment = ({ postId, commentData }: CommentProps) => {
+  const { data: userData } = useGetCurrentUser();
   const createCommentMutation = getCreateComment();
   const queryClient = useQueryClient();
 
@@ -195,9 +197,11 @@ const Comment = ({ postId, commentData }: CommentProps) => {
         deleteReplyComment={deleteReplyComment}
         commentData={commentData}
       />
-      <View style={CommonStyles.appContainer}>
-        <CommentInput onSubmit={handleSubmit} />
-      </View>
+      {userData ? (
+        <View style={CommonStyles.appContainer}>
+          <CommentInput onSubmit={handleSubmit} />
+        </View>
+      ) : null}
     </View>
   );
 };
