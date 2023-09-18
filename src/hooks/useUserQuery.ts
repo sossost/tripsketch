@@ -27,7 +27,10 @@ export const useGetCurrentUser = () => {
     data = null,
     isLoading,
     isError,
-  } = useQuery<User | null>([QUERY_KEY.CURRENT_USER], getCurrentUser);
+  } = useQuery<User | null>([QUERY_KEY.CURRENT_USER], getCurrentUser, {
+    suspense: false,
+    useErrorBoundary: false,
+  });
 
   return { data, isLoading, isError };
 };
