@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useGetNotifications } from "../../hooks/useNotificationQuery";
-import { FlatList, RefreshControl } from "react-native";
+import { FlatList, RefreshControl, View } from "react-native";
 import { Notification } from "../../types/Notification";
 
 import NotificationItem from "./NotificationItem";
@@ -31,24 +31,26 @@ const MyNotificationList = () => {
 
   return (
     <>
-      <FlatList
-        data={notifications}
-        renderItem={({ item }) => (
-          <NotificationItem notification={item as Notification} />
-        )}
-        keyExtractor={(item) => (item as Notification).id}
-        onEndReached={handleEndReached}
-        onEndReachedThreshold={0.1}
-        contentContainerStyle={{
-          gap: 10,
-          paddingVertical: 20,
-          paddingHorizontal: 2,
-        }}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={false} onRefresh={handleRefresh} />
-        }
-      />
+      <View>
+        <FlatList
+          data={notifications}
+          renderItem={({ item }) => (
+            <NotificationItem notification={item as Notification} />
+          )}
+          keyExtractor={(item) => (item as Notification).id}
+          onEndReached={handleEndReached}
+          onEndReachedThreshold={0.1}
+          contentContainerStyle={{
+            gap: 10,
+            paddingVertical: 20,
+            paddingHorizontal: 2,
+          }}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={false} onRefresh={handleRefresh} />
+          }
+        />
+      </View>
     </>
   );
 };
