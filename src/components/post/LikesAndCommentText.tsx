@@ -52,11 +52,13 @@ const LikesAndCommentText = ({
     <View style={styles.container}>
       <View style={styles.icon_container}>
         <TouchableOpacity onPress={handleLike}>
-          <Ionicons
-            name={likes ? "md-heart-sharp" : "md-heart-outline"}
-            size={26}
-            color={likes ? "#ec6565" : "black"}
-          />
+          {userData ? (
+            <Ionicons
+              name={likes ? "md-heart-sharp" : "md-heart-outline"}
+              size={26}
+              color={likes ? "#ec6565" : "black"}
+            />
+          ) : null}
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleIconPress && handleIconPress(1)}>
           <EvilIcons name="comment" size={32} color="black" />

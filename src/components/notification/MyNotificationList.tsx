@@ -1,9 +1,21 @@
 import { useCallback } from "react";
 import { useGetNotifications } from "../../hooks/useNotificationQuery";
-import { FlatList, RefreshControl, Text, View } from "react-native";
+import {
+  Animated,
+  FlatList,
+  RefreshControl,
+  ScrollView,
+  TouchableOpacity,
+  Text,
+  View,
+} from "react-native";
 import { Notification } from "../../types/Notification";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "../../react-query/queryKey";
+import {
+  Swipeable,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
 
 import NotificationItem from "./NotificationItem";
 
@@ -42,26 +54,27 @@ const MyNotificationList = () => {
 
   return (
     <>
-      <View>
-        <FlatList
-          data={notifications}
-          renderItem={({ item }) => (
-            <NotificationItem notification={item as Notification} />
-          )}
-          keyExtractor={(item) => (item as Notification).id}
-          onEndReached={handleEndReached}
-          onEndReachedThreshold={0.1}
-          contentContainerStyle={{
-            gap: 10,
-            paddingVertical: 20,
-            paddingHorizontal: 2,
-          }}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl refreshing={false} onRefresh={handleRefresh} />
-          }
-        />
-      </View>
+      <FlatList
+        data={notifications}
+        renderItem={({ item }) => (
+          <NotificationItem
+            notification={item as Notification}
+            // onDelete={handleDeleteNotification}
+          />
+        )}
+        keyExtractor={(item) => (item as Notification).id}
+        onEndReached={handleEndReached}
+        onEndReachedThreshold={0.1}
+        contentContainerStyle={{
+          gap: 15,
+          paddingVertical: 20,
+          paddingHorizontal: 2,
+        }}
+        showsVerticalScrollIndicator={false}
+        refreshControl={
+          <RefreshControl refreshing={false} onRefresh={handleRefresh} />
+        }
+      />
     </>
   );
 };

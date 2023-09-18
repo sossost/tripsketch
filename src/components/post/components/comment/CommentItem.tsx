@@ -142,7 +142,10 @@ const CommentItem = ({
             <Text style={styles.comment}>{comment.content}</Text>
             {comment.isDeleted ? null : (
               <View style={styles.likes_container}>
-                <TouchableOpacity onPress={handleLike}>
+                <TouchableOpacity
+                  onPress={handleLike}
+                  disabled={!userData ? true : false}
+                >
                   <Ionicons
                     name={likes ? "md-heart-sharp" : "md-heart-outline"}
                     size={18}
@@ -183,7 +186,7 @@ const CommentItem = ({
           ) : null}
         </View>
       </View>
-      {sort === "all" ? (
+      {sort === "all" && userData ? (
         <View style={styles.recommentBox}>
           {!showCommentInput ? (
             <TouchableOpacity onPress={handleCommentButtonClick}>
@@ -207,17 +210,13 @@ const CommentItem = ({
         <View style={styles.recomment_container}>
           {comment.children.map((item) => (
             <View key={item.id}>
-              {userData ? (
-                <ReCommentItem
-                  recomment={item}
-                  userData={userData}
-                  likeReplyComment={likeReplyComment}
-                  updateReplyComment={updateReplyComment}
-                  deleteReplyComment={deleteReplyComment}
-                />
-              ) : (
-                <Text>사용자 데이터를 사용할 수 없습니다.</Text>
-              )}
+              <ReCommentItem
+                recomment={item}
+                userData={userData}
+                likeReplyComment={likeReplyComment}
+                updateReplyComment={updateReplyComment}
+                deleteReplyComment={deleteReplyComment}
+              />
             </View>
           ))}
         </View>
