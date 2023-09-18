@@ -36,9 +36,9 @@ export const API_PATH = {
       // TripId로 게시물 조회하기
       TRIP_ID: `/trip/guest/:id`,
       // Comment와 Trip 함께 조회하기
-      TRIP_AND_COMMENT: `/trip/user/tripAndComments/:tripId`,
+      TRIP_AND_COMMENT: `/trip/user/trip-comments/:tripId`,
       // Comment와 Trip 함께 조회하기 :: 게스트
-      TRIP_AND_COMMENT_GUEST: `/trip/guest/tripAndComments/:tripId`,
+      TRIP_AND_COMMENT_GUEST: `/trip/guest/trip-comments/:tripId`,
       // 업데이트 기존 데이터 조회하기
       TRIP_UPDATE_DATA: `/trip/modify/:id`,
     },

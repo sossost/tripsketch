@@ -2,13 +2,13 @@ import {
   View,
   Modal,
   Text,
-  ScrollView,
   TouchableOpacity,
   Image,
   TouchableWithoutFeedback,
   Dimensions,
   Alert,
 } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import styled from "styled-components/native";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -26,6 +26,7 @@ import DeleteXbutton from "../../components/common/DeleteXbutton";
 import usePostTrip from "./hooks/usePostTrip";
 import useUpdatePost from "./hooks/useUpdatePost";
 import Loading from "../UI/Loading";
+import { resetStateStorage } from "./utils/resetStateStorage";
 
 type Suggestion = {
   place_id: string;
@@ -52,7 +53,6 @@ type ImagePickerResult = {
 };
 
 /** 여행 글쓰기 */
-
 LocaleConfig.locales["ko"] = {
   monthNames: [
     "1월",
@@ -175,11 +175,14 @@ const PostPageComponent: React.FC<PostPageProps> = ({
   const [isPublic, setIsPublic] = useState<boolean>(
     updateId ? updateData.isPublic : true
   );
-
   const [errors, setErrors] = useState({
     title: "",
     content: "",
+    address: "",
   });
+  // address 입력 여부를 관리하는 상태 추가
+  const [isAddressTouched, setIsAddressTouched] = useState(false);
+  const navigation = useNavigation<StackNavigation>();
 
   const isCheckEmpty =
     Object.values(errors).every((error) => error === "") &&
@@ -187,7 +190,8 @@ const PostPageComponent: React.FC<PostPageProps> = ({
     locationName !== "" &&
     title !== "" &&
     content !== "" &&
-    image.length !== 0;
+    image.length !== 0 &&
+    address.country !== "";
 
   // title 유효성 검사
   const validateTitle = (title: string) => {
@@ -211,39 +215,40 @@ const PostPageComponent: React.FC<PostPageProps> = ({
     }
   };
 
-  // 상태변수 초기화
-  const resetState = () => {
-    setQuery("");
-    setMapViewOn(false);
-    setLocationName("");
-    setShowModal(false);
-    setSuggestions([]);
-    setMarkedDates({});
-    setSelectedDates([]);
-    setStartDate(null);
-    setEndDate(null);
-    setImage([]);
-    setTitle("");
-    setContent("");
-    setHashtag("");
-    setHashtagList([]);
-    setIsPublic(true);
-    setAddress({
-      countryCode: "",
-      address: "",
-      municipality: "",
-      name: "",
-      country: "",
-      city: "",
-      town: "",
-      road: "",
-      display_name: "",
-      latitude: 0,
-      longitude: 0,
-    });
+  // address 유효성 검사
+  const addressCountry = address.country;
+  const validateAddress = (addressCountry: string) => {
+    let error = "";
+    if (addressCountry === "") {
+      error = "존재하지 않는 여행지입니다. 다시 선택해주세요.";
+      setErrors((prevState) => ({ ...prevState, address: error }));
+    } else {
+      setErrors((prevState) => ({ ...prevState, address: "" }));
+    }
   };
 
-  const navigation = useNavigation<StackNavigation>();
+  // 상태변수 초기화
+  const resetState = () =>
+    resetStateStorage({
+      setQuery,
+      setMapViewOn,
+      setLocationName,
+      setShowModal,
+      setSuggestions,
+      setMarkedDates,
+      setSelectedDates,
+      setStartDate,
+      setEndDate,
+      setImage,
+      setTitle,
+      setContent,
+      setHashtag,
+      setHashtagList,
+      setIsPublic,
+      setAddress,
+      setRegion,
+      setIsAddressTouched,
+    });
 
   // 입력 필드 값이 변경될 때 호출하는 함수
   const inputChangeHandler = (name: string, value: string) => {
@@ -336,24 +341,59 @@ const PostPageComponent: React.FC<PostPageProps> = ({
     setQuery(address.display_name);
   }, [address, region]);
 
+  // 선택 클릭 시 MAP 열기 -> 선택 클릭 시 위치 초기화
+  const selectAdressMap = () => {
+    setMapViewOn(!mapViewOn);
+    setAddress({
+      countryCode: "",
+      address: "",
+      municipality: "",
+      name: "",
+      country: "",
+      city: "",
+      town: "",
+      road: "",
+      display_name: "",
+      latitude: 0,
+      longitude: 0,
+    });
+    setRegion({
+      latitude: 37.5665,
+      longitude: 126.978,
+      latitudeDelta: 0.05,
+      longitudeDelta: 0.05,
+    });
+    setIsSearchLoading(false);
+    setSuggestions([]);
+  };
+
   /** 입력에 따라 도시를 찾는 핸들러 */
   const handleInputChange = async (value: string) => {
     setQuery(value);
     await searchCity(value);
   };
 
+  // 도시 검색 로딩 상태 저장
+  const [isSearchLoading, setIsSearchLoading] = useState(false);
+
   /** 도시 검색 */
   const searchCity = async (cityName: string) => {
     if (cityName.length > 1) {
-      fetch(
-        `https://nominatim.openstreetmap.org/search?city=${cityName}&format=json`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          setSuggestions(data);
-        });
+      setIsSearchLoading(true);
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?city=${cityName}&format=json`
+        );
+        const data = await response.json();
+        setSuggestions(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsSearchLoading(false);
+      }
     } else {
       setSuggestions([]);
+      setIsSearchLoading(false);
     }
   };
 
@@ -391,6 +431,8 @@ const PostPageComponent: React.FC<PostPageProps> = ({
   };
 
   const selectLocationHandler = (query: string) => {
+    setIsAddressTouched(true);
+    validateAddress(addressCountry);
     setLocationName(query);
     setMapViewOn(false);
   };
@@ -450,7 +492,6 @@ const PostPageComponent: React.FC<PostPageProps> = ({
       );
 
       const selectedUris = compressedUris.map((asset) => asset.uri);
-      console.log(selectedUris);
       const newImages = [...image, ...selectedUris];
 
       if (newImages.length > maxImageCount) {
@@ -682,95 +723,115 @@ const PostPageComponent: React.FC<PostPageProps> = ({
           <InfoBox>
             <MapIcon name="map-marker-alt" />
             <Title>여행지</Title>
-            <ContentText onPress={() => setMapViewOn(!mapViewOn)}>
+            <ContentText onPress={selectAdressMap}>
               {query === "" ? "선택" : locationName}
             </ContentText>
           </InfoBox>
+          <View style={{ marginBottom: 10, paddingLeft: 28 }}>
+            {errors.address !== "" && isAddressTouched ? (
+              <ValidationText>{errors.address}</ValidationText>
+            ) : null}
+          </View>
         </HeaderInfo>
         {mapViewOn && (
-          <SelectLocation>
-            <SelectLocationUpper>
-              <View></View>
-
-              <TouchableOpacity onPress={() => setMapViewOn(false)}>
-                <Text>╳</Text>
-              </TouchableOpacity>
-            </SelectLocationUpper>
-            <SelectLocationUpperBottom>
-              <LocationInput
-                value={query}
-                onChangeText={handleInputChange}
-                placeholder="도시 이름을 입력해주세요."
-              />
-              <FontAwesome
-                name="check"
-                size={24}
-                color="#73bbfb"
-                onPress={() => selectLocationHandler(query)}
-              />
-              {query.length === 0 ? (
-                <></>
-              ) : suggestions.length > 0 ? (
-                <LocationSuggestions>
-                  {suggestions.map((e) => {
-                    return (
-                      <TouchableWithoutFeedback
-                        style={{
-                          width: "100%",
-                          height: 50,
-                          backgroundColor: "white",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          borderRadius: 10,
-                          marginTop: 10,
-                        }}
-                        onPress={(event) => {
-                          event.stopPropagation(); // 이벤트 전파 중단
-                          handleSuggestionClick(e);
-                        }}
-                      >
-                        <LocationSuggestionsFields>
-                          <LocationSuggestionsTexts>
-                            {e.display_name}
-                          </LocationSuggestionsTexts>
-                        </LocationSuggestionsFields>
-                      </TouchableWithoutFeedback>
-                    );
-                  })}
-                </LocationSuggestions>
-              ) : (
-                <></>
-              )}
-            </SelectLocationUpperBottom>
-
-            <SelectLocationMiddle>
-              <MapView
-                style={{
-                  width: "100%",
-                  zIndex: 5,
-                  position: "absolute",
-                  height: 500,
-                }}
-                region={region}
-                onRegionChangeComplete={(region) => setRegion(region)}
-                onPress={handlePressLocation}
-              >
-                <UrlTile
-                  urlTemplate="http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  maximumZ={19}
-                />
-                <Marker
-                  coordinate={{
-                    latitude: address.latitude,
-                    longitude: address.longitude,
+          <MapOverlay height={windowHeight}>
+            <SelectLocation>
+              <SelectLocationUpper>
+                <View></View>
+                <TouchableOpacity
+                  onPress={() => {
+                    setMapViewOn(false);
+                    setQuery(""); // query 초기화
                   }}
-                  title="My Marker"
-                  description="Some description"
+                >
+                  <Text>╳</Text>
+                </TouchableOpacity>
+              </SelectLocationUpper>
+              <SelectLocationUpperBottom>
+                <LocationInput
+                  value={query}
+                  onChangeText={handleInputChange}
+                  placeholder="도시 이름을 입력해주세요."
                 />
-              </MapView>
-            </SelectLocationMiddle>
-            <SelectLocationLower></SelectLocationLower>
-          </SelectLocation>
+                <FontAwesome
+                  name="check"
+                  size={24}
+                  color="#73bbfb"
+                  onPress={() => selectLocationHandler(query)}
+                />
+                {query.length === 0 ? (
+                  <></>
+                ) : suggestions.length > 0 ? (
+                  isSearchLoading ? (
+                    <Loading /> // 로딩 중 메시지 표시
+                  ) : (
+                    <LocationSuggestions>
+                      <ScrollView>
+                        {suggestions.map((e) => {
+                          return (
+                            <TouchableWithoutFeedback
+                              style={{
+                                width: "100%",
+                                height: 50,
+                                backgroundColor: "white",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                borderRadius: 10,
+                                marginTop: 10,
+                              }}
+                              onPress={(event) => {
+                                event.stopPropagation(); // 이벤트 전파 중단
+                                handleSuggestionClick(e);
+                              }}
+                            >
+                              <LocationSuggestionsFields>
+                                <LocationSuggestionsTexts>
+                                  {e.display_name}
+                                </LocationSuggestionsTexts>
+                              </LocationSuggestionsFields>
+                            </TouchableWithoutFeedback>
+                          );
+                        })}
+                      </ScrollView>
+                    </LocationSuggestions>
+                  )
+                ) : (
+                  <></>
+                )}
+              </SelectLocationUpperBottom>
+
+              <SelectLocationMiddle>
+                {suggestions.length > 0 ? (
+                  <MapViewOverlay></MapViewOverlay>
+                ) : null}
+                <MapView
+                  style={{
+                    width: "100%",
+                    zIndex: 5,
+                    position: "absolute",
+                    height: 500,
+                  }}
+                  region={region}
+                  onRegionChangeComplete={(region) => setRegion(region)}
+                  onPress={handlePressLocation}
+                >
+                  <UrlTile
+                    urlTemplate="http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    maximumZ={19}
+                  />
+                  <Marker
+                    coordinate={{
+                      latitude: address.latitude,
+                      longitude: address.longitude,
+                    }}
+                    title="My Marker"
+                    description="Some description"
+                  />
+                </MapView>
+              </SelectLocationMiddle>
+              <SelectLocationLower></SelectLocationLower>
+            </SelectLocation>
+          </MapOverlay>
         )}
 
         <ScrollView>
@@ -948,6 +1009,15 @@ const ModalContainer = styled.View`
   padding-top: 45%;
 `;
 
+const MapViewOverlay = styled.View`
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 500px;
+  background-color: rgba(20, 20, 20, 0.3);
+  z-index: 6;
+`;
+
 /** 여행기간, 여행지 감싸는 View */
 const HeaderInfo = styled.View`
   padding: 0 20px;
@@ -990,7 +1060,7 @@ const ValidationText = styled.Text`
 
 /** 달력 아이콘 */
 const CalendarIcon = styled(Feather)`
-  font-size: 28px;
+  font-size: 25px;
   color: #73bbfb;
   margin-right: 5px;
 `;
@@ -1009,7 +1079,7 @@ const CloseIcon = styled(Feather)`
 
 /** 여행지 아이콘 */
 const MapIcon = styled(FontAwesome5)`
-  font-size: 28px;
+  font-size: 25px;
   color: #73bbfb;
   margin-left: 3px;
   margin-right: 9px;
@@ -1027,11 +1097,13 @@ const SelectButton = styled.TouchableOpacity`
 
 /** 내용 Text */
 const ContentText = styled.Text`
+  width: 70%;
   color: #73bbfb;
   margin-right: 10px;
   font-size: 16px;
   font-style: italic;
   text-decoration: underline #73bbfb;
+  word-wrap: break-word;
 `;
 
 /** 선택 Text */
@@ -1066,7 +1138,7 @@ const TitleInput = styled.TextInput<TitleInputProps>`
 const LocationInput = styled.TextInput`
   padding: 10px 10px;
   height: 45px;
-  font-size: 18px;
+  font-size: 16px;
   border: none;
   border-radius: 5px;
   width: 70%;
@@ -1238,19 +1310,24 @@ const ActionButtonText = styled.Text<{ cancel: boolean }>`
   font-size: 16px;
 `;
 
+const MapOverlay = styled.View<ViewProps>`
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  height: ${(props) => props.height}px;
+  top: 0;
+  z-index: 1;
+`;
+
 const SelectLocation = styled.View`
   background-color: white;
-  shadow-color: "#111";
-  shadow-opacity: 0.1;
-  shadow-radius: 8rem;
-  shadow-offset-x: 50px;
   top: 10%;
   left: 0;
   position: absolute;
   width: 90%;
-  height: 300px;
+  height: 350px;
   color: white;
-  border-radius: 30px;
+  border-radius: 10px;
   margin: 20px;
   font-size: 15px;
   z-index: 3;
@@ -1258,8 +1335,6 @@ const SelectLocation = styled.View`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  border-width: 0.5px;
-  border-color: #dddddd;
   overflow: hidden;
 `;
 
@@ -1288,36 +1363,26 @@ const SelectLocationUpperBottom = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  backgroundcolor: white;
+  background-color: white;
   z-index: 10;
 `;
 
 const LocationSuggestions = styled.View`
   margin: 13px;
-  margin-top: 10px;
+  margin-top: 20px;
   background-color: white;
   width: 100%;
-  height: auto;
+  height: 160px;
   position: absolute;
   z-index: 20;
   top: 150%;
-  display: flex;
-  flex-direction: column;
-  justify-contents: flex-start;
-  align-items: flex-start;
   border-radius: 20px;
   overflow: hidden;
   padding: 10px;
-  shadow-color: black;
-  shadow-opacity: 0.2;
-  shadow-radius: 5px;
-  border: solid;
-  border-width: 0.5px;
-  border-color: #dddddd;
 `;
 
 const LocationSuggestionsFields = styled.View`
-  background-color: white;
+  background-color: transparent;
   width: 100%;
   height: 50px;
   position: relative;
@@ -1342,7 +1407,7 @@ const LocationSuggestionsTexts = styled.Text`
 const SelectLocationMiddle = styled.View`
   background-color: gray;
   width: 100%;
-  height: 220px;
+  height: 250px;
   color: white;
   font-size: 16px;
 
