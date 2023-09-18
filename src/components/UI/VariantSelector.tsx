@@ -57,7 +57,7 @@ const VariantSelector = <T extends string>(props: VariantProps<T>) => {
 
 const Container = styled.View`
   flex-direction: row;
-  height: 56px;
+  height: 50px;
   align-items: center;
   border-bottom: 1px solid #ccc;
 `;
@@ -74,6 +74,7 @@ const VariantText = styled.Text<{ isSelected: boolean }>`
   font-weight: ${(props) => (props.isSelected ? "600" : "400")};
   color: ${(props) =>
     props.isSelected ? props.theme.mainFont : props.theme.subFont};
+  padding-bottom: 15px;
 `;
 
 const Underline = styled(Animated.View)`

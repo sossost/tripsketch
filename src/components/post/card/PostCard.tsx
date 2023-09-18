@@ -18,8 +18,8 @@ const DEFAULT_IMAGE =
 /**
  * @description : 여행일기 카드 컴포넌트
  * @author : 이수현
- * @update : 2023-09-14, 장윤수 : 스타일 에러 수정
- * @version 1.0.1,
+ * @update : 2023-09-19,
+ * @version 1.1.1, 장윤수 : 프로필 클릭시 유저페이지 이동 핸들함수 추가 및 스타일 조정
  * @see None,
  */
 const PostCard = ({ post }: PostCardProps) => {
@@ -32,13 +32,17 @@ const PostCard = ({ post }: PostCardProps) => {
 
   const navigation = useNavigation<StackNavigation>();
 
-  const postHandler = () => {
+  const postHandleClick = () => {
     navigation.navigate(LINK.TRIP_DETAIL_PAGE, { postId: post.id });
+  };
+
+  const handleProfileClick = () => {
+    navigation.navigate(LINK.USER_PAGE, { nickname: post.nickname });
   };
 
   return (
     <PostCardLayout>
-      <ImageWrapper onPress={postHandler}>
+      <ImageWrapper onPress={postHandleClick}>
         <Thumnail source={{ uri: post.image || DEFAULT_IMAGE }}>
           <ThumnailText>{post.createdAt.slice(0, 10)}</ThumnailText>
         </Thumnail>
@@ -61,7 +65,7 @@ const PostCard = ({ post }: PostCardProps) => {
           </RowContainer>
         </PostMetaDataContainer>
 
-        <ProfileContainer>
+        <ProfileContainer onPress={handleProfileClick}>
           <ProfileWrapper>
             <ProfileImageWrapper>
               <ProfileImage source={{ uri: post.profileImageUrl }} />
@@ -85,7 +89,7 @@ const PostCard = ({ post }: PostCardProps) => {
 export default PostCard;
 
 const PostCardLayout = styled.View`
-  width: ${SCREEN_WIDTH - 50}px;
+  width: ${SCREEN_WIDTH - 44}px;
   background-color: white;
   border-radius: 30px;
   margin-bottom: 30px;
@@ -152,7 +156,7 @@ const PostLocation = styled.Text`
   margin-left: 5px;
 `;
 
-const ProfileContainer = styled.View`
+const ProfileContainer = styled.TouchableOpacity`
   width: 100%;
   margin-top: 15px;
   flex-direction: row;

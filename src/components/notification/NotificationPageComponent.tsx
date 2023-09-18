@@ -6,6 +6,7 @@ import Header from "../UI/header/Header";
 import Title from "../UI/header/Title";
 import AsyncBoundary from "../common/AsyncBoundary";
 import MyNotificationList from "./MyNotificationList";
+import PageLayout from "../common/PageLayout";
 
 /**
  * @description : 알림 페이지 컴포넌트
@@ -19,8 +20,8 @@ const NotificationPageComponent = () => {
 
   return (
     <AsyncBoundary>
-      <Header left={<Title title={"알림"} />} />
-      <Container>
+      <PageLayout>
+        <Header left={<Title title={"알림"} />} />
         <AdSection></AdSection>
         <VariantSelector
           variant1="내소식"
@@ -32,26 +33,16 @@ const NotificationPageComponent = () => {
         <AsyncBoundary>
           {variant === "내소식" && <MyNotificationList />}
         </AsyncBoundary>
-      </Container>
+      </PageLayout>
     </AsyncBoundary>
   );
 };
-
-const Container = styled.View`
-  flex: 1;
-  align-items: center;
-  background-color: #fff;
-  padding: 0 20px;
-`;
 
 const AdSection = styled.View`
   width: 100%;
   height: 80px;
   background: #eee;
   border-radius: 5px;
-`;
-const List = styled.FlatList`
-  width: 100%;
 `;
 
 export default NotificationPageComponent;
