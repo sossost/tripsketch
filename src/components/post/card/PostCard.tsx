@@ -89,7 +89,6 @@ const PostCardLayout = styled.View`
   background-color: white;
   border-radius: 30px;
   margin-bottom: 30px;
-  overflow: hidden;
   shadow-color: #000;
   shadow-opacity: 0.25;
   shadow-radius: 1.5px;
@@ -100,7 +99,9 @@ const PostCardLayout = styled.View`
 const ImageWrapper = styled.TouchableOpacity`
   width: 100%;
   aspect-ratio: 1.1;
-  border-radius: 30px;
+  overflow: hidden;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
 `;
 
 const Thumnail = styled.ImageBackground`
