@@ -41,7 +41,7 @@ const MyNotificationList = () => {
           onEndReached={handleEndReached}
           onEndReachedThreshold={0.1}
           contentContainerStyle={{
-            gap: 10,
+            gap: 15,
             paddingVertical: 20,
             paddingHorizontal: 2,
           }}

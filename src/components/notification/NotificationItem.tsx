@@ -75,7 +75,7 @@ const Container = styled.TouchableOpacity`
   background-color: #fff;
   shadow-color: #000;
   shadow-opacity: 0.25;
-  shadow-radius: 1.5px;
+  shadow-radius: 1px;
   shadow-offset: 0px 0px;
   elevation: 2;
   position: relative;
@@ -102,12 +102,13 @@ const TextContainer = styled.View`
 
 const NotDescript = styled.Text`
   font-weight: bold;
-  font-size: 14px;
+  font-size: 15px;
   letter-spacing: -0.5px;
+  margin-bottom: 3px;
 `;
 
 const NotContent = styled.Text`
-  font-size: 12px;
+  font-size: 14px;
   color: #888;
 `;
 
@@ -122,7 +123,7 @@ const CreateNotification = styled.View`
 `;
 
 const CreateDate = styled.Text`
-  font-size: 11px;
+  font-size: 13px;
   color: ${colors.subFont};
 `;
 
