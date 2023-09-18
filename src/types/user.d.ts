@@ -5,4 +5,5 @@ export type User = {
   followersCount?: number;
   followingCount?: number;
   isFollowing: boolean;
+  isAdmin: boolean;
 };

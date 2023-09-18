@@ -5,7 +5,6 @@ import {
   ScrollView,
   Animated,
   TouchableOpacity,
-  Text,
 } from "react-native";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import PostViewContainer from "./PostViewContainer";
@@ -17,25 +16,22 @@ import {
   useGetPostAndCommentsForGuest,
 } from "../../hooks/usePostQuery";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
-import PostViewSkeleton from "./components/post/PostViewSkeleton";
-import LikeAndCommentSkeleton from "./components/comment/LikesAndCommentSkeleton";
+import DeletePostView from "./components/post/DeletePostView";
+import { GetPost } from "../../types/Post";
+import Loading from "../UI/Loading";
 
 const PostDetailPageComponent = ({ postId }: { postId: string }) => {
   const { data: userData } = useGetCurrentUser();
-  let postAndCommentData, isDataLoading, isDataError;
+  let postAndCommentData: GetPost | undefined;
 
   if (userData) {
     // 로그인된 사용자의 데이터 가져오기
     const userResult = useGetPostAndComments(postId);
     postAndCommentData = userResult.postAndCommentData;
-    isDataLoading = userResult.isDataUserLoading;
-    isDataError = userResult.isDataUserError;
   } else {
     // 비로그인 상태의 데이터 가져오기
     const guestResult = useGetPostAndCommentsForGuest(postId);
     postAndCommentData = guestResult.postAndCommentGuestData;
-    isDataLoading = guestResult.isDataGuestLoading;
-    isDataError = guestResult.isDataGuestError;
   }
 
   // 바텀시트 높이 조절하는 변수
@@ -57,17 +53,13 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
     sheetRef.current?.snapToIndex(index);
   }, []);
 
-  if (isDataLoading) {
-    return (
-      <View>
-        <PostViewSkeleton />
-        <LikeAndCommentSkeleton />
-      </View>
-    );
+  if (!postAndCommentData) {
+    return <Loading />;
   }
 
-  if (isDataError) {
-    return <Text>에러</Text>;
+  // 삭제된 게시물 요청 시 보여질 부분
+  if (postAndCommentData?.tripAndCommentPairDataByTripId.first.isHidden) {
+    <DeletePostView />;
   }
 
   return (

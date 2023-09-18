@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Image,
   ImageBackground,
+  Platform,
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
@@ -80,16 +81,19 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
             {postData.title}
           </Text>
           <View style={styles.ellipsis}>
-            {userData?.nickname === postData.nickname ? (
+            {userData?.nickname === postData.nickname || userData?.isAdmin ? (
               <TouchableOpacity onPress={settingBox}>
                 <Ionicons name="ellipsis-vertical" size={18} color="#9f9f9f" />
               </TouchableOpacity>
             ) : null}
             {isSettingOpen && (
               <View style={styles.setting_box}>
-                <TouchableOpacity onPress={postUpdateHandler}>
-                  <Text style={styles.setting_box_text}>수정하기</Text>
-                </TouchableOpacity>
+                {userData?.nickname !== postData.nickname &&
+                userData?.isAdmin ? null : (
+                  <TouchableOpacity onPress={postUpdateHandler}>
+                    <Text style={styles.setting_box_text}>수정하기</Text>
+                  </TouchableOpacity>
+                )}
                 <TouchableOpacity onPress={() => postDeleteHandler(postId)}>
                   <Text style={styles.setting_box_text}>삭제하기</Text>
                 </TouchableOpacity>
@@ -211,7 +215,7 @@ const styles = StyleSheet.create({
     borderColor: "#73BBFB",
     borderWidth: 1,
     borderRadius: 20,
-    paddingVertical: 3,
+    paddingVertical: Platform.OS === "android" ? 3 : 7,
     paddingHorizontal: 10,
   },
   tag_text: {
@@ -233,12 +237,13 @@ const styles = StyleSheet.create({
     position: "relative",
     marginTop: 15,
     backgroundColor: "#f7f7f7",
-    padding: 13,
+    padding: Platform.OS === "android" ? 13 : 17,
   },
   trip_date_container: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    marginVertical: Platform.OS === "android" ? 0 : 1,
   },
   trip_date_text: {
     fontSize: 13,
@@ -273,6 +278,7 @@ const styles = StyleSheet.create({
 
   content_container: {
     paddingHorizontal: 20,
+    marginTop: Platform.OS === "android" ? 0 : 5,
   },
   content_text: {
     lineHeight: 18,
