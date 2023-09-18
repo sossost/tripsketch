@@ -212,27 +212,13 @@ export const postLike = async (id: string) => {
   const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
   try {
     const response = await axiosBase.post(
-      API_PATH.TRIP.POST.TRIP_LIKE,
+      API_PATH.TRIP.POST.TRIP_LIKE_TOGGLE,
       { id },
       { headers: { Authorization: `Bearer ${accessToken}` } }
     );
     if (response.status !== 200) {
       throw new Error("Network response was not ok");
     }
-    return response.data;
-  } catch (error: any) {
-    throw new Error(error);
-  }
-};
-
-export const postUnlike = async (id: string) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
-  try {
-    const response = await axiosBase.post(
-      API_PATH.TRIP.POST.TRIP_UNLIKE,
-      { id },
-      { headers: { Authorization: `Bearer ${accessToken}` } }
-    );
     return response.data;
   } catch (error: any) {
     throw new Error(error);

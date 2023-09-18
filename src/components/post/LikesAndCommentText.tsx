@@ -2,30 +2,24 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useState, useEffect } from "react";
 import { EvilIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import { useGetPostsById } from "../../hooks/usePostQuery";
-import { usePostLike, usePostUnlike } from "../../hooks/usePostQuery";
+import { usePostLike } from "../../hooks/usePostQuery";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
-import LikeAndCommentSkeleton from "./components/comment/LikesAndCommentSkeleton";
+import { GetPost } from "../../types/Post";
 import Toast from "react-native-toast-message";
 
 interface LikesAndCommentTextProps {
   postId: string;
   handleIconPress?: (index: number) => void;
+  postData: GetPost["tripAndCommentPairDataByTripId"]["first"];
 }
 
 const LikesAndCommentText = ({
   postId,
   handleIconPress,
+  postData,
 }: LikesAndCommentTextProps) => {
-  const { postData, isLoading } = useGetPostsById(postId);
   const { data: userData } = useGetCurrentUser();
-
-  // 리스트에서 좋아요 유/무 확인하는 로직
-  // const checkLikeUser = () =>
-  //   Boolean(
-  //     userData?.nickname && postData?.tripLikes.includes(userData.nickname)
-  //   );
 
   const checkLikeUser = postData?.isLiked;
   const [likes, setLikes] = useState(false);
@@ -33,38 +27,26 @@ const LikesAndCommentText = ({
     setLikes(checkLikeUser);
   }, [userData, postData]);
 
-  // console.log(checkLikeUser);
-  // console.log(postData);
-
   const queryClient = useQueryClient();
   const postLikeMutation = usePostLike();
-  const postUnlikeMutation = usePostUnlike();
 
   // 현재 게시글 좋아요 추가, 해제
   const handleLike = async () => {
     try {
       if (likes) {
         setLikes(false);
-        await postUnlikeMutation.mutateAsync(postId);
+        await postLikeMutation.mutateAsync(postId);
         Toast.show({ type: "success", text1: "좋아요가 해제되었습니다." });
       } else {
         setLikes(true);
         await postLikeMutation.mutateAsync(postId);
         Toast.show({ type: "success", text1: "좋아요가 표시되었습니다." });
       }
-      queryClient.invalidateQueries(["postId"]);
+      queryClient.invalidateQueries(["postAndComment"]);
     } catch (error) {
       console.error("오류 발생:", error);
     }
   };
-
-  if (isLoading) {
-    return <LikeAndCommentSkeleton />;
-  }
-
-  if (!postData) {
-    return <Text>Data not available.</Text>;
-  }
 
   return (
     <View style={styles.container}>
