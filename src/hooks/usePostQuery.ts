@@ -17,13 +17,6 @@ import {
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { Post, GetPost, PostUpdate } from "../types/Post";
 
-export interface PostsData {
-  posts: Post[];
-  currentPage: number;
-  totalPage: number;
-  postsPerPage: number;
-}
-
 export interface TripsData {
   trips: Post[];
   currentPage: number;
@@ -32,7 +25,7 @@ export interface TripsData {
 }
 
 export interface InfinitePostsData {
-  pages: PostsData;
+  pages: TripsData[];
   pageParams: number[];
 }
 
@@ -62,17 +55,17 @@ export const useGetPostsByNickname = (nickname: string, category: string) => {
     },
     {
       enabled: !!nickname,
-      getNextPageParam: (lastPage: PostsData | undefined) => {
+      getNextPageParam: (lastPage: TripsData | undefined) => {
         if (!lastPage) return undefined;
-        if (lastPage.totalPage === 0) return undefined;
-        if (lastPage.totalPage === lastPage.currentPage) return undefined;
+        if (lastPage.totalPages === 0) return undefined;
+        if (lastPage.totalPages === lastPage.currentPage) return undefined;
 
         return lastPage.currentPage + 1;
       },
     }
   );
 
-  const posts = data?.pages.flatMap((page) => page!.posts) || [];
+  const posts = data?.pages.flatMap((page) => page!.trips) || [];
 
   return { posts, fetchNextPage, hasNextPage, postsIsLoading, postsIsError };
 };
