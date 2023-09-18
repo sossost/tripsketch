@@ -49,6 +49,8 @@ export const API_PATH = {
       TRIP_LIKE: `/trip/like`,
       // 좋아요 해제하기
       TRIP_UNLIKE: `/trip/unlike`,
+      // 좋아요 토글
+      TRIP_LIKE_TOGGLE: `/trip/toggle-like`,
     },
     PUT: {
       // 게시물 수정하기

@@ -35,33 +35,27 @@ const PostFlatList = ({
 }: DiaryListProps) => {
   posts;
   return (
-    <Container>
-      <FlatList
-        data={posts}
-        renderItem={({ item }) => {
-          return <PostCard key={(item as Post).id} post={item as Post} />;
-        }}
-        alwaysBounceVertical={false}
-        onEndReached={handleEndReached}
-        onEndReachedThreshold={0.1}
-        ListHeaderComponent={listHeaderComponent}
-        ListFooterComponent={listFooterComponent}
-        contentContainerStyle={{ paddingBottom: 50, paddingTop: 20 }}
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={false} onRefresh={handleRefresh} />
-        }
-      />
-    </Container>
+    <FlatList
+      data={posts}
+      renderItem={({ item }) => {
+        return <PostCard key={(item as Post).id} post={item as Post} />;
+      }}
+      alwaysBounceVertical={false}
+      onEndReached={handleEndReached}
+      onEndReachedThreshold={0.1}
+      ListHeaderComponent={listHeaderComponent}
+      ListFooterComponent={listFooterComponent}
+      contentContainerStyle={{
+        paddingBottom: 50,
+        paddingTop: 20,
+        paddingHorizontal: 10,
+      }}
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl refreshing={false} onRefresh={handleRefresh} />
+      }
+    />
   );
 };
-
-const Container = styled.View`
-  shadow-color: #000;
-  shadow-opacity: 0.25;
-  shadow-radius: 1.5px;
-  shadow-offset: 0px 0px;
-  elevation: 2;
-`;
 
 export default PostFlatList;

@@ -2,10 +2,7 @@ import axios from "axios";
 import { axiosBase } from "./axios";
 import { API_BASE_URL } from "@env";
 import { User } from "../types/user";
-import {
-  getDataFromSecureStore,
-  resetDataInSecureStore,
-} from "../utils/secureStore";
+import { getDataFromSecureStore } from "../utils/secureStore";
 import { STORE_KEY } from "../constants/store";
 import { errorLoging, errorToastMessageInCatch } from "../utils/errorHandler";
 import { ERROR_MESSAGE } from "../constants/message";
@@ -32,9 +29,9 @@ export const getCurrentUser = async () => {
     }
     return null;
   } catch (error: unknown) {
-    await resetDataInSecureStore(STORE_KEY.ACCESS_TOKEN);
-    await resetDataInSecureStore(STORE_KEY.REFRESH_TOKEN);
-    errorToastMessageInCatch(error);
+    errorToastMessageInCatch(
+      "유저 정보 요청에 실패했습니다. 다시 로그인 해주세요."
+    );
     errorLoging(error, "로그인한 유저 정보 요청 에러는🤔");
     return null;
   }
@@ -50,16 +47,21 @@ export const getCurrentUser = async () => {
 export const patchCurrentUser = async (data: any) => {
   const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
 
-  if (accessToken) {
-    const response = await axios.patch(`${API_BASE_URL}user`, data, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    return response.data;
+  try {
+    if (accessToken) {
+      const response = await axios.patch(`${API_BASE_URL}user`, data, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      return response.data;
+    }
+    throw new Error(ERROR_MESSAGE.UNAUTHORIZED);
+  } catch (error: unknown) {
+    errorLoging(error, "유저 정보 수정 에러는🤔");
+    throw new Error(ERROR_MESSAGE.EDIT_USER);
   }
-  throw new Error(ERROR_MESSAGE.UNAUTHORIZED);
 };
 
 /**
