@@ -68,8 +68,6 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
     return <Text>에러</Text>;
   }
 
-  console.log(checkUser);
-
   return (
     <View style={styles.container}>
       <View style={styles.containerInner}>
