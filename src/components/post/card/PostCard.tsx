@@ -36,70 +36,56 @@ const PostCard = ({ post }: PostCardProps) => {
     navigation.navigate(LINK.TRIP_DETAIL_PAGE, { postId: post.id });
   };
 
-  console.log("post.image", post.image);
-
   return (
-    <PostCardShadow>
-      <PostCardLayout>
-        <ImageWrapper onPress={postHandler}>
-          <Thumnail source={{ uri: post.image || DEFAULT_IMAGE }}>
-            <ThumnailText>{post.createdAt.slice(0, 10)}</ThumnailText>
-          </Thumnail>
-        </ImageWrapper>
+    <PostCardLayout>
+      <ImageWrapper onPress={postHandler}>
+        <Thumnail source={{ uri: post.image || DEFAULT_IMAGE }}>
+          <ThumnailText>{post.createdAt.slice(0, 10)}</ThumnailText>
+        </Thumnail>
+      </ImageWrapper>
 
-        <MetaDataContainer>
-          <PostMetaDataContainer>
-            <PostTitle>
-              {post.title.length > 26
-                ? post.title.substring(0, 26) + ".."
-                : post.title}
-            </PostTitle>
+      <MetaDataContainer>
+        <PostMetaDataContainer>
+          <PostTitle>
+            {post.title.length > 26
+              ? post.title.substring(0, 26) + ".."
+              : post.title}
+          </PostTitle>
 
-            <RowContainer>
-              <Flag
-                code={post.countryCode?.toUpperCase() || "FRANCE"}
-                size={32}
-              />
-              <PostLocation>{post.country}</PostLocation>
-            </RowContainer>
-          </PostMetaDataContainer>
+          <RowContainer>
+            <Flag
+              code={post.countryCode?.toUpperCase() || "FRANCE"}
+              size={32}
+            />
+            <PostLocation>{post.country}</PostLocation>
+          </RowContainer>
+        </PostMetaDataContainer>
 
-          <ProfileContainer>
-            <ProfileWrapper>
-              <ProfileImageWrapper>
-                <ProfileImage source={{ uri: post.profileImageUrl }} />
-              </ProfileImageWrapper>
-              <UserNickname>{post.nickname}</UserNickname>
-            </ProfileWrapper>
+        <ProfileContainer>
+          <ProfileWrapper>
+            <ProfileImageWrapper>
+              <ProfileImage source={{ uri: post.profileImageUrl }} />
+            </ProfileImageWrapper>
+            <UserNickname>{post.nickname}</UserNickname>
+          </ProfileWrapper>
 
-            <RowContainer>
-              <LikeButton source={likeButtonImgPath} />
-              <UserLikes>{post.likes}</UserLikes>
+          <RowContainer>
+            <LikeButton source={likeButtonImgPath} />
+            <UserLikes>{post.likes}</UserLikes>
 
-              <CommentButton source={commentButtonImgPath} />
-              <UserComments>{post.comments}</UserComments>
-            </RowContainer>
-          </ProfileContainer>
-        </MetaDataContainer>
-      </PostCardLayout>
-    </PostCardShadow>
+            <CommentButton source={commentButtonImgPath} />
+            <UserComments>{post.comments}</UserComments>
+          </RowContainer>
+        </ProfileContainer>
+      </MetaDataContainer>
+    </PostCardLayout>
   );
 };
 
 export default PostCard;
 
-const PostCardShadow = styled.View`
-  width: ${SCREEN_WIDTH - 40}px;
-  shadow-color: #000;
-  shadow-opacity: 0.25;
-  shadow-radius: 3px;
-  shadow-offset: 0px 0px;
-  elevation: 2;
-  flex-direction: column;
-`;
-
 const PostCardLayout = styled.View`
-  width: 100%;
+  width: ${SCREEN_WIDTH - 40}px;
   background-color: white;
   border-radius: 30px;
   margin-bottom: 30px;
