@@ -4,6 +4,8 @@ import { StackNavigation } from "../../../types/RootStack";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
+import { QUERY_KEY } from "../../../react-query/queryKey";
+import { useGetCurrentUser } from "../../../hooks/useUserQuery";
 
 type PostDataProps = {
   image: string[];
@@ -43,7 +45,9 @@ const usePostTrip = ({
   const createPostMutation = useCreatePost();
   const queryClient = useQueryClient();
   const navigation = useNavigation<StackNavigation>();
+  const { data: userData } = useGetCurrentUser();
   const [isLoading, setIsLoading] = useState(false);
+  const nickname = userData?.nickname;
 
   useEffect(() => {
     if (createPostMutation.isLoading) {
@@ -91,6 +95,8 @@ const usePostTrip = ({
       Toast.show({ type: "success", text1: "게시글 생성이 완료되었습니다." });
       resetState(); // 상태변수 초기화
       queryClient.invalidateQueries(["posts"]);
+      queryClient.invalidateQueries([QUERY_KEY.POSTS, nickname]);
+      queryClient.invalidateQueries([QUERY_KEY.CATEGORIES, nickname]);
       navigation.goBack();
     } catch (error) {
       console.error("게시물 생성 중 오류 발생:", error);
