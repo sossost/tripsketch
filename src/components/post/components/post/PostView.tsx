@@ -81,16 +81,19 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
             {postData.title}
           </Text>
           <View style={styles.ellipsis}>
-            {userData?.nickname === postData.nickname ? (
+            {userData?.nickname === postData.nickname || userData?.isAdmin ? (
               <TouchableOpacity onPress={settingBox}>
                 <Ionicons name="ellipsis-vertical" size={18} color="#9f9f9f" />
               </TouchableOpacity>
             ) : null}
             {isSettingOpen && (
               <View style={styles.setting_box}>
-                <TouchableOpacity onPress={postUpdateHandler}>
-                  <Text style={styles.setting_box_text}>수정하기</Text>
-                </TouchableOpacity>
+                {userData?.nickname !== postData.nickname &&
+                userData?.isAdmin ? null : (
+                  <TouchableOpacity onPress={postUpdateHandler}>
+                    <Text style={styles.setting_box_text}>수정하기</Text>
+                  </TouchableOpacity>
+                )}
                 <TouchableOpacity onPress={() => postDeleteHandler(postId)}>
                   <Text style={styles.setting_box_text}>삭제하기</Text>
                 </TouchableOpacity>

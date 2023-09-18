@@ -759,7 +759,7 @@ const PostPageComponent: React.FC<PostPageProps> = ({
                   color="#73bbfb"
                   onPress={() => selectLocationHandler(query)}
                 />
-                {query.length === 0 ? (
+                {query && query.length === 0 ? (
                   <></>
                 ) : suggestions.length > 0 ? (
                   isSearchLoading ? (
@@ -916,7 +916,7 @@ const PostPageComponent: React.FC<PostPageProps> = ({
                 <Text>+</Text>
               </TagSelectButton>
             </TagContainer>
-            {hashtagList.length > 0 ? (
+            {hashtagList && hashtagList.length > 0 ? (
               <TagList>
                 {hashtagList.map((item, index) => (
                   <TagItem key={index}>

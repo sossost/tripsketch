@@ -127,8 +127,9 @@ const CommentItem = ({
               <Text style={styles.id}>{comment.userNickName}</Text>
               <View style={styles.likes}>
                 {userData &&
-                userData.nickname === comment.userNickName &&
-                comment.isDeleted === false ? (
+                (userData.isAdmin ||
+                  (userData.nickname === comment.userNickName &&
+                    comment.isDeleted === false)) ? (
                   <TouchableOpacity onPress={handleButton}>
                     <Entypo
                       name="dots-three-vertical"
@@ -171,14 +172,22 @@ const CommentItem = ({
         <View>
           {userData && isButton ? (
             <View style={styles.button_container}>
+              {userData?.nickname !== comment.userNickName &&
+              userData?.isAdmin ? null : (
+                <TouchableOpacity
+                  style={styles.button_update}
+                  onPress={handleUpdate}
+                >
+                  <Text style={styles.update_txt}>수정하기</Text>
+                </TouchableOpacity>
+              )}
               <TouchableOpacity
-                style={styles.button_update}
-                onPress={handleUpdate}
-              >
-                <Text style={styles.update_txt}>수정하기</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.button_delete}
+                style={
+                  userData?.isAdmin &&
+                  userData?.nickname !== comment.userNickName
+                    ? styles.button_admin
+                    : styles.button_delete
+                }
                 onPress={handleDelete}
               >
                 <Text style={styles.update_txt}>삭제하기</Text>
@@ -334,6 +343,13 @@ const styles = StyleSheet.create({
   },
   button_delete: {
     width: "50%",
+    textAlign: "center",
+    backgroundColor: "#939393",
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  button_admin: {
+    width: "100%",
     textAlign: "center",
     backgroundColor: "#939393",
     paddingVertical: 10,
