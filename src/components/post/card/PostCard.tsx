@@ -85,11 +85,16 @@ const PostCard = ({ post }: PostCardProps) => {
 export default PostCard;
 
 const PostCardLayout = styled.View`
-  width: ${SCREEN_WIDTH - 40}px;
+  width: ${SCREEN_WIDTH - 50}px;
   background-color: white;
   border-radius: 30px;
   margin-bottom: 30px;
   overflow: hidden;
+  shadow-color: #000;
+  shadow-opacity: 0.25;
+  shadow-radius: 1.5px;
+  shadow-offset: 0px 0px;
+  elevation: 2;
 `;
 
 const ImageWrapper = styled.TouchableOpacity`
