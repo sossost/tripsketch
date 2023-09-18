@@ -1,22 +1,22 @@
 import React, { ReactElement } from "react";
 
-// 에러 처리 컴포넌트에 전달되는 오류 정보를 정의하는 타입
+// 에러 폴백 컴포넌트에 전달되는 오류 정보를 정의하는 타입
 export type ErrorFallbackProps<ErrorType extends Error = Error> = {
-  error: ErrorType;
-  reset: (...args: unknown[]) => void;
+  error: ErrorType; // 발생한 오류 객체
+  reset: (...args: unknown[]) => void; // 에러 상태를 초기화하는 메서드
 };
 
-// 에러 처리 컴포넌트의 타입 정의
+// 에러 폴백 컴포넌트의 타입 정의
 export type ErrorFallbackType = <ErrorType extends Error>(
   props: ErrorFallbackProps<ErrorType>
 ) => JSX.Element;
 
-// 에러 경계 컴포넌트의 속성 타입 정의
+// 에러 바운더리 컴포넌트의 속성 타입 정의
 type Props = {
-  errorFallback: ErrorFallbackType;
-  children: ReactElement;
-  resetQuery?: () => void;
-  keys?: unknown[];
+  errorFallback: ErrorFallbackType; // 오류 폴백 컴포넌트
+  children: ReactElement; // 에러가 발생하지 않을 때 렌더링할 자식 요소
+  resetQuery?: () => void; // 오류 상태를 초기화하는 메서드
+  keys?: unknown[]; // 오류 상태를 초기화할 때 사용할 키 값 배열
 };
 
 // 에러 경계 컴포넌트의 상태 타입 정의
@@ -36,17 +36,17 @@ class ErrorBoundary extends React.Component<Props, State> {
 
   // 자식 컴포넌트에서 발생한 오류를 처리하는 메서드
   static getDerivedStateFromError(error: Error) {
-    console.log("1 : " + error);
     return { hasError: true, error }; // 오류 상태를 설정
   }
 
   // 에러 바운더리 컴포넌트의 상태를 초기화하는 메서드
   resetErrorBoundary = () => {
     const { resetQuery } = this.props;
-    resetQuery?.();
-    this.setState(initialState);
+    resetQuery?.(); // resetQuery가 존재하는 경우 호출
+    this.setState(initialState); // 상태를 초기 상태로 재설정
   };
 
+  // 배열 변경 여부를 확인하는 메서드
   changedArray = (
     prevArray: Array<unknown> = [],
     nextArray: Array<unknown> = []
@@ -68,7 +68,7 @@ class ErrorBoundary extends React.Component<Props, State> {
       prevState.error !== null &&
       this.changedArray(prevProps.keys, keys)
     ) {
-      this.resetErrorBoundary();
+      this.resetErrorBoundary(); // 키 값이 변경되면 에러 상태 초기화
     }
   }
 
@@ -76,12 +76,13 @@ class ErrorBoundary extends React.Component<Props, State> {
     const { hasError, error } = this.state; // 상태 변수 추출
     const isErrExist = hasError && error !== null; // 오류 발생 여부 확인
 
-    if (isErrExist)
+    if (isErrExist) {
       return this.props.errorFallback({
         error: error,
         reset: this.resetErrorBoundary,
-      });
-    return this.props.children;
+      }); // 오류 처리 컴포넌트 렌더링
+    }
+    return this.props.children; // 자식 요소 렌더링
   }
 }
 
