@@ -5,7 +5,6 @@ import {
   ScrollView,
   Animated,
   TouchableOpacity,
-  Text,
 } from "react-native";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import PostViewContainer from "./PostViewContainer";
@@ -19,6 +18,7 @@ import {
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import PostViewSkeleton from "./components/post/PostViewSkeleton";
 import LikeAndCommentSkeleton from "./components/comment/LikesAndCommentSkeleton";
+import DeletePostView from "./components/post/DeletePostView";
 
 const PostDetailPageComponent = ({ postId }: { postId: string }) => {
   const { data: userData } = useGetCurrentUser();
@@ -66,8 +66,9 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
     );
   }
 
-  if (isDataError) {
-    return <Text>에러</Text>;
+  // 삭제된 게시물 요청 시 보여질 부분
+  if (postAndCommentData?.tripAndCommentPairDataByTripId.first.isHidden) {
+    <DeletePostView />;
   }
 
   return (
