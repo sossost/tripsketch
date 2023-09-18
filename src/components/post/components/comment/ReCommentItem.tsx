@@ -109,7 +109,10 @@ const ReCommentItem = ({
           {recomment.isDeleted ? null : (
             <View style={styles.likes}>
               <Text>
-                <TouchableOpacity onPress={handleLike}>
+                <TouchableOpacity
+                  onPress={handleLike}
+                  disabled={!userData ? true : false}
+                >
                   <Ionicons
                     name={likes ? "md-heart-sharp" : "md-heart-outline"}
                     size={18}
