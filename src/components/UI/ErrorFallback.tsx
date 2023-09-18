@@ -6,7 +6,7 @@ const ErrorFallback = (props: ErrorFallbackProps) => {
   return (
     <ErrorFallbackContainer>
       <ErrorMesageTitle>네트워크 오류가 발생했습니다.</ErrorMesageTitle>
-      <ErrorMessage>에러는 : {props.error.toString()}</ErrorMessage>
+      <ErrorMessage>{props.error.toString()}</ErrorMessage>
       <RetryButton onPress={() => props.reset()}>
         <ButtonText>다시시도</ButtonText>
       </RetryButton>
@@ -18,9 +18,10 @@ export default ErrorFallback;
 
 const ErrorFallbackContainer = styled.View`
   display: flex;
+  flex: 1;
   justify-content: center;
   align-items: center;
-  background-color: ${colors.white};
+  background-color: ${colors.pastel};
   padding: 20px;
   border-radius: 10px;
 `;
@@ -46,5 +47,5 @@ const ErrorMesageTitle = styled.Text`
 const ErrorMessage = styled.Text`
   font-size: 16px;
   color: ${colors.mainFont};
-  padding-bottom: 10px;
+  padding-bottom: 20px;
 `;

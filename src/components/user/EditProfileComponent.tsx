@@ -1,15 +1,21 @@
 import { styled } from "styled-components/native";
 import { useState } from "react";
-import { useGetCurrentUser } from "../../hooks/useUserQuery";
-import useUpdateRrofile from "./hooks/useUpdateRrofile";
+import { useGetCurrentUser, useUpdateRrofile } from "../../hooks/useUserQuery";
+import { resetDataInSecureStore } from "../../utils/secureStore";
+import { STORE_KEY } from "../../constants/store";
+import { Button } from "react-native";
 
 import InputBottomLine from "../UI/InputBottomLine";
 import ProfileImageManage from "./profile/ProfileImageManage";
 import Header from "../UI/header/Header";
 import CommonHeaderLeft from "../UI/header/HeaderLeft";
 import ConfirmButton from "../UI/header/ConfirmButton";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "../../types/RootStack";
+import { LINK } from "../../constants/link";
 
 const EditProfileComponent = () => {
+  const navigation = useNavigation<StackNavigation>();
   // 현재 로그인한 유저 정보를 가져옴
   const { profileImageUrl, nickname, introduction } = useGetCurrentUser().data!;
 
@@ -23,6 +29,12 @@ const EditProfileComponent = () => {
     newNickname,
     newIntroduction
   );
+
+  const logout = async () => {
+    await resetDataInSecureStore(STORE_KEY.ACCESS_TOKEN);
+    await resetDataInSecureStore(STORE_KEY.NOTIFICATION);
+    navigation.navigate(LINK.MAIN);
+  };
 
   return (
     <>
@@ -49,6 +61,7 @@ const EditProfileComponent = () => {
             textLength={30}
           />
         </InputWrapper>
+        <Button title="로그아웃" onPress={logout} />
       </Layout>
     </>
   );
