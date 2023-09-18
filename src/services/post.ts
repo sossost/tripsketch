@@ -30,12 +30,12 @@ export const getPostsByNickname = async (
   try {
     if (category === "전체보기") {
       const response = await axiosBase.get<PostsData>(
-        `trip/nickname/tripsWithPagination/categories?nickname=${nickname}&page=${page}&pageSize=${size}`
+        `trip/nickname/trips-pagination/categories?nickname=${nickname}&page=${page}&pageSize=${size}`
       );
       return response.data;
     } else {
       const response = await axiosBase.get<PostsData>(
-        `trip/nickname/tripsWithPagination/country/${category}?nickname=${nickname}&page=${page}&size=${size}`
+        `trip/nickname/trips-pagination/country/${category}?nickname=${nickname}&page=${page}&size=${size}`
       );
       return response.data;
     }
