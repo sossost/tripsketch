@@ -6,6 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
   Alert,
+  Platform,
 } from "react-native";
 import { Comment } from "../../../../types/comment";
 import { useState } from "react";
@@ -269,6 +270,7 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 11,
     color: "#b3b3b3",
+    marginTop: Platform.OS === "android" ? 0 : 3,
   },
   comment: {
     fontSize: 14,

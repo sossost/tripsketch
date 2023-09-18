@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Platform,
 } from "react-native";
 import { Comment } from "../../../../types/comment";
 import { Ionicons } from "@expo/vector-icons";
@@ -195,6 +196,7 @@ const styles = StyleSheet.create({
   comment: {
     fontSize: 13,
     color: "#6f6f6f",
+    marginTop: Platform.OS === "android" ? 0 : 5,
   },
   likes: {
     display: "flex",
