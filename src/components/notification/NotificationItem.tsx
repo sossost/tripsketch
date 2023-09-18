@@ -75,6 +75,8 @@ const Container = styled.TouchableOpacity`
   background-color: #fff;
   shadow-color: #000;
   shadow-opacity: 0.25;
+  shadow-radius: 1.5px;
+  shadow-offset: 0px 0px;
   elevation: 2;
   position: relative;
 `;
