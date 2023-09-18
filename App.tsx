@@ -29,14 +29,12 @@ export default function App() {
       <RecoilRoot>
         <StyledTheme>
           <SafeAreaProvider>
-            <AsyncBoundary suspenseFallback={<></>}>
-              <NotificationProvider>
-                <FadeOutContextProvider>
-                  <StatusBar style="auto" />
-                  <RootStack />
-                </FadeOutContextProvider>
-              </NotificationProvider>
-            </AsyncBoundary>
+            <NotificationProvider>
+              <FadeOutContextProvider>
+                <StatusBar style="auto" />
+                <RootStack />
+              </FadeOutContextProvider>
+            </NotificationProvider>
           </SafeAreaProvider>
         </StyledTheme>
       </RecoilRoot>
