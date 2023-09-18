@@ -5,6 +5,18 @@ import useTimeAgo from "../../hooks/useTimeAgo";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../types/RootStack";
 import { LINK } from "../../constants/link";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Animated,
+  Dimensions,
+} from "react-native";
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
+import {
+  Swipeable,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
 
 interface NotificationProps {
   notification: Notification;
@@ -20,8 +32,16 @@ interface NotificationProps {
 const NotificationItem = ({ notification }: NotificationProps) => {
   const navigation = useNavigation<StackNavigation>();
 
-  const { profileUrl, title, body, createdAt, nickname, commentId, tripId } =
-    notification;
+  const {
+    id,
+    profileUrl,
+    title,
+    body,
+    createdAt,
+    nickname,
+    commentId,
+    tripId,
+  } = notification;
 
   const timeAgo = useTimeAgo(createdAt);
 
@@ -45,39 +65,86 @@ const NotificationItem = ({ notification }: NotificationProps) => {
     navigation.navigate(LINK.USER_PAGE, { nickname: nickname });
   };
 
+  const renderRightActions = (dragX: any) => {
+    // 스와이프로 나타날 왼쪽 액션을 렌더링하는 함수
+    const trans = dragX.interpolate({
+      inputRange: [0, 50, 100, 101],
+      outputRange: [0, 0, 0, 1],
+    });
+
+    const handleDelete = () => {
+      // 삭제 핸들러 호출
+      // onDelete(notification.id); // 또는 삭제할 항목의 ID를 전달하는 방법에 따라 다름
+      console.log("notification.id", id);
+    };
+
+    return (
+      <TouchableOpacity onPress={handleDelete}>
+        <View
+          style={{
+            backgroundColor: "red",
+            justifyContent: "center",
+            alignItems: "center",
+            width: 100,
+            height: "100%",
+            borderRadius: 10,
+          }}
+        >
+          <Animated.Text
+            style={{
+              color: "white",
+              transform: [{ translateX: trans }],
+            }}
+          >
+            삭제
+          </Animated.Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
-    <Container onPress={handlePress}>
-      <ProfileImageWrapper>
-        <ProfileImage source={{ uri: profileUrl }} />
-      </ProfileImageWrapper>
+    <GestureHandlerRootView>
+      <Swipeable renderRightActions={(dragX) => renderRightActions(dragX)}>
+        <View style={{ paddingVertical: 2, paddingHorizontal: 1 }}>
+          <Container onPress={handlePress}>
+            <ProfileImageWrapper>
+              <ProfileImage source={{ uri: profileUrl }} />
+            </ProfileImageWrapper>
 
-      <TextContainer>
-        <NotDescript numberOfLines={1} ellipsizeMode="tail">
-          <HighLight>{seperatedBody[0]}</HighLight>님{seperatedBody[1]}
-        </NotDescript>
+            <TextContainer>
+              <NotDescript numberOfLines={1} ellipsizeMode="tail">
+                <HighLight>{seperatedBody[0]}</HighLight>님{seperatedBody[1]}
+              </NotDescript>
 
-        <NotContent>{title}</NotContent>
+              <NotContent>{title}</NotContent>
 
-        <CreateNotification>
-          <CreateDate>{timeAgo}</CreateDate>
-        </CreateNotification>
-      </TextContainer>
-    </Container>
+              <CreateNotification>
+                <CreateDate>{timeAgo}</CreateDate>
+              </CreateNotification>
+            </TextContainer>
+          </Container>
+        </View>
+      </Swipeable>
+    </GestureHandlerRootView>
   );
 };
+
+// border-bottom-width: 1px; /* 아래 선 두께 설정 */
+//   border-bottom-color: #f2f2f2; /* 아래 선 색상 설정 */
 
 const Container = styled.TouchableOpacity`
   display: flex;
   flex-direction: row;
-  width: 100%;
+  width: ${SCREEN_WIDTH - 46}px;
   padding: 10px 10px 25px;
+  background-color: white;
   border-radius: 10px;
-  background-color: #fff;
   shadow-color: #000;
   shadow-opacity: 0.25;
   shadow-radius: 1px;
   shadow-offset: 0px 0px;
-  elevation: 2;
+  elevation: 1;
   position: relative;
 `;
 

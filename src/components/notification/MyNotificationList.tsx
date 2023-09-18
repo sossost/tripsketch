@@ -6,6 +6,7 @@ import {
   RefreshControl,
   ScrollView,
   TouchableOpacity,
+  Text,
   View,
 } from "react-native";
 import { Notification } from "../../types/Notification";
@@ -40,22 +41,6 @@ const MyNotificationList = () => {
     queryClient.invalidateQueries([QUERY_KEY.NOTIFICATIONS]);
   };
 
-  const handleDeleteNotification = (notificationId: string) => {
-    // notifications 배열에서 해당 ID를 가진 항목을 제거
-    const updatedNotifications = notifications.filter(
-      (item) => item.id !== notificationId
-    );
-
-    // 상태 업데이트
-    // 예를 들어, useState를 사용한다면 setNotifications(updatedNotifications) 등으로 업데이트
-  };
-
-  const handleDelete = () => {
-    // 삭제 핸들러
-    // onDelete(id);
-    console.log("삭제@@");
-  };
-
   const renderFooter = () => {
     if (!hasNextPage) {
       return (
@@ -67,52 +52,15 @@ const MyNotificationList = () => {
     return null;
   };
 
-  const renderRightActions = (dragX: any) => {
-    // 스와이프로 나타날 왼쪽 액션을 렌더링하는 함수
-    const trans = dragX.interpolate({
-      inputRange: [0, 50, 100, 101],
-      outputRange: [-20, 0, 0, 1],
-    });
-
-    return (
-      <TouchableOpacity onPress={handleDelete}>
-        <View
-          style={{
-            backgroundColor: "red",
-            justifyContent: "center",
-            alignItems: "center",
-            width: 100,
-            height: "100%",
-          }}
-        >
-          <Animated.Text
-            style={{
-              color: "white",
-              transform: [{ translateX: trans }],
-            }}
-          >
-            Delete
-          </Animated.Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
   return (
     <>
       <FlatList
         data={notifications}
-        renderItem={({ item, index }) => (
-          <GestureHandlerRootView>
-            <Swipeable
-              renderRightActions={(dragX) => renderRightActions(dragX)}
-            >
-              <NotificationItem
-                notification={item as Notification}
-                // onDelete={handleDeleteNotification}
-              />
-            </Swipeable>
-          </GestureHandlerRootView>
+        renderItem={({ item }) => (
+          <NotificationItem
+            notification={item as Notification}
+            // onDelete={handleDeleteNotification}
+          />
         )}
         keyExtractor={(item) => (item as Notification).id}
         onEndReached={handleEndReached}
