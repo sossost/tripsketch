@@ -47,17 +47,14 @@ const MyNotificationList = () => {
       <FlatList
         data={notifications}
         renderItem={({ item }) => (
-          <NotificationItem
-            notification={item as Notification}
-            // onDelete={handleDeleteNotification}
-          />
+          <NotificationItem notification={item as Notification} />
         )}
         keyExtractor={(item) => (item as Notification).id}
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.1}
         contentContainerStyle={{
-          gap: 15,
-          paddingVertical: 20,
+          gap: 10,
+          paddingVertical: 10,
           paddingHorizontal: 2,
         }}
         showsVerticalScrollIndicator={false}

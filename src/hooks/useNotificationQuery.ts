@@ -1,7 +1,14 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { QUERY_KEY } from "../react-query/queryKey";
-import { getNotifications } from "../services/notification";
+import { deleteNotification, getNotifications } from "../services/notification";
 import { NotificationResponse } from "../types/Notification";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
+import { ERROR_MESSAGE, SUCCESS_MESSAGE } from "../constants/message";
+import { errorLoging } from "../utils/errorHandler";
 
 export interface InfinitePostsData {
   pages: NotificationResponse;
@@ -29,7 +36,7 @@ export const useGetNotifications = () => {
         if (lastPage.totalPage === 0) return undefined;
         if (lastPage.totalPage === lastPage.currentPage) return undefined;
 
-        return lastPage.currentPage + 1;
+        return lastPage.currentPage;
       },
     }
   );
@@ -38,4 +45,38 @@ export const useGetNotifications = () => {
     data?.pages.flatMap((page) => page?.notifications) || [];
 
   return { notifications, fetchNextPage, hasNextPage };
+};
+
+/**
+ * @description : 알림 삭제를 위한 리액트 쿼리 커스텀 훅
+ *
+ * @author : 장윤수
+ * @update : 2023-09-19,
+ * @version 1.0.0,
+ * @see None,
+ */
+export const useDeleteNotificationQuery = () => {
+  const queryClient = useQueryClient();
+
+  /** 리액트 쿼리 뮤테이션 */
+  const mutation = useMutation((id: string) => deleteNotification(id), {
+    onSuccess: () => {
+      Toast.show({
+        type: "success",
+        text1: SUCCESS_MESSAGE.DELETE_NOTIFICATION,
+      });
+
+      queryClient.invalidateQueries([QUERY_KEY.NOTIFICATIONS]);
+    },
+    onError: (error) => {
+      errorLoging(error, "알림 삭제 에러는");
+      Toast.show({ type: "error", text1: ERROR_MESSAGE.DELETE_NOTIFICATION });
+    },
+  });
+
+  const handleDeleteNotification = (id: string) => {
+    mutation.mutate(id);
+  };
+
+  return handleDeleteNotification;
 };
