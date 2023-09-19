@@ -72,7 +72,6 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
           />
           <LikesAndCommentText
             postId={postId}
-            handleIconPress={(index) => handleSnapPress(index)}
             postData={postAndCommentData.tripAndCommentPairDataByTripId.first}
           />
           <TouchableOpacity
