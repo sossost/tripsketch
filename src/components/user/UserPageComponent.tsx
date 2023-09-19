@@ -25,23 +25,24 @@ interface UserPageComponentProps {
  * @param variant : 페이지 종류 (마이페이지, 유저페이지)
  *
  * @author : 장윤수
- * @update : 2023-09-17,
- * @version 1.4.0, 유저페이지 리팩토링
+ * @update : 2023-09-19,
+ * @version 1.4.1, 플랫리스트 스타일 변경
  * @see None,
  */
 const UserPageComponent = ({ nickname }: UserPageComponentProps) => {
+  // 현재 로그인한 유저 정보를 가져옴
+  const { data: currentUser } = useGetCurrentUser();
   // 페이지 별로 헤더 왼쪽에 들어갈 컴포넌트를 다르게 렌더링
-  const HeaderChildren = nickname ? (
-    <CommonHeaderLeft title={nickname} />
-  ) : (
-    <Title title={"마이페이지"} />
-  );
+  const HeaderChildren =
+    nickname && currentUser?.nickname !== nickname ? (
+      <CommonHeaderLeft title={nickname} />
+    ) : (
+      <Title title={"마이페이지"} />
+    );
 
   const [selectedCategory, setSelectedCategory] = useRecoilState(categoryState);
-  // 현재 로그인한 유저 정보를 가져옴
-  const currentUser = useGetCurrentUser();
   // 현재 페이지 주인의 닉네임 (마이페이지면 현재 로그인한 유저의 닉네임)
-  const pageOwnerNickname = nickname || currentUser.data!.nickname;
+  const pageOwnerNickname = nickname || currentUser!.nickname;
 
   // 유저 페이지 변경시 카테고리 초기화
   useEffect(() => {
@@ -55,11 +56,9 @@ const UserPageComponent = ({ nickname }: UserPageComponentProps) => {
         <FlatList
           data={null}
           renderItem={null}
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%",
-            alignItems: "center",
+            paddingHorizontal: 2,
           }}
           ListHeaderComponent={() => (
             <UserPageContainer>
@@ -82,6 +81,7 @@ const UserPageComponent = ({ nickname }: UserPageComponentProps) => {
 export default UserPageComponent;
 
 const UserPageContainer = styled.View`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 20px;

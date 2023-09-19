@@ -1,6 +1,5 @@
 import { Dimensions } from "react-native";
-import React from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { styled } from "styled-components/native";
 import { colors } from "../../../constants/color";
 import { StackNavigation } from "../../../types/RootStack";
@@ -19,10 +18,12 @@ const DEFAULT_IMAGE =
  * @description : 여행일기 카드 컴포넌트
  * @author : 이수현
  * @update : 2023-09-19,
- * @version 1.1.1, 장윤수 : 프로필 클릭시 유저페이지 이동 핸들함수 추가 및 스타일 조정
+ * @version 1.1.2, 장윤수 : 터치시 opacity 효과 제거 및 마이페이지인 경우 프로필 클릭 이벤트 제거
  * @see None,
  */
 const PostCard = ({ post }: PostCardProps) => {
+  const route = useRoute<StackNavigation>();
+
   const isLiked = post.isLiked;
   const likeButtonImgPath =
     isLiked === true
@@ -37,12 +38,13 @@ const PostCard = ({ post }: PostCardProps) => {
   };
 
   const handleProfileClick = () => {
+    if (route.name === LINK.MY_PAGE) return;
     navigation.navigate(LINK.USER_PAGE, { nickname: post.nickname });
   };
 
   return (
-    <PostCardLayout>
-      <ImageWrapper onPress={postHandleClick}>
+    <PostCardLayout onPress={postHandleClick} activeOpacity={1}>
+      <ImageWrapper>
         <Thumnail source={{ uri: post.image || DEFAULT_IMAGE }}>
           <ThumnailText>{post.createdAt.slice(0, 10)}</ThumnailText>
         </Thumnail>
@@ -65,8 +67,8 @@ const PostCard = ({ post }: PostCardProps) => {
           </RowContainer>
         </PostMetaDataContainer>
 
-        <ProfileContainer onPress={handleProfileClick}>
-          <ProfileWrapper>
+        <ProfileContainer>
+          <ProfileWrapper onPress={handleProfileClick}>
             <ProfileImageWrapper>
               <ProfileImage source={{ uri: post.profileImageUrl }} />
             </ProfileImageWrapper>
@@ -88,7 +90,7 @@ const PostCard = ({ post }: PostCardProps) => {
 
 export default PostCard;
 
-const PostCardLayout = styled.View`
+const PostCardLayout = styled.TouchableOpacity`
   width: ${SCREEN_WIDTH - 44}px;
   background-color: white;
   border-radius: 30px;
@@ -100,7 +102,7 @@ const PostCardLayout = styled.View`
   elevation: 2;
 `;
 
-const ImageWrapper = styled.TouchableOpacity`
+const ImageWrapper = styled.View`
   width: 100%;
   aspect-ratio: 1.1;
   overflow: hidden;
@@ -156,7 +158,7 @@ const PostLocation = styled.Text`
   margin-left: 5px;
 `;
 
-const ProfileContainer = styled.TouchableOpacity`
+const ProfileContainer = styled.View`
   width: 100%;
   margin-top: 15px;
   flex-direction: row;
@@ -164,7 +166,7 @@ const ProfileContainer = styled.TouchableOpacity`
   align-items: center;
 `;
 
-const ProfileWrapper = styled.View`
+const ProfileWrapper = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
 `;
