@@ -106,6 +106,7 @@ const Title = styled.Text`
   line-height: 16px;
   color: ${colors.mainFont};
   margin-bottom: 5px;
+  width: 75%;
 `;
 
 const Content = styled.Text`
