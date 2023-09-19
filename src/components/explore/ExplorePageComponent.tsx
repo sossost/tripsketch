@@ -13,7 +13,7 @@ const ExplorePageComponent = () => {
   return (
     <PageLayout>
       <SearchBar
-        placeholder="검색어를 입력하세요"
+        placeholder="궁금한 여행지를 검색해보세요."
         setSearchQuery={setSearchQuery}
       />
 
