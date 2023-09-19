@@ -18,6 +18,7 @@ const EditProfileComponent = () => {
   const [newNickname, SetNewNickname] = useState(nickname);
   const [newIntroduction, setNewIntroduction] = useState(introduction);
 
+  /** 프로필 수정 폼 제출하는 핸들러 */
   const handleProfileSubmit = useUpdateRrofile(
     newProfileImage,
     newNickname,
