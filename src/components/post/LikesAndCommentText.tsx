@@ -1,28 +1,30 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useState, useEffect } from "react";
-import { EvilIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { usePostLike } from "../../hooks/usePostQuery";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import { GetPost } from "../../types/Post";
+import { colors } from "../../constants/color";
 import Toast from "react-native-toast-message";
+import PostViewMap from "./components/post/PostViewMap";
 
 interface LikesAndCommentTextProps {
   postId: string;
-  handleIconPress?: (index: number) => void;
   postData: GetPost["tripAndCommentPairDataByTripId"]["first"];
 }
 
 const LikesAndCommentText = ({
   postId,
-  handleIconPress,
   postData,
 }: LikesAndCommentTextProps) => {
   const { data: userData } = useGetCurrentUser();
 
   const checkLikeUser = postData?.isLiked;
   const [likes, setLikes] = useState(false);
+  const [isLocation, setIsLocation] = useState<boolean>(false);
+
   useEffect(() => {
     setLikes(checkLikeUser);
   }, [userData, postData]);
@@ -51,29 +53,50 @@ const LikesAndCommentText = ({
   return (
     <View style={styles.container}>
       <View style={styles.icon_container}>
-        <TouchableOpacity onPress={handleLike}>
-          {userData ? (
-            <Ionicons
-              name={likes ? "md-heart-sharp" : "md-heart-outline"}
-              size={26}
-              color={likes ? "#ec6565" : "black"}
+        <TouchableOpacity
+          onPress={() => setIsLocation(!isLocation)}
+          style={styles.location_btn}
+        >
+          <Ionicons name="location-sharp" size={16} color="white" />
+          <Text style={styles.location_text}>위치</Text>
+        </TouchableOpacity>
+      </View>
+      <View>
+        {isLocation ? (
+          <View>
+            <PostViewMap
+              latitude={postData.latitude}
+              longitude={postData.longitude}
             />
-          ) : null}
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleIconPress && handleIconPress(1)}>
-          <EvilIcons name="comment" size={32} color="black" />
-        </TouchableOpacity>
+          </View>
+        ) : null}
       </View>
       <View style={styles.line}>
         <View style={styles.likeView_container}>
           <View style={styles.likes}>
             <View style={styles.info_name}>
+              <TouchableOpacity onPress={handleLike} style={{ marginRight: 3 }}>
+                {userData ? (
+                  <Ionicons
+                    name={likes ? "md-heart-sharp" : "md-heart-outline"}
+                    size={23}
+                    color={likes ? "#ec6565" : "#555"}
+                    style={{ lineHeight: 30, textAlign: "center" }}
+                  />
+                ) : null}
+              </TouchableOpacity>
               <Text style={styles.info_text}>좋아요</Text>
             </View>
             <Text style={styles.likeView_text}>{postData.likes}</Text>
           </View>
           <View style={styles.views}>
             <View style={styles.info_name}>
+              <AntDesign
+                name="eyeo"
+                size={23}
+                color="#555"
+                style={{ lineHeight: 30, textAlign: "center", marginRight: 3 }}
+              />
               <Text style={styles.info_text}>조회수</Text>
             </View>
             <Text style={styles.likeView_text}>{postData.views}</Text>
@@ -87,10 +110,24 @@ const LikesAndCommentText = ({
 const styles = StyleSheet.create({
   container: {},
   icon_container: {
+    marginVertical: 12,
+    paddingHorizontal: 15,
     display: "flex",
     flexDirection: "row",
-    paddingVertical: 10,
-    paddingHorizontal: 10,
+    justifyContent: "flex-end",
+  },
+  location_btn: {
+    backgroundColor: colors.primary,
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingLeft: 7,
+    paddingRight: 9,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  location_text: {
+    color: "#fff",
   },
   line: {
     width: "100%",
@@ -108,9 +145,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 15,
   },
-  info_name: {},
+  info_name: {
+    display: "flex",
+    flexDirection: "row",
+    alignContent: "center",
+    justifyContent: "center",
+  },
   info_text: {
     color: "#888",
+    lineHeight: 28,
   },
   likes: {
     display: "flex",
