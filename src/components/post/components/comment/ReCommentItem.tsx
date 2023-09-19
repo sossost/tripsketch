@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Platform,
 } from "react-native";
 import { Comment } from "../../../../types/comment";
 import { Ionicons } from "@expo/vector-icons";
@@ -99,8 +100,9 @@ const ReCommentItem = ({
               <Text style={styles.comment}>{recomment.content}</Text>
             </View>
             {userData &&
-            userData.nickname === recomment.userNickName &&
-            recomment.isDeleted === false ? (
+            (userData.isAdmin ||
+              (userData.nickname === recomment.userNickName &&
+                recomment.isDeleted === false)) ? (
               <TouchableOpacity onPress={handleButton}>
                 <Entypo name="dots-three-vertical" size={14} color="#c5c5c5" />
               </TouchableOpacity>
@@ -141,13 +143,24 @@ const ReCommentItem = ({
       <View>
         {userData && isButton ? (
           <View style={styles.button_container}>
+            {userData?.nickname !== recomment.userNickName &&
+            userData?.isAdmin ? null : (
+              <TouchableOpacity
+                style={styles.button_update}
+                onPress={handleUpdate}
+              >
+                <Text style={styles.update_txt}>수정하기</Text>
+              </TouchableOpacity>
+            )}
             <TouchableOpacity
-              style={styles.button_update}
-              onPress={handleUpdate}
+              style={
+                userData?.isAdmin &&
+                userData?.nickname !== recomment.userNickName
+                  ? styles.button_admin
+                  : styles.button_delete
+              }
+              // style={styles.button_delete}
             >
-              <Text style={styles.update_txt}>수정하기</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button_delete}>
               <Text style={styles.update_txt} onPress={handleDelete}>
                 삭제하기
               </Text>
@@ -195,6 +208,7 @@ const styles = StyleSheet.create({
   comment: {
     fontSize: 13,
     color: "#6f6f6f",
+    marginTop: Platform.OS === "android" ? 0 : 5,
   },
   likes: {
     display: "flex",
@@ -229,6 +243,13 @@ const styles = StyleSheet.create({
   },
   button_delete: {
     width: "50%",
+    textAlign: "center",
+    backgroundColor: "#939393",
+    paddingVertical: 10,
+    borderRadius: 5,
+  },
+  button_admin: {
+    width: "100%",
     textAlign: "center",
     backgroundColor: "#939393",
     paddingVertical: 10,

@@ -5,9 +5,12 @@ import {
   TouchableOpacity,
   Image,
   ImageBackground,
+  Platform,
+  StatusBar,
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useGetCurrentUser } from "../../../../hooks/useUserQuery";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../../types/RootStack";
@@ -68,28 +71,45 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
 
   return (
     <View style={[styles.container]}>
+      <StatusBar
+        animated={true}
+        backgroundColor="#0f0f0f"
+        barStyle={"light-content"}
+        showHideTransition={"slide"}
+      />
       <ImageBackground
         source={{ uri: postData.images[0] }}
         resizeMode="cover"
         style={styles.image_bg}
       >
         <View style={styles.opacity}></View>
-
+        <View style={styles.header_container}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <MaterialIcons
+              name="keyboard-arrow-left"
+              size={28}
+              color="#9f9f9f"
+            />
+          </TouchableOpacity>
+        </View>
         <View style={styles.title_container}>
           <Text style={styles.title} numberOfLines={3}>
             {postData.title}
           </Text>
           <View style={styles.ellipsis}>
-            {userData?.nickname === postData.nickname ? (
+            {userData?.nickname === postData.nickname || userData?.isAdmin ? (
               <TouchableOpacity onPress={settingBox}>
                 <Ionicons name="ellipsis-vertical" size={18} color="#9f9f9f" />
               </TouchableOpacity>
             ) : null}
             {isSettingOpen && (
               <View style={styles.setting_box}>
-                <TouchableOpacity onPress={postUpdateHandler}>
-                  <Text style={styles.setting_box_text}>수정하기</Text>
-                </TouchableOpacity>
+                {userData?.nickname !== postData.nickname &&
+                userData?.isAdmin ? null : (
+                  <TouchableOpacity onPress={postUpdateHandler}>
+                    <Text style={styles.setting_box_text}>수정하기</Text>
+                  </TouchableOpacity>
+                )}
                 <TouchableOpacity onPress={() => postDeleteHandler(postId)}>
                   <Text style={styles.setting_box_text}>삭제하기</Text>
                 </TouchableOpacity>
@@ -157,18 +177,22 @@ const styles = StyleSheet.create({
   },
   image_bg: {
     width: "100%",
-    height: 200,
+    height: 240,
     paddingVertical: 40,
     position: "relative",
   },
   opacity: {
     position: "absolute",
     width: "100%",
-    height: 200,
+    height: 240,
     paddingVertical: 40,
     backgroundColor: "#000",
     opacity: 0.6,
     top: 0,
+  },
+  header_container: {
+    paddingHorizontal: 15,
+    height: 40,
   },
   wrap: {
     paddingHorizontal: 20,
@@ -211,7 +235,7 @@ const styles = StyleSheet.create({
     borderColor: "#73BBFB",
     borderWidth: 1,
     borderRadius: 20,
-    paddingVertical: 3,
+    paddingVertical: Platform.OS === "android" ? 3 : 7,
     paddingHorizontal: 10,
   },
   tag_text: {
@@ -233,12 +257,13 @@ const styles = StyleSheet.create({
     position: "relative",
     marginTop: 15,
     backgroundColor: "#f7f7f7",
-    padding: 13,
+    padding: Platform.OS === "android" ? 13 : 17,
   },
   trip_date_container: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    marginVertical: Platform.OS === "android" ? 0 : 1,
   },
   trip_date_text: {
     fontSize: 13,
@@ -273,6 +298,7 @@ const styles = StyleSheet.create({
 
   content_container: {
     paddingHorizontal: 20,
+    marginTop: Platform.OS === "android" ? 0 : 5,
   },
   content_text: {
     lineHeight: 18,
