@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import CustomButton from "../common/CustomButton";
+import CustomButton from "../UI/CustomButton";
 import KakaoLoginButton from "./KakaoLoginButton";
 import { StackNavigation } from "../../types/RootStack";
 import { styled } from "styled-components/native";
