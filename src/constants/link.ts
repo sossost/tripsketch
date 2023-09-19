@@ -13,4 +13,11 @@ export const LINK = {
   EDIT_PROFILE_PAGE: "EditProfilePage",
   NOTIFICATION_PAGE: "NotificationPage",
   AUTH_CONFIRM: "AuthConfirm",
+  SETUP_PAGE: "SetupPage",
+  PUSH_NOTIFICATION_SETUP_PAGE: "PushNotificationSetupPage",
+  OPENSOURCE_LICENCE_PAGE: "OpensourceLicencePage",
+  PRIVACY_POLICY_PAGE: "PrivacyPolicyPage",
+  LOCATION_POLICY_PAGE: "LocationPolicyPage",
+  POST_MANAGEMENT_POLICY_PAGE: "PostManagementPolicyPage",
+  ACCOUNT_MANAGEMENT_PAGE: "AccountManagementPage",
 };
