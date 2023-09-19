@@ -31,7 +31,11 @@ export default function RootStack() {
               name={LINK.KAKAO_LOGIN_PAGE}
               component={KakaoLoginPage}
             />
-            <Stack.Screen name={LINK.TRIP_DETAIL_PAGE} component={PostDetail} />
+            <Stack.Screen
+              name={LINK.TRIP_DETAIL_PAGE}
+              component={PostDetail}
+              options={{ headerShown: false }}
+            />
             <Stack.Screen
               name={LINK.USER_PAGE}
               component={UserPage}

@@ -6,9 +6,11 @@ import {
   Image,
   ImageBackground,
   Platform,
+  StatusBar,
 } from "react-native";
 import { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useGetCurrentUser } from "../../../../hooks/useUserQuery";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../../types/RootStack";
@@ -69,13 +71,27 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
 
   return (
     <View style={[styles.container]}>
+      <StatusBar
+        animated={true}
+        backgroundColor="#0f0f0f"
+        barStyle={"light-content"}
+        showHideTransition={"slide"}
+      />
       <ImageBackground
         source={{ uri: postData.images[0] }}
         resizeMode="cover"
         style={styles.image_bg}
       >
         <View style={styles.opacity}></View>
-
+        <View style={styles.header_container}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <MaterialIcons
+              name="keyboard-arrow-left"
+              size={28}
+              color="#9f9f9f"
+            />
+          </TouchableOpacity>
+        </View>
         <View style={styles.title_container}>
           <Text style={styles.title} numberOfLines={3}>
             {postData.title}
@@ -161,18 +177,22 @@ const styles = StyleSheet.create({
   },
   image_bg: {
     width: "100%",
-    height: 200,
+    height: 240,
     paddingVertical: 40,
     position: "relative",
   },
   opacity: {
     position: "absolute",
     width: "100%",
-    height: 200,
+    height: 240,
     paddingVertical: 40,
     backgroundColor: "#000",
     opacity: 0.6,
     top: 0,
+  },
+  header_container: {
+    paddingHorizontal: 15,
+    height: 40,
   },
   wrap: {
     paddingHorizontal: 20,
