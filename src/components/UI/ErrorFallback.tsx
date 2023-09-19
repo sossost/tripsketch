@@ -1,6 +1,6 @@
 import { styled } from "styled-components/native";
 import { colors } from "../../constants/color";
-import { ErrorFallbackProps } from "./ErrorBoundary";
+import { ErrorFallbackProps } from "../common/ErrorBoundary";
 
 const ErrorFallback = (props: ErrorFallbackProps) => {
   return (

@@ -1,25 +1,16 @@
 import React from "react";
 import {
-  ProfileContainer,
-  ProfileIntroductionText,
-  ProfileLayout,
-  ProfileRightWrapper,
-  ProfileSocialWrapper,
-  ProfileTextWrapper,
-  ProfileUserNameText,
-} from "./Profile.style";
-import {
   useGetCurrentUser,
   useGetUserByNickname,
 } from "../../../hooks/useUserQuery";
-
-import ProfileImage from "./ProfileImage";
-import Link from "../../UI/Link";
-import Button from "../../UI/Button";
 import { LINK } from "../../../constants/link";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../types/RootStack";
 import { useSocialControllerInUserPage } from "../../../hooks/useFollowQuery";
+import { styled } from "styled-components/native";
+
+import Link from "../../UI/Link";
+import Button from "../../UI/Button";
 
 type ProfileProps = {
   nickname: string;
@@ -84,7 +75,7 @@ const Profile = ({ nickname }: ProfileProps) => {
   return (
     <ProfileLayout>
       <ProfileContainer>
-        <ProfileImage img={profileUser!.profileImageUrl} />
+        <ProifleImage source={{ uri: profileUser!.profileImageUrl }} />
         <ProfileRightWrapper>
           <ProfileSocialWrapper>
             <Link
@@ -121,3 +112,54 @@ const Profile = ({ nickname }: ProfileProps) => {
 /* 부모컴포넌트의 리렌더링은 대부분 카테고리가 변경될때 이므로
 프로필 컴포넌트는 메모이제이션하여 불필요한 리렌더링을 막음 */
 export default React.memo(Profile);
+
+const ProfileLayout = styled.View`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const ProfileContainer = styled.View`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 25px;
+`;
+
+const ProifleImage = styled.Image`
+  width: 80px;
+  height: 80px;
+  border-radius: 100px;
+  background-color: #ccc;
+`;
+
+const ProfileRightWrapper = styled.View`
+  display: flex;
+  flex-grow: 1;
+  gap: 5px;
+  align-items: flex-start;
+`;
+
+const ProfileSocialWrapper = styled.View`
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+`;
+
+const ProfileTextWrapper = styled.View`
+  display: flex;
+  gap: 2px;
+  padding-bottom: 8px;
+`;
+
+const ProfileUserNameText = styled.Text`
+  font-size: 18px;
+  font-weight: 600;
+  color: ${(props) => props.theme.mainFont};
+`;
+
+const ProfileIntroductionText = styled.Text`
+  font-size: 14px;
+  font-weight: 400;
+  color: ${(props) => props.theme.mainFont};
+`;

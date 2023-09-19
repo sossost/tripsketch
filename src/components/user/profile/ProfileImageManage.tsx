@@ -3,8 +3,6 @@ import { Text } from "react-native";
 import React, { Dispatch } from "react";
 import * as ImagePicker from "expo-image-picker";
 
-import ProfileImage from "./ProfileImage";
-
 type ProfileImageManageProps = {
   image: string;
   setImage: Dispatch<React.SetStateAction<string>>;
@@ -26,7 +24,7 @@ const ProfileImageManage = ({ image, setImage }: ProfileImageManageProps) => {
 
   return (
     <Container>
-      <ProfileImage img={image} />
+      <Image source={{ uri: image }} />
       <Button onPress={selectImageHandler}>
         <Text>사진 수정</Text>
       </Button>
@@ -41,6 +39,12 @@ const Container = styled.View`
   align-items: center;
   gap: 10px;
   padding: 20px 0;
+`;
+
+const Image = styled.Image`
+  width: 80px;
+  height: 80px;
+  border-radius: 100px;
 `;
 
 const Button = styled.TouchableOpacity`

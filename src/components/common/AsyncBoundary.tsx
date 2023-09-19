@@ -1,5 +1,5 @@
 import { ComponentProps, Suspense } from "react";
-import ErrorBoundary, { ErrorFallbackType } from "../UI/ErrorBoundary";
+import ErrorBoundary, { ErrorFallbackType } from "./ErrorBoundary";
 import ErrorFallback from "../UI/ErrorFallback";
 
 import Loading from "../UI/Loading";

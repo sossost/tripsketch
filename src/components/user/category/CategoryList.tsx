@@ -18,15 +18,12 @@ const CategoryList = ({ nickname }: { nickname: string }) => {
   const { data: initialCategoryList } = useGetCategoriesByNickname(nickname);
 
   // 카테고리 리스트를 가져와서 카테고리 이름만 뽑아서 배열로 만듦
-  const categoryNameList =
-    initialCategoryList && initialCategoryList.length > 0
-      ? [
-          "전체보기",
-          ...Object.values(initialCategoryList).map(
-            (item) => item.categoryName
-          ),
-        ]
-      : [];
+  const categoryNameList = initialCategoryList
+    ? [
+        "전체보기",
+        ...Object.values(initialCategoryList).map((item) => item.categoryName),
+      ]
+    : [];
 
   // 카테고리 리스트를 관리하는 상태
   const [categoryList, setCategoryList] = useState<string[]>(categoryNameList);
@@ -49,6 +46,8 @@ const CategoryList = ({ nickname }: { nickname: string }) => {
       {categoryList.map((item, index) => {
         // 현재 클릭된 카테고리인지 확인
         const isClicked = item === selectedCategory;
+
+        if (categoryList.length === 1) return null;
 
         return (
           <CategoryButton

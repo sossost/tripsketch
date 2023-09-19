@@ -3,6 +3,7 @@ import { Post } from "../../types/Post";
 import { ReactElement } from "react";
 
 import PostCard from "./card/PostCard";
+import NoneData from "../common/NoneData";
 
 interface DiaryListProps {
   posts: Post[];
@@ -32,7 +33,10 @@ const PostFlatList = ({
   listHeaderComponent,
   listFooterComponent,
 }: DiaryListProps) => {
-  posts;
+  if (posts.length === 0) {
+    return <NoneData message="현재 작성된 포스트가 없습니다." />;
+  }
+
   return (
     <FlatList
       data={posts}

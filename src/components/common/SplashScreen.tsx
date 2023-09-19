@@ -10,7 +10,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import SplashBack from "./SplashBack";
 import KakaoLoginButton from "../auth/KakaoLoginButton";
-import CustomButton from "./CustomButton";
+import CustomButton from "../UI/CustomButton";
 import { FadeOutContext } from "../../context/fadeOutContext";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 const splashBgColor = "#fff";
@@ -29,8 +29,6 @@ const SplashScreen = ({ children }: { children: ReactNode }) => {
   const [isGone, setIsGone] = useState(false);
 
   const logoPath = require("../../assets/logo_white.png");
-  //SafeArea 값
-  const edges = useSafeAreaInsets();
 
   //애니메이션 값
   const startAnimation = useRef(new Animated.Value(0)).current;
@@ -48,11 +46,14 @@ const SplashScreen = ({ children }: { children: ReactNode }) => {
 
   // 로그인 되어있으면 버튼 없이 바로 넘어가기
   useEffect(() => {
-    const timer = setTimeout(() => {
+    let timer: NodeJS.Timeout;
+
+    timer = setTimeout(() => {
       if (currentUser.data) {
         setFadeOut(true);
       }
     }, 2000);
+
     return () => clearTimeout(timer);
   }, [currentUser.data]);
 
