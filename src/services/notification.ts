@@ -25,3 +25,22 @@ export const getNotifications = async (page: number, size: number) => {
     throw new Error(ERROR_MESSAGE.GET_NOTIFICATIONS);
   }
 };
+
+/**
+ * @description : 알림을 삭제하는 함수
+ *
+ * @param id : 삭제할 알림 id
+ *
+ * @author : 장윤수
+ * @update : 2023-09-19,
+ * @version 1.0.0,
+ * @see None,
+ */
+export const deleteNotification = async (id: string) => {
+  try {
+    await axiosBase.delete(`notifications/${id}`);
+  } catch (error: unknown) {
+    errorLoging(error, "알림 삭제 요청 에러는🤔");
+    throw new Error(ERROR_MESSAGE.DELETE_NOTIFICATION);
+  }
+};

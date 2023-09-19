@@ -13,6 +13,7 @@ import Header from "../UI/header/Header";
 import Title from "../UI/header/Title";
 import CommonHeaderLeft from "../UI/header/HeaderLeft";
 import PageLayout from "../common/PageLayout";
+import HamburgerBtn from "./profile/HamburgerBtn";
 
 interface UserPageComponentProps {
   nickname?: string;
@@ -32,13 +33,13 @@ interface UserPageComponentProps {
 const UserPageComponent = ({ nickname }: UserPageComponentProps) => {
   // 현재 로그인한 유저 정보를 가져옴
   const { data: currentUser } = useGetCurrentUser();
+  const isMypage = !nickname || nickname === currentUser!.nickname;
   // 페이지 별로 헤더 왼쪽에 들어갈 컴포넌트를 다르게 렌더링
-  const HeaderChildren =
-    nickname && currentUser?.nickname !== nickname ? (
-      <CommonHeaderLeft title={nickname} />
-    ) : (
-      <Title title={"마이페이지"} />
-    );
+  const LeftHeaderChildren = isMypage ? (
+    <Title title={"마이페이지"} />
+  ) : (
+    <CommonHeaderLeft title={nickname!} />
+  );
 
   const [selectedCategory, setSelectedCategory] = useRecoilState(categoryState);
   // 현재 페이지 주인의 닉네임 (마이페이지면 현재 로그인한 유저의 닉네임)
@@ -52,7 +53,10 @@ const UserPageComponent = ({ nickname }: UserPageComponentProps) => {
   return (
     <AsyncBoundary>
       <PageLayout>
-        <Header left={HeaderChildren} />
+        <Header
+          left={LeftHeaderChildren}
+          right={isMypage && <HamburgerBtn />}
+        />
         <FlatList
           data={null}
           renderItem={null}

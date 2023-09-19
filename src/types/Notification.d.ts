@@ -3,6 +3,7 @@ export interface Notification {
   profileUrl: string;
   title: string;
   body: string;
+  content: string;
   createdAt: string;
   nickname: string;
   commentId: string;
