@@ -16,6 +16,7 @@ export const LINK = {
   SETUP_PAGE: "SetupPage",
   PUSH_NOTIFICATION_SETUP_PAGE: "PushNotificationSetupPage",
   OPENSOURCE_LICENCE_PAGE: "OpensourceLicencePage",
+  OPENSOURCE_LICENCE_DETAIL_PAGE: "OpensourceLicenceDetailPage",
   PRIVACY_POLICY_PAGE: "PrivacyPolicyPage",
   LOCATION_POLICY_PAGE: "LocationPolicyPage",
   POST_MANAGEMENT_POLICY_PAGE: "PostManagementPolicyPage",

@@ -13,6 +13,9 @@ import EditProfilePage from "../screens/EditProfilePage";
 import Toast from "react-native-toast-message";
 import SocialPage from "../screens/SocialPage";
 import UpdatePost from "../screens/UpdatePost";
+import SetupPage from "../screens/SetupPage";
+import OpenSourcePage from "../screens/OpenSourcePage";
+import OpenSourceDetalPage from "../screens/OpenSourceDetalPage";
 
 const Stack = createStackNavigator();
 
@@ -31,7 +34,13 @@ export default function RootStack() {
               name={LINK.KAKAO_LOGIN_PAGE}
               component={KakaoLoginPage}
             />
-            <Stack.Screen name={LINK.TRIP_DETAIL_PAGE} component={PostDetail} />
+            <Stack.Screen
+              name={LINK.TRIP_DETAIL_PAGE}
+              component={PostDetail}
+              options={{
+                headerShown: false,
+              }}
+            />
             <Stack.Screen
               name={LINK.USER_PAGE}
               component={UserPage}
@@ -56,6 +65,27 @@ export default function RootStack() {
             <Stack.Screen
               name={LINK.EDIT_PROFILE_PAGE}
               component={EditProfilePage}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={LINK.SETUP_PAGE}
+              component={SetupPage}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={LINK.OPENSOURCE_LICENCE_PAGE}
+              component={OpenSourcePage}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={LINK.OPENSOURCE_LICENCE_DETAIL_PAGE}
+              component={OpenSourceDetalPage}
               options={{
                 headerShown: false,
               }}

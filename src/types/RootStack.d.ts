@@ -5,6 +5,7 @@ export type RootStackParamList = {
   KakaoLoginPage: undefined;
   PostDetail: { postId: string };
   UpdatePost: { postId: string };
+  OpensourceLicenceDetailPage: { libraryName: string };
   // 다른 스크린도 필요한 경우 정의할 수 있음
 };
 

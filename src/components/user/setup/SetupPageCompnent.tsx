@@ -69,7 +69,7 @@ const SetupPageCompnent = () => {
           return (
             <SetupItem
               key={item.title}
-              // onPress={() => navigation.navigate(item.screenName)}
+              onPress={() => navigation.navigate(item.screenName)}
             >
               <SetupItemTitle>{item.title}</SetupItemTitle>
               <SetupItemLinkIcon
