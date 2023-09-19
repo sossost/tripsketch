@@ -37,9 +37,7 @@ export default function RootStack() {
             <Stack.Screen
               name={LINK.TRIP_DETAIL_PAGE}
               component={PostDetail}
-              options={{
-                headerShown: false,
-              }}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name={LINK.USER_PAGE}
