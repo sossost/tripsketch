@@ -5,6 +5,9 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../../types/RootStack";
 import { resetDataInSecureStore } from "../../../utils/secureStore";
 import { STORE_KEY } from "../../../constants/store";
+import { Toast } from "react-native-toast-message/lib/src/Toast";
+import { SUCCESS_MESSAGE } from "../../../constants/message";
+import { ERROR_MESSAGE } from "../../../constants/message";
 
 import Header from "../../UI/header/Header";
 import CommonHeaderLeft from "../../UI/header/HeaderLeft";
@@ -37,13 +40,25 @@ const SETUP_PAGE_LIST = [
   },
 ];
 
+/**
+ * @description : 설정 및 개인정보 페이지 컴포넌트
+ * @author : 장윤수
+ * @update : 2023-09-19,
+ * @version 1.0.0,
+ * @see None
+ */
 const SetupPageCompnent = () => {
   const navigation = useNavigation<StackNavigation>();
 
-  const handleLogout = () => {
-    resetDataInSecureStore(STORE_KEY.ACCESS_TOKEN);
-    resetDataInSecureStore(STORE_KEY.REFRESH_TOKEN);
-    navigation.navigate(LINK.MAIN);
+  const handleLogout = async () => {
+    try {
+      await resetDataInSecureStore(STORE_KEY.ACCESS_TOKEN);
+      await resetDataInSecureStore(STORE_KEY.REFRESH_TOKEN);
+      navigation.navigate(LINK.MAIN);
+      Toast.show({ type: "success", text1: SUCCESS_MESSAGE.LOGOUT });
+    } catch (error: unknown) {
+      Toast.show({ type: "error", text1: ERROR_MESSAGE.LOGOUT });
+    }
   };
 
   return (
