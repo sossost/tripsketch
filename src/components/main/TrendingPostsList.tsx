@@ -32,7 +32,9 @@ const TrendingPostsList = () => {
       posts={posts}
       handleEndReached={handleEndReached}
       handleRefresh={handleRefresh}
-      listHeaderComponent={<BlueTitle text="여행 스케치 둘러보기" />}
+      listHeaderComponent={
+        <BlueTitle text="여행 스케치 둘러보기" isLine={true} />
+      }
     />
   );
 };
