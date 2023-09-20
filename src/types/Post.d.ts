@@ -1,27 +1,85 @@
-export interface PostsData {
-  posts: Post[];
-  currentPage: number;
-  totalPage: number;
-  postsPerPage: number;
-}
+import { Comment } from "./comment";
 
-export interface Post {
+export type Post = {
   id: string;
-  title: string;
-  images: string[];
-  content: string;
   nickname: string;
-  views: number;
-  location: string;
+  profileImageUrl: string;
+  title: string;
   likes: number;
-  isLiked: boolean;
-  hashtag: string[];
-  tripLikes: string[];
-  hidden: boolean;
-  public: boolean;
+  comments: number;
+  countryCode: string;
+  country: string;
   createdAt: string;
-  updatedAt: string;
-  deletedAt: string;
+  image: string;
+  isLiked: boolean;
+  content?: string;
+};
+
+export type CreatePost = {
+  title: string;
+  content: string;
+  location: string;
   startedAt: string;
   endAt: string;
-}
+  latitude: number;
+  longitude: number;
+  hashtagInfo: {
+    countryCode: string;
+    country: string;
+    city: string;
+    municipality: string;
+    name: string;
+    displayName: string;
+    road: string;
+    address: string;
+    etc: string[];
+  };
+  isPublic: boolean;
+  images: [];
+};
+
+export type PostUpdate = {
+  id: string;
+  nickname: string;
+  title: string;
+  content: string;
+  likes: number;
+  views: number;
+  location: string[];
+  startedAt: string;
+  endAt: string;
+  hashtag: string[];
+  hidden: boolean;
+  createdAt: string;
+  tripLikes: string[];
+  images: string[];
+  isLiked: boolean;
+  public: boolean;
+};
+
+export type GetPost = {
+  tripAndCommentPairDataByTripId: {
+    first: {
+      id: string;
+      nickname: string;
+      title: string;
+      content: string;
+      likes: number;
+      views: number;
+      location: string;
+      startedAt: string;
+      endAt: string;
+      hashtag: string[];
+      latitude: number;
+      longitude: number;
+      isPublic: boolean;
+      isHidden: boolean;
+      createdAt: string;
+      updatedAt: string;
+      deletedAt: string;
+      images: string[];
+      isLiked: boolean;
+    };
+    second: Comment[];
+  };
+};
