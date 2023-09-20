@@ -34,8 +34,8 @@ const WelcomeContainer = styled.View`
   align-items: center;
   flex-direction: row;
   gap: 12px;
-  padding: 10px 0;
   width: 100%;
+  height: 40px;
 `;
 
 const ProfileImageWrapper = styled.View`

@@ -50,7 +50,7 @@ const PostFlatList = ({
       ListFooterComponent={listFooterComponent}
       contentContainerStyle={{
         paddingBottom: 50,
-        paddingTop: 20,
+        paddingTop: 5,
         paddingHorizontal: 2,
       }}
       showsVerticalScrollIndicator={false}
