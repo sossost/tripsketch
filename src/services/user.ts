@@ -8,6 +8,17 @@ import { errorLoging, errorToastMessageInCatch } from "../utils/errorHandler";
 import { ERROR_MESSAGE } from "../constants/message";
 
 /**
+ * @description : 카카오 로그인 요청하는 함수
+ * @author : 장윤수
+ * @update : 2023-09-21,
+ * @version 1.0.0,
+ * @see None
+ */
+export const kakaoLogin = async () => {
+  return await axiosBase.get("oauth/kakao/redirect");
+};
+
+/**
  * @description : 로그인한 유저의 정보를 요청하는 함수
  * @author : 이수현
  * @update : 2023-09-13, 데이터 패치 실패 시 null 반환하도록 수정
@@ -60,7 +71,6 @@ export const patchCurrentUser = async (data: any) => {
     throw new Error(ERROR_MESSAGE.UNAUTHORIZED);
   } catch (error: unknown) {
     errorLoging(error, "유저 정보 수정 에러는🤔");
-    throw new Error(ERROR_MESSAGE.EDIT_USER);
   }
 };
 
