@@ -5,13 +5,14 @@ import { QUERY_KEY } from "../../react-query/queryKey";
 
 import PostFlatList from "../post/PostFlatList";
 import MoreTripsButton from "./MoreTripsButton";
-import TrendingPosts from "./TrendingPosts";
+import TrendingPosts from "./TrendingPostsList";
+import BlueTitle from "@components/UI/BlueTitle";
 
 /**
  * @description : 메인화면에 보여지는 구독한 유저들의 포스트 리스트 컴포넌트
  * @author : 장윤수
- * @update : 2023-09-14,
- * @version 1.0.0,
+ * @update : 2023-09-20,
+ * @version 1.1.0, 리스트 헤더 컴포넌트 추가
  * @see None,
  */
 const SubscribedPostsList = () => {
@@ -41,6 +42,7 @@ const SubscribedPostsList = () => {
       handleEndReached={handleEndReached}
       handleRefresh={handleRefresh}
       listFooterComponent={<MoreTripsButton />}
+      listHeaderComponent={<BlueTitle text={"내가 구독하는 여행자의 스케치"} />}
     />
   );
 };
