@@ -96,7 +96,7 @@ export const getPostsByTrending = async (page: number, size: number) => {
  *
  * @author : 장윤수
  * @update : 2023-09-17,
- * @version 1.1.0, 페이지 네이션 기능 추가
+ * @version 1.2.0, API 엔드포인트 하나로 통합
  * @see None,
  */
 export const getSortedPostsBySearchKeyword = async (
@@ -111,17 +111,10 @@ export const getSortedPostsBySearchKeyword = async (
     오래된순: -1,
   };
   try {
-    if (keward === "") {
-      const response = await axiosBase.get(
-        `trip/guest/trips?page=${page}&size=${size}&sortType=${sortingType[sorting]}`
-      );
-      return response.data;
-    } else {
-      const response = await axiosBase.get(
-        `trip/guest/search?keyword=${keward}&page=${page}&size=${size}&sortType=${sortingType[sorting]}`
-      );
-      return response.data;
-    }
+    const response = await axiosBase.get(
+      `trip/guest/search?keyword=${keward}&page=${page}&size=${size}&sortType=${sortingType[sorting]}`
+    );
+    return response.data;
   } catch (error: unknown) {
     errorLoging(error, "검색 게시글 리스트 요청 에러는🤔");
     throw new Error(ERROR_MESSAGE.GET_POSTS);

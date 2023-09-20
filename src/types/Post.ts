@@ -12,6 +12,7 @@ export type Post = {
   createdAt: string;
   image: string;
   isLiked: boolean;
+  content?: string;
 };
 
 export type CreatePost = {
