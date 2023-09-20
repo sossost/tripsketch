@@ -36,6 +36,6 @@ const StyledText = styled.Text`
 
 const Line = styled.View`
   flex: 1;
-  height: 2px;
+  height: 1.2px;
   background-color: ${colors.lightGrey};
 `;
