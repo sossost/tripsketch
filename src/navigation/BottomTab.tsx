@@ -19,6 +19,9 @@ export default function BottomTab() {
       screenOptions={{
         tabBarActiveTintColor: "#167DD8",
         tabBarShowLabel: false,
+        tabBarStyle: {
+          height: 80, // 탭 바의 높이를 조정하세요.
+        },
       }}
     >
       <Tabs.Screen
@@ -48,7 +51,12 @@ export default function BottomTab() {
         options={{
           title: "작성하기",
           tabBarIcon: () => (
-            <AntDesign name="pluscircle" color={colors.primary} size={35} />
+            <AntDesign
+              name="pluscircle"
+              color={colors.primary}
+              size={55}
+              style={{ marginTop: -23 }}
+            />
           ),
         }}
       />

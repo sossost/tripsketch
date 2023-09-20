@@ -103,9 +103,6 @@ const NotificationItem = ({ notification }: NotificationProps) => {
   );
 };
 
-// border-bottom-width: 1px; /* 아래 선 두께 설정 */
-//   border-bottom-color: #f2f2f2; /* 아래 선 색상 설정 */
-
 const Container = styled.TouchableOpacity`
   display: flex;
   flex-direction: row;
