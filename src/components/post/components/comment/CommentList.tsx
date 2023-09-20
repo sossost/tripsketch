@@ -62,7 +62,7 @@ const CommentList = ({
         <View>
           {sort === "all" ? (
             <View style={styles.comment}>
-              {commentData.map((item: any) => (
+              {commentData.map((item) => (
                 <View key={item.id}>
                   <CommentItem
                     comment={item}

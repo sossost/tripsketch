@@ -27,31 +27,69 @@ interface ViewProps {
   height?: number;
 }
 
+// 여행지 불러오기 상태 관리 Props
 interface PostSearchLocationProps {
-  query: any;
-  setQuery: any;
-  suggestions: any;
-  setSuggestions: any;
-  mapViewOn: any;
-  setMapViewOn: any;
-  locationName: any;
-  setLocationName: any;
-  address: any;
-  setAddress: any;
+  query: string;
+  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  suggestions: Suggestion[];
+  setSuggestions: React.Dispatch<React.SetStateAction<Suggestion[]>>;
+  mapViewOn: boolean;
+  setMapViewOn: React.Dispatch<React.SetStateAction<boolean>>;
+  locationName: string;
+  setLocationName: React.Dispatch<React.SetStateAction<string>>;
+  address: {
+    countryCode: string;
+    address: string;
+    municipality: string;
+    name: string;
+    country: string;
+    city: string;
+    town: string;
+    road: string;
+    display_name: string;
+    latitude: number;
+    longitude: number;
+  };
+  setAddress: React.Dispatch<
+    React.SetStateAction<{
+      countryCode: string;
+      address: string;
+      municipality: string;
+      name: string;
+      country: string;
+      city: string;
+      town: string;
+      road: string;
+      display_name: string;
+      latitude: number;
+      longitude: number;
+    }>
+  >;
   region: {
     latitude: number;
     longitude: number;
     latitudeDelta: number;
     longitudeDelta: number;
   };
-  setRegion: any;
+  setRegion: React.Dispatch<
+    React.SetStateAction<{
+      latitude: number;
+      longitude: number;
+      latitudeDelta: number;
+      longitudeDelta: number;
+    }>
+  >;
   isSearchLoading: boolean;
   setIsSearchLoading: React.Dispatch<React.SetStateAction<boolean>>;
   isAddressTouched: boolean;
   setIsAddressTouched: React.Dispatch<React.SetStateAction<boolean>>;
   addressCountry: string;
-  validateAddress: any;
-  errors: any;
+  validateAddress: (addressCountry: string) => void;
+  errors: {
+    title: string;
+    content: string;
+    address: string;
+  };
 }
 
 const PostSearchLocation = ({
