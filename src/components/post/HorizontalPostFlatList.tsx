@@ -30,7 +30,7 @@ const HorizontalPostFlatList = ({
   listHeaderComponent,
   listFooterComponent,
 }: DiaryListProps) => {
-  posts;
+  console.log(posts);
   return (
     <FlatList
       data={posts}

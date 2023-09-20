@@ -7,12 +7,13 @@ import { StackNavigation } from "../../types/RootStack";
 import { LINK } from "../../constants/link";
 import { View, Dimensions } from "react-native";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
+import { useDeleteNotificationQuery } from "../../hooks/useNotificationQuery";
 import {
   Swipeable,
   GestureHandlerRootView,
 } from "react-native-gesture-handler";
+
 import NotificationDeleteBtn from "./NotificationDeleteBtn";
-import { useDeleteNotificationQuery } from "../../hooks/useNotificationQuery";
 
 interface NotificationProps {
   notification: Notification;
@@ -137,10 +138,11 @@ const TextContainer = styled.View`
 `;
 
 const NotDescript = styled.Text`
-  font-weight: bold;
+  font-weight: 500;
   font-size: 15px;
   letter-spacing: -0.5px;
   margin-bottom: 3px;
+  color: ${colors.mainFont};
 `;
 
 const NotContent = styled.Text`
