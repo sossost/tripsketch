@@ -69,6 +69,10 @@ const MainPageComponent = () => {
             </AsyncBoundary>
           </>
         }
+        contentContainerStyle={{
+          paddingBottom: 50,
+          paddingHorizontal: 2,
+        }}
       />
     </MainLayout>
   );
