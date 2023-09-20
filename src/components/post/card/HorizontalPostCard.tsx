@@ -1,7 +1,7 @@
 import { styled } from "styled-components/native";
 import { Post } from "../../../types/Post";
 import { colors } from "../../../constants/color";
-import { View } from "react-native";
+import { Dimensions, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import UserAvatar from "../user/UserAvatar";
@@ -9,6 +9,7 @@ import LikesCount from "../LikesCount";
 import CommentsCount from "../CommentsCount";
 import { StackNavigation } from "../../../types/RootStack";
 import { LINK } from "../../../constants/link";
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 interface HorizontalPostCardProps {
   post: Post;
@@ -24,7 +25,7 @@ const DEFAULT_IMAGE =
  *
  * @author : 장윤수
  * @update : 2023-09-20,
- * @version 1.1.0, 포스트 내용 1줄 추가
+ * @version 1.1.1, 카드 레이아웃 너비 수정
  * @see None,
  */
 const HorizontalPostCard = ({ post }: HorizontalPostCardProps) => {
@@ -70,9 +71,9 @@ const HorizontalPostCard = ({ post }: HorizontalPostCardProps) => {
 export default HorizontalPostCard;
 
 const Container = styled.TouchableOpacity`
+  width: ${SCREEN_WIDTH - 44}px;
   display: flex;
   flex-direction: row;
-  width: 100%;
   border-radius: 10px;
   background-color: #fff;
   overflow: hidden;

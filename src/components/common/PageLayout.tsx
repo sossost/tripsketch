@@ -15,6 +15,6 @@ const ExplorePageLayout = styled.View`
   flex: 1;
   background-color: #fff;
   padding: 20px;
-  padding-top: 45px;
+  padding-top: 50px;
   gap: 15px;
 `;
