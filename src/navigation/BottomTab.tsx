@@ -1,13 +1,14 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import { LINK } from "../constants/link";
+import { LINK } from "@constants/link";
+import { colors } from "@constants/color";
 
-import MainPage from "../screens/MainPage";
-import MyPage from "../screens/MyPage";
-import CreatePost from "../screens/CreatePost";
-import ExplorePage from "../screens/ExplorePage";
-import NotificationPage from "../screens/NotificationPage";
+import MainPage from "@screens/MainPage";
+import MyPage from "@screens/MyPage";
+import CreatePost from "@screens/CreatePost";
+import ExplorePage from "@screens/ExplorePage";
+import NotificationPage from "@screens/NotificationPage";
 
 const Tabs = createBottomTabNavigator();
 
@@ -47,7 +48,7 @@ export default function BottomTab() {
         options={{
           title: "작성하기",
           tabBarIcon: () => (
-            <AntDesign name="pluscircle" color={"black"} size={35} />
+            <AntDesign name="pluscircle" color={colors.primary} size={35} />
           ),
         }}
       />

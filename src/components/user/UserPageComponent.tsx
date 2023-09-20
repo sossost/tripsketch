@@ -5,15 +5,15 @@ import { useRecoilState } from "recoil";
 import { categoryState } from "../../store/categoryAtom";
 import { FlatList } from "react-native";
 
-import Profile from "./profile/Profile";
-import CategoryList from "./category/CategoryList";
-import AsyncBoundary from "../common/AsyncBoundary";
-import UserPostList from "./post/UserPostList";
-import Header from "../UI/header/Header";
-import Title from "../UI/header/Title";
-import CommonHeaderLeft from "../UI/header/HeaderLeft";
-import PageLayout from "../common/PageLayout";
-import HamburgerBtn from "./profile/HamburgerBtn";
+import Profile from "@components/user/profile/Profile";
+import UserPostList from "@components/user/post/UserPostList";
+import CategoryList from "@components/user/category/CategoryList";
+import HamburgerBtn from "@components/user/profile/HamburgerBtn";
+import AsyncBoundary from "@components/common/AsyncBoundary";
+import PageLayout from "@components/common/PageLayout";
+import Header from "@components/UI/header/Header";
+import Title from "@components/UI/header/Title";
+import CommonHeaderLeft from "@components/UI/header/HeaderLeft";
 
 interface UserPageComponentProps {
   nickname?: string;
