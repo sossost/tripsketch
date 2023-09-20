@@ -1,9 +1,7 @@
 import { Text, Image, Dimensions, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import styled from "styled-components/native";
-import { FontAwesome5 } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
 import { colors } from "../../constants/color";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -31,16 +29,6 @@ type Region = {
   longitude: number;
   latitudeDelta: number;
   longitudeDelta: number;
-};
-
-type ImagePickerResult = {
-  cancelled: boolean;
-  uri?: string;
-  width?: number;
-  height?: number;
-  type?: string;
-  exif?: { [key: string]: any };
-  base64?: string;
 };
 
 /** 날짜 정보 Type */
@@ -584,22 +572,6 @@ const LoadingBox = styled.View`
   display: flex;
 `;
 
-const ModalContainer = styled.View`
-  flex: 1;
-  align-items: center;
-  background-color: #d4eff6;
-  padding-top: 45%;
-`;
-
-const MapViewOverlay = styled.View`
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 500px;
-  background-color: rgba(20, 20, 20, 0.3);
-  z-index: 6;
-`;
-
 /** 여행기간, 여행지 감싸는 View */
 const HeaderInfo = styled.View`
   padding: 0 20px;
@@ -611,13 +583,6 @@ const HeaderInfo = styled.View`
 /** 제목, 내용, 태그, 공개설정 감싸는 View */
 const BodyInfo = styled.View`
   padding: 0 20px;
-`;
-
-/** 여행기간 */
-const InfoBox = styled.View`
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 15px;
 `;
 
 /** 주제 Text */
@@ -640,59 +605,6 @@ const ValidationText = styled.Text`
   color: #999;
 `;
 
-/** 달력 아이콘 */
-const CalendarIcon = styled(Feather)`
-  font-size: 25px;
-  color: #73bbfb;
-  margin-right: 5px;
-`;
-
-const CloseButton = styled.TouchableOpacity`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-`;
-
-const CloseIcon = styled(Feather)`
-  font-size: 28px;
-  color: #73bbfb;
-  margin-right: 5px;
-`;
-
-/** 여행지 아이콘 */
-const MapIcon = styled(FontAwesome5)`
-  font-size: 25px;
-  color: #73bbfb;
-  margin-left: 3px;
-  margin-right: 9px;
-`;
-
-/** 선택 Button */
-const SelectButton = styled.TouchableOpacity`
-  width: 42px;
-  height: 25px;
-  background-color: #73bbfb;
-  border-radius: 5px;
-  justify-content: center;
-  align-items: center;
-`;
-
-/** 내용 Text */
-const ContentText = styled.Text`
-  width: 70%;
-  color: #73bbfb;
-  margin-right: 10px;
-  font-size: 16px;
-  font-style: italic;
-  text-decoration: underline #73bbfb;
-`;
-
-/** 선택 Text */
-const SelectText = styled.Text`
-  font-size: 15px;
-  color: #ffffff;
-`;
-
 /** 사진 첨부 아이콘 */
 const PhotoIcon = styled(FontAwesome)`
   color: #fff;
@@ -713,18 +625,6 @@ const TitleInput = styled.TextInput<TitleInputProps>`
   border-radius: 5px;
   margin-top: 12px;
   margin-bottom: 12px;
-  color: #6f6f6f;
-`;
-
-const LocationInput = styled.TextInput`
-  padding: 10px 10px;
-  height: 45px;
-  font-size: 16px;
-  border: none;
-  border-radius: 5px;
-  width: 70%;
-  z-index: 20;
-
   color: #6f6f6f;
 `;
 
