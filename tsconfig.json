@@ -6,7 +6,14 @@
     "paths": {
       "@components/*": ["components/*"],
       "@screens/*": ["screens/*"],
-      "@assets/*": ["assets/*"]
+      "@assets/*": ["assets/*"],
+      "@utils/*": ["utils/*"],
+      "@constants/*": ["constants/*"],
+      "@hooks/*": ["hooks/*"],
+      "@react-query/*": ["react-query/*"],
+      "@navigation/*": ["navigation/*"],
+      "@services/*": ["services/*"],
+      "@types/*": ["types/*"]
     }
   }
 }
