@@ -1,11 +1,7 @@
 import { useGetCurrentUser } from "@hooks/useUserQuery";
-import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "@types/RootStack";
 import { LINK } from "@constants/link";
-import { styled } from "styled-components/native";
-import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEY } from "@react-query/queryKey";
 
 import AsyncBoundary from "@components/common/AsyncBoundary";
 import TrendingPostsList from "@components/main/TrendingPostsList";
@@ -13,6 +9,7 @@ import SubscribedPostsList from "@components/main/SubscribedPostsList";
 import Header from "@components/UI/header/Header";
 import Logo from "@components/UI/Logo";
 import ProfileImage from "@components/user/profile/ProfileImage";
+import PageLayout from "@components/common/PageLayout";
 
 /**
  * @description : 메인 페이지 컴포넌트
@@ -23,23 +20,9 @@ import ProfileImage from "@components/user/profile/ProfileImage";
  */
 const MainPageComponent = () => {
   const navigation = useNavigation<StackNavigation>();
-  const queryClient = useQueryClient();
 
   // 현재 유저 정보 가져오는 커스텀 훅
   const { data: currentUser } = useGetCurrentUser();
-
-  // 리스트 리프레쉬 핸들러
-  const handleRefresh = () => {
-    queryClient.invalidateQueries([
-      QUERY_KEY.POSTS,
-      QUERY_KEY.SUBSCRIPTED_USERS,
-    ]);
-  };
-
-  // 리스트 리프레쉬 컨트롤 컴포넌트
-  const refreshContral = (
-    <RefreshControl refreshing={false} onRefresh={handleRefresh} />
-  );
 
   // 헤더 왼쪽, 오른쪽 컴포넌트
   const headerLeft = <Logo />;
@@ -51,41 +34,14 @@ const MainPageComponent = () => {
   );
 
   return (
-    <MainLayout>
-      <FlatList
-        data={null}
-        renderItem={null}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: 50,
-          paddingHorizontal: 2,
-        }}
-        refreshControl={refreshContral}
-        ListHeaderComponent={
-          <>
-            <Header
-              style={{ marginVertical: 15 }}
-              left={headerLeft}
-              right={headerRight}
-            />
+    <PageLayout>
+      <Header left={headerLeft} right={headerRight} />
 
-            <AsyncBoundary>
-              {currentUser ? <SubscribedPostsList /> : <TrendingPostsList />}
-            </AsyncBoundary>
-          </>
-        }
-      />
-    </MainLayout>
+      <AsyncBoundary>
+        {currentUser ? <SubscribedPostsList /> : <TrendingPostsList />}
+      </AsyncBoundary>
+    </PageLayout>
   );
 };
 
 export default MainPageComponent;
-
-const MainLayout = styled.View`
-  display: flex;
-  flex: 1;
-  background-color: #fff;
-  padding: 20px;
-  padding-top: 30px;
-  gap: 15px;
-`;
