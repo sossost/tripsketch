@@ -3,9 +3,9 @@ import { useGetSubscribedUsersPosts } from "../../hooks/usePostQuery";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "../../react-query/queryKey";
 
-import PostFlatList from "../post/PostFlatList";
-import MoreTripsButton from "./MoreTripsButton";
-import TrendingPosts from "./TrendingPostsList";
+import MoreTripsButton from "@components/main/MoreTripsButton";
+import TrendingPosts from "@components/main/TrendingPostsList";
+import PostFlatList from "@components/post/PostFlatList";
 import BlueTitle from "@components/UI/BlueTitle";
 
 /**
@@ -42,7 +42,9 @@ const SubscribedPostsList = () => {
       handleEndReached={handleEndReached}
       handleRefresh={handleRefresh}
       listFooterComponent={<MoreTripsButton />}
-      listHeaderComponent={<BlueTitle text={"내가 구독하는 여행자의 스케치"} />}
+      listHeaderComponent={
+        <BlueTitle text={"내가 구독하는 여행자의 스케치"} isLine={true} />
+      }
     />
   );
 };
