@@ -49,7 +49,7 @@ const PostFlatList = ({
       ListHeaderComponent={listHeaderComponent}
       ListFooterComponent={listFooterComponent}
       contentContainerStyle={{
-        paddingBottom: 50,
+        paddingBottom: 30,
         paddingTop: 5,
         paddingHorizontal: 2,
       }}
