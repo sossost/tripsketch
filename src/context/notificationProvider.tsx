@@ -3,9 +3,9 @@ import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import { Platform } from "react-native";
 import { Subscription } from "expo-modules-core";
-import { setDataToSecureStore } from "../utils/secureStore";
-import { STORE_KEY } from "../constants/store";
-import { updateNotification } from "../utils/updateNotification";
+import { setDataToSecureStore } from "@utils/secureStore";
+import { STORE_KEY } from "@constants/store";
+import { saveDataToAsyncStorage } from "@utils/asyncStorage";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -58,10 +58,18 @@ const NotificationProvider = ({ children }: { children: ReactNode }) => {
 
         if (existingStatus !== "granted") {
           const { status } = await Notifications.requestPermissionsAsync();
+          await saveDataToAsyncStorage<boolean>(
+            STORE_KEY.PUSH_NOTIFICATION_PERMISSION,
+            true
+          );
           finalStatus = status;
         }
 
         if (finalStatus !== "granted") {
+          await saveDataToAsyncStorage<boolean>(
+            STORE_KEY.PUSH_NOTIFICATION_PERMISSION,
+            false
+          );
           console.log("알림 권한이 거부되었습니다.");
           return;
         }

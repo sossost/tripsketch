@@ -16,6 +16,7 @@ import UpdatePost from "@screens/UpdatePost";
 import SetupPage from "@screens/setup/SetupPage";
 import OpenSourcePage from "@screens/setup/OpenSourcePage";
 import OpenSourceDetalPage from "@screens/setup/OpenSourceDetalPage";
+import PushNotificationSetupPage from "@screens/setup/PushNotificationSetupPage";
 
 const Stack = createStackNavigator();
 
@@ -84,6 +85,13 @@ export default function RootStack() {
             <Stack.Screen
               name={LINK.OPENSOURCE_LICENCE_DETAIL_PAGE}
               component={OpenSourceDetalPage}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={LINK.PUSH_NOTIFICATION_SETUP_PAGE}
+              component={PushNotificationSetupPage}
               options={{
                 headerShown: false,
               }}
