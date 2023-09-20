@@ -7,7 +7,10 @@ import SearchPostList from "./SearchPostList";
 import PageLayout from "../common/PageLayout";
 
 const ExplorePageComponent = () => {
+  // 게시물 정렬 기준 상태값
   const [variant, setVariant] = useState<"인기순" | "최신순">("인기순");
+
+  // 검색어 상태값
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   return (

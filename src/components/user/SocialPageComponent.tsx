@@ -35,6 +35,7 @@ const SocialPageComponent = ({
   // 페이지의 variant 상태를 관리하는 state
   const [variant, setVariant] = useState<"팔로워" | "팔로잉">(initialVariant);
 
+  // 현재 페이지가 팔로워 페이지인지 팔로잉 페이지인지 확인
   const isFollowerPage = variant === "팔로워" ? true : false;
 
   // 현재 로그인한 유저의 정보를 가져옴
@@ -43,7 +44,7 @@ const SocialPageComponent = ({
   // 현재 페이지 주인의 정보를 가져옴
   const { data: pageOwner } = useGetUserByNickname(pageOwnerNickname);
 
-  // 팔로우 버튼을 눌렀을 때의 핸들러
+  /** 팔로우 버튼을 눌렀을 때의 핸들러 */
   const followBtnHandler = useSocialControllerInSocialPage({
     currentUser,
     pageOwnerNickname,

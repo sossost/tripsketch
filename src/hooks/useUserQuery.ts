@@ -100,6 +100,11 @@ export const useGetSocialList = (
 
 /**
  * @설명 : 리액트 쿼리 뮤테이션을 사용한 유저 프로필 수정 커스텀 훅
+ *
+ * @param profileImageUrl : 프로필 이미지 URL
+ * @param nickname : 닉네임
+ * @param introduction : 자기소개
+ *
  * @작성자 : 장윤수
  * @작성일 : 2023-09-18
  * @version 1.0.1, 파일 이동
