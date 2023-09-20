@@ -26,14 +26,14 @@ export const getPostCommentList = () => {
 
 export const getPostCommentListByTripId = (tripId: string) => {
   const {
-    data: commentData = [],
+    data: commentUserData = [],
     isLoading,
     isError,
   } = useQuery<Comment[]>(["commentTripId", tripId], () =>
     getCommentByTripId(tripId)
   );
 
-  return { commentData, isLoading, isError };
+  return { commentUserData, isLoading, isError };
 };
 
 export const getPostCommentGuestListByTripId = (tripId: string) => {

@@ -17,6 +17,7 @@ import { StackNavigation } from "../../../../types/RootStack";
 import Slick from "react-native-slick";
 import useDeleteAlert from "../../hooks/useDeleteAlert";
 import { GetPost } from "../../../../types/Post";
+import NonePostView from "./NonePostView";
 
 type PostViewProps = {
   postId: string;
@@ -30,11 +31,7 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
   const navigation = useNavigation<StackNavigation>();
 
   if (!postData) {
-    return (
-      <View style={styles.none_postData}>
-        <Text>데이터가 존재하지 않습니다.</Text>
-      </View>
-    );
+    return <NonePostView />;
   }
 
   const settingBox = () => {
