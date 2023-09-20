@@ -8,6 +8,8 @@ import { STORE_KEY } from "../../../constants/store";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { SUCCESS_MESSAGE } from "../../../constants/message";
 import { ERROR_MESSAGE } from "../../../constants/message";
+import { useQueryClient } from "@tanstack/react-query";
+import { QUERY_KEY } from "../../../react-query/queryKey";
 
 import Header from "../../UI/header/Header";
 import CommonHeaderLeft from "../../UI/header/HeaderLeft";
@@ -43,17 +45,19 @@ const SETUP_PAGE_LIST = [
 /**
  * @description : 설정 및 개인정보 페이지 컴포넌트
  * @author : 장윤수
- * @update : 2023-09-19,
- * @version 1.0.0,
+ * @update : 2023-09-20,
+ * @version 1.0.1, 로그아웃 쿼리키 무효화 추가
  * @see None
  */
 const SetupPageCompnent = () => {
   const navigation = useNavigation<StackNavigation>();
+  const queryClient = useQueryClient();
 
   const handleLogout = async () => {
     try {
       await resetDataInSecureStore(STORE_KEY.ACCESS_TOKEN);
       await resetDataInSecureStore(STORE_KEY.REFRESH_TOKEN);
+      queryClient.setQueryData([QUERY_KEY.CURRENT_USER], null);
       navigation.navigate(LINK.MAIN);
       Toast.show({ type: "success", text1: SUCCESS_MESSAGE.LOGOUT });
     } catch (error: unknown) {
