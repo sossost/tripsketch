@@ -17,6 +17,16 @@ interface HorizontalPostCardProps {
 const DEFAULT_IMAGE =
   "https://ax6izwmsuv9c.objectstorage.ap-osaka-1.oci.customer-oci.com/n/ax6izwmsuv9c/b/tripsketch/o/profile.png";
 
+/**
+ * @description : 수평으로 긴 포스트 카드 컴포넌트
+ *
+ * @param post : 포스트 객체
+ *
+ * @author : 장윤수
+ * @update : 2023-09-20,
+ * @version 1.1.0, 포스트 내용 1줄 추가
+ * @see None,
+ */
 const HorizontalPostCard = ({ post }: HorizontalPostCardProps) => {
   const navigation = useNavigation<StackNavigation>();
   const handlePostDetailPress = () => {
@@ -38,9 +48,9 @@ const HorizontalPostCard = ({ post }: HorizontalPostCardProps) => {
             </Title>
             <CreatedAt>{post.createdAt.slice(0, 10)}</CreatedAt>
           </RowView>
-          {/* <Content numberOfLines={1} ellipsizeMode="tail">
-            {post.}
-          </Content> */}
+          <Content numberOfLines={1} ellipsizeMode="tail">
+            {post.content}
+          </Content>
         </View>
         <MetaData>
           <UserAvatar

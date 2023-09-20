@@ -1,14 +1,14 @@
 import { FlatList, Text } from "react-native";
 import { OpenSourceLicense } from "./OpenSourceLicense";
 import { styled } from "styled-components/native";
-import { colors } from "../../constants/color";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigation } from "../../types/RootStack";
-import { LINK } from "../../constants/link";
+import { colors } from "@constants/color";
+import { LINK } from "@constants/link";
+import { StackNavigation } from "@types/RootStack";
 
-import PageLayout from "../common/PageLayout";
-import Header from "../UI/header/Header";
-import CommonHeaderLeft from "../UI/header/HeaderLeft";
+import PageLayout from "@components/common/PageLayout";
+import Header from "@components/UI/header/Header";
+import CommonHeaderLeft from "@components/UI/header/HeaderLeft";
 
 const OpenSourcePageComponent = () => {
   const navigation = useNavigation<StackNavigation>();
@@ -31,9 +31,7 @@ const OpenSourcePageComponent = () => {
               <Text>Version. {item.version}</Text>
             </ListContent>
             <NavigationButton>
-              <NavigationIcon
-                source={require("../../assets/images/nextIcon.png")}
-              />
+              <NavigationIcon source={require("@assets/images/nextIcon.png")} />
             </NavigationButton>
           </ListWrapper>
         )}

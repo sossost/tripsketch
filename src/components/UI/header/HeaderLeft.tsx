@@ -13,7 +13,7 @@ const CommonHeaderLeft = ({ title }: CommonHeaderLeftProps) => {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        gap: 25,
+        gap: 15,
       }}
     >
       <BackButton />

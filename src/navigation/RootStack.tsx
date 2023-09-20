@@ -1,21 +1,22 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { LINK } from "../constants/link";
-
-import PostDetail from "../screens/PostDetail";
-import KakaoLoginPage from "../components/auth/KakaoLoginPage";
-import BottomTab from "./BottomTab";
-import SplashScreen from "../components/common/SplashScreen";
-import CreatePost from "../screens/CreatePost";
-import UserPage from "../screens/UserPage";
-import EditProfilePage from "../screens/EditProfilePage";
 import Toast from "react-native-toast-message";
-import SocialPage from "../screens/SocialPage";
-import UpdatePost from "../screens/UpdatePost";
-import SetupPage from "../screens/SetupPage";
-import OpenSourcePage from "../screens/OpenSourcePage";
-import OpenSourceDetalPage from "../screens/OpenSourceDetalPage";
+import { LINK } from "@constants/link";
+
+import BottomTab from "./BottomTab";
+import PostDetail from "@screens/PostDetail";
+import KakaoLoginPage from "@components/auth/KakaoLoginPage";
+import SplashScreen from "@components/common/SplashScreen";
+import CreatePost from "@screens/CreatePost";
+import UserPage from "@screens/UserPage";
+import EditProfilePage from "@screens/EditProfilePage";
+import SocialPage from "@screens/SocialPage";
+import UpdatePost from "@screens/UpdatePost";
+import SetupPage from "@screens/setup/SetupPage";
+import OpenSourcePage from "@screens/setup/OpenSourcePage";
+import OpenSourceDetalPage from "@screens/setup/OpenSourceDetalPage";
+import PushNotificationSetupPage from "@screens/setup/PushNotificationSetupPage";
 
 const Stack = createStackNavigator();
 
@@ -84,6 +85,13 @@ export default function RootStack() {
             <Stack.Screen
               name={LINK.OPENSOURCE_LICENCE_DETAIL_PAGE}
               component={OpenSourceDetalPage}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={LINK.PUSH_NOTIFICATION_SETUP_PAGE}
+              component={PushNotificationSetupPage}
               options={{
                 headerShown: false,
               }}

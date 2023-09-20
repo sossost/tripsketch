@@ -1,7 +1,7 @@
 import { useRoute, RouteProp } from "@react-navigation/native";
-import { RootStackParamList } from "../types/RootStack";
+import { RootStackParamList } from "@types/RootStack";
 
-import OpenSourceDetailPageComponent from "../components/policy/OpenSourceDetailPageComponent";
+import OpenSourceDetailPageComponent from "@components/setup/policy/OpenSourceDetailPageComponent";
 
 type OpenSourceLicenseRouteProp = RouteProp<
   RootStackParamList,

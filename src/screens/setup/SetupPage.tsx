@@ -1,4 +1,4 @@
-import SetupPageCompnent from "../components/user/setup/SetupPageCompnent";
+import SetupPageCompnent from "@components/setup/SetupPageCompnent";
 
 const SetupPage = () => {
   return <SetupPageCompnent />;

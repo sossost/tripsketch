@@ -1,11 +1,11 @@
 import { styled } from "styled-components/native";
-import { colors } from "../../constants/color";
 import { Text } from "react-native";
+import { colors } from "@constants/color";
 import { OpenSourceLicense } from "./OpenSourceLicense";
 
-import PageLayout from "../common/PageLayout";
-import Header from "../UI/header/Header";
-import CommonHeaderLeft from "../UI/header/HeaderLeft";
+import PageLayout from "@components/common/PageLayout";
+import Header from "@components/UI/header/Header";
+import CommonHeaderLeft from "@components/UI/header/HeaderLeft";
 
 interface OpenSourceLicense {
   libraryName: string;
