@@ -1,10 +1,10 @@
 import { Dimensions } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { styled } from "styled-components/native";
-import { colors } from "../../../constants/color";
-import { StackNavigation } from "../../../types/RootStack";
-import { Post } from "../../../types/Post";
-import { LINK } from "../../../constants/link";
+import { StackNavigation } from "@types/RootStack";
+import { Post } from "@types/Post";
+import { colors } from "@constants/color";
+import { LINK } from "@constants/link";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 import Flag from "react-native-flags";
 
@@ -27,9 +27,9 @@ const PostCard = ({ post }: PostCardProps) => {
   const isLiked = post.isLiked;
   const likeButtonImgPath =
     isLiked === true
-      ? require("../../../assets/images/isLikedIcon.png")
-      : require("../../../assets/images/isNotLikedIcon.png");
-  const commentButtonImgPath = require("../../../assets/comment.png");
+      ? require("@assets/images/isLikedIcon.png")
+      : require("@assets/images/isNotLikedIcon.png");
+  const commentButtonImgPath = require("@assets/images/commentIcon.png");
 
   const navigation = useNavigation<StackNavigation>();
 
@@ -224,43 +224,3 @@ const RowContainer = styled.View`
   flex-direction: row;
   align-items: center;
 `;
-
-const post = {
-  content: "가다다다두둗두ㅏㄷ",
-  createdAt: "2023-09-17T06:38:24.428",
-  deletedAt: null,
-  endAt: "2023-09-07",
-  hashtag: ["대한민국", "서울", "덕수궁", "세종대로"],
-  id: "65069ee046b63664e4ec26b0",
-  images: [
-    "https://ax6izwmsuv9c.objectstorage.ap-osaka-1.oci.customer-oci.com/n/ax6izwmsuv9c/b/tripsketch/o/trip-sketching/20230917063819aW1hZ2Uw.jpg",
-  ],
-  isHidden: false,
-  isLiked: false,
-  isPublic: true,
-  latitude: 37.56655399646471,
-  likes: 0,
-  location: "대한민국",
-  longitude: 126.97684999555348,
-  nickname: "ynnsuis",
-  startedAt: "2023-09-01",
-  title: "글작성입니자.",
-  updatedAt: null,
-  views: 0,
-};
-
-const trips = {
-  comments: 0,
-  country: "",
-  countryCode: "",
-  createdAt: "2023-09-16T09:54:58.772",
-  id: "65057b728363d91ae559c383",
-  image: null,
-  isLiked: true,
-  likes: 1,
-  nickname: "박짱구구",
-  profileImageUrl:
-    "https://ax6izwmsuv9c.objectstorage.ap-osaka-1.oci.customer-oci.com/n/ax6izwmsuv9c/b/tripsketch/o/profile.png",
-  title: "글 작성 - 0916 - 05",
-  views: 0,
-};

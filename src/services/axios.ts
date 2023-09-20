@@ -4,9 +4,14 @@ import { API_BASE_URL } from "@env";
 import {
   getDataFromSecureStore,
   setDataToSecureStore,
-} from "../utils/secureStore";
-import { STORE_KEY } from "../constants/store";
-import { errorLoging } from "../utils/errorHandler";
+} from "@utils/secureStore";
+import { STORE_KEY } from "@constants/store";
+import { errorLoging } from "@utils/errorHandler";
+
+// 대기열 배열
+let refreshSubscribers: ((accessToken: string) => void)[] = [];
+// 토큰 갱신 중인지 여부를 나타내는 변수
+let isRefreshing = false;
 
 /** axiosBase 인스턴스 생성 */
 export const axiosBase = axios.create({
@@ -70,6 +75,7 @@ export const tokenRefresh = async () => {
     await setDataToSecureStore(STORE_KEY.REFRESH_TOKEN, newRefreshToken);
 
     console.log("새로발급받은 리프레시토큰은 :" + newRefreshToken);
+    return newAccessToken;
   } catch (error) {
     errorLoging(error, "리프레시 토큰으로 액세스 토큰 갱신 에러는🤔");
   }
@@ -88,7 +94,6 @@ axiosBase.interceptors.request.use(
   }
 );
 
-let isTokenRefreshing = false;
 // 응답 인터셉터: 모든 응답 전에 실행되는 함수
 axiosBase.interceptors.response.use(
   (response) => {
@@ -103,30 +108,46 @@ axiosBase.interceptors.response.use(
     if (error.response?.status === 401) {
       console.log(error.response.config.url, "에서 401 에러 발생");
 
-      if (!isTokenRefreshing) {
-        isTokenRefreshing = true;
-        const isExpired = await isTokenExpired(); // 토큰이 만료되었는지 확인합니다.
-        if (isExpired) {
-          const refreshToken = await getDataFromSecureStore(
-            STORE_KEY.REFRESH_TOKEN
-          );
-          console.log("리프레시 토큰", refreshToken);
-          console.log("토큰이 만료되었습니다.");
-          await tokenRefresh();
+      // 토큰 갱신 중이 아니라면 토큰 갱신 시도
+      if (!isRefreshing) {
+        // 토큰이 만료되었는지 확인
+        const isExpired = await isTokenExpired();
+        if (!isExpired) return Promise.reject(error);
+        console.log("토큰이 만료되었습니다.");
 
-          isTokenRefreshing = false;
+        // 토큰 갱신 로직
+        try {
+          isRefreshing = true;
+
+          // 토큰 갱신 요청
+          const newAccessToken = await tokenRefresh();
+
+          // 토큰 갱신에 성공했다면 헤더에 새로운 액세스 토큰을 추가
+          axiosBase.defaults.headers.common[
+            "Authorization"
+          ] = `Bearer ${newAccessToken}`;
+
+          // 대기열 요청 재시도
+          refreshSubscribers.forEach((cb) => cb(newAccessToken));
+          refreshSubscribers = [];
+
+          // 현재 요청 재시도
+          const response = await axiosBase(error.config);
+          return response;
+        } catch (error) {
+          errorLoging(error, "토큰 갱신 에러는🤔");
+        } finally {
+          isRefreshing = false;
         }
-      } // 토큰이 만료되었다면 토큰을 갱신합니다.
-
-      const accessToken = await getAccessToken(); // 갱신된 토큰을 가져옵니다.
-
-      // 에러가 발생한 요청의 헤더를 갱신된 토큰으로 업데이트합니다.
-      error.config.headers = {
-        Authorization: `Bearer ${accessToken}`,
-      };
-
-      const response = await axios.request(error.config); // 갱신된 토큰으로 다시 요청을 보냅니다.
-      return response; // 요청 재시도 결과를 반환합니다.
+      } else {
+        // 토큰 갱신 중이라면 401 에러난 요청들 대기열에 추가
+        return new Promise((resolve) => {
+          refreshSubscribers.push((newAccessToken) => {
+            error.config.headers["Authorization"] = `Bearer ${newAccessToken}`;
+            resolve(axiosBase(error.config));
+          });
+        });
+      }
     }
     return Promise.reject(error); // 그 외의 에러는 해당 에러를 반환합니다.
   }

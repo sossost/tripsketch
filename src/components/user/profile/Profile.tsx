@@ -1,16 +1,13 @@
 import React from "react";
-import {
-  useGetCurrentUser,
-  useGetUserByNickname,
-} from "../../../hooks/useUserQuery";
-import { LINK } from "../../../constants/link";
+import { useGetCurrentUser, useGetUserByNickname } from "@hooks/useUserQuery";
+import { LINK } from "@constants/link";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigation } from "../../../types/RootStack";
-import { useSocialControllerInUserPage } from "../../../hooks/useFollowQuery";
+import { StackNavigation } from "@types/RootStack";
+import { useSocialControllerInUserPage } from "@hooks/useFollowQuery";
 import { styled } from "styled-components/native";
 
-import Link from "../../UI/Link";
-import Button from "../../UI/Button";
+import Link from "@components/UI/Link";
+import Button from "@components/UI/Button";
 
 type ProfileProps = {
   nickname: string;
@@ -27,7 +24,7 @@ export type RootStackParamList = {
  * @param nickname : 프로필 주인의 닉네임
  *
  * @author : 장윤수
- * @update : 2023-09-16, isFollowing 체크로직 변경
+ * @update : 2023-09-20,
  * @version 1.2.0,
  * @see None,
  */
@@ -148,7 +145,7 @@ const ProfileSocialWrapper = styled.View`
 
 const ProfileTextWrapper = styled.View`
   display: flex;
-  gap: 2px;
+  gap: 5px;
   padding-bottom: 8px;
 `;
 
@@ -159,7 +156,7 @@ const ProfileUserNameText = styled.Text`
 `;
 
 const ProfileIntroductionText = styled.Text`
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 400;
   color: ${(props) => props.theme.mainFont};
 `;
