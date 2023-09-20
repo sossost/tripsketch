@@ -1,9 +1,10 @@
 import { useCallback } from "react";
-
-import PostFlatList from "../post/PostFlatList";
-import { useGetPostsByTrendingQuery } from "../../hooks/usePostQuery";
 import { useQueryClient } from "@tanstack/react-query";
-import { QUERY_KEY } from "../../react-query/queryKey";
+import { useGetPostsByTrendingQuery } from "@hooks/usePostQuery";
+import { QUERY_KEY } from "@react-query/queryKey";
+
+import PostFlatList from "@components/post/PostFlatList";
+import BlueTitle from "@components/UI/BlueTitle";
 
 /**
  * @description : 메인화면에 보여지는 인기있는 포스트 리스트 컴포넌트
@@ -12,7 +13,7 @@ import { QUERY_KEY } from "../../react-query/queryKey";
  * @version 1.0.0,
  * @see None,
  */
-const TrendingPosts = () => {
+const TrendingPostsList = () => {
   const queryClient = useQueryClient();
   const { posts, hasNextPage, fetchNextPage } = useGetPostsByTrendingQuery();
 
@@ -31,8 +32,9 @@ const TrendingPosts = () => {
       posts={posts}
       handleEndReached={handleEndReached}
       handleRefresh={handleRefresh}
+      listHeaderComponent={<BlueTitle text="여행 스케치 둘러보기" />}
     />
   );
 };
 
-export default TrendingPosts;
+export default TrendingPostsList;
