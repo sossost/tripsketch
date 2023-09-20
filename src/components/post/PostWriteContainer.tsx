@@ -1,4 +1,4 @@
-import { Text, Image, Dimensions, Alert } from "react-native";
+import { Text, Image, Dimensions } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import styled from "styled-components/native";
 import { FontAwesome } from "@expo/vector-icons";
@@ -16,6 +16,7 @@ import Loading from "../UI/Loading";
 import { resetStateStorage } from "./utils/resetStateStorage";
 import PostCalender from "./components/write/PostCalendar";
 import PostSearchLocation from "./components/write/PostSearchLocation";
+import useDeleteAlert from "./hooks/useDeleteAlert";
 
 type Suggestion = {
   place_id: string;
@@ -123,7 +124,7 @@ const PostWriteContainer: React.FC<PostPageProps> = ({
     content: "",
     address: "",
   });
-  // address 입력 여부를 관리하는 상태 추가
+  // address 입력 여부를 관리하는 상태
   const [isAddressTouched, setIsAddressTouched] = useState(false);
 
   // 도시 검색 로딩 상태 저장
@@ -235,7 +236,6 @@ const PostWriteContainer: React.FC<PostPageProps> = ({
     setHashtagList(updatedList);
   };
 
-  // 230728
   /** 공개 설정 핸들러 */
   const publicToggleHandler = () => {
     setIsPublic(true);
@@ -330,20 +330,14 @@ const PostWriteContainer: React.FC<PostPageProps> = ({
   };
 
   const cancelPost = () => {
-    Alert.alert("알림", "작성을 취소하고 이전 페이지로 돌아가시겠습니까?", [
-      {
-        text: "계속 작성할래요",
-        style: "cancel",
-      },
-      {
-        text: "네!",
-        onPress: () => {
-          resetState();
-          navigation.goBack();
-        },
-      },
-    ]),
-      { cancelable: false };
+    const cancelAlertFunction = useDeleteAlert({
+      clearRequest: resetState,
+      backRequest: navigation,
+      alertTitle: "작성을 취소하고 이전 페이지로 돌아가시겠습니까?",
+      alertCancel: "계속 작성할래요.",
+      alertOk: "네!",
+    });
+    cancelAlertFunction();
   };
 
   const postTripData = {
@@ -359,8 +353,6 @@ const PostWriteContainer: React.FC<PostPageProps> = ({
     resetState: resetState,
     deletedImageUrls: deleteUpdateImage,
   };
-
-  //console.log(postTripData);
 
   const { submitPost, isLoading } = usePostTrip(postTripData);
   const { submitUpdatePost, isUpdateLoading } = useUpdatePost(postTripData);

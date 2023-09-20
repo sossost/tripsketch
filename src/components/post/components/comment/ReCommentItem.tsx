@@ -13,6 +13,7 @@ import { Entypo } from "@expo/vector-icons";
 import { useState } from "react";
 import CommentInput from "./CommentInput";
 import { User } from "../../../../types/user";
+import useDeleteAlert from "../../hooks/useDeleteAlert";
 
 type ReplyCommentProps = {
   recomment: Comment;
@@ -64,24 +65,37 @@ const ReCommentItem = ({
     isUpdateInput ? setIsUpdateInput(false) : setIsUpdateInput(true);
   };
 
-  // 댓글 삭제 핸들러
+  // 대댓글 삭제 핸들러
+  // const handleDelete = () => {
+  //   if (deleteReplyComment) {
+  //     Alert.alert("알림", "정말 삭제하시겠습니까?", [
+  //       {
+  //         text: "괜찮습니다.",
+  //         style: "cancel",
+  //       },
+  //       {
+  //         text: "삭제",
+  //         onPress: () => {
+  //           deleteReplyComment(recomment.id, recomment.parentId);
+  //         },
+  //       },
+  //     ]),
+  //       { cancelable: false };
+  //     setIsButton(false);
+  //   }
+  // };
+
   const handleDelete = () => {
-    if (deleteReplyComment) {
-      Alert.alert("알림", "정말 삭제하시겠습니까?", [
-        {
-          text: "괜찮습니다.",
-          style: "cancel",
-        },
-        {
-          text: "삭제",
-          onPress: () => {
-            deleteReplyComment(recomment.id, recomment.parentId);
-          },
-        },
-      ]),
-        { cancelable: false };
-      setIsButton(false);
-    }
+    const deleteAlertFunction = useDeleteAlert({
+      id: recomment.id,
+      commentParentId: recomment.parentId || "",
+      deleteParentIdRequest: deleteReplyComment,
+      alertTitle: "정말 삭제하시겠습니까?",
+      alertCancel: "괜찮습니다.",
+      alertOk: "삭제",
+    });
+    deleteAlertFunction();
+    setIsButton(false);
   };
 
   return (
