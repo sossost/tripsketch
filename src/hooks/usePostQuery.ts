@@ -57,14 +57,13 @@ export const useGetPostsByNickname = (nickname: string, category: string) => {
       enabled: !!nickname,
       getNextPageParam: (lastPage: TripsData | undefined) => {
         if (!lastPage) return undefined;
-        if (lastPage.totalPages === 0) return undefined;
+        if (lastPage.totalPages === 1) return undefined;
         if (lastPage.totalPages === lastPage.currentPage) return undefined;
 
         return lastPage.currentPage + 1;
       },
     }
   );
-
   const posts = data?.pages.flatMap((page) => page!.trips) || [];
 
   return { posts, fetchNextPage, hasNextPage, postsIsLoading, postsIsError };

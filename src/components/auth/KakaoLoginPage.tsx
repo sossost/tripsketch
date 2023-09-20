@@ -13,9 +13,6 @@ import { errorLoging } from "../../utils/errorHandler";
 import { StackNavigation } from "../../types/RootStack";
 import { LINK } from "../../constants/link";
 
-import ErrorBoundary from "react-native-error-boundary";
-import ErrorFallback from "../UI/ErrorFallback";
-
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 const OAUTH_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${KAKAO_CLIENT_ID}&redirect_uri=https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao/callback&response_type=code`;
 
@@ -70,21 +67,19 @@ const KaKaoLogin = () => {
 
   return (
     <View style={Styles.container}>
-      <ErrorBoundary FallbackComponent={ErrorFallback}>
-        <WebView
-          style={{ flex: 1 }}
-          originWhitelist={["*"]}
-          scalesPageToFit={false}
-          source={{
-            uri: OAUTH_URL,
-          }}
-          injectedJavaScript={INJECTED_JAVASCRIPT}
-          javaScriptEnabled
-          onMessage={(event) => {
-            KakaoLoginWebView(event.nativeEvent["url"]);
-          }}
-        />
-      </ErrorBoundary>
+      <WebView
+        style={{ flex: 1 }}
+        originWhitelist={["*"]}
+        scalesPageToFit={false}
+        source={{
+          uri: OAUTH_URL,
+        }}
+        injectedJavaScript={INJECTED_JAVASCRIPT}
+        javaScriptEnabled
+        onMessage={(event) => {
+          KakaoLoginWebView(event.nativeEvent["url"]);
+        }}
+      />
     </View>
   );
 };

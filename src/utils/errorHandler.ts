@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+import { ERROR_MESSAGE } from "../constants/message";
 import { errorToastMessage } from "./toastMessage";
 
 type ErrorWithMessage = {
@@ -20,6 +22,19 @@ export function getErrorMessage(error: unknown) {
   if (isErrorWithMessage(error)) return error.message;
   return String(error);
 }
+
+export const isInstanceofAPIError = (error: unknown) => {
+  return error instanceof AxiosError;
+};
+
+export const getStatusCodeFromAPIError = (error: unknown) => {
+  if (!isInstanceofAPIError(error)) return null;
+  const errorMessage = getErrorMessage(error);
+  const statusCode =
+    errorMessage.match(/\d+/g)?.join() &&
+    Number(errorMessage.match(/\d+/g)?.join());
+  return statusCode;
+};
 
 /**
  * @description : 에러를 받아서 콘솔로그에 띄우는 함수

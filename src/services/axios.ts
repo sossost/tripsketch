@@ -68,6 +68,8 @@ export const tokenRefresh = async () => {
     // 새로운 리프레시 토큰 저장
     const newRefreshToken = response.headers.refreshtoken;
     await setDataToSecureStore(STORE_KEY.REFRESH_TOKEN, newRefreshToken);
+
+    console.log("새로발급받은 리프레시토큰은 :" + newRefreshToken);
   } catch (error) {
     errorLoging(error, "리프레시 토큰으로 액세스 토큰 갱신 에러는🤔");
   }
@@ -86,6 +88,7 @@ axiosBase.interceptors.request.use(
   }
 );
 
+let isTokenRefreshing = false;
 // 응답 인터셉터: 모든 응답 전에 실행되는 함수
 axiosBase.interceptors.response.use(
   (response) => {
@@ -98,15 +101,21 @@ axiosBase.interceptors.response.use(
   async (error) => {
     // 응답 상태 코드가 401 (Unauthorized)인 경우
     if (error.response?.status === 401) {
-      console.log("401 에러 발생");
-      const isExpired = await isTokenExpired(); // 토큰이 만료되었는지 확인합니다.
-      if (isExpired) {
-        const refreshToken = await getDataFromSecureStore(
-          STORE_KEY.REFRESH_TOKEN
-        );
-        console.log("리프레시 토큰", refreshToken);
-        console.log("토큰이 만료되었습니다.");
-        await tokenRefresh();
+      console.log(error.response.config.url, "에서 401 에러 발생");
+
+      if (!isTokenRefreshing) {
+        isTokenRefreshing = true;
+        const isExpired = await isTokenExpired(); // 토큰이 만료되었는지 확인합니다.
+        if (isExpired) {
+          const refreshToken = await getDataFromSecureStore(
+            STORE_KEY.REFRESH_TOKEN
+          );
+          console.log("리프레시 토큰", refreshToken);
+          console.log("토큰이 만료되었습니다.");
+          await tokenRefresh();
+
+          isTokenRefreshing = false;
+        }
       } // 토큰이 만료되었다면 토큰을 갱신합니다.
 
       const accessToken = await getAccessToken(); // 갱신된 토큰을 가져옵니다.

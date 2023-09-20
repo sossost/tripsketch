@@ -73,6 +73,6 @@ const NavigationButton = styled.View`
 `;
 
 const NavigationIcon = styled.Image`
-  width: 12px;
-  height: 20px;
+  width: 10px;
+  height: 18px;
 `;
