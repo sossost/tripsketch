@@ -20,7 +20,6 @@ const LikesAndCommentText = ({
   postData,
 }: LikesAndCommentTextProps) => {
   const { data: userData } = useGetCurrentUser();
-
   const checkLikeUser = postData?.isLiked;
   const [likes, setLikes] = useState(false);
   const [isLocation, setIsLocation] = useState<boolean>(false);
@@ -63,12 +62,20 @@ const LikesAndCommentText = ({
       </View>
       <View>
         {isLocation ? (
-          <View>
-            <PostViewMap
-              latitude={postData.latitude}
-              longitude={postData.longitude}
-            />
-          </View>
+          postData.latitude !== null ? (
+            <View>
+              <PostViewMap
+                latitude={postData.latitude}
+                longitude={postData.longitude}
+              />
+            </View>
+          ) : (
+            <Text
+              style={{ textAlign: "right", marginRight: 15, marginBottom: 10 }}
+            >
+              위치 데이터가 존재하지 않습니다.
+            </Text>
+          )
         ) : null}
       </View>
       <View style={styles.line}>
