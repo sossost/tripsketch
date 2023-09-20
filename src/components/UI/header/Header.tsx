@@ -1,14 +1,15 @@
+import { ViewProps } from "react-native";
 import { styled } from "styled-components/native";
 
-type HeaderProps = {
+interface HeaderProps extends ViewProps {
   left?: React.ReactNode;
   center?: React.ReactNode;
   right?: React.ReactNode;
-};
+}
 
-const Header = ({ left, center, right }: HeaderProps) => {
+const Header = ({ left, center, right, ...props }: HeaderProps) => {
   return (
-    <Layout>
+    <Layout {...props}>
       <LeftWrapper>{left}</LeftWrapper>
       <CenterWrapper>{center}</CenterWrapper>
       <RightWrapper>{right}</RightWrapper>

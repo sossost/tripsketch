@@ -25,7 +25,7 @@ const TextWrapper = styled.View`
 `;
 
 const StyledText = styled.Text`
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 500;
   color: ${colors.primary};
 `;

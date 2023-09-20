@@ -1,9 +1,9 @@
-import { FlatList, RefreshControl, View } from "react-native";
-import { Post } from "../../types/Post";
+import { FlatList, RefreshControl } from "react-native";
+import { Post } from "@types/Post";
 import { ReactElement } from "react";
 
-import PostCard from "./card/PostCard";
-import NoneData from "../common/NoneData";
+import PostCard from "@components/post/card/PostCard";
+import NoneData from "@components/common/NoneData";
 
 interface DiaryListProps {
   posts: Post[];

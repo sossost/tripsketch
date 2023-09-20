@@ -1,6 +1,7 @@
+import { ViewProps } from "react-native";
 import { styled } from "styled-components/native";
 
-interface PageLayoutProps {
+interface PageLayoutProps extends ViewProps {
   children: React.ReactNode;
 }
 
