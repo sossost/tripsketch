@@ -4,17 +4,34 @@ type resetStateProps = {
   setLocationName: (value: string) => void;
   setShowModal: (value: boolean) => void;
   setMarkedDates: (value: Record<string, any>) => void;
-  setSelectedDates: (value: any[]) => void;
+  setSelectedDates: (value: string[]) => void;
   setStartDate: (value: string | null) => void;
   setEndDate: (value: string | null) => void;
   setImage: (value: string[]) => void;
   setTitle: (value: string) => void;
   setContent: (value: string) => void;
   setHashtag: (value: string) => void;
-  setHashtagList: (value: any[]) => void;
+  setHashtagList: (value: string[]) => void;
   setIsPublic: (value: boolean) => void;
-  setAddress: (value: any) => void;
-  setRegion: (value: any) => void;
+  setAddress: (value: {
+    countryCode: string;
+    address: string;
+    municipality: string;
+    name: string;
+    country: string;
+    city: string;
+    town: string;
+    road: string;
+    display_name: string;
+    latitude: number;
+    longitude: number;
+  }) => void;
+  setRegion: (value: {
+    latitude: number;
+    longitude: number;
+    latitudeDelta: number;
+    longitudeDelta: number;
+  }) => void;
   setIsAddressTouched: (value: boolean) => void;
   setSuggestions: (value: any) => void;
 };

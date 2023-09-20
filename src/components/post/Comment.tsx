@@ -13,9 +13,13 @@ import {
   getUpdateReplyComment,
   getDeleteComment,
   getDeleteReplyComment,
+  getPostCommentGuestListByTripId,
+  getPostCommentListByTripId,
 } from "../../hooks/useCommentQuery";
 import { GetPost } from "../../types/Post";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
+import { useEffect, useState } from "react";
+import Loading from "@components/UI/Loading";
 
 type CommentProps = {
   postId: string;
@@ -27,6 +31,32 @@ const Comment = ({ postId, commentData }: CommentProps) => {
   const createCommentMutation = getCreateComment();
   const queryClient = useQueryClient();
 
+  // 게시글 업데이트 시 Comment api 요청
+  const [userCommentData, setUserCommentData] = useState(commentData);
+
+  const userDataPresent = userData ? true : false;
+
+  // 회원 접근 시 사용하는 Comment 데이터
+  const { commentUserData, isLoading: isUserDataLoading } =
+    getPostCommentListByTripId(postId);
+
+  // 게스트로 접근 시 사용하는 Comment 데이터
+  const { commentGuestData, isLoading: isGuestDataLoading } =
+    getPostCommentGuestListByTripId(postId);
+
+  // CommentData 로딩 시
+  if (
+    (userDataPresent && isUserDataLoading) ||
+    (!userDataPresent && isGuestDataLoading)
+  ) {
+    return <Loading />;
+  }
+
+  // userData에 따라 적절한 commentData를 선택
+  const selectedCommentData = userDataPresent
+    ? commentUserData
+    : commentGuestData;
+
   // 게시글 댓글 생성하기
   const handleSubmit = async (comment: string) => {
     try {
@@ -36,8 +66,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
       };
       await createCommentMutation.mutateAsync(commentData);
       Toast.show({ type: "success", text1: "댓글 생성이 완료되었습니다." });
+      setUserCommentData(selectedCommentData);
       queryClient.invalidateQueries(["commentTripId"]);
-      queryClient.invalidateQueries(["postAndComment"]);
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 생성을 실패하였습니다." });
@@ -51,6 +81,7 @@ const Comment = ({ postId, commentData }: CommentProps) => {
     parentId: string,
     replyToNickname: string
   ) => {
+    setUserCommentData(selectedCommentData);
     try {
       const replyCommentData = {
         tripId: postId,
@@ -60,8 +91,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
       };
       await createReplyCommentMutation.mutateAsync(replyCommentData);
       Toast.show({ type: "success", text1: "댓글 생성이 완료되었습니다." });
+      setUserCommentData(selectedCommentData);
       queryClient.invalidateQueries(["commentTripId"]);
-      queryClient.invalidateQueries(["postAndComment"]);
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 생성을 실패하였습니다." });
@@ -73,8 +104,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
   const likeComment = async (likeCommentId: string, isLikeStatus: boolean) => {
     try {
       await isLikeCommentMutation.mutateAsync(likeCommentId);
+      setUserCommentData(selectedCommentData);
       queryClient.invalidateQueries(["commentTripId"]);
-      queryClient.invalidateQueries(["postAndComment"]);
       if (isLikeStatus) {
         Toast.show({ type: "success", text1: "좋아요가 해제되었습니다." });
       } else {
@@ -98,8 +129,9 @@ const Comment = ({ postId, commentData }: CommentProps) => {
         parentId: parentId,
       };
       await isLikeReplyCommentMutation.mutateAsync(replyCommentData);
+      setUserCommentData(selectedCommentData);
       queryClient.invalidateQueries(["commentTripId"]);
-      queryClient.invalidateQueries(["postAndComment"]);
+
       if (isLikeStatus) {
         Toast.show({ type: "success", text1: "좋아요가 해제되었습니다." });
       } else {
@@ -120,8 +152,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
       };
       await updateCommentMutation.mutateAsync(updateData);
       Toast.show({ type: "success", text1: "댓글 수정 완료!" });
+      setUserCommentData(selectedCommentData);
       queryClient.invalidateQueries(["commentTripId"]);
-      queryClient.invalidateQueries(["postAndComment"]);
     } catch (error) {
       console.error("오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 수정 실패!" });
@@ -143,8 +175,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
       };
       await updateReplyCommentMutation.mutateAsync(updateReplyData);
       Toast.show({ type: "success", text1: "댓글 수정 완료!" });
+      setUserCommentData(selectedCommentData);
       queryClient.invalidateQueries(["commentTripId"]);
-      queryClient.invalidateQueries(["postAndComment"]);
     } catch (error) {
       console.error("오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 수정 실패!" });
@@ -157,8 +189,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
     try {
       await deleteCommentMutation.mutateAsync(id);
       Toast.show({ type: "success", text1: "댓글 삭제 완료!" });
+      setUserCommentData(selectedCommentData);
       queryClient.invalidateQueries(["commentTripId"]);
-      queryClient.invalidateQueries(["postAndComment"]);
     } catch (error) {
       console.error("오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 삭제 실패!" });
@@ -175,19 +207,22 @@ const Comment = ({ postId, commentData }: CommentProps) => {
       };
       await deleteReplyCommentMutation.mutateAsync(deleteData);
       Toast.show({ type: "success", text1: "댓글 삭제 완료!" });
+      setUserCommentData(selectedCommentData);
       queryClient.invalidateQueries(["commentTripId"]);
-      queryClient.invalidateQueries(["postAndComment"]);
     } catch (error) {
       console.error("오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 삭제 실패!" });
     }
   };
 
+  useEffect(() => {
+    setUserCommentData(selectedCommentData);
+  }, [selectedCommentData]);
+
   return (
     <View style={styles.container}>
       <CommentList
         sort={"all"}
-        postId={postId}
         onReplySubmit={handleReplyCommentSubmit}
         likeComment={likeComment}
         likeReplyComment={likeReplyComment}
@@ -195,7 +230,7 @@ const Comment = ({ postId, commentData }: CommentProps) => {
         updateReplyComment={updateReplyComment}
         deleteComment={deleteComment}
         deleteReplyComment={deleteReplyComment}
-        commentData={commentData}
+        commentData={userCommentData}
       />
       {userData ? (
         <View style={CommonStyles.appContainer}>

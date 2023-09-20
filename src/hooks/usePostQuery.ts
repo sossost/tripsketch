@@ -7,7 +7,6 @@ import {
   getUpdatePost,
   createPost,
   postLike,
-  postUnlike,
   postUpdate,
   deletePostById,
   getSubscribedUsersPosts,
@@ -233,10 +232,6 @@ export const useCreatePost = () => {
 
 export const usePostLike = () => {
   return useMutation(postLike);
-};
-
-export const usePostUnlike = () => {
-  return useMutation(postUnlike);
 };
 
 export const usePostUpdate = () => {

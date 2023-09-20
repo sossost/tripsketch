@@ -49,16 +49,16 @@ interface RangeKeyDict {
 }
 
 interface CalenderProps {
-  showModal: any;
-  setShowModal: any;
-  markedDates: any;
-  setMarkedDates: any;
-  selectedDates: any;
-  setSelectedDates: any;
-  startDate: any;
-  setStartDate: any;
-  endDate: any;
-  setEndDate: any;
+  showModal: boolean;
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  markedDates: RangeKeyDict;
+  setMarkedDates: React.Dispatch<React.SetStateAction<RangeKeyDict>>;
+  selectedDates: string[];
+  setSelectedDates: React.Dispatch<React.SetStateAction<string[]>>;
+  startDate: string | null;
+  setStartDate: React.Dispatch<React.SetStateAction<string | null>>;
+  endDate: string | null;
+  setEndDate: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const PostCalender = ({

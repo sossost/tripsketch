@@ -15,6 +15,7 @@ import { Entypo } from "@expo/vector-icons";
 import { useGetCurrentUser } from "../../../../hooks/useUserQuery";
 import ReCommentItem from "./ReCommentItem";
 import CommentInput from "./CommentInput";
+import useDeleteAlert from "../../hooks/useDeleteAlert";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -94,22 +95,15 @@ const CommentItem = ({
 
   // 댓글 삭제 핸들러
   const handleDelete = () => {
-    if (deleteComment) {
-      Alert.alert("알림", "정말 삭제하시겠습니까?", [
-        {
-          text: "괜찮습니다.",
-          style: "cancel",
-        },
-        {
-          text: "삭제",
-          onPress: () => {
-            deleteComment(comment.id);
-          },
-        },
-      ]),
-        { cancelable: false };
-      setIsButton(false);
-    }
+    const deleteAlertFunction = useDeleteAlert({
+      id: comment.id,
+      deleteRequest: deleteComment,
+      alertTitle: "정말 삭제하시겠습니까?",
+      alertCancel: "괜찮습니다.",
+      alertOk: "삭제",
+    });
+    deleteAlertFunction();
+    setIsButton(false);
   };
 
   return (
