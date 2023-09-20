@@ -23,7 +23,7 @@ interface NotificationProps {
  * @description : 소셜 아이템 컴포넌트
  * @author : 장윤수
  * @update : 2023-09-19,
- * @version 1.0.2, 닉네임 분리 로직 수정
+ * @version 1.0.3, 알림 내용 부분 1줄 넘어가면 ... 처리
  * @see None,
  */
 const NotificationItem = ({ notification }: NotificationProps) => {
@@ -42,10 +42,11 @@ const NotificationItem = ({ notification }: NotificationProps) => {
     tripId,
   } = notification;
 
+  // 상대 시간 변환
   const timeAgo = useTimeAgo(createdAt);
 
+  // 알림 내용에서 닉네임 뒤에 오는 내용만 추출
   const basisIndex = body.indexOf("님");
-
   const seperatedBody = body.slice(basisIndex + 1);
 
   /** 알림 클릭 핸들러 */
@@ -87,7 +88,9 @@ const NotificationItem = ({ notification }: NotificationProps) => {
                 <HighLight>{nickname}</HighLight>님{seperatedBody}
               </NotDescript>
 
-              <NotContent>{content}</NotContent>
+              <NotContent numberOfLines={1} ellipsizeMode="tail">
+                {content}
+              </NotContent>
 
               <CreateNotification>
                 <CreateDate>{timeAgo}</CreateDate>
@@ -147,7 +150,9 @@ const NotDescript = styled.Text`
 
 const NotContent = styled.Text`
   font-size: 14px;
-  color: #888;
+  color: ${colors.subFont};
+  font-weight: 400;
+  width: 80%;
 `;
 
 const HighLight = styled.Text`
