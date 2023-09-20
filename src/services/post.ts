@@ -1,12 +1,11 @@
-import { Post, GetPost, PostUpdate } from "../types/Post";
-import { CreatePost } from "../types/Post";
-import { API_PATH } from "../constants/path";
-import axiosBase from "./axios";
-import { PostsData } from "../hooks/usePostQuery";
-import { getDataFromSecureStore } from "../utils/secureStore";
-import { STORE_KEY } from "../constants/store";
-import { errorLoging } from "../utils/errorHandler";
-import { ERROR_MESSAGE } from "../constants/message";
+import axiosBase from "@services/axios";
+import { STORE_KEY } from "@constants/store";
+import { API_PATH } from "@constants/path";
+import { ERROR_MESSAGE } from "@constants/message";
+import { errorLoging } from "@utils/errorHandler";
+import { getDataFromSecureStore } from "@utils/secureStore";
+import { Post, GetPost, PostUpdate } from "@types/Post";
+import { CreatePost } from "@types/Post";
 
 /**
  * @description : 닉네임과 카테고리로 해당 유저의 카테고리에 해당하는 게시글 리스트를 요청하는 함수
@@ -29,12 +28,12 @@ export const getPostsByNickname = async (
 ) => {
   try {
     if (category === "전체보기") {
-      const response = await axiosBase.get<PostsData>(
+      const response = await axiosBase.get(
         `trip/nickname/trips-pagination/categories?nickname=${nickname}&page=${page}&pageSize=${size}`
       );
       return response.data;
     } else {
-      const response = await axiosBase.get<PostsData>(
+      const response = await axiosBase.get(
         `trip/nickname/trips-pagination/country/${category}?nickname=${nickname}&page=${page}&size=${size}`
       );
       return response.data;
@@ -112,7 +111,7 @@ export const getSortedPostsBySearchKeyword = async (
   };
   try {
     const response = await axiosBase.get(
-      `trip/guest/search?keyword=${keward}&page=${page}&size=${size}&sortType=${sortingType[sorting]}`
+      `trip/guest/search?keyword=${keward}&page=${page}&size=${size}&sort_type=${sortingType[sorting]}`
     );
     return response.data;
   } catch (error: unknown) {
