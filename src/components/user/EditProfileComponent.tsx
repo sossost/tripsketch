@@ -1,13 +1,13 @@
 import { styled } from "styled-components/native";
 import { useState } from "react";
-import { useGetCurrentUser, useUpdateRrofile } from "../../hooks/useUserQuery";
+import { useGetCurrentUser, useUpdateRrofile } from "@hooks/useUserQuery";
 
-import InputBottomLine from "../UI/InputBottomLine";
-import ProfileImageManage from "./profile/ProfileImageManage";
-import Header from "../UI/header/Header";
-import CommonHeaderLeft from "../UI/header/HeaderLeft";
-import ConfirmButton from "../UI/header/ConfirmButton";
-import PageLayout from "../common/PageLayout";
+import InputBottomLine from "@components/UI/InputBottomLine";
+import ProfileImageManage from "@components/user/profile/ProfileImageManage";
+import Header from "@components/UI/header/Header";
+import CommonHeaderLeft from "@components/UI/header/HeaderLeft";
+import ConfirmButton from "@components/UI/header/ConfirmButton";
+import PageLayout from "@components/common/PageLayout";
 
 const EditProfileComponent = () => {
   // 현재 로그인한 유저 정보를 가져옴
@@ -25,6 +25,16 @@ const EditProfileComponent = () => {
     newIntroduction
   );
 
+  const onChangeNickname = (text: string) => {
+    if (text.length > 12) return;
+    SetNewNickname(text);
+  };
+
+  const onChangeIntroduction = (text: string) => {
+    if (text.length > 30) return;
+    setNewIntroduction(text);
+  };
+
   return (
     <PageLayout>
       <Header
@@ -39,13 +49,13 @@ const EditProfileComponent = () => {
         <InputBottomLine
           label="닉네임"
           text={newNickname}
-          setText={SetNewNickname}
+          onChangeText={onChangeNickname}
           textLength={12}
         />
         <InputBottomLine
           label="소개"
           text={newIntroduction}
-          setText={setNewIntroduction}
+          onChangeText={onChangeIntroduction}
           textLength={30}
         />
       </InputWrapper>
