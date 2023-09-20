@@ -51,11 +51,16 @@ const MainPageComponent = () => {
   );
 
   return (
-    <MainLayout refreshControl={refreshContral}>
+    <MainLayout>
       <FlatList
         data={null}
         renderItem={null}
         showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingBottom: 50,
+          paddingHorizontal: 2,
+        }}
+        refreshControl={refreshContral}
         ListHeaderComponent={
           <>
             <Header
@@ -69,10 +74,6 @@ const MainPageComponent = () => {
             </AsyncBoundary>
           </>
         }
-        contentContainerStyle={{
-          paddingBottom: 50,
-          paddingHorizontal: 2,
-        }}
       />
     </MainLayout>
   );
@@ -80,7 +81,7 @@ const MainPageComponent = () => {
 
 export default MainPageComponent;
 
-const MainLayout = styled.ScrollView`
+const MainLayout = styled.View`
   display: flex;
   flex: 1;
   background-color: #fff;
