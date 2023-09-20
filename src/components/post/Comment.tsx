@@ -19,43 +19,38 @@ import {
 import { GetPost } from "../../types/Post";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import { useEffect, useState } from "react";
-import Loading from "@components/UI/Loading";
 
 type CommentProps = {
   postId: string;
   commentData: GetPost["tripAndCommentPairDataByTripId"]["second"];
+  scrollBottom: React.MouseEventHandler<HTMLButtonElement>;
+  handleIconPress?: (index: number) => void;
 };
 
-const Comment = ({ postId, commentData }: CommentProps) => {
+const Comment = ({
+  postId,
+  commentData,
+  scrollBottom,
+  handleIconPress,
+}: CommentProps) => {
   const { data: userData } = useGetCurrentUser();
   const createCommentMutation = getCreateComment();
   const queryClient = useQueryClient();
 
   // 게시글 업데이트 시 Comment api 요청
   const [userCommentData, setUserCommentData] = useState(commentData);
+  const [isCheckUpdate, setIsCheckUpdate] = useState(false);
 
-  const userDataPresent = userData ? true : false;
-
-  // 회원 접근 시 사용하는 Comment 데이터
-  const { commentUserData, isLoading: isUserDataLoading } =
-    getPostCommentListByTripId(postId);
-
-  // 게스트로 접근 시 사용하는 Comment 데이터
-  const { commentGuestData, isLoading: isGuestDataLoading } =
-    getPostCommentGuestListByTripId(postId);
-
-  // CommentData 로딩 시
-  if (
-    (userDataPresent && isUserDataLoading) ||
-    (!userDataPresent && isGuestDataLoading)
-  ) {
-    return <Loading />;
+  let commentUserData: GetPost["tripAndCommentPairDataByTripId"]["second"];
+  if (isCheckUpdate && userData) {
+    // 회원 접근 시 사용하는 Comment 데이터
+    const commentResult = getPostCommentListByTripId(postId);
+    commentUserData = commentResult.commentUserData;
+  } else {
+    // 게스트로 접근 시 사용하는 Comment 데이터
+    const commentResult = getPostCommentGuestListByTripId(postId);
+    commentUserData = commentResult.commentGuestData;
   }
-
-  // userData에 따라 적절한 commentData를 선택
-  const selectedCommentData = userDataPresent
-    ? commentUserData
-    : commentGuestData;
 
   // 게시글 댓글 생성하기
   const handleSubmit = async (comment: string) => {
@@ -66,7 +61,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
       };
       await createCommentMutation.mutateAsync(commentData);
       Toast.show({ type: "success", text1: "댓글 생성이 완료되었습니다." });
-      setUserCommentData(selectedCommentData);
+      setUserCommentData(commentUserData);
+      setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
@@ -81,7 +77,6 @@ const Comment = ({ postId, commentData }: CommentProps) => {
     parentId: string,
     replyToNickname: string
   ) => {
-    setUserCommentData(selectedCommentData);
     try {
       const replyCommentData = {
         tripId: postId,
@@ -91,7 +86,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
       };
       await createReplyCommentMutation.mutateAsync(replyCommentData);
       Toast.show({ type: "success", text1: "댓글 생성이 완료되었습니다." });
-      setUserCommentData(selectedCommentData);
+      setUserCommentData(commentUserData);
+      setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
@@ -104,7 +100,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
   const likeComment = async (likeCommentId: string, isLikeStatus: boolean) => {
     try {
       await isLikeCommentMutation.mutateAsync(likeCommentId);
-      setUserCommentData(selectedCommentData);
+      setUserCommentData(commentUserData);
+      setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
       if (isLikeStatus) {
         Toast.show({ type: "success", text1: "좋아요가 해제되었습니다." });
@@ -129,7 +126,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
         parentId: parentId,
       };
       await isLikeReplyCommentMutation.mutateAsync(replyCommentData);
-      setUserCommentData(selectedCommentData);
+      setUserCommentData(commentUserData);
+      setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
 
       if (isLikeStatus) {
@@ -152,7 +150,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
       };
       await updateCommentMutation.mutateAsync(updateData);
       Toast.show({ type: "success", text1: "댓글 수정 완료!" });
-      setUserCommentData(selectedCommentData);
+      setUserCommentData(commentUserData);
+      setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
     } catch (error) {
       console.error("오류 발생:", error);
@@ -175,7 +174,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
       };
       await updateReplyCommentMutation.mutateAsync(updateReplyData);
       Toast.show({ type: "success", text1: "댓글 수정 완료!" });
-      setUserCommentData(selectedCommentData);
+      setUserCommentData(commentUserData);
+      setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
     } catch (error) {
       console.error("오류 발생:", error);
@@ -189,7 +189,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
     try {
       await deleteCommentMutation.mutateAsync(id);
       Toast.show({ type: "success", text1: "댓글 삭제 완료!" });
-      setUserCommentData(selectedCommentData);
+      setUserCommentData(commentUserData);
+      setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
     } catch (error) {
       console.error("오류 발생:", error);
@@ -207,7 +208,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
       };
       await deleteReplyCommentMutation.mutateAsync(deleteData);
       Toast.show({ type: "success", text1: "댓글 삭제 완료!" });
-      setUserCommentData(selectedCommentData);
+      setUserCommentData(commentUserData);
+      setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
     } catch (error) {
       console.error("오류 발생:", error);
@@ -216,8 +218,8 @@ const Comment = ({ postId, commentData }: CommentProps) => {
   };
 
   useEffect(() => {
-    setUserCommentData(selectedCommentData);
-  }, [selectedCommentData]);
+    setUserCommentData(commentUserData);
+  }, [commentUserData]);
 
   return (
     <View style={styles.container}>
@@ -234,7 +236,11 @@ const Comment = ({ postId, commentData }: CommentProps) => {
       />
       {userData ? (
         <View style={CommonStyles.appContainer}>
-          <CommentInput onSubmit={handleSubmit} />
+          <CommentInput
+            onSubmit={handleSubmit}
+            scrollBottom={scrollBottom}
+            handleIconPress={handleIconPress}
+          />
         </View>
       ) : null}
     </View>

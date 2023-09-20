@@ -40,6 +40,7 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
   const [sheetIndex, setSheetIndex] = useState(0);
 
   const overlayOpacity = useRef(new Animated.Value(0)).current;
+  const bottomSheetScrollViewRef: any = useRef(null);
   const handleSheetChange = useCallback((index: number) => {
     setSheetIndex(index);
     Animated.timing(overlayOpacity, {
@@ -61,6 +62,13 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
   if (postAndCommentData?.tripAndCommentPairDataByTripId.first.isHidden) {
     <DeletePostView />;
   }
+
+  // input 누르면 scroll 하단으로 이동
+  const scrollToBottom = () => {
+    if (bottomSheetScrollViewRef.current) {
+      bottomSheetScrollViewRef.current.scrollToEnd();
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -99,10 +107,15 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
         onChange={handleSheetChange}
         style={styles.sheet}
       >
-        <BottomSheetScrollView contentContainerStyle={styles.contentContainer}>
+        <BottomSheetScrollView
+          ref={bottomSheetScrollViewRef}
+          contentContainerStyle={styles.contentContainer}
+        >
           {postAndCommentData && (
             <Comment
               postId={postId}
+              scrollBottom={scrollToBottom}
+              handleIconPress={(index) => handleSnapPress(index)}
               commentData={
                 postAndCommentData.tripAndCommentPairDataByTripId.second
               }

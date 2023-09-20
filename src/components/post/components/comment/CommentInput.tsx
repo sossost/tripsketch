@@ -21,10 +21,12 @@ type CommentInputProps = {
     parentId: string,
     content: string
   ) => void;
+  scrollBottom?: React.MouseEventHandler<HTMLButtonElement>;
   commentId?: string;
   commentNickname?: string;
   updateId?: string;
   parentReplyCommentId?: string;
+  handleIconPress?: (index: number) => void;
 };
 
 const CommentInput = ({
@@ -32,10 +34,12 @@ const CommentInput = ({
   onReplySubmit,
   updateComment,
   updateReplyComment,
+  scrollBottom,
   commentId,
   commentNickname,
   updateId,
   parentReplyCommentId,
+  handleIconPress,
 }: CommentInputProps) => {
   const [comment, setComment] = useState("");
   const parentId = commentId ? commentId : "";
@@ -66,6 +70,10 @@ const CommentInput = ({
   return (
     <SafeAreaView style={styles.container}>
       <TextInput
+        onFocus={() => {
+          scrollBottom;
+          handleIconPress && handleIconPress(2);
+        }}
         style={styles.input}
         onChangeText={setComment}
         value={comment}
