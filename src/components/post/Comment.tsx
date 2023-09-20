@@ -24,9 +24,16 @@ import Loading from "@components/UI/Loading";
 type CommentProps = {
   postId: string;
   commentData: GetPost["tripAndCommentPairDataByTripId"]["second"];
+  scrollBottom: React.MouseEventHandler<HTMLButtonElement>;
+  handleIconPress?: (index: number) => void;
 };
 
-const Comment = ({ postId, commentData }: CommentProps) => {
+const Comment = ({
+  postId,
+  commentData,
+  scrollBottom,
+  handleIconPress,
+}: CommentProps) => {
   const { data: userData } = useGetCurrentUser();
   const createCommentMutation = getCreateComment();
   const queryClient = useQueryClient();
@@ -234,7 +241,11 @@ const Comment = ({ postId, commentData }: CommentProps) => {
       />
       {userData ? (
         <View style={CommonStyles.appContainer}>
-          <CommentInput onSubmit={handleSubmit} />
+          <CommentInput
+            onSubmit={handleSubmit}
+            scrollBottom={scrollBottom}
+            handleIconPress={handleIconPress}
+          />
         </View>
       ) : null}
     </View>
