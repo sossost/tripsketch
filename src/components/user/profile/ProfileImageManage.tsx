@@ -1,7 +1,7 @@
 import { styled } from "styled-components/native";
-import { Text } from "react-native";
 import React, { Dispatch } from "react";
 import * as ImagePicker from "expo-image-picker";
+import { colors } from "@constants/color";
 
 type ProfileImageManageProps = {
   image: string;
@@ -26,7 +26,7 @@ const ProfileImageManage = ({ image, setImage }: ProfileImageManageProps) => {
     <Container>
       <Image source={{ uri: image }} />
       <Button onPress={selectImageHandler}>
-        <Text>사진 수정</Text>
+        <StyledText>사진 수정</StyledText>
       </Button>
     </Container>
   );
@@ -45,6 +45,12 @@ const Image = styled.Image`
   width: 80px;
   height: 80px;
   border-radius: 100px;
+`;
+
+const StyledText = styled.Text`
+  font-size: 16px;
+  font-weight: 500;
+  color: ${colors.mainFont};
 `;
 
 const Button = styled.TouchableOpacity`
