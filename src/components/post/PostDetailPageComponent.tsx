@@ -81,7 +81,6 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
             onPress={() => handleSnapPress(1)}
           >
             <CommentBest
-              postId={postId}
               commentData={
                 postAndCommentData.tripAndCommentPairDataByTripId.second
               }
