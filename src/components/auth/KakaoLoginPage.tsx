@@ -11,6 +11,7 @@ import { setDataToSecureStore } from "@utils/secureStore";
 import { StackNavigation } from "@types/RootStack";
 
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
+const BASE_URL = process.env.API_BASE_URL;
 
 /**
  * @description : 카카오 OAuth 로그인 페이지 컴포넌트
@@ -67,6 +68,9 @@ const KaKaoLogin = () => {
         style={{ flex: 1 }}
         originWhitelist={["*"]}
         scalesPageToFit={false}
+        source={{
+          uri: `${BASE_URL}/oauth/kakao/redirect`,
+        }}
         injectedJavaScript={INJECTED_JAVASCRIPT}
         javaScriptEnabled
         onMessage={KakaoLoginWebView}
