@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import { TouchableOpacity, Text, Dimensions, Image, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FadeOutContext } from "../../context/fadeOutContext";
-import { LINK } from "../../constants/link";
+import { LINK } from "@constants/link";
+import { StackNavigation } from "@types/RootStack";
 
 const { width: screenWidth } = Dimensions.get("window");
 
@@ -11,11 +12,11 @@ const KakaoLoginButton = () => {
   const { setFadeOut } = useContext(FadeOutContext);
   /** 버튼 너비 (양쪽 패딩 20씩 제외한 길이) */
   const buttonWidth = screenWidth - 40;
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigation>();
 
   /** 카카오톡 로그인 버튼 핸들러 */
   const loginButtonHandler = () => {
-    (navigation.navigate as (route: string) => void)(LINK.KAKAO_LOGIN_PAGE);
+    navigation.navigate(LINK.KAKAO_LOGIN_PAGE);
     setTimeout(() => {
       setFadeOut(true);
     }, 500);
