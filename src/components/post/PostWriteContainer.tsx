@@ -412,7 +412,7 @@ const PostWriteContainer: React.FC<PostPageProps> = ({
           />
         </HeaderInfo>
 
-        <ScrollView>
+        <ScrollViewContainer>
           <BodyInfo>
             {/* 제목 */}
             <ValidateTitleContainer>
@@ -535,7 +535,7 @@ const PostWriteContainer: React.FC<PostPageProps> = ({
               <ActionButtonText cancel={false}>등록</ActionButtonText>
             </ActionButton>
           </BottomInfo>
-        </ScrollView>
+        </ScrollViewContainer>
       </Container>
     </>
   );
@@ -578,6 +578,11 @@ const HeaderInfo = styled.View`
   margin-bottom: 15px;
 `;
 
+/* 스크롤뷰 컨테이너 */
+const ScrollViewContainer = styled.ScrollView`
+  margin-bottom: 75px;
+`;
+
 /** 제목, 내용, 태그, 공개설정 감싸는 View */
 const BodyInfo = styled.View`
   padding: 0 20px;
@@ -587,7 +592,8 @@ const BodyInfo = styled.View`
 const Title = styled.Text`
   font-size: 17px;
   font-weight: 600;
-  color: #73bbfb;
+  /* color: #73bbfb; */
+  color: ${colors.primary};
   margin-right: 8px;
 `;
 
@@ -745,14 +751,15 @@ const VisibilityButton = styled.TouchableOpacity<{ isSelected: boolean }>`
   border-radius: 5px;
   justify-content: center;
   align-items: center;
-  background-color: ${(props) => (props.isSelected ? "#73bbfb" : "#ffffff")};
-  border-color: #73bbfb;
+  background-color: ${(props) =>
+    props.isSelected ? colors.primary : "#ffffff"};
+  border-color: ${(props) => (props.isSelected ? colors.primary : "#ddd")};
   border-width: 1px;
 `;
 
 /** 전체 공개 텍스트 */
 const ButtonText = styled.Text<{ isSelected: boolean }>`
-  color: ${(props) => (props.isSelected ? "#ffffff" : "#73bbfb")};
+  color: ${(props) => (props.isSelected ? "#ffffff" : "#999")};
   font-size: 16px;
 `;
 
@@ -765,14 +772,15 @@ const BottomInfo = styled.View`
   flex-direction: row;
   justify-content: flex-end;
   padding-top: 15px;
+  padding-bottom: 30px;
 `;
 
 /** 취소, 등록 버튼 */
 const ActionButton = styled.TouchableOpacity<{ cancel: boolean }>`
   width: 80px;
   height: 40px;
-  background-color: ${(props) => (props.cancel ? "#ffffff" : "#73bbfb")};
-  border-color: #73bbfb;
+  background-color: ${(props) => (props.cancel ? "#ffffff" : colors.primary)};
+  border-color: ${colors.primary};
   border-width: 1px;
   border-radius: 5px;
   justify-content: center;
@@ -782,7 +790,7 @@ const ActionButton = styled.TouchableOpacity<{ cancel: boolean }>`
 
 /** 취소, 등록 텍스트 */
 const ActionButtonText = styled.Text<{ cancel: boolean }>`
-  color: ${(props) => (props.cancel ? "#73bbfb" : "#ffffff")};
+  color: ${(props) => (props.cancel ? colors.primary : "#ffffff")};
   font-size: 16px;
 `;
 
