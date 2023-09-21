@@ -26,83 +26,41 @@ export default function RootStack() {
     <>
       <NavigationContainer>
         <SplashScreen>
-          <Stack.Navigator initialRouteName={LINK.HOME}>
-            <Stack.Screen
-              name={LINK.HOME}
-              component={BottomTab}
-              options={{ headerShown: false }}
-            />
+          <Stack.Navigator
+            screenOptions={{ headerShown: false }}
+            initialRouteName={LINK.HOME}
+          >
+            <Stack.Screen name={LINK.HOME} component={BottomTab} />
             <Stack.Screen
               name={LINK.KAKAO_LOGIN_PAGE}
               component={KakaoLoginPage}
             />
-            <Stack.Screen
-              name={LINK.TRIP_DETAIL_PAGE}
-              component={PostDetail}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name={LINK.USER_PAGE}
-              component={UserPage}
-              options={{ headerShown: false }}
-            />
+            <Stack.Screen name={LINK.TRIP_DETAIL_PAGE} component={PostDetail} />
+            <Stack.Screen name={LINK.USER_PAGE} component={UserPage} />
             <Stack.Screen name={LINK.CREATE_POST_PAGE} component={CreatePost} />
             <Stack.Screen name={LINK.UPDATE_POST_PAGE} component={UpdatePost} />
-            <Stack.Screen
-              name={LINK.FOLLOWER_PAGE}
-              component={SocialPage}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Stack.Screen
-              name={LINK.FOLLOWING_PAGE}
-              component={SocialPage}
-              options={{
-                headerShown: false,
-              }}
-            />
+            <Stack.Screen name={LINK.FOLLOWER_PAGE} component={SocialPage} />
+            <Stack.Screen name={LINK.FOLLOWING_PAGE} component={SocialPage} />
             <Stack.Screen
               name={LINK.EDIT_PROFILE_PAGE}
               component={EditProfilePage}
-              options={{
-                headerShown: false,
-              }}
             />
-            <Stack.Screen
-              name={LINK.SETUP.SETUP_PAGE}
-              component={SetupPage}
-              options={{
-                headerShown: false,
-              }}
-            />
+            <Stack.Screen name={LINK.SETUP.SETUP_PAGE} component={SetupPage} />
             <Stack.Screen
               name={LINK.SETUP.OPENSOURCE_LICENCE_PAGE}
               component={OpenSourcePage}
-              options={{
-                headerShown: false,
-              }}
             />
             <Stack.Screen
               name={LINK.SETUP.OPENSOURCE_LICENCE_DETAIL_PAGE}
               component={OpenSourceDetalPage}
-              options={{
-                headerShown: false,
-              }}
             />
             <Stack.Screen
               name={LINK.SETUP.PUSH_NOTIFICATION_SETUP_PAGE}
               component={PushNotificationSetupPage}
-              options={{
-                headerShown: false,
-              }}
             />
             <Stack.Screen
               name={LINK.SETUP.PRIVACY_POLICY_PAGE}
               component={PrivacyPolicyPage}
-              options={{
-                headerShown: false,
-              }}
             />
           </Stack.Navigator>
         </SplashScreen>
