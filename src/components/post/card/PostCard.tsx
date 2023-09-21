@@ -59,10 +59,7 @@ const PostCard = ({ post }: PostCardProps) => {
           </PostTitle>
 
           <RowContainer>
-            <Flag
-              code={post.countryCode?.toUpperCase() || "FRANCE"}
-              size={32}
-            />
+            <Flag code={post.countryCode?.toUpperCase()} size={32} />
             <PostLocation>{post.country}</PostLocation>
           </RowContainer>
         </PostMetaDataContainer>
@@ -154,7 +151,7 @@ const PostTitle = styled.Text`
 const PostLocation = styled.Text`
   font-size: 16px;
   font-weight: 500;
-  color: #73bbfb;
+  color: ${colors.primary};
   margin-left: 5px;
 `;
 
