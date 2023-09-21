@@ -237,7 +237,7 @@ const Comment = ({
       style={styles.sheet}
     >
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
         keyboardVerticalOffset={100}
         style={styles.container}
       >
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
   },
   input_container: {
     justifyContent: "space-between",
-    marginBottom: 10,
+    marginBottom: Platform.OS === "android" ? -5 : 10,
     borderTopColor: "#e6e6e6",
     borderTopWidth: 0.5,
   },
