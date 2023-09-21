@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, KeyboardAvoidingView, Platform } from "react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import { CommonStyles } from "../../styles/CommonStyles";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
@@ -236,30 +236,36 @@ const Comment = ({
       onChange={handleSheetChange}
       style={styles.sheet}
     >
-      <BottomSheetScrollView
-        ref={bottomSheetScrollViewRef}
-        contentContainerStyle={styles.contentContainer}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={100}
+        style={styles.container}
       >
-        <View>
-          <CommentList
-            sort={"all"}
-            onReplySubmit={handleReplyCommentSubmit}
-            likeComment={likeComment}
-            likeReplyComment={likeReplyComment}
-            updateComment={updateComment}
-            updateReplyComment={updateReplyComment}
-            deleteComment={deleteComment}
-            deleteReplyComment={deleteReplyComment}
-            commentData={userCommentData}
-            handleIconPress={handleIconPress}
-          />
-        </View>
-      </BottomSheetScrollView>
-      {userData ? (
-        <View style={[CommonStyles.appContainer, styles.input_container]}>
-          <CommentInput onSubmit={handleSubmit} />
-        </View>
-      ) : null}
+        <BottomSheetScrollView
+          ref={bottomSheetScrollViewRef}
+          contentContainerStyle={styles.contentContainer}
+        >
+          <View style={styles.comment_list}>
+            <CommentList
+              sort={"all"}
+              onReplySubmit={handleReplyCommentSubmit}
+              likeComment={likeComment}
+              likeReplyComment={likeReplyComment}
+              updateComment={updateComment}
+              updateReplyComment={updateReplyComment}
+              deleteComment={deleteComment}
+              deleteReplyComment={deleteReplyComment}
+              commentData={userCommentData}
+              handleIconPress={handleIconPress}
+            />
+          </View>
+        </BottomSheetScrollView>
+        {userData ? (
+          <View style={[CommonStyles.appContainer, styles.input_container]}>
+            <CommentInput onSubmit={handleSubmit} />
+          </View>
+        ) : null}
+      </KeyboardAvoidingView>
     </BottomSheet>
   );
 };
@@ -267,16 +273,21 @@ const Comment = ({
 const styles = StyleSheet.create({
   container: {
     paddingBottom: 20,
+    flex: 1,
   },
-  input_container: {
-    marginBottom: 15,
-    borderTopColor: "#e6e6e6",
-    borderTopWidth: 0.5,
+  comment_list: {
+    flex: 1,
   },
   contentContainer: {
     backgroundColor: "white",
     position: "relative",
-    paddingBottom: 10,
+    paddingBottom: 15,
+  },
+  input_container: {
+    justifyContent: "space-between",
+    marginBottom: 10,
+    borderTopColor: "#e6e6e6",
+    borderTopWidth: 0.5,
   },
   sheet: {
     backgroundColor: "#fff",
