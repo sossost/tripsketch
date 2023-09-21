@@ -260,11 +260,15 @@ const Comment = ({
             />
           </View>
         </BottomSheetScrollView>
-        {userData ? (
+        {/* {userData ? (
           <View style={[CommonStyles.appContainer, styles.input_container]}>
             <CommentInput onSubmit={handleSubmit} />
           </View>
-        ) : null}
+        ) : null} */}
+
+        <View style={[CommonStyles.appContainer, styles.input_container]}>
+          <CommentInput onSubmit={handleSubmit} />
+        </View>
       </KeyboardAvoidingView>
     </BottomSheet>
   );
@@ -284,8 +288,11 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   input_container: {
-    justifyContent: "space-between",
-    marginBottom: Platform.OS === "android" ? -5 : 10,
+    display: "flex",
+    justifyContent: "center",
+    alignContent: "center",
+    paddingVertical: 13,
+    marginBottom: Platform.OS === "android" ? -18 : 0,
     borderTopColor: "#e6e6e6",
     borderTopWidth: 0.5,
   },
