@@ -13,7 +13,8 @@
       "@react-query/*": ["react-query/*"],
       "@navigation/*": ["navigation/*"],
       "@services/*": ["services/*"],
-      "@types/*": ["types/*"]
+      "@types/*": ["types/*"],
+      "@context/*": ["context/*"]
     }
   }
 }
