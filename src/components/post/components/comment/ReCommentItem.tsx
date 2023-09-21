@@ -94,9 +94,9 @@ const ReCommentItem = ({
               <Text style={styles.comment}>{recomment.content}</Text>
             </View>
             {userData &&
+            recomment.isDeleted === false &&
             (userData.isAdmin ||
-              (userData.nickname === recomment.userNickName &&
-                recomment.isDeleted === false)) ? (
+              userData.nickname === recomment.userNickName) ? (
               <TouchableOpacity onPress={handleButton}>
                 <Entypo name="dots-three-vertical" size={14} color="#c5c5c5" />
               </TouchableOpacity>
