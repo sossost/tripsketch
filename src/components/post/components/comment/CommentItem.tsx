@@ -121,9 +121,9 @@ const CommentItem = ({
               <Text style={styles.id}>{comment.userNickName}</Text>
               <View style={styles.likes}>
                 {userData &&
+                comment.isDeleted === false &&
                 (userData.isAdmin ||
-                  (userData.nickname === comment.userNickName &&
-                    comment.isDeleted === false)) ? (
+                  userData.nickname === comment.userNickName) ? (
                   <TouchableOpacity onPress={handleButton}>
                     <Entypo
                       name="dots-three-vertical"

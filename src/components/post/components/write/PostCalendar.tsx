@@ -2,6 +2,7 @@ import { View, Modal, Text, TouchableOpacity } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import styled from "styled-components/native";
 import { Feather } from "@expo/vector-icons";
+import { colors } from "@constants/color";
 
 LocaleConfig.locales["ko"] = {
   monthNames: [
@@ -245,8 +246,8 @@ const InfoBox = styled.View`
 
 /** 달력 아이콘 */
 const CalendarIcon = styled(Feather)`
-  font-size: 25px;
-  color: #73bbfb;
+  font-size: 22px;
+  color: ${colors.primary};
   margin-right: 5px;
 `;
 
@@ -254,18 +255,17 @@ const CalendarIcon = styled(Feather)`
 const Title = styled.Text`
   font-size: 17px;
   font-weight: 600;
-  color: #73bbfb;
+  color: ${colors.primary};
   margin-right: 8px;
 `;
 
 /** 내용 Text */
 const ContentText = styled.Text`
   width: 70%;
-  color: #73bbfb;
+  color: ${colors.primary};
   margin-right: 10px;
   font-size: 16px;
-  font-style: italic;
-  text-decoration: underline #73bbfb;
+  text-decoration: underline ${colors.primary};
 `;
 
 const ModalContainer = styled.View`
@@ -277,7 +277,7 @@ const ModalContainer = styled.View`
 
 const CloseIcon = styled(Feather)`
   font-size: 28px;
-  color: #73bbfb;
+  color: ${colors.primary};
   margin-right: 5px;
 `;
 

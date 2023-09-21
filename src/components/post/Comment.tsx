@@ -260,15 +260,11 @@ const Comment = ({
             />
           </View>
         </BottomSheetScrollView>
-        {/* {userData ? (
+        {userData ? (
           <View style={[CommonStyles.appContainer, styles.input_container]}>
             <CommentInput onSubmit={handleSubmit} />
           </View>
-        ) : null} */}
-
-        <View style={[CommonStyles.appContainer, styles.input_container]}>
-          <CommentInput onSubmit={handleSubmit} />
-        </View>
+        ) : null}
       </KeyboardAvoidingView>
     </BottomSheet>
   );

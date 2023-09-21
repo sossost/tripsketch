@@ -6,6 +6,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { useEffect } from "react";
 import MapView, { Marker, UrlTile } from "react-native-maps";
 import Loading from "../../../UI/Loading";
+import { colors } from "@constants/color";
 
 type Suggestion = {
   place_id: string;
@@ -290,7 +291,7 @@ const PostSearchLocation = ({
               <FontAwesome
                 name="check"
                 size={24}
-                color="#73bbfb"
+                color={colors.primary}
                 onPress={() => selectLocationHandler(query)}
               />
             </SelectLocationUpperBottom>
@@ -383,8 +384,8 @@ const InfoBox = styled.View`
 
 /** 여행지 아이콘 */
 const MapIcon = styled(FontAwesome5)`
-  font-size: 25px;
-  color: #73bbfb;
+  font-size: 22px;
+  color: ${colors.primary};
   margin-left: 3px;
   margin-right: 9px;
 `;
@@ -393,18 +394,17 @@ const MapIcon = styled(FontAwesome5)`
 const Title = styled.Text`
   font-size: 17px;
   font-weight: 600;
-  color: #73bbfb;
+  color: ${colors.primary};
   margin-right: 8px;
 `;
 
 /** 내용 Text */
 const ContentText = styled.Text`
   width: 70%;
-  color: #73bbfb;
+  color: ${colors.primary};
   margin-right: 10px;
   font-size: 16px;
-  font-style: italic;
-  text-decoration: underline #73bbfb;
+  text-decoration: underline ${colors.primary};
 `;
 
 const ValidationText = styled.Text`
