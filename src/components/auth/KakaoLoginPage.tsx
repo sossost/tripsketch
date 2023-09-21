@@ -67,9 +67,6 @@ const KaKaoLogin = () => {
         style={{ flex: 1 }}
         originWhitelist={["*"]}
         scalesPageToFit={false}
-        source={{
-          uri: OAUTH_URL,
-        }}
         injectedJavaScript={INJECTED_JAVASCRIPT}
         javaScriptEnabled
         onMessage={KakaoLoginWebView}

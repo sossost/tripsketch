@@ -1,28 +1,29 @@
-import { StyleProp, ViewStyle } from "react-native";
 import { styled } from "styled-components/native";
 
 interface InputBottomLine {
   label: string;
   text: string;
-  setText: React.Dispatch<React.SetStateAction<string>>;
+  onChangeText: (text: string) => void;
   textLength: number;
 }
 
 const InputBottomLine = ({
   label,
   text,
-  setText,
+  onChangeText,
   textLength,
 }: InputBottomLine) => {
   return (
     <Container>
       <Label>{label}</Label>
       <InputWrapper>
-        <Input value={text} onChangeText={(text) => setText(text)} />
-        <ResetBtn onPress={() => setText("")}>
-          <ResetIcon
-            source={require("../../assets/images/inputResetIcon.png")}
-          />
+        <Input
+          value={text}
+          onChangeText={(text) => onChangeText(text)}
+          maxLength={textLength}
+        />
+        <ResetBtn onPress={() => onChangeText("")}>
+          <ResetIcon source={require("@assets/images/inputResetIcon.png")} />
         </ResetBtn>
       </InputWrapper>
       <LengthCheckText>

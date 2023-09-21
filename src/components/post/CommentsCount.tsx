@@ -1,6 +1,5 @@
-import { Ionicons } from "@expo/vector-icons";
 import { Image, Text, View } from "react-native";
-import { colors } from "../../constants/color";
+import { colors } from "@constants/color";
 
 interface CommentsCountProps {
   comments: number;
@@ -18,10 +17,11 @@ const CommentsCount = ({ comments, variant }: CommentsCountProps) => {
       }}
     >
       <Image
-        source={require("../../assets/images/commentIcon.png")}
+        source={require("@assets/images/commentIconBold.png")}
         style={{
           width: style.iconSize[variant || "medium"],
           aspectRatio: 1,
+          objectFit: "contain",
         }}
       />
       <Text
