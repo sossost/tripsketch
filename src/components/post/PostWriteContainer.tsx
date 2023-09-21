@@ -8,15 +8,17 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../types/RootStack";
 import * as ImagePicker from "expo-image-picker";
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
+import { resetStateStorage } from "./utils/resetStateStorage";
 
 import DeleteXbutton from "../../components/common/DeleteXbutton";
 import usePostTrip from "./hooks/usePostTrip";
 import useUpdatePost from "./hooks/useUpdatePost";
 import Loading from "../UI/Loading";
-import { resetStateStorage } from "./utils/resetStateStorage";
 import PostCalender from "./components/write/PostCalendar";
 import PostSearchLocation from "./components/write/PostSearchLocation";
 import useDeleteAlert from "./hooks/useDeleteAlert";
+import Header from "@components/UI/header/Header";
+import CommonHeaderLeft from "@components/UI/header/HeaderLeft";
 
 type Suggestion = {
   place_id: string;
@@ -359,6 +361,10 @@ const PostWriteContainer: React.FC<PostPageProps> = ({
 
   return (
     <>
+      <Header
+        left={<CommonHeaderLeft title={updateId ? "수정하기" : "작성하기"} />}
+        style={{ paddingHorizontal: 20, paddingTop: 50, paddingBottom: 10 }}
+      />
       <Container>
         {isLoading || isUpdateLoading ? (
           <LoadingPopup height={windowHeight}>

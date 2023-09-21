@@ -11,7 +11,7 @@ const BackButton = () => {
 
   return (
     <BackBtnWrapper onPress={backPressHandler}>
-      <BackBtnIcon source={require("../../../assets/images/backIcon.png")} />
+      <BackBtnIcon source={require("@assets/images/backIcon.png")} />
     </BackBtnWrapper>
   );
 };
@@ -30,4 +30,5 @@ const BackBtnWrapper = styled.TouchableOpacity`
 const BackBtnIcon = styled.Image`
   width: 12px;
   height: 20px;
+  object-fit: contain;
 `;

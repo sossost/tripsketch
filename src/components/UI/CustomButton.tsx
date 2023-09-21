@@ -1,10 +1,9 @@
+import { colors } from "@constants/color";
 import React from "react";
 import {
   TouchableOpacity,
   Text,
   TouchableOpacityProps,
-  View,
-  ViewStyle,
   Dimensions,
 } from "react-native";
 
@@ -23,8 +22,8 @@ const CustomButton = ({
   buttonText,
   ...rest
 }: CustomButtonProps) => {
-  const buttonColor: string = color === "blue" ? "#73BBFB" : "white";
-  const textColor: string = color === "blue" ? "white" : "#73BBFB";
+  const buttonColor: string = color === "blue" ? colors.primary : colors.white;
+  const textColor: string = color === "blue" ? colors.white : colors.primary;
   const buttonWidth = screenWidth - 40;
 
   return (

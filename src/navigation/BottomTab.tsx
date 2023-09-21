@@ -25,13 +25,13 @@ export default function BottomTab() {
         tabBarStyle: {
           height: tabBarStyleHeight,
         },
+        headerShown: false,
       }}
     >
       <Tabs.Screen
         name={LINK.MAIN}
         component={MainPage}
         options={{
-          headerShown: false,
           title: "홈",
           tabBarIcon: ({ color, size }) => (
             <Feather name="home" color={color} size={size} />
@@ -42,7 +42,6 @@ export default function BottomTab() {
         name={LINK.EXPLORE_PAGE}
         component={ExplorePage}
         options={{
-          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Feather name="search" color={color} size={size} />
           ),
@@ -52,7 +51,6 @@ export default function BottomTab() {
         name={LINK.CREATE_POST_PAGE}
         component={CreatePost}
         options={{
-          title: "작성하기",
           tabBarIcon: () => (
             <AntDesign
               name="pluscircle"
@@ -67,7 +65,6 @@ export default function BottomTab() {
         name={LINK.NOTIFICATION_PAGE}
         component={NotificationPage}
         options={{
-          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Feather name="bell" color={color} size={size} />
           ),
@@ -77,7 +74,6 @@ export default function BottomTab() {
         name={LINK.MY_PAGE}
         component={MyPage}
         options={{
-          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Feather name="user" color={color} size={size} />
           ),
