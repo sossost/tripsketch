@@ -1,15 +1,7 @@
 import React, { useCallback, useRef, useMemo, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  ScrollView,
-  Animated,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, View, ScrollView, Animated, Text } from "react-native";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import PostViewContainer from "./PostViewContainer";
-import Comment from "./Comment";
-import CommentBest from "./CommentBest";
 import LikesAndCommentText from "./LikesAndCommentText";
 import {
   useGetPostAndComments,
@@ -19,7 +11,8 @@ import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import DeletePostView from "./components/post/DeletePostView";
 import { GetPost } from "../../types/Post";
 import Loading from "../UI/Loading";
-import CommentInput from "./components/comment/CommentInput";
+import PostCommentContainer from "./postCommentContainer";
+import CommentViewButton from "./components/comment/CommentViewButton";
 
 const PostDetailPageComponent = ({ postId }: { postId: string }) => {
   const { data: userData } = useGetCurrentUser();
@@ -37,7 +30,7 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
 
   // 바텀시트 높이 조절하는 변수
   const sheetRef = useRef<BottomSheet>(null);
-  const snapPoints = useMemo(() => ["3%", "50%", "90%"], []);
+  const snapPoints = useMemo(() => ["1%", "50%", "90%"], []);
   const [sheetIndex, setSheetIndex] = useState(0);
 
   const overlayOpacity = useRef(new Animated.Value(0)).current;
@@ -76,16 +69,26 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
             postId={postId}
             postData={postAndCommentData.tripAndCommentPairDataByTripId.first}
           />
-          <TouchableOpacity
-            activeOpacity={0.8}
-            onPress={() => handleSnapPress(1)}
-          >
-            <CommentBest
-              commentData={
-                postAndCommentData.tripAndCommentPairDataByTripId.second
-              }
+
+          <PostCommentContainer
+            sort={"preview"}
+            postId={postId}
+            handleIconPress={(index) => handleSnapPress(index)}
+            commentData={
+              postAndCommentData.tripAndCommentPairDataByTripId.second
+            }
+            sheetRef={sheetRef}
+            snapPoints={snapPoints}
+            handleSheetChange={handleSheetChange}
+            bottomSheetScrollViewRef={bottomSheetScrollViewRef}
+          />
+          <View style={styles.isComment_btn}>
+            <CommentViewButton
+              text={"댓글 생성 & 전체 댓글보기"}
+              activeOpacity={0.8}
+              onPress={() => handleSnapPress(1)}
             />
-          </TouchableOpacity>
+          </View>
         </ScrollView>
         {sheetIndex >= 1 && (
           <Animated.View
@@ -93,7 +96,8 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
           />
         )}
       </View>
-      <Comment
+      <PostCommentContainer
+        sort={"all"}
         postId={postId}
         handleIconPress={(index) => handleSnapPress(index)}
         commentData={postAndCommentData.tripAndCommentPairDataByTripId.second}
@@ -116,6 +120,14 @@ const styles = StyleSheet.create({
   contentContainer: {
     backgroundColor: "white",
     position: "relative",
+  },
+  isComment_btn: {
+    marginTop: 20,
+    marginBottom: 40,
+    paddingHorizontal: 20,
+    paddingTop: 15,
+    borderTopColor: "#e9e9e9",
+    borderTopWidth: 1,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,

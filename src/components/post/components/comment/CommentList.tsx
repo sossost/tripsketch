@@ -43,6 +43,20 @@ const CommentList = ({
   commentData,
   handleIconPress,
 }: CommentProps) => {
+  // 댓글 10개까지 보여주는 함수
+  const countPreviewComment = () => {
+    let count = 0;
+    const result = [];
+    for (const item of commentData) {
+      count += item.children.length + 1;
+      result.push(item);
+
+      // count가 10개 이상이면 순회 중지
+      if (count >= 10) break;
+    }
+    return result;
+  };
+
   // 댓글, 대댓글 카운트 함수
   const countComment = (commentData: Comment[]): number => {
     const commentCounts = commentData.length;
@@ -84,9 +98,19 @@ const CommentList = ({
             </View>
           ) : (
             <View style={styles.comment}>
-              {commentData.slice(0, 1).map((item: any) => (
+              {countPreviewComment().map((item) => (
                 <View key={item.id}>
-                  <CommentItem comment={item} sort={"best"} />
+                  <CommentItem
+                    comment={item}
+                    sort={"best"}
+                    onReplySubmit={onReplySubmit}
+                    likeComment={likeComment}
+                    likeReplyComment={likeReplyComment}
+                    updateComment={updateComment}
+                    updateReplyComment={updateReplyComment}
+                    deleteComment={deleteComment}
+                    deleteReplyComment={deleteReplyComment}
+                  />
                 </View>
               ))}
             </View>

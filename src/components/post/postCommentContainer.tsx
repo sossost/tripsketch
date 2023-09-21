@@ -1,8 +1,13 @@
-import { StyleSheet, View, KeyboardAvoidingView, Platform } from "react-native";
+import {
+  StyleSheet,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+} from "react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import { CommonStyles } from "../../styles/CommonStyles";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import CommentList from "./components/comment/CommentList";
 import CommentInput from "./components/comment/CommentInput";
 import Toast from "react-native-toast-message";
 import {
@@ -20,8 +25,10 @@ import {
 import { GetPost } from "../../types/Post";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import { useEffect, useState } from "react";
+import CommentList from "./components/comment/CommentList";
 
 type CommentProps = {
+  sort: "all" | "preview";
   postId: string;
   commentData: GetPost["tripAndCommentPairDataByTripId"]["second"];
   handleIconPress?: (index: number) => void;
@@ -31,7 +38,8 @@ type CommentProps = {
   bottomSheetScrollViewRef: React.RefObject<any>;
 };
 
-const Comment = ({
+const PostCommentContainer = ({
+  sort,
   postId,
   commentData,
   handleIconPress,
@@ -71,6 +79,7 @@ const Comment = ({
       setUserCommentData(commentUserData);
       setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
+      queryClient.invalidateQueries(["postAndCommentData"]);
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 생성을 실패하였습니다." });
@@ -96,6 +105,7 @@ const Comment = ({
       setUserCommentData(commentUserData);
       setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
+      queryClient.invalidateQueries(["postAndCommentData"]);
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 생성을 실패하였습니다." });
@@ -110,6 +120,7 @@ const Comment = ({
       setUserCommentData(commentUserData);
       setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
+      queryClient.invalidateQueries(["postAndCommentData"]);
       if (isLikeStatus) {
         Toast.show({ type: "success", text1: "좋아요가 해제되었습니다." });
       } else {
@@ -136,7 +147,7 @@ const Comment = ({
       setUserCommentData(commentUserData);
       setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
-
+      queryClient.invalidateQueries(["postAndCommentData"]);
       if (isLikeStatus) {
         Toast.show({ type: "success", text1: "좋아요가 해제되었습니다." });
       } else {
@@ -160,6 +171,7 @@ const Comment = ({
       setUserCommentData(commentUserData);
       setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
+      queryClient.invalidateQueries(["postAndCommentData"]);
     } catch (error) {
       console.error("오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 수정 실패!" });
@@ -184,6 +196,7 @@ const Comment = ({
       setUserCommentData(commentUserData);
       setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
+      queryClient.invalidateQueries(["postAndCommentData"]);
     } catch (error) {
       console.error("오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 수정 실패!" });
@@ -199,6 +212,7 @@ const Comment = ({
       setUserCommentData(commentUserData);
       setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
+      queryClient.invalidateQueries(["postAndCommentData"]);
     } catch (error) {
       console.error("오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 삭제 실패!" });
@@ -229,44 +243,63 @@ const Comment = ({
   }, [commentUserData]);
 
   return (
-    <BottomSheet
-      ref={sheetRef}
-      index={0}
-      snapPoints={snapPoints}
-      onChange={handleSheetChange}
-      style={styles.sheet}
-    >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        keyboardVerticalOffset={100}
-        style={styles.container}
-      >
-        <BottomSheetScrollView
-          ref={bottomSheetScrollViewRef}
-          contentContainerStyle={styles.contentContainer}
+    <>
+      {sort === "all" ? (
+        <BottomSheet
+          ref={sheetRef}
+          index={0}
+          snapPoints={snapPoints}
+          onChange={handleSheetChange}
+          style={styles.sheet}
         >
-          <View style={styles.comment_list}>
-            <CommentList
-              sort={"all"}
-              onReplySubmit={handleReplyCommentSubmit}
-              likeComment={likeComment}
-              likeReplyComment={likeReplyComment}
-              updateComment={updateComment}
-              updateReplyComment={updateReplyComment}
-              deleteComment={deleteComment}
-              deleteReplyComment={deleteReplyComment}
-              commentData={userCommentData}
-              handleIconPress={handleIconPress}
-            />
-          </View>
-        </BottomSheetScrollView>
-        {userData ? (
-          <View style={[CommonStyles.appContainer, styles.input_container]}>
-            <CommentInput onSubmit={handleSubmit} />
-          </View>
-        ) : null}
-      </KeyboardAvoidingView>
-    </BottomSheet>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : undefined}
+            keyboardVerticalOffset={100}
+            style={styles.container}
+          >
+            <BottomSheetScrollView
+              ref={bottomSheetScrollViewRef}
+              contentContainerStyle={styles.contentContainer}
+            >
+              <View style={styles.comment_list}>
+                <CommentList
+                  sort={sort}
+                  onReplySubmit={handleReplyCommentSubmit}
+                  likeComment={likeComment}
+                  likeReplyComment={likeReplyComment}
+                  updateComment={updateComment}
+                  updateReplyComment={updateReplyComment}
+                  deleteComment={deleteComment}
+                  deleteReplyComment={deleteReplyComment}
+                  commentData={userCommentData}
+                  handleIconPress={handleIconPress}
+                />
+              </View>
+            </BottomSheetScrollView>
+            {userData ? (
+              <View style={[CommonStyles.appContainer, styles.input_container]}>
+                <CommentInput onSubmit={handleSubmit} />
+              </View>
+            ) : null}
+          </KeyboardAvoidingView>
+        </BottomSheet>
+      ) : (
+        <View>
+          <CommentList
+            sort={sort}
+            onReplySubmit={handleReplyCommentSubmit}
+            likeComment={likeComment}
+            likeReplyComment={likeReplyComment}
+            updateComment={updateComment}
+            updateReplyComment={updateReplyComment}
+            deleteComment={deleteComment}
+            deleteReplyComment={deleteReplyComment}
+            commentData={userCommentData}
+            handleIconPress={handleIconPress}
+          />
+        </View>
+      )}
+    </>
   );
 };
 
@@ -305,4 +338,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Comment;
+export default PostCommentContainer;
