@@ -83,7 +83,6 @@ const CommentInput = ({
 const styles = StyleSheet.create({
   container: {
     color: "black",
-    marginTop: 15,
     position: "relative",
   },
   input: {

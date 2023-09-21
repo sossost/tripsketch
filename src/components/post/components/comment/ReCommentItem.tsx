@@ -65,26 +65,6 @@ const ReCommentItem = ({
     isUpdateInput ? setIsUpdateInput(false) : setIsUpdateInput(true);
   };
 
-  // 대댓글 삭제 핸들러
-  // const handleDelete = () => {
-  //   if (deleteReplyComment) {
-  //     Alert.alert("알림", "정말 삭제하시겠습니까?", [
-  //       {
-  //         text: "괜찮습니다.",
-  //         style: "cancel",
-  //       },
-  //       {
-  //         text: "삭제",
-  //         onPress: () => {
-  //           deleteReplyComment(recomment.id, recomment.parentId);
-  //         },
-  //       },
-  //     ]),
-  //       { cancelable: false };
-  //     setIsButton(false);
-  //   }
-  // };
-
   const handleDelete = () => {
     const deleteAlertFunction = useDeleteAlert({
       id: recomment.id,

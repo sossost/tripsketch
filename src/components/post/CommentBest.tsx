@@ -3,21 +3,20 @@ import CommentList from "./components/comment/CommentList";
 import { GetPost } from "../../types/Post";
 
 type CommentBestProps = {
-  postId: string;
   commentData: GetPost["tripAndCommentPairDataByTripId"]["second"];
 };
 
-const CommentBest = ({ postId, commentData }: CommentBestProps) => {
+const CommentBest = ({ commentData }: CommentBestProps) => {
   return (
     <View style={styles.container}>
-      <CommentList sort={"best"} postId={postId} commentData={commentData} />
+      <CommentList sort={"best"} commentData={commentData} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 40,
+    paddingBottom: 30,
     backgroundColor: "#fff",
   },
 });

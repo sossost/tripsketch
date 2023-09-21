@@ -12,6 +12,7 @@ type CommentProps = {
     replyToNickname: string
   ) => void;
   sort: string;
+
   likeComment?: (likeCommentId: string, isLikeStatus: boolean) => void;
   likeReplyComment?: (
     likeCommentId: string,
@@ -52,9 +53,6 @@ const CommentList = ({
       .reduce((acc, cur) => (acc += cur), 0);
     return commentCounts + reCommentCounts;
   };
-
-  // 댓글이 없는 경우 클릭 시 댓글 창 보이도록
-  const inputViewHandler = () => {};
 
   return (
     <View style={styles.container}>

@@ -201,11 +201,13 @@ const CommentItem = ({
               <TouchableOpacity onPress={handleCommentButtonClick}>
                 <Text style={styles.add_comment}>답글 달기</Text>
               </TouchableOpacity>
-              <CommentInput
-                onReplySubmit={onReplySubmit}
-                commentId={comment.id}
-                commentNickname={comment.userNickName}
-              />
+              <View style={{ marginTop: 15 }}>
+                <CommentInput
+                  onReplySubmit={onReplySubmit}
+                  commentId={comment.id}
+                  commentNickname={comment.userNickName}
+                />
+              </View>
             </View>
           )}
         </View>
