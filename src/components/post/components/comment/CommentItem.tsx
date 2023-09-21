@@ -109,7 +109,7 @@ const CommentItem = ({
   return (
     <View style={styles.container}>
       <View style={styles.container_inner}>
-        <View style={[styles.normal, sort === "best" && styles.background]}>
+        <View style={[styles.normal, sort === "preview" && styles.background]}>
           <View style={styles.image}>
             <Image
               style={styles.profile}
@@ -212,7 +212,7 @@ const CommentItem = ({
           )}
         </View>
       ) : null}
-      {sort === "all" && comment.children.length > 0 ? (
+      {comment.children.length > 0 ? (
         <View style={styles.recomment_container}>
           {comment.children.map((item) => (
             <View key={item.id}>
@@ -243,12 +243,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   background: {
-    backgroundColor: "#f7f7f7",
+    backgroundColor: "#fff",
     width: "100%",
     borderRadius: 10,
     display: "flex",
     flexDirection: "row",
-    padding: 15,
+    padding: 10,
   },
   image: {
     width: "17%",
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     paddingVertical: 10,
   },
-  inputPadd: { paddingHorizontal: 10 },
+  inputPadd: { paddingHorizontal: 10, marginTop: 10 },
   button_container: {
     display: "flex",
     flexDirection: "row",
