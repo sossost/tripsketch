@@ -18,27 +18,27 @@ import PageLayout from "@components/common/PageLayout";
 const SETUP_PAGE_LIST = [
   {
     title: "푸시 알림 설정",
-    screenName: LINK.PUSH_NOTIFICATION_SETUP_PAGE,
+    screenName: LINK.SETUP.PUSH_NOTIFICATION_SETUP_PAGE,
   },
   {
     title: "오픈소스 라이선스",
-    screenName: LINK.OPENSOURCE_LICENCE_PAGE,
+    screenName: LINK.SETUP.OPENSOURCE_LICENCE_PAGE,
   },
   {
     title: "개인정보 처리방침",
-    screenName: LINK.PRIVACY_POLICY_PAGE,
+    screenName: LINK.SETUP.PRIVACY_POLICY_PAGE,
   },
   {
     title: "위치정보서비스 이용약관",
-    screenName: LINK.LOCATION_POLICY_PAGE,
+    screenName: LINK.SETUP.LOCATION_POLICY_PAGE,
   },
   {
     title: "게시물 운영 정책",
-    screenName: LINK.POST_MANAGEMENT_POLICY_PAGE,
+    screenName: LINK.SETUP.POST_MANAGEMENT_POLICY_PAGE,
   },
   {
     title: "계정 관리",
-    screenName: LINK.ACCOUNT_MANAGEMENT_PAGE,
+    screenName: LINK.SETUP.ACCOUNT_MANAGEMENT_PAGE,
   },
 ];
 

@@ -8,7 +8,7 @@ const HamburgerBtn = () => {
   const navigation = useNavigation<StackNavigation>();
 
   return (
-    <ButtonWrapper onPress={() => navigation.navigate(LINK.SETUP_PAGE)}>
+    <ButtonWrapper onPress={() => navigation.navigate(LINK.SETUP.SETUP_PAGE)}>
       <HamburgerIcon source={require("../../../assets/images/hamburger.png")} />
     </ButtonWrapper>
   );
