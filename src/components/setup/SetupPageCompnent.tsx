@@ -29,10 +29,6 @@ const SETUP_PAGE_LIST = [
     screenName: LINK.SETUP.PRIVACY_POLICY_PAGE,
   },
   {
-    title: "위치정보서비스 이용약관",
-    screenName: LINK.SETUP.LOCATION_POLICY_PAGE,
-  },
-  {
     title: "게시물 운영 정책",
     screenName: LINK.SETUP.POST_MANAGEMENT_POLICY_PAGE,
   },
