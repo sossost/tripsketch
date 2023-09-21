@@ -3,6 +3,7 @@ import CommentItem from "./CommentItem";
 import CommentNone from "./CommentNone";
 import { Comment } from "../../../../types/comment";
 import { GetPost } from "../../../../types/Post";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 type CommentProps = {
   onReplySubmit?: (
@@ -26,6 +27,7 @@ type CommentProps = {
   deleteComment?: (id: string) => void;
   deleteReplyComment?: (id: string, parentId: string) => void;
   commentData: GetPost["tripAndCommentPairDataByTripId"]["second"];
+  handleIconPress?: (index: number) => void;
 };
 
 const CommentList = ({
@@ -38,6 +40,7 @@ const CommentList = ({
   deleteComment,
   deleteReplyComment,
   commentData,
+  handleIconPress,
 }: CommentProps) => {
   // 댓글, 대댓글 카운트 함수
   const countComment = (commentData: Comment[]): number => {
@@ -49,6 +52,9 @@ const CommentList = ({
       .reduce((acc, cur) => (acc += cur), 0);
     return commentCounts + reCommentCounts;
   };
+
+  // 댓글이 없는 경우 클릭 시 댓글 창 보이도록
+  const inputViewHandler = () => {};
 
   return (
     <View style={styles.container}>
@@ -89,7 +95,9 @@ const CommentList = ({
           )}
         </View>
       ) : (
-        <CommentNone />
+        <TouchableOpacity onPress={() => handleIconPress && handleIconPress(2)}>
+          <CommentNone />
+        </TouchableOpacity>
       )}
     </View>
   );
