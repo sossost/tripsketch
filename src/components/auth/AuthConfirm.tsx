@@ -1,14 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
-import CustomButton from "../UI/CustomButton";
-import KakaoLoginButton from "./KakaoLoginButton";
-import { StackNavigation } from "../../types/RootStack";
 import { styled } from "styled-components/native";
-import { colors } from "../../constants/color";
+import { StackNavigation } from "@types/RootStack";
+import { colors } from "@constants/color";
+
+import CustomButton from "@components/UI/CustomButton";
+import KakaoLoginButton from "./KakaoLoginButton";
 
 /**
  * @description : 인증이 필요한 페이지 접근시 띄워주는 컴포넌트
  * @author : 장윤수
- * @update : 2023-09-13,
+ * @update : 2023-09-21,
  * @version 1.0.0,
  * @see None,
  */
@@ -36,7 +37,6 @@ const AuthConfirm = () => {
 export default AuthConfirm;
 
 const ModalContainer = styled.View`
-  position: absolute;
   flex: 1;
   justify-content: center;
   align-items: center;
@@ -51,6 +51,8 @@ const ModalContentWrapper = styled.View`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  padding-horizontal: 20px;
 `;
 
 const StyledText = styled.Text`

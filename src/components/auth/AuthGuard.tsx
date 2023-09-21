@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useState } from "react";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 
-import AuthConfirm from "./AuthConfirmModal";
+import AuthConfirm from "./AuthConfirm";
 import Loading from "../UI/Loading";
 
 /**
