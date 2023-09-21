@@ -67,7 +67,7 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
   return (
     <View style={styles.container}>
       <View style={styles.containerInner}>
-        <ScrollView>
+        <ScrollView scrollIndicatorInsets={{ right: 1 }}>
           <PostViewContainer
             postId={postId}
             postData={postAndCommentData.tripAndCommentPairDataByTripId.first}
