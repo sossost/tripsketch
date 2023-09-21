@@ -304,7 +304,7 @@ const PostSearchLocation = ({
                   width: "100%",
                   zIndex: 5,
                   position: "absolute",
-                  height: 500,
+                  height: 550,
                 }}
                 region={region}
                 onRegionChangeComplete={(region) => setRegion(region)}
@@ -428,7 +428,7 @@ const SelectLocation = styled.View`
   left: 0;
   position: absolute;
   width: 90%;
-  height: 350px;
+  height: 400px;
   color: white;
   border-radius: 10px;
   margin: 20px;
@@ -521,7 +521,7 @@ const LocationSuggestionsTexts = styled.Text`
 const SelectLocationMiddle = styled.View`
   background-color: gray;
   width: 100%;
-  height: 250px;
+  height: 300px;
   color: white;
   font-size: 16px;
 
