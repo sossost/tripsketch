@@ -10,10 +10,12 @@ import { SUCCESS_MESSAGE } from "@constants/message";
 import { ERROR_MESSAGE } from "@constants/message";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "@react-query/queryKey";
+import useModal from "@hooks/useModal";
 
 import Header from "@components/UI/header/Header";
 import CommonHeaderLeft from "@components/UI/header/HeaderLeft";
 import PageLayout from "@components/common/PageLayout";
+import ConfirmModal from "@components/auth/ConfirmModal";
 
 const SETUP_PAGE_LIST = [
   {
@@ -41,13 +43,14 @@ const SETUP_PAGE_LIST = [
 /**
  * @description : 설정 및 개인정보 페이지 컴포넌트
  * @author : 장윤수
- * @update : 2023-09-20,
- * @version 1.0.1, 로그아웃 쿼리키 무효화 추가
+ * @update : 2023-09-21,
+ * @version 1.1., 로그아웃 모달 추가
  * @see None
  */
 const SetupPageCompnent = () => {
   const navigation = useNavigation<StackNavigation>();
   const queryClient = useQueryClient();
+  const { isModalOpen, closeModal, openModal } = useModal();
 
   const handleLogout = async () => {
     try {
@@ -78,10 +81,21 @@ const SetupPageCompnent = () => {
             </SetupItem>
           );
         })}
-        <SetupItem onPress={handleLogout}>
+        <SetupItem onPress={openModal}>
           <LogoutText>로그아웃</LogoutText>
         </SetupItem>
       </SetupList>
+
+      {isModalOpen && (
+        <ConfirmModal
+          isModalOpen={isModalOpen}
+          closeModal={closeModal}
+          message={`로그아웃을\n진행하시겠습니까?`}
+          cancelText="취소"
+          confirmText="로그아웃"
+          onClickConfirm={handleLogout}
+        />
+      )}
     </PageLayout>
   );
 };
