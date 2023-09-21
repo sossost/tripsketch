@@ -15,7 +15,8 @@
           "@react-query": "./src/react-query",
           "@navigation": "./src/navigation",
           "@services": "./src/services",
-          "@types": "./src/types"
+          "@types": "./src/types",
+          "@context": "./src/context"
         }
       }
     ]

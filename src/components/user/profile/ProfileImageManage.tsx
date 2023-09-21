@@ -2,23 +2,36 @@ import { styled } from "styled-components/native";
 import React, { Dispatch } from "react";
 import * as ImagePicker from "expo-image-picker";
 import { colors } from "@constants/color";
+import { SaveFormat, manipulateAsync } from "expo-image-manipulator";
 
 type ProfileImageManageProps = {
   image: string;
   setImage: Dispatch<React.SetStateAction<string>>;
 };
 
+/**
+ * @description : 프로필 사진 관리 컴포넌트
+ * @author : 장윤수
+ * @update : 2023-09-21,
+ * @version 1.1.0, 이미지 압축 기능 추가
+ * @see None,
+ */
 const ProfileImageManage = ({ image, setImage }: ProfileImageManageProps) => {
   const selectImageHandler = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 0.3,
+      quality: 1,
     });
 
     if (!result.canceled) {
-      setImage(result.assets[0].uri);
+      const compressedImage = await manipulateAsync(
+        result.assets[0].uri,
+        [{ resize: { width: 200 } }],
+        { compress: 0.8, format: SaveFormat.JPEG }
+      );
+      setImage(compressedImage.uri);
     }
   };
 

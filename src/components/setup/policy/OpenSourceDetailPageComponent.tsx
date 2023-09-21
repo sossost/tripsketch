@@ -7,7 +7,7 @@ import PageLayout from "@components/common/PageLayout";
 import Header from "@components/UI/header/Header";
 import CommonHeaderLeft from "@components/UI/header/HeaderLeft";
 
-interface OpenSourceLicense {
+interface OpenSourceLicenseInterface {
   libraryName: string;
   version: string;
   _license: string;
@@ -20,7 +20,7 @@ const OpenSourceDetailPageComponent = ({
 }: {
   libraryName: string;
 }) => {
-  const openSourceLicense: OpenSourceLicense = OpenSourceLicense.find(
+  const openSourceLicense: OpenSourceLicenseInterface = OpenSourceLicense.find(
     (item) => item.libraryName === libraryName
   );
 
@@ -29,9 +29,9 @@ const OpenSourceDetailPageComponent = ({
 
   return (
     <PageLayout>
-      <Header left={<CommonHeaderLeft title={libraryName} />} />
+      <Header left={<CommonHeaderLeft title={libraryName.substring(1)} />} />
       <ListWrapper>
-        <ListTitle>{libraryName}</ListTitle>
+        <ListTitle>{libraryName.substring(1)}</ListTitle>
         <Text>Version : {version}</Text>
         <Text>{_license}</Text>
         <Text>{_description}</Text>

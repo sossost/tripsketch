@@ -6,8 +6,9 @@ import StyledTheme from "./src/context/themeContext";
 import { StatusBar } from "expo-status-bar";
 import { RecoilRoot } from "recoil";
 
-import NotificationProvider from "./src/context/notificationProvider";
-import FadeOutContextProvider from "./src/context/fadeOutContext";
+import NotificationProvider from "@context/notificationProvider";
+import FadeOutContextProvider from "@context/fadeOutContext";
+import AuthModalProvider from "@context/AuthModalProvider";
 
 // LogBox.ignoreAllLogs(true);
 
@@ -29,8 +30,10 @@ export default function App() {
           <SafeAreaProvider>
             <NotificationProvider>
               <FadeOutContextProvider>
-                <StatusBar style="auto" />
-                <RootStack />
+                <AuthModalProvider>
+                  <StatusBar style="auto" />
+                  <RootStack />
+                </AuthModalProvider>
               </FadeOutContextProvider>
             </NotificationProvider>
           </SafeAreaProvider>

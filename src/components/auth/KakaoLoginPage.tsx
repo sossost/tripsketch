@@ -17,7 +17,7 @@ const BASE_URL = process.env.API_BASE_URL;
  * @description : 카카오 OAuth 로그인 페이지 컴포넌트
  * @author : 이수현
  * @update : 2023-09-12,
- * @version 1.0.2, 장윤수 : 비동기 처리 누락 수정
+ * @version 1.0.3, 장윤수 : 로그아웃 후 로그인 안되는 로직 해결
  * @see None,
  */
 
@@ -51,15 +51,15 @@ const KaKaoLogin = () => {
 
   // 카카오 로그인 진행하는 화면
   const KakaoLoginWebView = async () => {
-    // OAuth url에서 토근 발급 받은 후 스토어에 저장
+    // 토큰 발급 요청
     await requestToken();
 
     // 현재 로그인한 유저 정보 요청 후 쿼리에 저장
     const userInfo = await getCurrentUser();
     queryClient.setQueryData([QUERY_KEY.CURRENT_USER], userInfo);
 
-    // 홈 화면으로 이동
-    navigation.push(LINK.HOME);
+    // 메인 화면으로 이동
+    navigation.navigate(LINK.MAIN);
   };
 
   return (
