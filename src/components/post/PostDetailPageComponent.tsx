@@ -19,6 +19,7 @@ import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import DeletePostView from "./components/post/DeletePostView";
 import { GetPost } from "../../types/Post";
 import Loading from "../UI/Loading";
+import CommentInput from "./components/comment/CommentInput";
 
 const PostDetailPageComponent = ({ postId }: { postId: string }) => {
   const { data: userData } = useGetCurrentUser();
@@ -63,13 +64,6 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
     <DeletePostView />;
   }
 
-  // input 누르면 scroll 하단으로 이동
-  const scrollToBottom = () => {
-    if (bottomSheetScrollViewRef.current) {
-      bottomSheetScrollViewRef.current.scrollToEnd();
-    }
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.containerInner}>
@@ -100,29 +94,15 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
           />
         )}
       </View>
-      <BottomSheet
-        ref={sheetRef}
-        index={0}
+      <Comment
+        postId={postId}
+        handleIconPress={(index) => handleSnapPress(index)}
+        commentData={postAndCommentData.tripAndCommentPairDataByTripId.second}
+        sheetRef={sheetRef}
         snapPoints={snapPoints}
-        onChange={handleSheetChange}
-        style={styles.sheet}
-      >
-        <BottomSheetScrollView
-          ref={bottomSheetScrollViewRef}
-          contentContainerStyle={styles.contentContainer}
-        >
-          {postAndCommentData && (
-            <Comment
-              postId={postId}
-              scrollBottom={scrollToBottom}
-              handleIconPress={(index) => handleSnapPress(index)}
-              commentData={
-                postAndCommentData.tripAndCommentPairDataByTripId.second
-              }
-            />
-          )}
-        </BottomSheetScrollView>
-      </BottomSheet>
+        handleSheetChange={handleSheetChange}
+        bottomSheetScrollViewRef={bottomSheetScrollViewRef}
+      />
     </View>
   );
 };
