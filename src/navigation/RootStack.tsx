@@ -17,6 +17,7 @@ import SetupPage from "@screens/setup/SetupPage";
 import OpenSourcePage from "@screens/setup/OpenSourcePage";
 import OpenSourceDetalPage from "@screens/setup/OpenSourceDetalPage";
 import PushNotificationSetupPage from "@screens/setup/PushNotificationSetupPage";
+import PrivacyPolicyPage from "@screens/setup/PrivacyPolicyPage";
 
 const Stack = createStackNavigator();
 
@@ -69,29 +70,36 @@ export default function RootStack() {
               }}
             />
             <Stack.Screen
-              name={LINK.SETUP_PAGE}
+              name={LINK.SETUP.SETUP_PAGE}
               component={SetupPage}
               options={{
                 headerShown: false,
               }}
             />
             <Stack.Screen
-              name={LINK.OPENSOURCE_LICENCE_PAGE}
+              name={LINK.SETUP.OPENSOURCE_LICENCE_PAGE}
               component={OpenSourcePage}
               options={{
                 headerShown: false,
               }}
             />
             <Stack.Screen
-              name={LINK.OPENSOURCE_LICENCE_DETAIL_PAGE}
+              name={LINK.SETUP.OPENSOURCE_LICENCE_DETAIL_PAGE}
               component={OpenSourceDetalPage}
               options={{
                 headerShown: false,
               }}
             />
             <Stack.Screen
-              name={LINK.PUSH_NOTIFICATION_SETUP_PAGE}
+              name={LINK.SETUP.PUSH_NOTIFICATION_SETUP_PAGE}
               component={PushNotificationSetupPage}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name={LINK.SETUP.PRIVACY_POLICY_PAGE}
+              component={PrivacyPolicyPage}
               options={{
                 headerShown: false,
               }}
