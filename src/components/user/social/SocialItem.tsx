@@ -1,10 +1,11 @@
-import { User } from "../../../types/user";
-import { styled } from "styled-components/native";
-import { LINK } from "../../../constants/link";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigation } from "../../../types/RootStack";
+import { styled } from "styled-components/native";
+import { LINK } from "@constants/link";
+import { StackNavigation } from "@types/RootStack";
+import { User } from "@types/user";
+import { colors } from "@constants/color";
 
-import SocialButton from "./SocialButton";
+import SocialButton from "@components/user/social/SocialButton";
 
 type SocialItemProps = {
   user: User;
@@ -20,8 +21,8 @@ type SocialItemProps = {
  * @param followBtnHandler : 팔로우 버튼 핸들러
  *
  * @author : 장윤수
- * @update : 2023-09-13,
- * @version 1.1.0, 소셜리스트에 유저가 나일 경우 팔로우 버튼이 보이지 않도록 수정
+ * @update : 2023-09-21,
+ * @version 1.1.0,
  * @see None,
  */
 const SocialItem = ({
@@ -46,7 +47,9 @@ const SocialItem = ({
         </ProfileImageWrapper>
         <ProfileTextWrapper>
           <Nickname>{user.nickname}</Nickname>
-          <Introduction>{user.introduction}</Introduction>
+          <Introduction numberOfLines={1} ellipsizeMode="tail">
+            {user.introduction}
+          </Introduction>
         </ProfileTextWrapper>
       </ProfileWrapper>
       {!isMe && (
@@ -62,14 +65,11 @@ const SocialItem = ({
 export default SocialItem;
 
 const SocialItemContainer = styled.View`
-  background-color: #ffffff;
-  border-radius: 16px;
-  overflow: hidden;
   flex-direction: row;
-  flex: 1;
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
+  gap: 10px;
 `;
 
 const ProfileWrapper = styled.TouchableOpacity`
@@ -86,7 +86,7 @@ const ProfileImageWrapper = styled.View`
   height: 50px;
   border-radius: 9999px;
   overflow: hidden;
-  background-color: #cccccc;
+  background-color: ${colors.lightGrey};
 `;
 
 const ProfileImage = styled.Image`
@@ -100,14 +100,18 @@ const ProfileTextWrapper = styled.View`
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
+  flex: 1;
 `;
 
 const Nickname = styled.Text`
+  color: ${colors.mainFont};
   font-size: 16px;
   font-weight: bold;
+  width: 100%;
 `;
 
 const Introduction = styled.Text`
   font-size: 13px;
-  color: #999999;
+  color: ${colors.subFont};
+  width: 100%;
 `;

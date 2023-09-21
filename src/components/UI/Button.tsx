@@ -1,3 +1,4 @@
+import { colors } from "@constants/color";
 import { TouchableOpacity, Text } from "react-native";
 
 interface ButtonProps {
@@ -13,9 +14,12 @@ interface ButtonProps {
 
 /** 커스텀 버튼 컴포넌트 */
 const Button = ({ style, onPress, title, ...rest }: ButtonProps) => {
-  const buttonColor: string = style.color === "blue" ? "#73BBFB" : "white";
-  const textColor: string = style.color === "blue" ? "white" : "#73BBFB";
-  const borderColor: string = style.color === "blue" ? "white" : "#73BBFB";
+  const buttonColor: string =
+    style.color === "blue" ? colors.primary : colors.white;
+  const textColor: string =
+    style.color === "blue" ? colors.white : colors.primary;
+  const borderColor: string =
+    style.color === "blue" ? colors.white : colors.primary;
 
   return (
     <TouchableOpacity
