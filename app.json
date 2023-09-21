@@ -4,33 +4,28 @@
     "slug": "tripsketch",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/logoIcon.png",
+    "icon": "@assets/logoIconBackground.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./src/assets/splashScreen.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*",
-      "assets/images/*"
-    ],
+    "assetBundlePatterns": ["**/*", "assets/images/*"],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "kr.kro.tripsketch"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./src/assets/adaptive-icon.png",
+        "foregroundImage": "@assets/logoIconBackground.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": [
-        "android.permission.RECORD_AUDIO"
-      ],
+      "permissions": ["android.permission.RECORD_AUDIO"],
       "package": "kr.kro.tripsketch"
     },
     "web": {
-      "favicon": "./src/assets/favicon.png"
+      "favicon": "@assets/logoIconBackground.png"
     },
     "plugins": [
       [
