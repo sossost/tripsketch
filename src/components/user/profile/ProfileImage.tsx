@@ -21,7 +21,6 @@ const ProfileImgWrapper = styled.TouchableOpacity`
   height: 40px;
   border-radius: 9999px;
   overflow: hidden;
-  border: 1px solid ${colors.lightGrey};
 `;
 
 const ProfileImg = styled.Image`

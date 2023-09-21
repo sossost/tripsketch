@@ -172,8 +172,7 @@ const ProfileImageWrapper = styled.View`
   width: 45px;
   height: 45px;
   border-radius: 100px;
-  border-width: 0.5px;
-  border-color: #ccc;
+
   overflow: hidden;
   background-color: white;
 `;
