@@ -4,6 +4,7 @@ import { StackNavigation } from "../../../types/RootStack";
 import { useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
 import Toast from "react-native-toast-message";
+import { QUERY_KEY } from "@react-query/queryKey";
 
 type PostDataProps = {
   id: string;
@@ -98,6 +99,8 @@ const useUpdatePost = ({
       queryClient.invalidateQueries(["postId"]);
       queryClient.invalidateQueries(["updatePost"]);
       queryClient.invalidateQueries(["postAndComment"]);
+      queryClient.invalidateQueries([QUERY_KEY.CURRENT_USER]);
+      queryClient.invalidateQueries([QUERY_KEY.POSTS]);
       resetState(); // 상태변수 초기화
       navigation.goBack();
     } catch (error) {

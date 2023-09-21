@@ -3,6 +3,7 @@ import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { LINK } from "@constants/link";
 import { colors } from "@constants/color";
+import { Platform } from "react-native";
 
 import MainPage from "@screens/MainPage";
 import MyPage from "@screens/MyPage";
@@ -11,6 +12,8 @@ import ExplorePage from "@screens/ExplorePage";
 import NotificationPage from "@screens/NotificationPage";
 
 const Tabs = createBottomTabNavigator();
+const tabBarStyleHeight = Platform.OS === "ios" ? 80 : 55;
+const createPostMarginTop = Platform.OS === "ios" ? -23 : -28;
 
 export default function BottomTab() {
   return (
@@ -20,7 +23,7 @@ export default function BottomTab() {
         tabBarActiveTintColor: "#167DD8",
         tabBarShowLabel: false,
         tabBarStyle: {
-          height: 80, // 탭 바의 높이를 조정하세요.
+          height: tabBarStyleHeight,
         },
       }}
     >
@@ -55,7 +58,7 @@ export default function BottomTab() {
               name="pluscircle"
               color={colors.primary}
               size={55}
-              style={{ marginTop: -23 }}
+              style={{ marginTop: createPostMarginTop }}
             />
           ),
         }}
