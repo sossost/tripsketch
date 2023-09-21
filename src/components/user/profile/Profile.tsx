@@ -8,6 +8,9 @@ import { styled } from "styled-components/native";
 
 import Link from "@components/UI/Link";
 import Button from "@components/UI/Button";
+import { Dimensions } from "react-native";
+
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 type ProfileProps = {
   nickname: string;
@@ -80,6 +83,7 @@ const Profile = ({ nickname }: ProfileProps) => {
               params={{ nickname: profileUser!.nickname, variant: "팔로워" }}
               text={`팔로워 ${profileUser!.followersCount}`}
             />
+
             <Link
               page="FollowingPage"
               params={{ nickname: profileUser!.nickname, variant: "팔로잉" }}
@@ -88,7 +92,7 @@ const Profile = ({ nickname }: ProfileProps) => {
           </ProfileSocialWrapper>
           <ProfileTextWrapper>
             <ProfileUserNameText>{profileUser!.nickname}</ProfileUserNameText>
-            <ProfileIntroductionText>
+            <ProfileIntroductionText numberOfLines={2}>
               {profileUser!.introduction}
             </ProfileIntroductionText>
           </ProfileTextWrapper>
@@ -111,6 +115,7 @@ const Profile = ({ nickname }: ProfileProps) => {
 export default React.memo(Profile);
 
 const ProfileLayout = styled.View`
+  width: ${SCREEN_WIDTH - 44}px;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -132,8 +137,8 @@ const ProifleImage = styled.Image`
 
 const ProfileRightWrapper = styled.View`
   display: flex;
-  flex-grow: 1;
-  gap: 5px;
+  flex: 1;
+  gap: 1px;
   align-items: flex-start;
 `;
 
@@ -145,7 +150,7 @@ const ProfileSocialWrapper = styled.View`
 
 const ProfileTextWrapper = styled.View`
   display: flex;
-  gap: 5px;
+  gap: 1px;
   padding-bottom: 8px;
 `;
 
@@ -159,4 +164,5 @@ const ProfileIntroductionText = styled.Text`
   font-size: 16px;
   font-weight: 400;
   color: ${(props) => props.theme.mainFont};
+  height: 40px;
 `;
