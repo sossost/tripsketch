@@ -1,22 +1,22 @@
 import { useState } from "react";
 import styled from "styled-components/native";
-import VariantSelector from "../UI/VariantSelector";
 
-import Header from "../UI/header/Header";
-import Title from "../UI/header/Title";
-import AsyncBoundary from "../common/AsyncBoundary";
-import MyNotificationList from "./MyNotificationList";
-import PageLayout from "../common/PageLayout";
+import VariantSelector from "@components/UI/VariantSelector";
+import Header from "@components/UI/header/Header";
+import Title from "@components/UI/header/Title";
+import AsyncBoundary from "@components/common/AsyncBoundary";
+import MyNotificationList from "@components/notification/MyNotificationList";
+import PageLayout from "@components/common/PageLayout";
 
 /**
  * @description : 알림 페이지 컴포넌트
  * @author : 장윤수
- * @update : 2023-09-17,
- * @version 1.0.1, 알림 리스트 컴포넌트, 로직 분리
+ * @update : 2023-09-20,
+ * @version 1.1.0, 내소식 -> 공지사항 워딩 변경
  * @see None,
  */
 const NotificationPageComponent = () => {
-  const [variant, setVariant] = useState<"내소식" | "새소식">("내소식");
+  const [variant, setVariant] = useState<"내소식" | "공지사항">("내소식");
 
   return (
     <AsyncBoundary>
@@ -25,7 +25,7 @@ const NotificationPageComponent = () => {
         <AdSection></AdSection>
         <VariantSelector
           variant1="내소식"
-          variant2="새소식"
+          variant2="공지사항"
           initialVariant="내소식"
           variant={variant}
           setVariant={setVariant}
