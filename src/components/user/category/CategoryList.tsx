@@ -72,7 +72,7 @@ export const CategoryContainer = styled.ScrollView`
 const CategoryButton = styled.TouchableOpacity<{ isClicked: boolean }>`
   padding: 6px 10px;
   border-width: 1px;
-  border-color: #73bbfb;
+  border-color: ${colors.primary};
   border-radius: 25px;
   background-color: ${({ isClicked }) =>
     isClicked ? colors.primary : colors.white};

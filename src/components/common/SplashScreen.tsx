@@ -6,7 +6,6 @@ import React, {
   useContext,
 } from "react";
 import { Animated, Dimensions, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import SplashBack from "./SplashBack";
 import KakaoLoginButton from "../auth/KakaoLoginButton";
@@ -157,12 +156,12 @@ const SplashScreen = ({ children }: { children: ReactNode }) => {
             ></Animated.Image>
             <Animated.Text
               style={{
-                fontSize: 15,
+                fontSize: 16,
                 color: "white",
                 opacity: fadeOut === true ? opacityTitle : 1,
               }}
             >
-              당신의 여행을 스케치하세요.
+              당신의 여행을 스케치하세요
             </Animated.Text>
           </Animated.View>
           <SplashBack willFadeOut={fadeOut === true ? true : false} />

@@ -17,7 +17,7 @@ const LikesCount = ({ likes, variant }: LikesCountProps) => {
       }}
     >
       <Image
-        source={require("@assets/images/heartOutlineIcon.png")}
+        source={require("@assets/images/isNotLikedIcon.png")}
         style={{
           width: style.iconSize[variant || "medium"],
           aspectRatio: 1.16,

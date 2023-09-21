@@ -42,6 +42,8 @@ const StyledButton = styled.TouchableOpacity`
 const ButtonIcon = styled.Image`
   width: 30px;
   height: 23px;
+  margin-right: 10px;
+  resize-mode: contain;
 `;
 
 const ButtonText = styled.Text`

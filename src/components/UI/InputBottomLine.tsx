@@ -51,14 +51,14 @@ const InputWrapper = styled.View`
   align-items: center;
   width: 100%;
   margin-bottom: 6px;
-  border-bottom-width: 1px;
+  border-bottom-width: 1.2px;
   border-color: ${(props) => props.theme.mainBlue};
   padding: 6px 0;
 `;
 
 const Input = styled.TextInput`
   flex: 1;
-  font-size: 18px;
+  font-size: 17px;
   color: ${(props) => props.theme.mainFont};
   border-width: 0;
 `;
@@ -71,8 +71,8 @@ const ResetBtn = styled.TouchableOpacity`
 `;
 
 const ResetIcon = styled.Image`
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
 `;
 
 const LengthCheckText = styled.Text`

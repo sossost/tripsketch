@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import { TouchableOpacity, Text, Animated, Dimensions } from "react-native";
 import styled from "styled-components/native";
+import { colors } from "@constants/color";
 
 type VariantProps<T extends string> = {
   variant1: T;
@@ -83,7 +84,7 @@ const Underline = styled(Animated.View)`
   height: 3px;
   border-radius: 9999px;
   width: 50%;
-  background-color: #73bbfb;
+  background-color: ${colors.primary};
 `;
 
 export default VariantSelector;

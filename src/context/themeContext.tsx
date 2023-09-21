@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { ThemeProvider } from "styled-components";
 
 const theme = {
-  mainBlue: "#73BBFB",
+  mainBlue: "#1FA6F9",
   subBlue: "#167DD8",
   mainFont: "#414141",
   subFont: "#6F6F6F",
