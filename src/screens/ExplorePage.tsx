@@ -1,4 +1,4 @@
-import ExplorePageComponent from "../components/explore/ExplorePageComponent";
+import ExplorePageComponent from "@components/explore/ExplorePageComponent";
 
 const ExplorePage = () => {
   return <ExplorePageComponent />;
