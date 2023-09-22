@@ -39,9 +39,6 @@ export const getCurrentUser = async () => {
     }
     return null;
   } catch (error: unknown) {
-    errorToastMessageInCatch(
-      "유저 정보 요청에 실패했습니다. 다시 로그인 해주세요."
-    );
     errorLoging(error, "로그인한 유저 정보 요청 에러는🤔");
     return null;
   }
