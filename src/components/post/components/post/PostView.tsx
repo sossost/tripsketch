@@ -18,6 +18,7 @@ import Slick from "react-native-slick";
 import useDeleteAlert from "../../hooks/useDeleteAlert";
 import { GetPost } from "../../../../types/Post";
 import NonePostView from "./NonePostView";
+import { LINK } from "@constants/link";
 
 type PostViewProps = {
   postId: string;
@@ -64,6 +65,11 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
       alertOk: "삭제",
     });
     deleteAlertFunction();
+  };
+  postId;
+
+  const followerHandler = () => {
+    navigation.navigate(LINK.USER_PAGE, { nickname: postData.nickname });
   };
 
   return (
@@ -115,7 +121,9 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
           </Text>
         </View>
         <View style={styles.writer_container}>
-          <Text style={styles.writer}>by {postData.nickname}</Text>
+          <TouchableOpacity onPress={followerHandler}>
+            <Text style={styles.writer}>by {postData.nickname}</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
       <View style={styles.wrap}>
