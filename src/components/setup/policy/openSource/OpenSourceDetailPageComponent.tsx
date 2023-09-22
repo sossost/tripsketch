@@ -29,7 +29,7 @@ const OpenSourceDetailPageComponent = ({
 
   return (
     <PageLayout>
-      <Header left={<CommonHeaderLeft title={libraryName.substring(1)} />} />
+      <Header left={<CommonHeaderLeft title={libraryName} />} />
       <ListWrapper>
         <ListTitle>{libraryName.substring(1)}</ListTitle>
         <Text>Version : {version}</Text>
@@ -43,7 +43,7 @@ const OpenSourceDetailPageComponent = ({
 
 export default OpenSourceDetailPageComponent;
 
-const ListWrapper = styled.View`
+const ListWrapper = styled.ScrollView`
   display: flex;
   flex-direction: column;
   gap: 10px;
