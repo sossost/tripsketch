@@ -247,9 +247,11 @@ const PostCommentContainer = ({
       {sort === "all" ? (
         <BottomSheet
           ref={sheetRef}
-          index={0}
+          index={-1}
           snapPoints={snapPoints}
           onChange={handleSheetChange}
+          enablePanDownToClose={true}
+          animateOnMount={true}
           style={styles.sheet}
         >
           <KeyboardAvoidingView
