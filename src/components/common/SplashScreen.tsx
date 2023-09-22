@@ -52,7 +52,6 @@ const SplashScreen = ({ children }: { children: ReactNode }) => {
 
     timer = setTimeout(async () => {
       if (isLoggedIn) {
-        console.log(isLoggedIn);
         setFadeOut(true);
       }
     }, 1500);
