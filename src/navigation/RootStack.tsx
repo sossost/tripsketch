@@ -18,6 +18,7 @@ import OpenSourcePage from "@screens/setup/OpenSourcePage";
 import OpenSourceDetalPage from "@screens/setup/OpenSourceDetalPage";
 import PushNotificationSetupPage from "@screens/setup/PushNotificationSetupPage";
 import PrivacyPolicyPage from "@screens/setup/PrivacyPolicyPage";
+import PostManagementPolicyPage from "@screens/setup/PostManagementPolicyPage";
 
 const Stack = createStackNavigator();
 
@@ -61,6 +62,10 @@ export default function RootStack() {
             <Stack.Screen
               name={LINK.SETUP.PRIVACY_POLICY_PAGE}
               component={PrivacyPolicyPage}
+            />
+            <Stack.Screen
+              name={LINK.SETUP.POST_MANAGEMENT_POLICY_PAGE}
+              component={PostManagementPolicyPage}
             />
           </Stack.Navigator>
         </SplashScreen>
