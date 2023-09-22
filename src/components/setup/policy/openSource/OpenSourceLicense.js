@@ -16,7 +16,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "@expo/webpack-config",
-    version: "18.1.1",
+    version: "19.0.0",
     _license: "MIT",
     _description:
       "A Webpack configuration used to bundle Expo websites with Expo CLI.",
@@ -31,7 +31,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "@gorhom/bottom-sheet",
-    version: "4.4.7",
+    version: "4.5.1",
     _license: "MIT",
     _description:
       "A performant interactive bottom sheet with fully configurable options 🚀",
@@ -45,8 +45,24 @@ export const OpenSourceLicense = [
       'MIT License\n\nCopyright (c) 2020 Mo Gorhom\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the "Software"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n',
   },
   {
+    libraryName: "@react-native-async-storage/async-storage",
+    version: "1.18.2",
+    _license: "MIT",
+    _description:
+      "Asynchronous, persistent, key-value storage system for React Native.",
+    homepage:
+      "https://github.com/react-native-async-storage/async-storage#readme",
+    author: { name: "Krzysztof Borowy", email: "hello@krizzu.dev" },
+    repository: {
+      type: "git",
+      url: "git+https://github.com/react-native-async-storage/async-storage.git",
+    },
+    _licenseContent:
+      'MIT License\n\nCopyright (c) 2015-present, Facebook, Inc.\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the "Software"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.',
+  },
+  {
     libraryName: "@react-native-community/datetimepicker",
-    version: "6.7.3",
+    version: "7.2.0",
     _license: "MIT",
     _description: "DateTimePicker component for React Native",
     homepage: "https://github.com/react-native-community/datetimepicker#readme",
@@ -77,7 +93,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "@react-native-picker/picker",
-    version: "2.4.8",
+    version: "2.4.10",
     _license: "MIT",
     _description: "React Native Picker for iOS, Android, macOS, and Windows",
     homepage: "https://github.com/react-native-picker/picker#readme",
@@ -148,7 +164,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "@tanstack/react-query",
-    version: "4.29.25",
+    version: "4.35.3",
     _license: "MIT",
     _description:
       "Hooks for managing, caching and syncing asynchronous and remote data in React",
@@ -156,14 +172,15 @@ export const OpenSourceLicense = [
     author: { name: "tannerlinsley" },
     repository: {
       type: "git",
-      url: "git+https://github.com/tanstack/query.git",
+      url: "git+https://github.com/TanStack/query.git",
+      directory: "packages/react-query",
     },
     _licenseContent:
       'MIT License\n\nCopyright (c) 2021-present Tanner Linsley\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the "Software"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n',
   },
   {
     libraryName: "aws-sdk",
-    version: "2.1442.0",
+    version: "2.1461.0",
     _license: "Apache-2.0",
     _description: "AWS SDK for JavaScript",
     homepage: "https://github.com/aws/aws-sdk-js",
@@ -174,7 +191,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "axios",
-    version: "1.4.0",
+    version: "1.5.0",
     _license: "MIT",
     _description: "Promise based HTTP client for the browser and node.js",
     homepage: "https://axios-http.com",
@@ -185,7 +202,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "expo",
-    version: "48.0.20",
+    version: "49.0.11",
     _license: "MIT",
     _description: "The Expo SDK",
     homepage: "https://github.com/expo/expo/tree/main/packages/expo",
@@ -198,7 +215,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "expo-asset",
-    version: "8.9.2",
+    version: "8.10.1",
     _license: "MIT",
     _description:
       "An Expo universal module to download assets and pass them into other APIs",
@@ -212,7 +229,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "expo-calendar",
-    version: "11.1.1",
+    version: "11.3.0",
     _license: "MIT",
     _description:
       "Provides an API for interacting with the device's system calendars, events, reminders, and associated records.",
@@ -226,7 +243,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "expo-constants",
-    version: "14.3.0",
+    version: "14.4.2",
     _license: "MIT",
     _description:
       "Provides system information that remains constant throughout the lifetime of your app.",
@@ -240,7 +257,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "expo-device",
-    version: "5.2.1",
+    version: "5.4.0",
     _license: "MIT",
     _description:
       "A universal module that gets physical information about the device running the application",
@@ -254,7 +271,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "expo-image-manipulator",
-    version: "11.1.1",
+    version: "11.3.0",
     _license: "MIT",
     _description:
       "Provides functions that let you manipulation images on the local file system, eg: resize, crop.",
@@ -268,7 +285,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "expo-image-picker",
-    version: "14.1.1",
+    version: "14.3.2",
     _license: "MIT",
     _description:
       "Provides access to the system's UI for selecting images and videos from the phone's library or taking a photo with the camera.",
@@ -282,7 +299,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "expo-linear-gradient",
-    version: "12.1.2",
+    version: "12.3.0",
     _license: "MIT",
     _description: "Provides a React component that renders a gradient view.",
     homepage: "https://docs.expo.dev/versions/latest/sdk/linear-gradient/",
@@ -295,7 +312,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "expo-notifications",
-    version: "0.18.1",
+    version: "0.20.1",
     _license: "MIT",
     _description: "Notifications module",
     homepage: "https://docs.expo.dev/versions/latest/sdk/notifications/",
@@ -308,7 +325,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "expo-secure-store",
-    version: "12.1.1",
+    version: "12.3.1",
     _license: "MIT",
     _description:
       "Provides a way to encrypt and securely store key–value pairs locally on the device.",
@@ -321,8 +338,22 @@ export const OpenSourceLicense = [
     },
   },
   {
+    libraryName: "expo-splash-screen",
+    version: "0.20.5",
+    _license: "MIT",
+    _description:
+      "Provides a module to allow keeping the native Splash Screen visible until you choose to hide it.",
+    homepage: "https://docs.expo.dev/versions/latest/sdk/splash-screen/",
+    author: { name: "650 Industries, Inc." },
+    repository: {
+      type: "git",
+      url: "git+https://github.com/expo/expo.git",
+      directory: "packages/expo-splash-screen",
+    },
+  },
+  {
     libraryName: "expo-status-bar",
-    version: "1.4.4",
+    version: "1.6.0",
     _license: "MIT",
     _description:
       "Provides the same interface as the React Native StatusBar API, but with slightly different defaults to work great in Expo environments.",
@@ -336,7 +367,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "expo-web-browser",
-    version: "12.1.1",
+    version: "12.3.2",
     _license: "MIT",
     _description:
       "Provides access to the system's web browser and supports handling redirects. On iOS, it uses SFSafariViewController or SFAuthenticationSession, depending on the method you call, and on Android it uses ChromeCustomTabs. As of iOS 11, SFSafariViewController no longer shares cookies with Safari, so if you are using WebBrowser for authentication you will want to use WebBrowser.openAuthSessionAsync, and if you just want to open a webpage (such as your app privacy policy), then use WebBrowser.openBrowserAsync.",
@@ -406,7 +437,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "react-native",
-    version: "0.71.8",
+    version: "0.72.4",
     _license: "MIT",
     _description: "A framework for building native apps using React",
     homepage: "https://github.com/facebook/react-native#readme",
@@ -419,7 +450,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "react-native-calendars",
-    version: "1.1300.0",
+    version: "1.1301.0",
     _license: "MIT",
     _description: "React Native Calendar Components",
     homepage: "https://github.com/wix/react-native-calendars#readme",
@@ -446,6 +477,24 @@ export const OpenSourceLicense = [
       'MIT License\r\n\r\nCopyright (c) 2017 Bertrand Marron\r\n\r\nPermission is hereby granted, free of charge, to any person obtaining a copy\r\nof this software and associated documentation files (the "Software"), to deal\r\nin the Software without restriction, including without limitation the rights\r\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\r\ncopies of the Software, and to permit persons to whom the Software is\r\nfurnished to do so, subject to the following conditions:\r\n\r\nThe above copyright notice and this permission notice shall be included in all\r\ncopies or substantial portions of the Software.\r\n\r\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\r\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\r\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\r\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\r\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\r\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\r\nSOFTWARE.\r\n',
   },
   {
+    libraryName: "react-native-error-boundary",
+    version: "1.2.3",
+    _license: "MIT",
+    _description: "A simple and reusable React-Native error boundary component",
+    homepage: "https://github.com/carloscuesta/react-native-error-boundary",
+    author: {
+      name: "carloscuesta",
+      email: "hi@carloscuesta.me",
+      url: "https://carloscuesta.me",
+    },
+    repository: {
+      type: "git",
+      url: "git+https://github.com/carloscuesta/react-native-error-boundary.git",
+    },
+    _licenseContent:
+      'MIT License\n\nCopyright (c) 2019-2022 Carlos Cuesta\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the "Software"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n',
+  },
+  {
     libraryName: "react-native-flags",
     version: "1.0.0",
     _license: "ISC",
@@ -461,7 +510,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "react-native-gesture-handler",
-    version: "2.13.0",
+    version: "2.12.1",
     _license: "MIT",
     _description:
       "Experimental implementation of a new declarative API for gesture handling in react-native",
@@ -477,7 +526,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "react-native-image-picker",
-    version: "5.6.0",
+    version: "5.7.0",
     _license: "MIT",
     _description:
       "A React Native module that allows you to use native UI to select media from the device library or directly from the camera",
@@ -493,7 +542,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "react-native-maps",
-    version: "1.3.2",
+    version: "1.7.1",
     _license: "MIT",
     _description: "React Native Mapview component for iOS + Android",
     homepage: "https://github.com/react-native-maps/react-native-maps#readme",
@@ -510,7 +559,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "react-native-modal-datetime-picker",
-    version: "17.0.0",
+    version: "17.1.0",
     _license: "MIT",
     _description: "A react-native datetime-picker for Android and iOS",
     homepage:
@@ -539,7 +588,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "react-native-reanimated",
-    version: "2.14.4",
+    version: "3.3.0",
     _license: "MIT",
     _description:
       "More powerful alternative to Animated library for React Native.",
@@ -587,7 +636,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "react-native-safe-area-context",
-    version: "4.5.0",
+    version: "4.6.3",
     _license: "MIT",
     _description:
       "A flexible way to handle safe area, also works on Android and web.",
@@ -603,7 +652,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "react-native-screens",
-    version: "3.20.0",
+    version: "3.22.1",
     _license: "MIT",
     _description: "Native navigation primitives for your React Native app.",
     homepage: "https://github.com/software-mansion/react-native-screens#readme",
@@ -660,7 +709,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "react-native-web",
-    version: "0.18.12",
+    version: "0.19.9",
     _license: "MIT",
     _description: "React Native for Web",
     homepage: "https://github.com/necolas/react-native-web#readme",
@@ -717,7 +766,7 @@ export const OpenSourceLicense = [
   },
   {
     libraryName: "styled-components",
-    version: "6.0.4",
+    version: "6.0.8",
     _license: "MIT",
     _description:
       "CSS for the <Component> Age. Style components your way with speed, strong typing, and flexibility.",
