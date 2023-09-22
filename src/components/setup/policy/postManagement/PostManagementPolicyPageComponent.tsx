@@ -6,7 +6,7 @@ import {
   ListContentContainer,
   ListTitle,
   Title,
-} from "@components/setup/Setup.style";
+} from "@components/setup/policy/PolicyPage.style";
 import { POST_MANAGEMENT_POLICY } from "./PostManagementPolicy";
 
 import Header from "@components/UI/header/Header";

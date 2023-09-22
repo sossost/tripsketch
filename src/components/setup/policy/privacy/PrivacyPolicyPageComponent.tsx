@@ -9,7 +9,7 @@ import {
   ListContentContainer,
   ListTitle,
   Title,
-} from "@components/setup/Setup.style";
+} from "@components/setup/policy/PolicyPage.style";
 
 import Header from "@components/UI/header/Header";
 import CommonHeaderLeft from "@components/UI/header/HeaderLeft";
