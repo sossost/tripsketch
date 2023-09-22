@@ -16,6 +16,9 @@ import { useGetCurrentUser } from "../../../../hooks/useUserQuery";
 import ReCommentItem from "./ReCommentItem";
 import CommentInput from "./CommentInput";
 import useDeleteAlert from "../../hooks/useDeleteAlert";
+import { LINK } from "@constants/link";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "@types/RootStack";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -61,6 +64,7 @@ const CommentItem = ({
   const [isButton, setIsButton] = useState(false);
   const [isUpdateInput, setIsUpdateInput] = useState(false);
 
+  const navigation = useNavigation<StackNavigation>();
   const likeCommentId = comment.id;
   const isLikeStatus = likes;
 
@@ -106,6 +110,10 @@ const CommentItem = ({
     setIsButton(false);
   };
 
+  const followerHandler = () => {
+    navigation.navigate(LINK.USER_PAGE, { nickname: comment.userNickName });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.container_inner}>
@@ -118,7 +126,9 @@ const CommentItem = ({
           </View>
           <View style={styles.text}>
             <View style={styles.top}>
-              <Text style={styles.id}>{comment.userNickName}</Text>
+              <TouchableOpacity onPress={followerHandler}>
+                <Text style={styles.id}>{comment.userNickName}</Text>
+              </TouchableOpacity>
               <View style={styles.likes}>
                 {userData &&
                 comment.isDeleted === false &&

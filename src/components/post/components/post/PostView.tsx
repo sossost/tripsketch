@@ -18,6 +18,7 @@ import Slick from "react-native-slick";
 import useDeleteAlert from "../../hooks/useDeleteAlert";
 import { GetPost } from "../../../../types/Post";
 import NonePostView from "./NonePostView";
+import { LINK } from "@constants/link";
 
 type PostViewProps = {
   postId: string;
@@ -65,6 +66,11 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
     });
     deleteAlertFunction();
   };
+  postId;
+
+  const followerHandler = () => {
+    navigation.navigate(LINK.USER_PAGE, { nickname: postData.nickname });
+  };
 
   return (
     <View style={[styles.container]}>
@@ -88,11 +94,6 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
               color="#9f9f9f"
             />
           </TouchableOpacity>
-        </View>
-        <View style={styles.title_container}>
-          <Text style={styles.title} numberOfLines={3}>
-            {postData.title}
-          </Text>
           <View style={styles.ellipsis}>
             {userData?.nickname === postData.nickname || userData?.isAdmin ? (
               <TouchableOpacity onPress={settingBox}>
@@ -114,8 +115,15 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
             )}
           </View>
         </View>
+        <View style={styles.title_container}>
+          <Text style={styles.title} numberOfLines={3}>
+            {postData.title}
+          </Text>
+        </View>
         <View style={styles.writer_container}>
-          <Text style={styles.writer}>by {postData.nickname}</Text>
+          <TouchableOpacity onPress={followerHandler}>
+            <Text style={styles.writer}>by {postData.nickname}</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
       <View style={styles.wrap}>
@@ -190,6 +198,8 @@ const styles = StyleSheet.create({
   header_container: {
     paddingHorizontal: 15,
     height: 40,
+    display: "flex",
+    justifyContent: "center",
   },
   wrap: {
     paddingHorizontal: 20,
@@ -201,7 +211,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: "600",
-    width: "90%",
+    width: "100%",
     color: "#fff",
   },
   ellipsis: {

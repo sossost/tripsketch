@@ -51,7 +51,9 @@ const KaKaoLogin = () => {
     queryClient.setQueryData([QUERY_KEY.CURRENT_USER], userInfo);
 
     // 메인 화면으로 이동
-    navigation.navigate(LINK.MAIN);
+    if (userInfo) {
+      navigation.navigate(LINK.MAIN);
+    }
   };
 
   return (
