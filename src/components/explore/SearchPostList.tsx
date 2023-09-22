@@ -5,6 +5,7 @@ import { QUERY_KEY } from "@react-query/queryKey";
 
 import Loading from "@components/UI/Loading";
 import HorizontalPostFlatList from "@components/post/HorizontalPostFlatList";
+import NoneData from "@components/common/NoneData";
 
 interface SearchPostListProps {
   searchQuery: string;
@@ -18,8 +19,8 @@ interface SearchPostListProps {
  * @param variant : 최신순, 인기순 variant
  *
  * @author : 장윤수
- * @update : 2023-09-20,
- * @version 1.1.0, 무한 스크롤 패치중 로딩 컴포넌트 추가
+ * @update : 2023-09-22,
+ * @version 1.2.0, 검색 결과 없을시 안내 컴포넌트 추가
  * @see None,
  */
 const SearchPostList = ({ searchQuery, variant }: SearchPostListProps) => {
@@ -49,6 +50,8 @@ const SearchPostList = ({ searchQuery, variant }: SearchPostListProps) => {
       return <Loading />;
     }
   };
+
+  if (!posts.length) return <NoneData message="검색 결과가 없습니다." />;
 
   return (
     <HorizontalPostFlatList

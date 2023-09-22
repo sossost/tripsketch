@@ -1,10 +1,10 @@
 import { useState } from "react";
 
-import VariantSelector from "../UI/VariantSelector";
-import SearchBar from "../UI/SearchBar";
-import AsyncBoundary from "../common/AsyncBoundary";
-import SearchPostList from "./SearchPostList";
-import PageLayout from "../common/PageLayout";
+import VariantSelector from "@components/UI/VariantSelector";
+import SearchBar from "@components/UI/SearchBar";
+import AsyncBoundary from "@components/common/AsyncBoundary";
+import SearchPostList from "@components/explore/SearchPostList";
+import PageLayout from "@components/common/PageLayout";
 
 const ExplorePageComponent = () => {
   // 게시물 정렬 기준 상태값

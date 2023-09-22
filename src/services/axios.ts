@@ -1,13 +1,15 @@
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 import { API_BASE_URL } from "@env";
-import {
-  getDataFromSecureStore,
-  resetDataInSecureStore,
-  setDataToSecureStore,
-} from "@utils/secureStore";
-import { STORE_KEY } from "@constants/store";
 import { errorLoging } from "@utils/errorHandler";
+import {
+  getAccessToken,
+  getRefreshToken,
+  resetAccessToken,
+  resetRefreshToken,
+  setAccessToken,
+  setRefreshToken,
+} from "@utils/token";
 
 /** axiosBase 인스턴스 생성 */
 export const axiosBase = axios.create({
@@ -17,7 +19,7 @@ export const axiosBase = axios.create({
 
 axiosBase.interceptors.request.use(
   async (config) => {
-    const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+    const accessToken = await getAccessToken();
 
     if (accessToken) {
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -77,15 +79,15 @@ axiosBase.interceptors.response.use(
             console.log(index + 1 + "번째 대기열에 있는 요청 재시도!");
             cb(newAccessToken);
           });
-          console.log("대기열의 모든 요청 재시도 성공!");
+          console.log("대기열의 모든 요청 재시도 성공!!");
           refreshSubscribers = [];
 
           return response;
         } catch (error) {
-          errorLoging(error, "토큰 갱신 에러는🤔!");
+          errorLoging(error, "토큰 갱신 에러는🤔!!");
         } finally {
           isRefreshing = false;
-          console.log("토큰 갱신 및 기존 요청 처리가 완료되었습니다.");
+          console.log("토큰 갱신 및 기존 요청 처리가 완료되었습니다.!!");
         }
       } else {
         console.log("현재 토큰 갱신 중이므로 대기열에 추가합니다");
@@ -133,7 +135,7 @@ const tokenRefresh = async () => {
   try {
     // 기존의 리프레시 토큰으로 액세스 토큰 갱신 요청
 
-    const refreshToken = await getDataFromSecureStore(STORE_KEY.REFRESH_TOKEN);
+    const refreshToken = await getRefreshToken();
     console.log("갱신 요청한 리프레시토큰은", refreshToken);
     const response = await axiosBase.post("oauth/kakao/refresh-token", {
       ourRefreshToken: refreshToken,
@@ -143,18 +145,18 @@ const tokenRefresh = async () => {
 
     // 새로운 액세스 토큰 저장
     const newAccessToken = response.headers.accesstoken;
-    await setDataToSecureStore(STORE_KEY.ACCESS_TOKEN, newAccessToken);
+    await setAccessToken(newAccessToken);
 
     // 새로운 리프레시 토큰 저장
     const newRefreshToken = response.headers.refreshtoken;
-    await setDataToSecureStore(STORE_KEY.REFRESH_TOKEN, newRefreshToken);
+    await setRefreshToken(newRefreshToken);
 
     console.log("새로발급받은 리프레시 :" + newRefreshToken);
     return newAccessToken;
   } catch (error) {
     errorLoging(error, "리프레시 토큰으로 액세스 토큰 갱신 에러는🤔");
-    resetDataInSecureStore(STORE_KEY.ACCESS_TOKEN);
-    resetDataInSecureStore(STORE_KEY.REFRESH_TOKEN);
+    resetAccessToken();
+    resetRefreshToken();
     throw error;
   }
 };

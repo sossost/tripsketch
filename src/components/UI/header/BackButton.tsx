@@ -28,7 +28,7 @@ const BackBtnWrapper = styled.TouchableOpacity`
 `;
 
 const BackBtnIcon = styled.Image`
-  width: 14px;
-  height: 24px;
+  width: 12px;
+  height: 22px;
   object-fit: contain;
 `;

@@ -1,6 +1,15 @@
 import { styled } from "styled-components/native";
 import { PRIVACY_POLICY } from "./PrivacyPolicy";
 import { colors } from "@constants/color";
+import {
+  Container,
+  Description,
+  List,
+  ListContent,
+  ListContentContainer,
+  ListTitle,
+  Title,
+} from "@components/setup/policy/PolicyPage.style";
 
 import Header from "@components/UI/header/Header";
 import CommonHeaderLeft from "@components/UI/header/HeaderLeft";
@@ -20,7 +29,7 @@ const PrivacyPolicyPageComponent = () => {
           <List key={index}>
             <ListTitle>{item.listTitle}</ListTitle>
             {item.listContent.map((list, index) => (
-              <>
+              <ListContentContainer key={index}>
                 <ListContent key={index}>{list.content}</ListContent>
                 {list.table && (
                   <Table>
@@ -40,7 +49,7 @@ const PrivacyPolicyPageComponent = () => {
                     ))}
                   </Table>
                 )}
-              </>
+              </ListContentContainer>
             ))}
           </List>
         ))}
@@ -51,42 +60,6 @@ const PrivacyPolicyPageComponent = () => {
 };
 
 export default PrivacyPolicyPageComponent;
-
-const Container = styled.ScrollView`
-  padding: 10px 0px;
-`;
-
-const Title = styled.Text`
-  font-size: 18px;
-  font-weight: 500;
-  color: ${colors.mainFont};
-  margin-bottom: 15px;
-`;
-
-const Description = styled.Text`
-  font-size: 14px;
-  font-weight: 400;
-  color: ${colors.mainFont};
-  margin-bottom: 15px;
-`;
-
-const List = styled.View`
-  gap: 5px;
-  margin-bottom: 15px;
-`;
-
-const ListTitle = styled.Text`
-  font-size: 16px;
-  font-weight: 500;
-  color: ${colors.mainFont};
-  margin-bottom: 5px;
-`;
-
-const ListContent = styled.Text`
-  font-size: 14px;
-  font-weight: 400;
-  color: ${colors.mainFont};
-`;
 
 const Table = styled.View`
   display: flex;

@@ -2,16 +2,15 @@ import axios from "axios";
 import { axiosBase } from "./axios";
 import { API_BASE_URL } from "@env";
 import { User } from "../types/user";
-import { getDataFromSecureStore } from "../utils/secureStore";
-import { STORE_KEY } from "../constants/store";
 import { errorLoging, errorToastMessageInCatch } from "../utils/errorHandler";
 import { ERROR_MESSAGE } from "../constants/message";
+import { getAccessToken, getPushToken } from "@utils/token";
 
 /**
  * @description : 카카오 로그인 요청하는 함수
  * @author : 장윤수
- * @update : 2023-09-21,
- * @version 1.0.0,
+ * @update : 2023-09-22,
+ * @version 1.0.1, 토큰 관련 함수 변경
  * @see None
  */
 export const kakaoLogin = async () => {
@@ -26,8 +25,8 @@ export const kakaoLogin = async () => {
  * @see None
  */
 export const getCurrentUser = async () => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
-  const pushToken = await getDataFromSecureStore(STORE_KEY.PUSH_TOKEN);
+  const accessToken = await getAccessToken();
+  const pushToken = await getPushToken();
 
   try {
     if (accessToken) {
@@ -56,7 +55,7 @@ export const getCurrentUser = async () => {
  * @see None
  */
 export const patchCurrentUser = async (data: any) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const accessToken = await getAccessToken();
 
   try {
     if (accessToken) {
@@ -136,7 +135,7 @@ export const getUserByNicknameAuthed = async (nickname: string) => {
  * @see None
  */
 export const followUser = async (nickname: string) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const accessToken = await getAccessToken();
 
   if (accessToken) {
     const response = await axiosBase.post(
@@ -162,7 +161,7 @@ export const followUser = async (nickname: string) => {
  * @see None
  */
 export const unfollowUser = async (nickname: string) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const accessToken = await getAccessToken();
 
   const data = { nickname: nickname };
 

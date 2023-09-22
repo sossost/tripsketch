@@ -1,6 +1,9 @@
 import { useGetCurrentUser } from "@hooks/useUserQuery";
 import { useContext } from "react";
 import { AuthModalContext } from "@context/AuthModalProvider";
+import { useNavigation } from "@react-navigation/native";
+import { LINK } from "@constants/link";
+import { StackNavigation } from "@types/RootStack";
 
 import AsyncBoundary from "@components/common/AsyncBoundary";
 import TrendingPostsList from "@components/main/TrendingPostsList";
@@ -20,7 +23,10 @@ import AuthModal from "@components/auth/AuthModal";
  * @see None,
  */
 const MainPageComponent = () => {
+  const navigation = useNavigation<StackNavigation>();
+
   const { openModal } = useContext(AuthModalContext);
+
   // 현재 유저 정보 가져오는 커스텀 훅
   const { data: currentUser } = useGetCurrentUser();
 
@@ -29,7 +35,7 @@ const MainPageComponent = () => {
   const headerRight = currentUser ? (
     <ProfileImage
       profileImage={currentUser?.profileImageUrl}
-      onPress={openModal}
+      onPress={() => navigation.navigate(LINK.MY_PAGE)}
     />
   ) : (
     <LoginButton onClick={openModal} />

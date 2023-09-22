@@ -1,4 +1,4 @@
-import OpenSourcePageComponent from "@components/setup/policy/OpenSourcePageComponent";
+import OpenSourcePageComponent from "@components/setup/policy/openSource/OpenSourcePageComponent";
 
 const OpenSourcePage = () => {
   return <OpenSourcePageComponent />;

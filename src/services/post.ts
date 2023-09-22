@@ -1,11 +1,10 @@
 import axiosBase from "@services/axios";
-import { STORE_KEY } from "@constants/store";
 import { API_PATH } from "@constants/path";
 import { ERROR_MESSAGE } from "@constants/message";
 import { errorLoging } from "@utils/errorHandler";
-import { getDataFromSecureStore } from "@utils/secureStore";
 import { Post, GetPost, PostUpdate } from "@types/Post";
 import { CreatePost } from "@types/Post";
+import { getAccessToken } from "@utils/token";
 
 /**
  * @description : 닉네임과 카테고리로 해당 유저의 카테고리에 해당하는 게시글 리스트를 요청하는 함수
@@ -16,8 +15,8 @@ import { CreatePost } from "@types/Post";
  * @param size : 페이지당 게시물수
  *
  * @author : 장윤수
- * @update : 2023-09-17,
- * @version 1.0.3, 로깅 및 에러메세지 수정
+ * @update : 2023-09-22,
+ * @version 1.0.4, 토큰 관련 함수 변경
  * @see None,
  */
 export const getPostsByNickname = async (
@@ -135,7 +134,7 @@ export const getPostsById = async (id: string) => {
 };
 
 export const getPostsAndComments = async (postId: string) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const accessToken = await getAccessToken();
 
   try {
     const response = await axiosBase.get<GetPost>(
@@ -185,7 +184,7 @@ export const getUpdatePost = async (id: string) => {
 };
 
 export const createPost = async (postData: CreatePost) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const accessToken = await getAccessToken();
   try {
     const response = await axiosBase.post(API_PATH.TRIP.POST.TRIP, postData, {
       headers: {
@@ -201,7 +200,7 @@ export const createPost = async (postData: CreatePost) => {
 };
 
 export const postLike = async (id: string) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const accessToken = await getAccessToken();
   try {
     const response = await axiosBase.post(
       API_PATH.TRIP.POST.TRIP_LIKE_TOGGLE,
@@ -218,7 +217,7 @@ export const postLike = async (id: string) => {
 };
 
 export const postUpdate = async (updateData: any) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const accessToken = await getAccessToken();
 
   // 수정할 id updateData에서 추출
   const idValue = updateData["_parts"].find(([key]: string) => key === "id");

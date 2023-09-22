@@ -12,12 +12,14 @@ import KakaoLoginButton from "../auth/KakaoLoginButton";
 import CustomButton from "../UI/CustomButton";
 import { FadeOutContext } from "../../context/fadeOutContext";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
+import { getAccessToken } from "@utils/token";
+
 const splashBgColor = "#fff";
 
 /**
  * @description : 소셜 페이지 컴포넌트
  * @author : 황반석
- * @update : 2023-09-14,
+ * @update : 2023-09-22,
  * @version 1.2.0, 장윤수 : 애니메이션 fade out으로 통일
  * @see None,
  */
@@ -47,8 +49,9 @@ const SplashScreen = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
-    timer = setTimeout(() => {
-      if (currentUser.data) {
+    timer = setTimeout(async () => {
+      const accessToken = await getAccessToken();
+      if (accessToken) {
         setFadeOut(true);
       }
     }, 2000);

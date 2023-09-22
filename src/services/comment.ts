@@ -1,7 +1,6 @@
 import { API_PATH } from "../constants/path";
-import { getDataFromSecureStore } from "../utils/secureStore";
-import { STORE_KEY } from "../constants/store";
 import axiosBase from "./axios";
+import { getAccessToken } from "@utils/token";
 
 export const getCommentData = async () => {
   try {
@@ -16,7 +15,7 @@ export const getCommentData = async () => {
 };
 
 export const getCommentByTripId = async (tripId: string) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const accessToken = await getAccessToken();
   if (accessToken) {
     try {
       const response = await axiosBase.get(
@@ -52,7 +51,7 @@ interface CommentData {
 }
 
 export const createComment = async (commentData: CommentData) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const accessToken = await getAccessToken();
   try {
     const response = await axiosBase.post(
       API_PATH.COMMENT.POST.COMMENT,
@@ -82,7 +81,7 @@ interface ReplyCommentData {
 export const createReplyComment = async (
   replyCommentData: ReplyCommentData
 ) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const accessToken = await getAccessToken();
   try {
     const updatedCommentData = {
       tripId: replyCommentData.tripId,
@@ -154,7 +153,7 @@ interface updateData {
 }
 
 export const updateComment = async (updateData: updateData) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const accessToken = await getAccessToken();
   try {
     const response = await axiosBase.patch(
       `${API_PATH.COMMENT.PATCH.COMMENT_CONTENT.replace(":id", updateData.id)}`,
@@ -183,7 +182,7 @@ interface updateReplyData {
 }
 
 export const updateReplyComment = async (updateReplyData: updateReplyData) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const accessToken = await getAccessToken();
   try {
     const response = await axiosBase.patch(
       `${API_PATH.COMMENT.PATCH.RECOMMENT_CONTENT.replace(
@@ -209,7 +208,7 @@ export const updateReplyComment = async (updateReplyData: updateReplyData) => {
 };
 
 export const deleteComment = async (id: string) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const accessToken = await getAccessToken();
   try {
     const response = await axiosBase.delete(
       `${API_PATH.COMMENT.DELETE.COMMENT.replace(":id", id)}`,
@@ -234,7 +233,7 @@ interface deleteData {
 }
 
 export const deleteReplyComment = async (deleteData: deleteData) => {
-  const accessToken = await getDataFromSecureStore(STORE_KEY.ACCESS_TOKEN);
+  const accessToken = await getAccessToken();
   try {
     const response = await axiosBase.delete(
       `${API_PATH.COMMENT.DELETE.RECOMMENT.replace(

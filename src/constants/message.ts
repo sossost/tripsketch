@@ -14,5 +14,5 @@ export const SUCCESS_MESSAGE = {
   FOLLOW: "팔로우 하였습니다.",
   UNFOLLOW: "팔로우를 취소 하였습니다.",
   DELETE_NOTIFICATION: "알림을 삭제하였습니다.",
-  LOGOUT: "로그아웃 하였습니다.",
+  LOGOUT: "로그아웃 되었습니다.",
 };

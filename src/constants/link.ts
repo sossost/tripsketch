@@ -19,7 +19,6 @@ export const LINK = {
     OPENSOURCE_LICENCE_PAGE: "OpensourceLicencePage",
     OPENSOURCE_LICENCE_DETAIL_PAGE: "OpensourceLicenceDetailPage",
     PRIVACY_POLICY_PAGE: "PrivacyPolicyPage",
-    LOCATION_POLICY_PAGE: "LocationPolicyPage",
     POST_MANAGEMENT_POLICY_PAGE: "PostManagementPolicyPage",
     ACCOUNT_MANAGEMENT_PAGE: "AccountManagementPage",
   },
