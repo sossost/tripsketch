@@ -99,13 +99,14 @@ export const getPostsByTrending = async (page: number, size: number) => {
  */
 export const getSortedPostsBySearchKeyword = async (
   keward: string,
-  sorting: "최신순" | "인기순" | "오래된순",
+  sorting: "최신순" | "조회수순" | "인기순" | "오래된순",
   page: number,
   size: number
 ) => {
   const sortingType = {
     최신순: 1,
-    인기순: 2,
+    조회수순: 2,
+    인기순: 3,
     오래된순: -1,
   };
   try {
