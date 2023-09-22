@@ -3,11 +3,10 @@ import { WebView } from "react-native-webview";
 import { useNavigation } from "@react-navigation/native";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "@react-query/queryKey";
-import { STORE_KEY } from "@constants/store";
 import { getCurrentUser, kakaoLogin } from "@services/user";
 import { LINK } from "@constants/link";
 import { errorLoging } from "@utils/errorHandler";
-import { setDataToSecureStore } from "@utils/secureStore";
+import { setAccessToken, setRefreshToken } from "@utils/token";
 import { StackNavigation } from "@types/RootStack";
 
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
@@ -32,18 +31,11 @@ const KaKaoLogin = () => {
 
       // 액세스 토큰 저장
       const accessToken: string = response.headers.accesstoken;
-      await setDataToSecureStore<string>(STORE_KEY.ACCESS_TOKEN, accessToken);
+      await setAccessToken(accessToken);
 
       // 리프레시 토큰 저장
       const refreshToken: string = response.headers.refreshtoken;
-      await setDataToSecureStore<string>(STORE_KEY.REFRESH_TOKEN, refreshToken);
-
-      // 리프레시 토큰 만료 기간 저장
-      const refreshTokenExpiryDate = response.headers.refreshtokenexpirydate;
-      await setDataToSecureStore(
-        STORE_KEY.REFRESH_TOKEN_EXPIRED_DATE,
-        refreshTokenExpiryDate
-      );
+      await setRefreshToken(refreshToken);
     } catch (error: unknown) {
       errorLoging(error, "토큰 발급 요청 실패 에러는");
     }

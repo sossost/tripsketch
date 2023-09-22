@@ -3,14 +3,13 @@ import { LINK } from "@constants/link";
 import { colors } from "@constants/color";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "@types/RootStack";
-import { resetDataInSecureStore } from "@utils/secureStore";
-import { STORE_KEY } from "@constants/store";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { SUCCESS_MESSAGE } from "@constants/message";
 import { ERROR_MESSAGE } from "@constants/message";
 import { useQueryClient } from "@tanstack/react-query";
 import { QUERY_KEY } from "@react-query/queryKey";
 import useModal from "@hooks/useModal";
+import { resetAccessToken, resetRefreshToken } from "@utils/token";
 
 import Header from "@components/UI/header/Header";
 import CommonHeaderLeft from "@components/UI/header/HeaderLeft";
@@ -44,7 +43,7 @@ const SETUP_PAGE_LIST = [
  * @description : 설정 및 개인정보 페이지 컴포넌트
  * @author : 장윤수
  * @update : 2023-09-21,
- * @version 1.1., 로그아웃 모달 추가
+ * @version 1.1.0, 로그아웃 모달 추가
  * @see None
  */
 const SetupPageCompnent = () => {
@@ -54,8 +53,8 @@ const SetupPageCompnent = () => {
 
   const handleLogout = async () => {
     try {
-      await resetDataInSecureStore(STORE_KEY.ACCESS_TOKEN);
-      await resetDataInSecureStore(STORE_KEY.REFRESH_TOKEN);
+      await resetAccessToken();
+      await resetRefreshToken();
       queryClient.setQueryData([QUERY_KEY.CURRENT_USER], null);
       navigation.navigate(LINK.MAIN);
       Toast.show({ type: "success", text1: SUCCESS_MESSAGE.LOGOUT });

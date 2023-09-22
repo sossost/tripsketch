@@ -3,9 +3,9 @@ import * as Notifications from "expo-notifications";
 import * as Device from "expo-device";
 import { Platform } from "react-native";
 import { Subscription } from "expo-modules-core";
-import { setDataToSecureStore } from "@utils/secureStore";
 import { STORE_KEY } from "@constants/store";
 import { saveDataToAsyncStorage } from "@utils/asyncStorage";
+import { setPushToken } from "@utils/token";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -89,7 +89,7 @@ const NotificationProvider = ({ children }: { children: ReactNode }) => {
           })
         ).data;
         const pushToken = token.slice("ExponentPushToken[".length, -1);
-        await setDataToSecureStore(STORE_KEY.PUSH_TOKEN, pushToken);
+        await setPushToken(pushToken);
       } else {
         alert("Must use physical device for Push Notifications");
       }
