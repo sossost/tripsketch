@@ -5,6 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "@types/RootStack";
 import { useSocialControllerInUserPage } from "@hooks/useFollowQuery";
 import { styled } from "styled-components/native";
+import { Platform } from "react-native";
 
 import Link from "@components/UI/Link";
 import Button from "@components/UI/Button";
@@ -82,12 +83,14 @@ const Profile = ({ nickname }: ProfileProps) => {
               page="FollowerPage"
               params={{ nickname: profileUser!.nickname, variant: "팔로워" }}
               text={`팔로워 ${profileUser!.followersCount}`}
+              fontSize={15}
             />
 
             <Link
               page="FollowingPage"
               params={{ nickname: profileUser!.nickname, variant: "팔로잉" }}
               text={`팔로잉 ${profileUser!.followingCount}`}
+              fontSize={15}
             />
           </ProfileSocialWrapper>
           <ProfileTextWrapper>
@@ -158,11 +161,11 @@ const ProfileUserNameText = styled.Text`
   font-size: 18px;
   font-weight: 600;
   color: ${(props) => props.theme.mainFont};
+  ${Platform.OS === "ios" ? "margin: 3px 0;" : ""}
 `;
 
 const ProfileIntroductionText = styled.Text`
   font-size: 16px;
   font-weight: 400;
   color: ${(props) => props.theme.mainFont};
-  height: 40px;
 `;
