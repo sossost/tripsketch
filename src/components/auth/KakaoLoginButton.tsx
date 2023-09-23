@@ -45,7 +45,7 @@ const KakaoLoginButton = () => {
           style={{ width: 20, resizeMode: "contain", marginRight: 5 }}
         />
         <Text style={{ fontSize: 17, color: "#414141" }}>
-          카카오톡으로 5초만에 시작하기
+          카카오톡 5초 로그인
         </Text>
       </View>
     </TouchableOpacity>

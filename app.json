@@ -3,6 +3,9 @@
     "name": "tripsketch",
     "slug": "tripsketch",
     "version": "1.0.0",
+    "updates": {
+      "enabled": true
+    },
     "orientation": "portrait",
     "icon": "./src/assets/logoIconBackground.png",
     "userInterfaceStyle": "light",

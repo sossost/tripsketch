@@ -17,14 +17,14 @@ const ProfileImage = ({ profileImage, ...props }: ProfileImageProps) => {
 export default ProfileImage;
 
 const ProfileImgWrapper = styled.TouchableOpacity`
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   border-radius: 9999px;
   overflow: hidden;
 `;
 
 const ProfileImg = styled.Image`
-  width: 40px;
-  height: 40px;
+  width: 34px;
+  height: 34px;
   object-fit: contain;
 `;
