@@ -14,6 +14,7 @@ import { useState } from "react";
 import CommentInput from "./CommentInput";
 import { User } from "../../../../types/user";
 import useDeleteAlert from "../../hooks/useDeleteAlert";
+import { useCreateTime } from "@hooks/useCreateTime";
 
 type ReplyCommentProps = {
   recomment: Comment;
@@ -78,6 +79,15 @@ const ReCommentItem = ({
     setIsButton(false);
   };
 
+  const formattedDate = () => {
+    const originalDate = recomment.createdAt;
+    const cutDate = originalDate.split("T")[0];
+    return cutDate;
+  };
+
+  // 생성일에서 한국 시간대로 추출하기
+  const createTime = useCreateTime(recomment.createdAt);
+
   return (
     <View style={styles.container}>
       <View style={styles.recomment_container}>
@@ -91,6 +101,13 @@ const ReCommentItem = ({
           <View style={styles.top_container}>
             <View>
               <Text style={styles.nickname}>{recomment.userNickName}</Text>
+              {recomment.isDeleted ? null : (
+                <View style={styles.date_container}>
+                  <Text style={styles.date}>{formattedDate()}</Text>
+                  <Text style={styles.date}> · </Text>
+                  <Text style={styles.date}>{createTime}</Text>
+                </View>
+              )}
               <Text style={styles.comment}>{recomment.content}</Text>
             </View>
             {userData &&
@@ -195,9 +212,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
   },
+  date_container: {
+    display: "flex",
+    flexDirection: "row",
+  },
   nickname: {
     fontSize: 13,
     fontWeight: "600",
+  },
+  date: {
+    fontSize: 10,
+    color: "#b3b3b3",
+    marginTop: Platform.OS === "android" ? 0 : 3,
   },
   comment: {
     fontSize: 13,
