@@ -134,9 +134,7 @@ const PostCalender = ({
 
       <ContentText>
         <Text onPress={() => setShowModal(true)}>
-          {startDate === null
-            ? "날짜를 선택해주세요."
-            : `${startDate} ~ ${endDate}`}
+          {startDate === null ? "선택" : `${startDate} ~ ${endDate}`}
         </Text>
       </ContentText>
 
@@ -155,7 +153,6 @@ const PostCalender = ({
                 backgroundColor: "white",
               }}
             >
-              {/* <Text>selectedDates : {selectedDates}</Text> */}
               <View
                 style={{
                   alignItems: "center",
@@ -200,9 +197,9 @@ const PostCalender = ({
             </View>
 
             {/* 달력 모달 닫기 버튼 */}
-            <CloseButton onPress={modalCloseHandler}>
+            {/* <CloseButton onPress={modalCloseHandler}>
               <CloseIcon name="x" />
-            </CloseButton>
+            </CloseButton> */}
             <Calendar
               style={{
                 borderRadius: 20,

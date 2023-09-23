@@ -592,9 +592,9 @@ const BodyInfo = styled.View`
 const Title = styled.Text`
   font-size: 17px;
   font-weight: 600;
-  /* color: #73bbfb; */
   color: ${colors.primary};
   margin-right: 8px;
+  margin-top: 20px;
 `;
 
 /** Validation을 포함하는 주제 View */
@@ -649,6 +649,7 @@ const ImageTitleContainer = styled.View`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: flex-end;
 `;
 
 const ImageInnerText = styled.Text`
@@ -681,15 +682,17 @@ const DeleteBox = styled.View`
 
 const PickImageButton = styled.TouchableOpacity`
   width: 60px;
+  height: 30px;
   background-color: ${colors.primary};
   border-radius: 5px;
   text-align: center;
-  padding: 5px 7px;
+  padding: 0px 7px;
 `;
 
 const PickImageButtonText = styled.Text`
   color: ${colors.white};
   text-align: center;
+  line-height: 30px;
 `;
 
 /* Tag */
@@ -768,10 +771,10 @@ const BottomInfo = styled.View`
   padding: 0 20px;
   border-top-width: 1px;
   border-top-color: #e8e8e8;
-  margin-top: 15px;
+  margin-top: 25px;
   flex-direction: row;
   justify-content: flex-end;
-  padding-top: 15px;
+  padding-top: 25px;
   padding-bottom: 30px;
 `;
 
