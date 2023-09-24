@@ -1,4 +1,4 @@
-import { Text, Image, Dimensions } from "react-native";
+import { Text, Image, Dimensions, Alert } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import styled from "styled-components/native";
 import { FontAwesome } from "@expo/vector-icons";
@@ -218,17 +218,17 @@ const PostWriteContainer: React.FC<PostPageProps> = ({
   const addHashtagHandler = () => {
     if (hashtag.trim() !== "" && hashtagList.length < maxTagCount) {
       if (hashtagList.includes(hashtag)) {
-        alert(`중복된 태그입니다.`);
+        Alert.alert("알림", `중복된 태그입니다.`);
         setHashtag("");
       } else {
         setHashtagList([...hashtagList, hashtag]);
         setHashtag(""); // 입력 필드를 초기화
       }
     } else if (hashtagList.length === maxTagCount) {
-      alert(`최대 태그 개수는 ${maxTagCount}개입니다.`);
+      Alert.alert("알림", `최대 태그 개수는 ${maxTagCount}개입니다.`);
       setHashtag("");
     } else {
-      alert("태그를 입력해주세요.");
+      Alert.alert("알림", "태그를 입력해주세요.");
     }
   };
 

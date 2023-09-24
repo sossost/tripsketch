@@ -84,7 +84,7 @@ const CommentList = ({
                 <View key={item.id}>
                   <CommentItem
                     comment={item}
-                    sort={"all"}
+                    sort={sort}
                     onReplySubmit={onReplySubmit}
                     likeComment={likeComment}
                     likeReplyComment={likeReplyComment}
@@ -102,7 +102,7 @@ const CommentList = ({
                 <View key={item.id}>
                   <CommentItem
                     comment={item}
-                    sort={"best"}
+                    sort={sort}
                     onReplySubmit={onReplySubmit}
                     likeComment={likeComment}
                     likeReplyComment={likeReplyComment}

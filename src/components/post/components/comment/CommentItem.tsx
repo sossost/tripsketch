@@ -19,6 +19,7 @@ import useDeleteAlert from "../../hooks/useDeleteAlert";
 import { LINK } from "@constants/link";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "@types/RootStack";
+import { useCreateTime } from "@hooks/useCreateTime";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -60,7 +61,6 @@ const CommentItem = ({
   const [showCommentInput, setShowCommentInput] = useState(false);
   const { data: userData } = useGetCurrentUser();
   const [likes, setLikes] = useState(comment.isLiked);
-  const [likeNum, setLikeNum] = useState(comment.numberOfLikes);
   const [isButton, setIsButton] = useState(false);
   const [isUpdateInput, setIsUpdateInput] = useState(false);
 
@@ -73,7 +73,6 @@ const CommentItem = ({
       const updatedLikeStatus = !likes;
       likeComment(likeCommentId, isLikeStatus);
       setLikes(updatedLikeStatus);
-      setLikeNum(updatedLikeStatus ? likeNum + 1 : likeNum - 1);
     }
   };
 
@@ -96,6 +95,9 @@ const CommentItem = ({
     const cutDate = originalDate.split("T")[0];
     return cutDate;
   };
+
+  // 생성일에서 한국 시간대로 추출하기
+  const createTime = useCreateTime(comment.createdAt);
 
   // 댓글 삭제 핸들러
   const handleDelete = () => {
@@ -144,7 +146,13 @@ const CommentItem = ({
                 ) : null}
               </View>
             </View>
-            <Text style={styles.date}>{formattedDate()}</Text>
+            {comment.isDeleted ? null : (
+              <View style={styles.date_container}>
+                <Text style={styles.date}>{formattedDate()}</Text>
+                <Text style={styles.date_dot}> · </Text>
+                <Text style={styles.date}>{createTime}</Text>
+              </View>
+            )}
             <Text style={styles.comment}>{comment.content}</Text>
             {comment.isDeleted ? null : (
               <View style={styles.likes_container}>
@@ -153,12 +161,14 @@ const CommentItem = ({
                   disabled={!userData ? true : false}
                 >
                   <Ionicons
-                    name={likes ? "md-heart-sharp" : "md-heart-outline"}
+                    name={
+                      comment.isLiked ? "md-heart-sharp" : "md-heart-outline"
+                    }
                     size={18}
-                    color={likes ? "#ec6565" : "#777"}
+                    color={comment.isLiked ? "#ec6565" : "#777"}
                   />
                 </TouchableOpacity>
-                <Text style={styles.like_length}>{likeNum}</Text>
+                <Text style={styles.like_length}>{comment.numberOfLikes}</Text>
               </View>
             )}
           </View>
@@ -282,7 +292,16 @@ const styles = StyleSheet.create({
   id: {
     fontWeight: "600",
   },
+  date_container: {
+    display: "flex",
+    flexDirection: "row",
+  },
   date: {
+    fontSize: 11,
+    color: "#b3b3b3",
+    marginTop: Platform.OS === "android" ? 0 : 3,
+  },
+  date_dot: {
     fontSize: 11,
     color: "#b3b3b3",
     marginTop: Platform.OS === "android" ? 0 : 3,
