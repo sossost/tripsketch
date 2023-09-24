@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  View,
-  KeyboardAvoidingView,
-  Platform,
-  Text,
-} from "react-native";
+import { StyleSheet, View, KeyboardAvoidingView, Platform } from "react-native";
 import { useQueryClient } from "@tanstack/react-query";
 import { CommonStyles } from "../../styles/CommonStyles";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
@@ -26,6 +20,7 @@ import { GetPost } from "../../types/Post";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import { useEffect, useState } from "react";
 import CommentList from "./components/comment/CommentList";
+import Loading from "@components/UI/Loading";
 
 type CommentProps = {
   sort: "all" | "preview";
@@ -54,19 +49,25 @@ const PostCommentContainer = ({
 
   // 게시글 업데이트 시 Comment api 요청
   const [userCommentData, setUserCommentData] = useState(commentData);
-  const [isCheckUpdate, setIsCheckUpdate] = useState(false);
 
   let commentUserData: GetPost["tripAndCommentPairDataByTripId"]["second"];
-  if (isCheckUpdate && userData) {
+  let commentUserLoading;
+
+  if (userData) {
     // 회원 접근 시 사용하는 Comment 데이터
     const commentResult = getPostCommentListByTripId(postId);
     commentUserData = commentResult.commentUserData;
+    commentUserLoading = commentResult.isLoading;
   } else {
     // 게스트로 접근 시 사용하는 Comment 데이터
     const commentResult = getPostCommentGuestListByTripId(postId);
     commentUserData = commentResult.commentGuestData;
+    commentUserLoading = commentResult.isLoading;
   }
 
+  if (commentUserLoading) {
+    return <Loading />;
+  }
   // 게시글 댓글 생성하기
   const handleSubmit = async (comment: string) => {
     try {
@@ -77,9 +78,8 @@ const PostCommentContainer = ({
       await createCommentMutation.mutateAsync(commentData);
       Toast.show({ type: "success", text1: "댓글 생성이 완료되었습니다." });
       setUserCommentData(commentUserData);
-      setIsCheckUpdate(true);
-      queryClient.invalidateQueries(["commentTripId"]);
-      queryClient.invalidateQueries(["postAndCommentData"]);
+      queryClient.invalidateQueries(["commentTripId", postId]);
+      queryClient.invalidateQueries(["postAndCommentData", postId]);
     } catch (error) {
       console.error("댓글 생성 중 오류 발생:", error);
       Toast.show({ type: "error", text1: "댓글 생성을 실패하였습니다." });
@@ -103,7 +103,6 @@ const PostCommentContainer = ({
       await createReplyCommentMutation.mutateAsync(replyCommentData);
       Toast.show({ type: "success", text1: "댓글 생성이 완료되었습니다." });
       setUserCommentData(commentUserData);
-      setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
       queryClient.invalidateQueries(["postAndCommentData"]);
     } catch (error) {
@@ -118,7 +117,6 @@ const PostCommentContainer = ({
     try {
       await isLikeCommentMutation.mutateAsync(likeCommentId);
       setUserCommentData(commentUserData);
-      setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
       queryClient.invalidateQueries(["postAndCommentData"]);
       if (isLikeStatus) {
@@ -145,7 +143,6 @@ const PostCommentContainer = ({
       };
       await isLikeReplyCommentMutation.mutateAsync(replyCommentData);
       setUserCommentData(commentUserData);
-      setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
       queryClient.invalidateQueries(["postAndCommentData"]);
       if (isLikeStatus) {
@@ -169,7 +166,6 @@ const PostCommentContainer = ({
       await updateCommentMutation.mutateAsync(updateData);
       Toast.show({ type: "success", text1: "댓글 수정 완료!" });
       setUserCommentData(commentUserData);
-      setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
       queryClient.invalidateQueries(["postAndCommentData"]);
     } catch (error) {
@@ -194,7 +190,7 @@ const PostCommentContainer = ({
       await updateReplyCommentMutation.mutateAsync(updateReplyData);
       Toast.show({ type: "success", text1: "댓글 수정 완료!" });
       setUserCommentData(commentUserData);
-      setIsCheckUpdate(true);
+
       queryClient.invalidateQueries(["commentTripId"]);
       queryClient.invalidateQueries(["postAndCommentData"]);
     } catch (error) {
@@ -210,7 +206,6 @@ const PostCommentContainer = ({
       await deleteCommentMutation.mutateAsync(id);
       Toast.show({ type: "success", text1: "댓글 삭제 완료!" });
       setUserCommentData(commentUserData);
-      setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
       queryClient.invalidateQueries(["postAndCommentData"]);
     } catch (error) {
@@ -230,7 +225,6 @@ const PostCommentContainer = ({
       await deleteReplyCommentMutation.mutateAsync(deleteData);
       Toast.show({ type: "success", text1: "댓글 삭제 완료!" });
       setUserCommentData(commentUserData);
-      setIsCheckUpdate(true);
       queryClient.invalidateQueries(["commentTripId"]);
     } catch (error) {
       console.error("오류 발생:", error);

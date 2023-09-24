@@ -40,7 +40,6 @@ const ReCommentItem = ({
   deleteReplyComment,
 }: ReplyCommentProps) => {
   const [likes, setLikes] = useState(recomment.isLiked);
-  const [likeNum, setLikeNum] = useState(recomment.numberOfLikes);
   const [isButton, setIsButton] = useState(false);
   const [isUpdateInput, setIsUpdateInput] = useState(false);
 
@@ -53,7 +52,6 @@ const ReCommentItem = ({
       const updatedLikeStatus = !likes;
       likeReplyComment(likeReplyCommentId, parentId, isLikeStatus);
       setLikes(updatedLikeStatus);
-      setLikeNum(updatedLikeStatus ? likeNum + 1 : likeNum - 1);
     }
   };
 
@@ -127,13 +125,15 @@ const ReCommentItem = ({
                   disabled={!userData ? true : false}
                 >
                   <Ionicons
-                    name={likes ? "md-heart-sharp" : "md-heart-outline"}
+                    name={
+                      recomment.isLiked ? "md-heart-sharp" : "md-heart-outline"
+                    }
                     size={18}
-                    color={likes ? "#ec6565" : "#777"}
+                    color={recomment.isLiked ? "#ec6565" : "#777"}
                   />
                 </TouchableOpacity>
               </Text>
-              <Text style={styles.likes_text}>{likeNum}</Text>
+              <Text style={styles.likes_text}>{recomment.numberOfLikes}</Text>
             </View>
           )}
         </View>

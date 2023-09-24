@@ -61,7 +61,6 @@ const CommentItem = ({
   const [showCommentInput, setShowCommentInput] = useState(false);
   const { data: userData } = useGetCurrentUser();
   const [likes, setLikes] = useState(comment.isLiked);
-  const [likeNum, setLikeNum] = useState(comment.numberOfLikes);
   const [isButton, setIsButton] = useState(false);
   const [isUpdateInput, setIsUpdateInput] = useState(false);
 
@@ -74,7 +73,6 @@ const CommentItem = ({
       const updatedLikeStatus = !likes;
       likeComment(likeCommentId, isLikeStatus);
       setLikes(updatedLikeStatus);
-      setLikeNum(updatedLikeStatus ? likeNum + 1 : likeNum - 1);
     }
   };
 
@@ -163,12 +161,14 @@ const CommentItem = ({
                   disabled={!userData ? true : false}
                 >
                   <Ionicons
-                    name={likes ? "md-heart-sharp" : "md-heart-outline"}
+                    name={
+                      comment.isLiked ? "md-heart-sharp" : "md-heart-outline"
+                    }
                     size={18}
-                    color={likes ? "#ec6565" : "#777"}
+                    color={comment.isLiked ? "#ec6565" : "#777"}
                   />
                 </TouchableOpacity>
-                <Text style={styles.like_length}>{likeNum}</Text>
+                <Text style={styles.like_length}>{comment.numberOfLikes}</Text>
               </View>
             )}
           </View>
