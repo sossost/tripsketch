@@ -1,10 +1,10 @@
 import axios from "axios";
 import { axiosBase } from "./axios";
 import { API_BASE_URL } from "@env";
-import { User } from "../types/user";
-import { errorLoging, errorToastMessageInCatch } from "../utils/errorHandler";
+import { errorLoging } from "../utils/errorHandler";
 import { ERROR_MESSAGE } from "../constants/message";
 import { getAccessToken, getPushToken } from "@utils/token";
+import { getRequest } from "./utils/request";
 
 /**
  * @description : 카카오 로그인 요청하는 함수
@@ -28,18 +28,11 @@ export const getCurrentUser = async () => {
   const accessToken = await getAccessToken();
   const pushToken = await getPushToken();
 
-  try {
-    if (accessToken) {
-      const response = await axiosBase.get(`user?token=${pushToken}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      return response.data as User;
-    }
-    return null;
-  } catch (error: unknown) {
-    errorLoging(error, "로그인한 유저 정보 요청 에러는🤔");
+  if (accessToken) {
+    return await getRequest(`user?token=${pushToken}`, {
+      Authorization: `Bearer ${accessToken}`,
+    });
+  } else {
     return null;
   }
 };
@@ -68,60 +61,6 @@ export const patchCurrentUser = async (data: any) => {
   } catch (error: unknown) {
     errorLoging(error, "유저 정보 수정 에러는🤔");
   }
-};
-
-/**
- * @description : 닉네임으로 해당 유저의 팔로우 리스트를 가져오는 함수
- * @author : 장윤수
- * @update : 2023-09-16,  try-catch -> 에러바운더리로 변경
- * @version 1.1.2,
- * @see None
- */
-export const getFollowerList = async (nickname: string) => {
-  const response = await axiosBase.get(
-    `follow/user/followers?nickname=${nickname}`
-  );
-  return response.data;
-};
-
-/**
- * @description : 닉네임으로 해당 유저의 팔로잉 리스트를 가져오는 함수
- * @author : 장윤수
- * @update : 2023-09-16,  try-catch -> 에러바운더리로 변경
- * @version 1.1.1,
- * @see None
- */
-export const getFollowingList = async (nickname: string) => {
-  const response = await axiosBase.get(
-    `follow/user/followings?nickname=${nickname}`
-  );
-  return response.data;
-};
-
-/**
- * @description : 비로그인시 닉네임으로 해당 유저의 정보를 가져오는 함수
- * @author : 장윤수
- * @update : 2023-09-16,  try-catch -> 에러바운더리로 변경
- * @version 1.1.1,
- * @see None
- */
-export const getUserByNickname = async (nickname: string) => {
-  const response = await axiosBase.get(
-    `user/nickname/guest?nickname=${nickname}`
-  );
-  return response.data;
-};
-
-/**
- * @description : 로그인시 닉네임으로 해당 유저의 정보를 가져오는 함수
- * @author : 장윤수
- * @update : 2023-09-16,  try-catch -> 에러바운더리로 변경
- * @version 1.0.1,
- * @see None
- */
-export const getUserByNicknameAuthed = async (nickname: string) => {
-  const response = await axiosBase.get(`user/nickname?nickname=${nickname}`);
-  return response.data;
 };
 
 /**

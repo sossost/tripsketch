@@ -1,12 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  getCurrentUser,
-  getFollowerList,
-  getFollowingList,
-  getUserByNickname,
-  getUserByNicknameAuthed,
-  patchCurrentUser,
-} from "../services/user";
+import { getCurrentUser, patchCurrentUser } from "../services/user";
 import { QUERY_KEY } from "../react-query/queryKey";
 import { User } from "../types/user";
 import { useNavigation } from "@react-navigation/native";
@@ -14,6 +7,8 @@ import { StackNavigation } from "../types/RootStack";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import validationCheck from "../utils/validationCheck";
 import { VALIDATION, VALIDATION_ERROR_MESSAGE } from "../constants/validation";
+import { getRequest } from "@services/utils/request";
+import { API_PATH } from "@constants/path";
 
 /**
  * @description : 현재 로그인한 유저의 정보를 요청하는 리액트 쿼리 훅
@@ -41,7 +36,7 @@ export const useGetCurrentUser = () => {
  * @param nickname : 유저닉네임
  *
  * @author : 장윤수
- * @update : 2023-09-16, 쿼리옵션 전역 변경, 비동기 바운더리 사용
+ * @update : 2023-09-25, getRequest 함수로 변경, url 상수화
  * @version 1.0.1,
  * @see None,
  */
@@ -51,8 +46,14 @@ export const useGetUserByNickname = (nickname: string) => {
   const { data: currentUser } = useGetCurrentUser();
 
   const queryFn = currentUser
-    ? () => getUserByNicknameAuthed(nickname)
-    : () => getUserByNickname(nickname);
+    ? () =>
+        getRequest(
+          API_PATH.USER.GET.BY_NICKNAME_AUTHED.replace(":nickname", nickname)
+        )
+    : () =>
+        getRequest(
+          API_PATH.USER.GET.BY_NICKNAME.replace(":nickname", nickname)
+        );
 
   const { data = null } = useQuery<User | null>(queryKey, queryFn, {
     enabled: !!nickname,
@@ -65,34 +66,38 @@ export const useGetUserByNickname = (nickname: string) => {
  * @description : 해당 페이지 유저의 팔로워 또는 팔로잉 리스트를 요청하는 리액트 쿼리 훅
  *
  * @param variant : 팔로워인지 팔로잉인지 variant
- * @param pageUserNickname : 페이지 유저의 닉네임
+ * @param nickname : 페이지 유저의 닉네임
  *
  * @author : 장윤수
- * @update : 2023-09-16, 비동기 바운더리로 처리
+ * @update : 2023-09-25, getRequest 함수로 변경, url 상수화
  * @version 1.0.2,
  * @see None,
  */
 export const useGetSocialList = (
   variant: "팔로워" | "팔로잉",
-  pageUserNickname: string
+  nickname: string
 ) => {
   const queryKey = [
     variant === "팔로워" ? QUERY_KEY.FOLLOWERS : QUERY_KEY.FOLLOWING,
-    pageUserNickname,
+    nickname,
   ];
 
   const queryFn = () => {
     if (variant === "팔로워") {
-      return getFollowerList(pageUserNickname);
+      return getRequest(
+        API_PATH.FOLLOWER_LIST.GET.BY_NICKNAME.replace(":nickname", nickname)
+      );
     }
     if (variant === "팔로잉") {
-      return getFollowingList(pageUserNickname);
+      return getRequest(
+        API_PATH.FOLLOWING_LIST.GET.BY_NICKNAME.replace(":nickname", nickname)
+      );
     }
     return null;
   };
 
   const { data = null } = useQuery<User[] | null>(queryKey, queryFn, {
-    enabled: !!pageUserNickname,
+    enabled: !!nickname,
   });
 
   return { data };
@@ -154,7 +159,7 @@ export const useUpdateRrofile = (
     formData.append("introduction", introduction);
     formData.append("profileImageUrl", {
       uri: profileImageUrl,
-      name: "profileImage",
+      name: "profileImage.jpg",
       type: "multipart/form-data",
     });
 
