@@ -265,10 +265,9 @@ const styles = StyleSheet.create({
   background: {
     backgroundColor: "#fff",
     width: "100%",
-    borderRadius: 10,
     display: "flex",
     flexDirection: "row",
-    padding: 10,
+    marginBottom: -5,
   },
   image: {
     width: "17%",

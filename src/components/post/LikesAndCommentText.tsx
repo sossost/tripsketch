@@ -13,11 +13,13 @@ import PostViewMap from "./components/post/PostViewMap";
 interface LikesAndCommentTextProps {
   postId: string;
   postData: GetPost["tripAndCommentPairDataByTripId"]["first"];
+  likesModal: () => void;
 }
 
 const LikesAndCommentText = ({
   postId,
   postData,
+  likesModal,
 }: LikesAndCommentTextProps) => {
   const { data: userData } = useGetCurrentUser();
   const checkLikeUser = postData?.isLiked;
@@ -92,7 +94,9 @@ const LikesAndCommentText = ({
                   />
                 ) : null}
               </TouchableOpacity>
-              <Text style={styles.info_text}>좋아요</Text>
+              <TouchableOpacity onPress={likesModal}>
+                <Text style={styles.info_text}>좋아요</Text>
+              </TouchableOpacity>
             </View>
             <Text style={styles.likeView_text}>{postData.likes}</Text>
           </View>
