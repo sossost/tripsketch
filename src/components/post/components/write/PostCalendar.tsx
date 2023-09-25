@@ -268,8 +268,8 @@ const ContentText = styled.Text`
 const ModalContainer = styled.View`
   flex: 1;
   align-items: center;
+  justify-content: center;
   background-color: #d4eff6;
-  padding-top: 45%;
 `;
 
 const CloseIcon = styled(Feather)`

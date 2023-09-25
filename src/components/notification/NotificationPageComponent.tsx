@@ -7,6 +7,7 @@ import Title from "@components/UI/header/Title";
 import AsyncBoundary from "@components/common/AsyncBoundary";
 import MyNotificationList from "@components/notification/MyNotificationList";
 import PageLayout from "@components/common/PageLayout";
+import NoticeList from "./NoticeList";
 
 /**
  * @description : 알림 페이지 컴포넌트
@@ -32,6 +33,7 @@ const NotificationPageComponent = () => {
         />
         <AsyncBoundary>
           {variant === "내소식" && <MyNotificationList />}
+          {variant === "공지사항" && <NoticeList />}
         </AsyncBoundary>
       </PageLayout>
     </AsyncBoundary>
