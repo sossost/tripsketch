@@ -13,6 +13,7 @@ import { GetPost } from "../../types/Post";
 import Loading from "../UI/Loading";
 import PostCommentContainer from "./postCommentContainer";
 import CommentViewButton from "./components/comment/CommentViewButton";
+import LikesListModal from "./LikesListModal";
 
 const PostDetailPageComponent = ({ postId }: { postId: string }) => {
   const { data: userData } = useGetCurrentUser();
@@ -27,6 +28,12 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
     const guestResult = useGetPostAndCommentsForGuest(postId);
     postAndCommentData = guestResult.postAndCommentGuestData;
   }
+
+  // 좋아요 유저리스트 확인 모달
+  const [isLikesModal, setIsLikesModal] = useState<boolean>(false);
+  const LikesModalHandler = () => {
+    setIsLikesModal(!isLikesModal);
+  };
 
   // 바텀시트 높이 조절하는 변수
   const sheetRef = useRef<BottomSheet>(null);
@@ -59,6 +66,7 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
 
   return (
     <View style={styles.container}>
+      {isLikesModal ? <LikesListModal modalClose={LikesModalHandler} /> : null}
       <View style={styles.containerInner}>
         <ScrollView scrollIndicatorInsets={{ right: 1 }}>
           <PostViewContainer
@@ -68,8 +76,8 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
           <LikesAndCommentText
             postId={postId}
             postData={postAndCommentData.tripAndCommentPairDataByTripId.first}
+            likesModal={LikesModalHandler}
           />
-
           <PostCommentContainer
             sort={"preview"}
             postId={postId}
