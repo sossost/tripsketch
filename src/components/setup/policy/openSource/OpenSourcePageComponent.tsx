@@ -32,7 +32,7 @@ const OpenSourcePageComponent = () => {
             >
               <ListContent>
                 <ListTitle numberOfLines={1} ellipsizeMode="tail">
-                  {item.libraryName.substring(1)}
+                  {item.libraryName}
                 </ListTitle>
                 <Text>Version. {item.version}</Text>
               </ListContent>

@@ -26,6 +26,7 @@ const splashBgColor = "#fff";
 const SplashScreen = ({ children }: { children: ReactNode }) => {
   const currentUser = useGetCurrentUser();
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { fadeOut, setFadeOut } = useContext(FadeOutContext);
   const [isGone, setIsGone] = useState(false);
 
@@ -50,14 +51,23 @@ const SplashScreen = ({ children }: { children: ReactNode }) => {
     let timer: NodeJS.Timeout;
 
     timer = setTimeout(async () => {
-      const accessToken = await getAccessToken();
-      if (accessToken) {
+      if (isLoggedIn) {
         setFadeOut(true);
       }
-    }, 2000);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, [currentUser.data]);
+
+  useEffect(() => {
+    const checkLoggedIn = async () => {
+      const accessToken = await getAccessToken();
+      if (accessToken) {
+        setIsLoggedIn(true);
+      }
+    };
+    checkLoggedIn();
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {

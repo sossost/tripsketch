@@ -9,12 +9,10 @@ import {
   postLike,
   postUpdate,
   deletePostById,
-  getSubscribedUsersPosts,
-  getSortedPostsBySearchKeyword,
-  getPostsByTrending,
 } from "../services/post";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
 import { Post, GetPost, PostUpdate } from "../types/Post";
+import { getRequest } from "@services/utils/request";
 
 export interface TripsData {
   trips: Post[];
@@ -27,6 +25,13 @@ export interface InfinitePostsData {
   pages: TripsData[];
   pageParams: number[];
 }
+
+const sortingType = {
+  최신순: 1,
+  조회수순: 2,
+  인기순: 3,
+  오래된순: -1,
+};
 
 /**
  * @description : 닉네임과 카테고리로 페이지네이션 처리된 게시글 리스트를 요청하는 리액트 쿼리 훅
@@ -71,8 +76,8 @@ export const useGetPostsByNickname = (nickname: string, category: string) => {
 /**
  * @description : 구독한 유저들을 기준으로 페이지네이션 처리된 게시글 리스트를 요청하는 리액트 쿼리 훅
  * @author : 장윤수
- * @update : 2023-09-16,
- * @version 1.0.1, 쿼리 옵션 전역으로 변경
+ * @update : 2023-09-25,
+ * @version 1.0.1, getRequest 함수로 변경,
  * @see None,
  */
 export const useGetSubscribedUsersPosts = () => {
@@ -83,9 +88,8 @@ export const useGetSubscribedUsersPosts = () => {
     hasNextPage,
   } = useInfiniteQuery(
     [QUERY_KEY.POSTS, QUERY_KEY.SUBSCRIPTED_USERS],
-    ({ pageParam = 1 }) => {
-      return getSubscribedUsersPosts(pageParam, postsPerPage);
-    },
+    ({ pageParam = 1 }) =>
+      getRequest(`trip/list/following?page=${pageParam}&size=${postsPerPage}`),
     {
       getNextPageParam: (lastPage: TripsData | undefined) => {
         if (!lastPage) return undefined;
@@ -105,8 +109,8 @@ export const useGetSubscribedUsersPosts = () => {
 /**
  * @description : 검색어를 바탕으로 정렬 및 페이지네이션 처리된 게시글 리스트를 요청하는 리액트 쿼리 훅
  * @author : 장윤수
- * @update : 2023-09-17,
- * @version 1.0.0,
+ * @update : 2023-09-25,
+ * @version 1.0.0, getRequest 함수로 변경,
  * @see None,
  */
 export const useGetPostsBySearchQuery = (
@@ -122,11 +126,8 @@ export const useGetPostsBySearchQuery = (
   } = useInfiniteQuery(
     [QUERY_KEY.POSTS, searchQuery, variant],
     ({ pageParam = 1 }) => {
-      return getSortedPostsBySearchKeyword(
-        searchQuery,
-        variant,
-        pageParam,
-        postsPerPage
+      return getRequest(
+        `trip/guest/search?keyword=${searchQuery}&page=${pageParam}&size=${postsPerPage}&sort_type=${sortingType[variant]}`
       );
     },
     {
@@ -148,8 +149,8 @@ export const useGetPostsBySearchQuery = (
 /**
  * @description : 인기 게시글 리스트를 요청하는 리액트 쿼리 훅
  * @author : 장윤수
- * @update : 2023-09-18,
- * @version 1.0.0,
+ * @update : 2023-09-25,
+ * @version 1.0.0, getRequest 함수로 변경,
  * @see None,
  */
 export const useGetPostsByTrendingQuery = () => {
@@ -161,9 +162,10 @@ export const useGetPostsByTrendingQuery = () => {
     hasNextPage,
   } = useInfiniteQuery(
     [QUERY_KEY.POSTS, QUERY_KEY.TRENDING],
-    ({ pageParam = 1 }) => {
-      return getPostsByTrending(pageParam, postsPerPage);
-    },
+    ({ pageParam = 1 }) =>
+      getRequest(
+        `trip/guest/trips?page=${pageParam}&size=${postsPerPage}&sortType=2`
+      ),
     {
       getNextPageParam: (lastPage: TripsData | undefined) => {
         if (!lastPage) return undefined;

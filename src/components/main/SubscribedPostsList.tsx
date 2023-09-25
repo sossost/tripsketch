@@ -34,7 +34,7 @@ const SubscribedPostsList = () => {
     ]);
   };
 
-  if (!posts) return <TrendingPosts />;
+  if (!posts.length) return <TrendingPosts />;
 
   return (
     <PostFlatList

@@ -6,6 +6,7 @@ import { QUERY_KEY } from "@react-query/queryKey";
 import Loading from "@components/UI/Loading";
 import HorizontalPostFlatList from "@components/post/HorizontalPostFlatList";
 import NoneData from "@components/common/NoneData";
+import { Keyboard } from "react-native";
 
 interface SearchPostListProps {
   searchQuery: string;
@@ -20,7 +21,7 @@ interface SearchPostListProps {
  *
  * @author : 장윤수
  * @update : 2023-09-22,
- * @version 1.2.0, 검색 결과 없을시 안내 컴포넌트 추가
+ * @version 1.2.0, 검색페이지 keyboard dismiss 추가
  * @see None,
  */
 const SearchPostList = ({ searchQuery, variant }: SearchPostListProps) => {
@@ -51,7 +52,13 @@ const SearchPostList = ({ searchQuery, variant }: SearchPostListProps) => {
     }
   };
 
-  if (!posts.length) return <NoneData message="검색 결과가 없습니다." />;
+  if (!posts.length)
+    return (
+      <NoneData
+        message="검색 결과가 없습니다."
+        onPress={() => Keyboard.dismiss()}
+      />
+    );
 
   return (
     <HorizontalPostFlatList
