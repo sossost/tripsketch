@@ -4,7 +4,7 @@
 
 <br/>
 
-![트립스케치](https://github.com/seoyeon-00/tripsketch/assets/110542210/bb42bf65-9123-47aa-8f33-d1bd115f343d)
+![트립스케치](https://github.com/sossost/todolist/assets/110542210/06412877-2d00-4d66-b966-ba14730af0ca)
 
 ## 프로젝트 소개
 
