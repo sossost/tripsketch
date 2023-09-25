@@ -1,4 +1,20 @@
 export const API_PATH = {
+  USER: {
+    GET: {
+      BY_NICKNAME: `user/nickname?nickname=:nickname`,
+      BY_NICKNAME_AUTHED: `user/nickname/guest?nickname=:nickname`,
+    },
+  },
+  FOLLOWER_LIST: {
+    GET: {
+      BY_NICKNAME: `follow/user/followers?nickname=:nickname`,
+    },
+  },
+  FOLLOWING_LIST: {
+    GET: {
+      BY_NICKNAME: `follow/user/followings?nickname=:nickname`,
+    },
+  },
   COMMENT: {
     GET: {
       // 모든 COMMENT 조회하기

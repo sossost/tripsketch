@@ -118,6 +118,7 @@ const Title = styled.Text`
   color: ${colors.mainFont};
   margin-bottom: 5px;
   width: 75%;
+  line-height: 20px;
 `;
 
 const Content = styled.Text`
