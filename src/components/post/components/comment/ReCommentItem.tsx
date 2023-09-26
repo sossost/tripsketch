@@ -18,7 +18,7 @@ import { useCreateTime } from "@hooks/useCreateTime";
 
 type ReplyCommentProps = {
   recomment: Comment;
-  userData: User;
+  userData: User | null;
   likeReplyComment?: (
     likeCommentId: string,
     parentId: string,
@@ -79,7 +79,7 @@ const ReCommentItem = ({
 
   const formattedDate = () => {
     const originalDate = recomment.createdAt;
-    const cutDate = originalDate.split("T")[0];
+    const cutDate = originalDate.split("T")[0].replace(/-/g, ".");
     return cutDate;
   };
 
@@ -101,9 +101,8 @@ const ReCommentItem = ({
               <Text style={styles.nickname}>{recomment.userNickName}</Text>
               {recomment.isDeleted ? null : (
                 <View style={styles.date_container}>
-                  <Text style={styles.date}>{formattedDate()}</Text>
-                  <Text style={styles.date}> · </Text>
-                  <Text style={styles.date}>{createTime}</Text>
+                  <Text style={styles.date}>{formattedDate()} </Text>
+                  <Text style={styles.date}> {createTime}</Text>
                 </View>
               )}
               <Text style={styles.comment}>{recomment.content}</Text>
@@ -192,18 +191,16 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   image: {
-    width: 30,
-    height: 30,
-    backgroundColor: "#444",
-    borderRadius: 30,
-    overflow: "hidden",
+    width: "12%",
   },
   profile: {
-    width: 30,
-    height: 30,
+    width: Platform.OS === "android" ? 30 : 35,
+    height: Platform.OS === "android" ? 30 : 35,
+    borderRadius: 50,
     resizeMode: "stretch",
   },
   info: {
+    width: "80%",
     paddingLeft: 10,
     flex: 5,
   },
@@ -221,14 +218,14 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   date: {
-    fontSize: 10,
+    fontSize: 11,
     color: "#b3b3b3",
     marginTop: Platform.OS === "android" ? 0 : 3,
   },
   comment: {
     fontSize: 13,
     color: "#6f6f6f",
-    marginTop: Platform.OS === "android" ? 0 : 5,
+    marginTop: Platform.OS === "android" ? 3 : 5,
   },
   likes: {
     display: "flex",

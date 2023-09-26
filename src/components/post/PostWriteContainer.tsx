@@ -284,10 +284,10 @@ const PostWriteContainer: React.FC<PostPageProps> = ({
       const compressedUris = await Promise.all(
         result.assets.map(async (asset) => {
           // 이미지 압축을 수행
-          if (asset.width > 960) {
+          if (asset.width >= 960) {
             const compressedUri = await manipulateAsync(
               asset.uri,
-              [{ resize: { width: 1080 } }],
+              [{ resize: { width: 960 } }],
               { compress: 0.8, format: SaveFormat.JPEG }
             );
             return compressedUri;

@@ -25,6 +25,8 @@ export const useGetCurrentUser = () => {
   } = useQuery<User | null>([QUERY_KEY.CURRENT_USER], getCurrentUser, {
     suspense: false,
     useErrorBoundary: false,
+    staleTime: 1000 * 60 * 60,
+    cacheTime: 1000 * 60 * 60,
   });
 
   return { data, isLoading, isError };

@@ -87,7 +87,10 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
       >
         <View style={styles.opacity}></View>
         <View style={styles.header_container}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
+          <TouchableOpacity
+            style={styles.back_btn}
+            onPress={() => navigation.goBack()}
+          >
             <MaterialIcons
               name="keyboard-arrow-left"
               size={28}
@@ -201,6 +204,9 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
   },
+  back_btn: {
+    width: 30,
+  },
   wrap: {
     paddingHorizontal: 20,
   },
@@ -225,10 +231,11 @@ const styles = StyleSheet.create({
     top: 22,
     backgroundColor: "#ddd",
     borderRadius: 5,
+    zIndex: 10,
   },
   setting_box_text: {
     textAlign: "center",
-    paddingVertical: 8,
+    paddingVertical: Platform.OS === "android" ? 8 : 12,
     fontSize: 12,
   },
   tag_container: {

@@ -155,8 +155,8 @@ const tokenRefresh = async () => {
     return newAccessToken;
   } catch (error) {
     errorLoging(error, "리프레시 토큰으로 액세스 토큰 갱신 에러는🤔");
-    resetAccessToken();
-    resetRefreshToken();
+    await resetAccessToken();
+    await resetRefreshToken();
     throw error;
   }
 };
