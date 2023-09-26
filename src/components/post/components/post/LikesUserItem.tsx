@@ -1,4 +1,5 @@
 import { colors } from "@constants/color";
+import { Platform } from "react-native";
 import styled from "styled-components/native";
 
 const LikesUserItem = ({ likesData }: { likesData: any }) => {
@@ -28,7 +29,7 @@ const LikeUserContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 11px;
 `;
 
 const InfoBox = styled.View`
@@ -39,21 +40,21 @@ const InfoBox = styled.View`
 `;
 
 const Imagebox = styled.View`
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   background-color: #777;
   border-radius: 50px;
   overflow: hidden;
 `;
 
 const Image = styled.Image`
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
 `;
 
 const NickNamebox = styled.Text`
   width: 100%;
-  margin-left: 8px;
+  margin-left: 10px;
 `;
 
 const ButtonBox = styled.View`
@@ -63,11 +64,11 @@ const ButtonBox = styled.View`
 const UserPageButton = styled.TouchableOpacity`
   width: 100%;
   border: 1px solid ${colors.primary};
-  padding: 3px 3%;
+  ${Platform.OS === "ios" ? "padding: 7% 3%;" : "padding: 5% 3%;"};
 `;
 
 const ButtonText = styled.Text`
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
   color: ${colors.primary};
 `;
