@@ -17,16 +17,22 @@ import LikesListModal from "./LikesListModal";
 
 const PostDetailPageComponent = ({ postId }: { postId: string }) => {
   const { data: userData } = useGetCurrentUser();
-  let postAndCommentData: GetPost | undefined;
+  let postAndCommentData: GetPost | null | undefined;
+  let postAndCommentLoading;
+  let postAndCommentError;
 
   if (userData) {
     // 로그인된 사용자의 데이터 가져오기
     const userResult = useGetPostAndComments(postId);
     postAndCommentData = userResult.postAndCommentData;
+    postAndCommentLoading = userResult.isDataUserLoading;
+    postAndCommentError = userResult.isDataUserError;
   } else {
     // 비로그인 상태의 데이터 가져오기
     const guestResult = useGetPostAndCommentsForGuest(postId);
     postAndCommentData = guestResult.postAndCommentGuestData;
+    postAndCommentLoading = guestResult.isDataGuestLoading;
+    postAndCommentError = guestResult.isDataGuestError;
   }
 
   // 좋아요 유저리스트 확인 모달
@@ -55,13 +61,13 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
     sheetRef.current?.snapToIndex(index);
   }, []);
 
-  if (!postAndCommentData) {
+  if (postAndCommentLoading) {
     return <Loading />;
   }
 
   // 삭제된 게시물 요청 시 보여질 부분
-  if (postAndCommentData?.tripAndCommentPairDataByTripId.first.isHidden) {
-    <DeletePostView />;
+  if (!postAndCommentData) {
+    return <DeletePostView />;
   }
 
   return (

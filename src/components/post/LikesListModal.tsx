@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import { Dimensions, Animated, Easing, View } from "react-native";
+import { Dimensions, Animated, Easing, Platform } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 import styled from "styled-components/native";
 import LikesUserItem from "./components/post/LikesUserItem";
 import { colors } from "@constants/color";
@@ -89,6 +89,7 @@ const LikesListModal = ({ modalClose }: { modalClose: any }) => {
             <Title>이 게시글 좋아요</Title>
             <Line />
             <LikesNum>
+              <Ionicons name={"md-heart-sharp"} size={13} color={"#ec6565"} />
               현재 <PointText>{Data.length}명</PointText>의 사람들이 좋아요를
               눌렀습니다.
             </LikesNum>
@@ -162,12 +163,12 @@ const Line = styled.Text`
   width: 100%;
   height: 1px;
   background-color: #e9e9e9;
-  margin: 10px 0 4px;
+  ${Platform.OS === "ios" ? "margin: 10px 0 7px;" : "margin: 10px 0 4px;"};
 `;
 
 const LikesNum = styled.Text`
   text-align: right;
-  font-size: 12px;
+  ${Platform.OS === "ios" ? "font-size: 13px;" : "font-size: 12px;"};
 `;
 
 const PointText = styled.Text`

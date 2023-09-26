@@ -5,7 +5,6 @@ import {
   Image,
   Dimensions,
   TouchableOpacity,
-  Alert,
   Platform,
 } from "react-native";
 import { Comment } from "../../../../types/comment";
@@ -92,7 +91,7 @@ const CommentItem = ({
 
   const formattedDate = () => {
     const originalDate = comment.createdAt;
-    const cutDate = originalDate.split("T")[0];
+    const cutDate = originalDate.split("T")[0].replace(/-/g, ".");
     return cutDate;
   };
 
@@ -148,9 +147,8 @@ const CommentItem = ({
             </View>
             {comment.isDeleted ? null : (
               <View style={styles.date_container}>
-                <Text style={styles.date}>{formattedDate()}</Text>
-                <Text style={styles.date_dot}> · </Text>
-                <Text style={styles.date}>{createTime}</Text>
+                <Text style={styles.date}>{formattedDate()} </Text>
+                <Text style={styles.date}> {createTime}</Text>
               </View>
             )}
             <Text style={styles.comment}>{comment.content}</Text>
@@ -271,10 +269,11 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "17%",
+    paddingLeft: Platform.OS === "android" ? "1%" : "2%",
   },
   profile: {
-    width: 37,
-    height: 37,
+    width: Platform.OS === "android" ? 37 : 43,
+    height: Platform.OS === "android" ? 37 : 43,
     backgroundColor: "grey",
     borderRadius: 50,
     overflow: "hidden",
@@ -296,12 +295,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   date: {
-    fontSize: 11,
-    color: "#b3b3b3",
-    marginTop: Platform.OS === "android" ? 0 : 3,
-  },
-  date_dot: {
-    fontSize: 11,
+    fontSize: Platform.OS === "android" ? 11 : 12,
     color: "#b3b3b3",
     marginTop: Platform.OS === "android" ? 0 : 3,
   },

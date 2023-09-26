@@ -59,7 +59,6 @@ export const getPostsById = async (id: string) => {
 
 export const getPostsAndComments = async (postId: string) => {
   const accessToken = await getAccessToken();
-
   try {
     const response = await axiosBase.get<GetPost>(
       `${API_PATH.TRIP.GET.TRIP_AND_COMMENT.replace(":tripId", postId)}`,
@@ -75,6 +74,7 @@ export const getPostsAndComments = async (postId: string) => {
     return response.data;
   } catch (error: unknown) {
     errorLoging(error, "게시글 상세페이지 요청 에러는🤔");
+    return null;
   }
 };
 
