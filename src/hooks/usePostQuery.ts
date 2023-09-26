@@ -197,8 +197,13 @@ export const useGetPostAndComments = (postId: string) => {
     data: postAndCommentData,
     isLoading: isDataUserLoading,
     isError: isDataUserError,
-  } = useQuery<GetPost | undefined>(["postAndComment", postId], () =>
-    getPostsAndComments(postId)
+  } = useQuery<GetPost | null>(
+    ["postAndComment", postId],
+    () => getPostsAndComments(postId),
+    {
+      suspense: false,
+      useErrorBoundary: false,
+    }
   );
 
   return { postAndCommentData, isDataUserLoading, isDataUserError };
