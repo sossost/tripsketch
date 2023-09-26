@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   },
   setting_box_text: {
     textAlign: "center",
-    paddingVertical: 8,
+    paddingVertical: Platform.OS === "android" ? 8 : 12,
     fontSize: 12,
   },
   tag_container: {
