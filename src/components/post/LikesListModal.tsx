@@ -114,7 +114,7 @@ const TitleContainer = styled.View`
 `;
 
 const Title = styled.Text`
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
 `;
 
@@ -127,7 +127,8 @@ const Line = styled.Text`
 
 const LikesNum = styled.Text`
   text-align: right;
-  ${Platform.OS === "ios" ? "font-size: 13px;" : "font-size: 12px;"};
+  color: ${colors.subFont};
+  ${Platform.OS === "ios" ? "font-size: 14px;" : "font-size: 13px;"};
 `;
 
 const PointText = styled.Text`

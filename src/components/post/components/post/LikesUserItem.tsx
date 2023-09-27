@@ -43,7 +43,7 @@ const LikeUserContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 11px;
+  margin-bottom: 14px;
 `;
 
 const InfoBox = styled.View`
@@ -54,16 +54,16 @@ const InfoBox = styled.View`
 `;
 
 const Imagebox = styled.View`
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   background-color: #777;
   border-radius: 50px;
   overflow: hidden;
 `;
 
 const Image = styled.Image`
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
 `;
 
 const NickNamebox = styled.Text`
@@ -72,17 +72,17 @@ const NickNamebox = styled.Text`
 `;
 
 const ButtonBox = styled.View`
-  width: 22%;
+  width: 23%;
 `;
 
 const UserPageButton = styled.TouchableOpacity`
   width: 100%;
   border: 1px solid ${colors.primary};
-  ${Platform.OS === "ios" ? "padding: 7% 3%;" : "padding: 5% 3%;"};
+  ${Platform.OS === "ios" ? "padding: 9% 3%;" : "padding: 7% 3%;"};
 `;
 
 const ButtonText = styled.Text`
-  font-size: 11px;
+  font-size: 12px;
   text-align: center;
   color: ${colors.primary};
 `;
