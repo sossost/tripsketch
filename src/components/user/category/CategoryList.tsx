@@ -1,19 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { styled } from "styled-components/native";
-import { colors } from "../../../constants/color";
-import { useGetCategoriesByNickname } from "../../../hooks/useCategoryQuery";
-import { useRecoilState } from "recoil";
-import { categoryState } from "../../../store/categoryAtom";
+import { colors } from "@constants/color";
+import { useGetCategoriesByNickname } from "@hooks/useCategoryQuery";
+
+interface CategoryListProps {
+  nickname: string;
+  selectedCategory: string;
+  setSelectedCategory: React.Dispatch<React.SetStateAction<string>>;
+}
+
+interface CategoryInterface {
+  categoryName: string;
+  postsLength: number;
+}
 
 /**
  * @description : 카테고리 리스트 컴포넌트
  *
  * @author : 장윤수
- * @update : 2023-09-18,
- * @version 1.2.1, 카테고리 횡스크롤 및, 선택시 선택된 카테고리 배열 맨앞으로 추가
+ * @update : 2023-09-27,
+ * @version 1.2.2, 카테고리 전역상태로 관리시 유저페이지, 마이페이지 카테고리 상태가 꼬이는 문제 해결
  * @see None,
  */
-const CategoryList = ({ nickname }: { nickname: string }) => {
+const CategoryList = ({
+  nickname,
+  selectedCategory,
+  setSelectedCategory,
+}: CategoryListProps) => {
   // 닉네임을 통해 해당 유저의 카테고리를 가져옴
   const { data: initialCategoryList } = useGetCategoriesByNickname(nickname);
 
@@ -21,15 +34,14 @@ const CategoryList = ({ nickname }: { nickname: string }) => {
   const categoryNameList = initialCategoryList
     ? [
         "전체보기",
-        ...Object.values(initialCategoryList).map((item) => item.categoryName),
+        ...Object.values(initialCategoryList as CategoryInterface).map(
+          (item) => item.categoryName
+        ),
       ]
     : [];
 
   // 카테고리 리스트를 관리하는 상태
   const [categoryList, setCategoryList] = useState<string[]>(categoryNameList);
-
-  // 현재 선택된 카테고리를 관리하는 상태
-  const [selectedCategory, setSelectedCategory] = useRecoilState(categoryState);
 
   // 선택된 카테고리가 바뀔때마다 카테고리 리스트를 업데이트
   useEffect(() => {
@@ -51,11 +63,17 @@ const CategoryList = ({ nickname }: { nickname: string }) => {
 
         return (
           <CategoryButton
+            //@ts-ignore
             isClicked={isClicked}
             key={index}
             onPress={() => setSelectedCategory(item)}
           >
-            <CategoryText isClicked={isClicked}>{item}</CategoryText>
+            <CategoryText
+              //@ts-ignore
+              isClicked={isClicked}
+            >
+              {item}
+            </CategoryText>
           </CategoryButton>
         );
       })}

@@ -1,8 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "styled-components/native";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
-import { useRecoilState } from "recoil";
-import { categoryState } from "../../store/categoryAtom";
 import { FlatList } from "react-native";
 
 import Profile from "@components/user/profile/Profile";
@@ -27,12 +25,12 @@ interface UserPageComponentProps {
  *
  * @author : 장윤수
  * @update : 2023-09-20,
- * @version 1.4.2, 플랫리스트 스타일 변경
+ * @version 1.4.3, 카테고리 전역상태로 관리시 유저페이지, 마이페이지 카테고리 상태가 꼬이는 문제 해결
  * @see None,
  */
 const UserPageComponent = ({ nickname }: UserPageComponentProps) => {
   // 현재 유저페이지의 선택된 카테고리 상태
-  const [selectedCategory, setSelectedCategory] = useRecoilState(categoryState);
+  const [selectedCategory, setSelectedCategory] = useState("전체보기");
 
   // 현재 로그인한 유저 정보를 가져옴
   const { data: currentUser } = useGetCurrentUser();
@@ -72,7 +70,11 @@ const UserPageComponent = ({ nickname }: UserPageComponentProps) => {
           ListHeaderComponent={() => (
             <UserPageContainer>
               <Profile nickname={pageOwnerNickname} />
-              <CategoryList nickname={pageOwnerNickname} />
+              <CategoryList
+                nickname={pageOwnerNickname}
+                selectedCategory={selectedCategory}
+                setSelectedCategory={setSelectedCategory}
+              />
               <AsyncBoundary>
                 <UserPostList
                   nickname={pageOwnerNickname}
