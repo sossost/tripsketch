@@ -45,7 +45,7 @@ const UserPageComponent = ({ nickname }: UserPageComponentProps) => {
 
   // 페이지 별로 헤더 왼쪽에 들어갈 컴포넌트를 다르게 렌더링
   const LeftHeaderChildren = isMypage ? (
-    <Title title="마이페이지" />
+    <Title title={pageOwnerNickname} />
   ) : (
     <CommonHeaderLeft title={pageOwnerNickname} />
   );

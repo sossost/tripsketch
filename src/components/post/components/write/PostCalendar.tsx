@@ -148,9 +148,10 @@ const PostCalender = ({
                 alignItems: "center",
                 justifyContent: "center",
                 width: "80%",
-                height: 65, // 레이블들이 고정된 높이를 가지도록 추가
+                height: "65", // 레이블들이 고정된 높이를 가지도록 추가
                 borderRadius: 10,
                 backgroundColor: "white",
+                paddingVertical: 5,
               }}
             >
               <View
@@ -164,7 +165,7 @@ const PostCalender = ({
                   style={{
                     textAlign: "center",
                     color: "#6F6F6F",
-                    marginBottom: "3%",
+                    marginBottom: "2%",
                   }}
                 >
                   시작일
@@ -173,7 +174,13 @@ const PostCalender = ({
                   {startDate}
                 </Text>
               </View>
-
+              <View
+                style={{
+                  width: 1,
+                  height: "70%",
+                  backgroundColor: "#e3e3e3",
+                }}
+              ></View>
               <View
                 style={{
                   alignItems: "center",
@@ -185,7 +192,7 @@ const PostCalender = ({
                   style={{
                     textAlign: "center",
                     color: "#6F6F6F",
-                    marginBottom: "3%",
+                    marginBottom: "2%",
                   }}
                 >
                   종료일
@@ -196,16 +203,12 @@ const PostCalender = ({
               </View>
             </View>
 
-            {/* 달력 모달 닫기 버튼 */}
-            {/* <CloseButton onPress={modalCloseHandler}>
-              <CloseIcon name="x" />
-            </CloseButton> */}
             <Calendar
               style={{
                 borderRadius: 20,
                 marginTop: 20,
                 width: "90%",
-                aspectRatio: 0.9,
+                aspectRatio: 0.85,
               }}
               onDayPress={dayPressHandler}
               markingType={"period"}
@@ -269,17 +272,5 @@ const ModalContainer = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  background-color: #d4eff6;
-`;
-
-const CloseIcon = styled(Feather)`
-  font-size: 28px;
-  color: ${colors.primary};
-  margin-right: 5px;
-`;
-
-const CloseButton = styled.TouchableOpacity`
-  position: absolute;
-  top: 10px;
-  right: 10px;
+  background-color: ${colors.pastel};
 `;
