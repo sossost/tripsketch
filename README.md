@@ -36,12 +36,12 @@
 
 - Npm 9.5.1
 - Node.js 18.16.0
+- expo 49.0.7
 
 #### 설치
 
 ```
-$ git clone https://github.com/seoyeon-00/tripsketch.git
-$ cd tripsketch
+$ npm install -g expo-cli
 $ npm install
 $ npm start
 ```
