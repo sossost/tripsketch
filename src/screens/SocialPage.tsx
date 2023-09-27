@@ -1,8 +1,8 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
-
-import AuthGuard from "../components/auth/AuthGuard";
-import SocialPageComponent from "../components/user/SocialPageComponent";
 import { RootStackParamList } from "../types/RootStack";
+
+import SocialPageComponent from "../components/user/SocialPageComponent";
+import withAuthGuard from "@components/auth/withAuthGuard";
 
 type UserScreenRouteProp = RouteProp<RootStackParamList, "SocialPage">;
 
@@ -12,13 +12,11 @@ const SocialPage = () => {
   const variant = route.params.variant;
 
   return (
-    <AuthGuard>
-      <SocialPageComponent
-        pageOwnerNickname={pageOwnerNickname}
-        initialVariant={variant}
-      />
-    </AuthGuard>
+    <SocialPageComponent
+      pageOwnerNickname={pageOwnerNickname}
+      initialVariant={variant}
+    />
   );
 };
 
-export default SocialPage;
+export default withAuthGuard(SocialPage);
