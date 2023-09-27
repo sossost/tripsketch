@@ -14,6 +14,7 @@ import Loading from "../UI/Loading";
 import PostCommentContainer from "./postCommentContainer";
 import CommentViewButton from "./components/comment/CommentViewButton";
 import LikesListModal from "./LikesListModal";
+import AsyncBoundary from "@components/common/AsyncBoundary";
 
 const PostDetailPageComponent = ({ postId }: { postId: string }) => {
   const { data: userData } = useGetCurrentUser();
@@ -72,7 +73,11 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
 
   return (
     <View style={styles.container}>
-      {isLikesModal ? <LikesListModal modalClose={LikesModalHandler} /> : null}
+      {isLikesModal ? (
+        <AsyncBoundary>
+          <LikesListModal modalClose={LikesModalHandler} postId={postId} />
+        </AsyncBoundary>
+      ) : null}
       <View style={styles.containerInner}>
         <ScrollView scrollIndicatorInsets={{ right: 1 }}>
           <PostViewContainer

@@ -1,18 +1,32 @@
 import { colors } from "@constants/color";
 import { Platform } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
+import { StackNavigation } from "@types/RootStack";
+import { LINK } from "@constants/link";
 
-const LikesUserItem = ({ likesData }: { likesData: any }) => {
+type LikesItemProps = {
+  likesData: any;
+  modalClose: () => void;
+};
+
+const LikesUserItem = ({ likesData, modalClose }: LikesItemProps) => {
+  const navigation = useNavigation<StackNavigation>();
+  const userPageHandler = () => {
+    navigation.navigate(LINK.USER_PAGE, { nickname: likesData.nickname });
+    modalClose();
+  };
+
   return (
     <LikeUserContainer>
       <InfoBox>
         <Imagebox>
-          <Image source={{ uri: likesData.imageURL }}></Image>
+          <Image source={{ uri: likesData.profileImageUrl }}></Image>
         </Imagebox>
-        <NickNamebox>{likesData.nickName}</NickNamebox>
+        <NickNamebox>{likesData.nickname}</NickNamebox>
       </InfoBox>
       <ButtonBox>
-        <UserPageButton>
+        <UserPageButton onPress={userPageHandler}>
           <ButtonText>유저페이지</ButtonText>
         </UserPageButton>
       </ButtonBox>

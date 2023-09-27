@@ -57,6 +57,8 @@ export const API_PATH = {
       TRIP_AND_COMMENT_GUEST: `/trip/guest/trip-comments/:tripId`,
       // 업데이트 기존 데이터 조회하기
       TRIP_UPDATE_DATA: `/trip/modify/:id`,
+      // 좋아요 누른 유저 조회하기
+      TRIP_LIKE_LIST: `/trip/like/user/:id`,
     },
     POST: {
       // 게시물 생성하기
