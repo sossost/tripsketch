@@ -1,8 +1,8 @@
 export const API_PATH = {
   USER: {
     GET: {
-      BY_NICKNAME: `user/nickname?nickname=:nickname`,
-      BY_NICKNAME_AUTHED: `user/nickname/guest?nickname=:nickname`,
+      BY_NICKNAME: `user/nickname/guest?nickname=:nickname`,
+      BY_NICKNAME_AUTHED: `user/nickname?nickname=:nickname`,
     },
   },
   FOLLOWER_LIST: {
