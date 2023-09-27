@@ -16,7 +16,7 @@
 
 ## 개발 기간
 
-- 2023.07 ~ 진행중
+- 2023.06.29 ~ 2023.09.27
 
 ### 멤버 구성
 
@@ -36,12 +36,12 @@
 
 - Npm 9.5.1
 - Node.js 18.16.0
+- expo 49.0.7
 
 #### 설치
 
 ```
-$ git clone https://github.com/seoyeon-00/tripsketch.git
-$ cd tripsketch
+$ npm install -g expo-cli
 $ npm install
 $ npm start
 ```
@@ -63,4 +63,6 @@ OAuth를 활용한 사용자인증
 
 ### 화면 구성
 
-...작성중
+<img width="1120" alt="화면들" src="https://github.com/sossost/portfolio./assets/110542210/f5bb03f5-4ca1-46a8-8097-054bcc2b1454">
+
+
