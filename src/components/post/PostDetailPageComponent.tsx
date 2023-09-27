@@ -95,9 +95,7 @@ const PostDetailPageComponent = ({ postId }: PostDetailProps) => {
   return (
     <View style={styles.container}>
       {isLikesModal ? (
-        <AsyncBoundary>
-          <LikesListModal modalClose={LikesModalHandler} postId={postId} />
-        </AsyncBoundary>
+        <LikesListModal modalClose={LikesModalHandler} postId={postId} />
       ) : null}
       <View style={styles.containerInner}>
         <ScrollView scrollIndicatorInsets={{ right: 1 }} ref={scrollViewRef}>
