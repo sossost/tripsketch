@@ -1,4 +1,11 @@
-import React, { useCallback, useRef, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useRef,
+  useMemo,
+  useState,
+  useEffect,
+  RefObject,
+} from "react";
 import { StyleSheet, View, ScrollView, Animated, Text } from "react-native";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import PostViewContainer from "./PostViewContainer";
@@ -14,8 +21,13 @@ import Loading from "../UI/Loading";
 import PostCommentContainer from "./postCommentContainer";
 import CommentViewButton from "./components/comment/CommentViewButton";
 import LikesListModal from "./LikesListModal";
+import AsyncBoundary from "@components/common/AsyncBoundary";
 
-const PostDetailPageComponent = ({ postId }: { postId: string }) => {
+type PostDetailProps = {
+  postId: string;
+};
+
+const PostDetailPageComponent = ({ postId }: PostDetailProps) => {
   const { data: userData } = useGetCurrentUser();
   let postAndCommentData: GetPost | null | undefined;
   let postAndCommentLoading;
@@ -47,7 +59,17 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
   const [sheetIndex, setSheetIndex] = useState(0);
 
   const overlayOpacity = useRef(new Animated.Value(0)).current;
-  const bottomSheetScrollViewRef: any = useRef(null);
+  const bottomSheetScrollViewRef: RefObject<ScrollView> = useRef(null);
+  const scrollViewRef: RefObject<ScrollView> = useRef(null);
+
+  // 스크롤 위치 초기화
+  useEffect(() => {
+    const scrollViewTop = scrollViewRef.current;
+    if (scrollViewTop) {
+      scrollViewTop.scrollTo({ x: 0, y: 0, animated: false });
+    }
+  }, [postId]);
+
   const handleSheetChange = useCallback((index: number) => {
     setSheetIndex(index);
     Animated.timing(overlayOpacity, {
@@ -72,9 +94,11 @@ const PostDetailPageComponent = ({ postId }: { postId: string }) => {
 
   return (
     <View style={styles.container}>
-      {isLikesModal ? <LikesListModal modalClose={LikesModalHandler} /> : null}
+      {isLikesModal ? (
+        <LikesListModal modalClose={LikesModalHandler} postId={postId} />
+      ) : null}
       <View style={styles.containerInner}>
-        <ScrollView scrollIndicatorInsets={{ right: 1 }}>
+        <ScrollView scrollIndicatorInsets={{ right: 1 }} ref={scrollViewRef}>
           <PostViewContainer
             postId={postId}
             postData={postAndCommentData.tripAndCommentPairDataByTripId.first}
