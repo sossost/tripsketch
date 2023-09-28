@@ -4,7 +4,6 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
-  Alert,
   Platform,
 } from "react-native";
 import { Comment } from "../../../../types/comment";
@@ -15,6 +14,9 @@ import CommentInput from "./CommentInput";
 import { User } from "../../../../types/user";
 import useDeleteAlert from "../../hooks/useDeleteAlert";
 import { useCreateTime } from "@hooks/useCreateTime";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "@types/RootStack";
+import { LINK } from "@constants/link";
 
 type ReplyCommentProps = {
   recomment: Comment;
@@ -43,6 +45,7 @@ const ReCommentItem = ({
   const [isButton, setIsButton] = useState(false);
   const [isUpdateInput, setIsUpdateInput] = useState(false);
 
+  const navigation = useNavigation<StackNavigation>();
   const likeReplyCommentId = recomment.id;
   const parentId = recomment.parentId;
   const isLikeStatus = likes;
@@ -86,6 +89,10 @@ const ReCommentItem = ({
   // 생성일에서 한국 시간대로 추출하기
   const createTime = useCreateTime(recomment.createdAt);
 
+  const followerHandler = () => {
+    navigation.navigate(LINK.USER_PAGE, { nickname: recomment.userNickName });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.recomment_container}>
@@ -98,7 +105,9 @@ const ReCommentItem = ({
         <View style={styles.info}>
           <View style={styles.top_container}>
             <View>
-              <Text style={styles.nickname}>{recomment.userNickName}</Text>
+              <TouchableOpacity onPress={followerHandler}>
+                <Text style={styles.nickname}>{recomment.userNickName}</Text>
+              </TouchableOpacity>
               {recomment.isDeleted ? null : (
                 <View style={styles.date_container}>
                   <Text style={styles.date}>{formattedDate()} </Text>
@@ -169,7 +178,6 @@ const ReCommentItem = ({
                   ? styles.button_admin
                   : styles.button_delete
               }
-              // style={styles.button_delete}
             >
               <Text style={styles.update_txt} onPress={handleDelete}>
                 삭제하기
