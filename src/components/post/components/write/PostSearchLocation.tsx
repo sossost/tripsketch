@@ -13,6 +13,16 @@ type Suggestion = {
   display_name: string;
   lat: string;
   lon: string;
+  geometry: {
+    coordinates: string[];
+  };
+  properties: {
+    city: string;
+    country: string;
+    name: string;
+    district: string;
+    street: string;
+  };
 };
 
 type MapPressEvent = {
@@ -191,10 +201,10 @@ const PostSearchLocation = ({
       setIsSearchLoading(true);
       try {
         const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?city=${cityName}&format=json`
+          `https://photon.komoot.io/api/?q=${cityName}`
         );
         const data = await response.json();
-        setSuggestions(data);
+        setSuggestions(data.features);
       } catch (error) {
         console.error(error);
       } finally {
@@ -208,9 +218,10 @@ const PostSearchLocation = ({
 
   /** 선택한 도시 받아오는 핸들러 */
   const handleSuggestionClick = async (suggestion: Suggestion) => {
+    //console.log(suggestion);
     setTimeout(() => {
       fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${suggestion.lat}&lon=${suggestion.lon}&zoom=18&addressdetails=1`
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${suggestion.geometry.coordinates[1]}&lon=${suggestion.geometry.coordinates[0]}&zoom=18&addressdetails=1`
       )
         .then((response) => response.json())
         .then((data) =>
@@ -224,15 +235,15 @@ const PostSearchLocation = ({
             town: data.address.town,
             road: data.address.road,
             display_name: data.display_name,
-            latitude: Number(suggestion.lat),
-            longitude: Number(suggestion.lon),
+            latitude: Number(suggestion.geometry.coordinates[1]),
+            longitude: Number(suggestion.geometry.coordinates[0]),
           })
         );
 
       setSuggestions([]);
       setRegion({
-        latitude: Number(suggestion.lat),
-        longitude: Number(suggestion.lon),
+        latitude: Number(suggestion.geometry.coordinates[1]),
+        longitude: Number(suggestion.geometry.coordinates[0]),
         latitudeDelta: 0.5,
         longitudeDelta: 0.5,
       });
@@ -352,7 +363,13 @@ const PostSearchLocation = ({
                         >
                           <LocationSuggestionsFields>
                             <LocationSuggestionsTexts>
-                              {item.display_name}
+                              {[
+                                item.properties.district,
+                                item.properties.street,
+                                item.properties.name,
+                              ]
+                                .filter(Boolean)
+                                .join(" ")}
                             </LocationSuggestionsTexts>
                           </LocationSuggestionsFields>
                         </TouchableOpacity>
