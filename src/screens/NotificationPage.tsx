@@ -1,12 +1,8 @@
-import AuthGuard from "../components/auth/AuthGuard";
+import withAuthGuard from "@components/auth/withAuthGuard";
 import NotificationPageComponent from "../components/notification/NotificationPageComponent";
 
 const NotificationPage = () => {
-  return (
-    <AuthGuard>
-      <NotificationPageComponent />
-    </AuthGuard>
-  );
+  return <NotificationPageComponent />;
 };
 
-export default NotificationPage;
+export default withAuthGuard(NotificationPage);

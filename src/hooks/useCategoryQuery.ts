@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCategoriesByNickname } from "../services/category";
 import { QUERY_KEY } from "../react-query/queryKey";
+import { getRequest } from "@services/utils/request";
+import { API_PATH } from "@constants/path";
 
 /**
  * @description : 닉네임으로 해당 유저의 카테고리 리스트를 요청하는 리액트 쿼리 훅
@@ -19,7 +20,7 @@ export const useGetCategoriesByNickname = (nickname: string) => {
     isError,
   } = useQuery(
     [QUERY_KEY.CATEGORIES, nickname],
-    () => getCategoriesByNickname(nickname),
+    () => getRequest(API_PATH.CATEGORY.GET.BY_NICKNAME(nickname)),
     {
       enabled: !!nickname,
     }
