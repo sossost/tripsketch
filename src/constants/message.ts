@@ -8,6 +8,7 @@ export const ERROR_MESSAGE = {
   GET_NOTIFICATIONS: "알림 리스트를 가져오는데 실패하였습니다.",
   DELETE_NOTIFICATION: "알림 삭제에 실패하였습니다.",
   LOGOUT: "로그아웃에 실패하였습니다.",
+  GET_LIKES: "좋아요 리스트를 가져오는데 실패하였습니다.",
 };
 
 export const SUCCESS_MESSAGE = {

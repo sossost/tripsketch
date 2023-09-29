@@ -1,8 +1,7 @@
 import styled from "styled-components/native";
 import { View, Text, TouchableOpacity, Modal } from "react-native";
 import { FlatList } from "react-native-gesture-handler";
-import { FontAwesome5 } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome5, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useEffect } from "react";
 import MapView, { Marker, UrlTile } from "react-native-maps";
 import Loading from "../../../UI/Loading";
@@ -13,6 +12,16 @@ type Suggestion = {
   display_name: string;
   lat: string;
   lon: string;
+  geometry: {
+    coordinates: string[];
+  };
+  properties: {
+    city: string;
+    country: string;
+    name: string;
+    district: string;
+    street: string;
+  };
 };
 
 type MapPressEvent = {
@@ -191,10 +200,10 @@ const PostSearchLocation = ({
       setIsSearchLoading(true);
       try {
         const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?city=${cityName}&format=json`
+          `https://photon.komoot.io/api/?q=${cityName}`
         );
         const data = await response.json();
-        setSuggestions(data);
+        setSuggestions(data.features);
       } catch (error) {
         console.error(error);
       } finally {
@@ -208,9 +217,10 @@ const PostSearchLocation = ({
 
   /** 선택한 도시 받아오는 핸들러 */
   const handleSuggestionClick = async (suggestion: Suggestion) => {
+    //console.log(suggestion);
     setTimeout(() => {
       fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${suggestion.lat}&lon=${suggestion.lon}&zoom=18&addressdetails=1`
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${suggestion.geometry.coordinates[1]}&lon=${suggestion.geometry.coordinates[0]}&zoom=18&addressdetails=1`
       )
         .then((response) => response.json())
         .then((data) =>
@@ -224,19 +234,25 @@ const PostSearchLocation = ({
             town: data.address.town,
             road: data.address.road,
             display_name: data.display_name,
-            latitude: Number(suggestion.lat),
-            longitude: Number(suggestion.lon),
+            latitude: Number(suggestion.geometry.coordinates[1]),
+            longitude: Number(suggestion.geometry.coordinates[0]),
           })
         );
 
       setSuggestions([]);
       setRegion({
-        latitude: Number(suggestion.lat),
-        longitude: Number(suggestion.lon),
+        latitude: Number(suggestion.geometry.coordinates[1]),
+        longitude: Number(suggestion.geometry.coordinates[0]),
         latitudeDelta: 0.5,
         longitudeDelta: 0.5,
       });
     }, 1000); // 1초 후에 실행
+  };
+
+  // 선택한 도시 검색어에서 제거하는 핸들러
+  const queryDeleteHandler = () => {
+    setQuery("");
+    setSuggestions([]);
   };
 
   const selectLocationHandler = (query: string) => {
@@ -261,7 +277,7 @@ const PostSearchLocation = ({
         ) : null}
       </View>
       {mapViewOn && (
-        <Modal transparent={true}>
+        <Modal transparent={true} animationType="fade">
           <View
             style={{
               flex: 1,
@@ -272,15 +288,17 @@ const PostSearchLocation = ({
           ></View>
           <SelectLocation>
             <SelectLocationUpper>
-              <View></View>
-              <TouchableOpacity
+              <SelectButton onPress={() => selectLocationHandler(query)}>
+                <Text style={{ color: "#fff", fontSize: 13 }}>선택</Text>
+              </SelectButton>
+              <SelectCancelButton
                 onPress={() => {
                   setMapViewOn(false);
                   setQuery(""); // query 초기화
                 }}
               >
-                <Text>╳</Text>
-              </TouchableOpacity>
+                <Text style={{ color: "#777", fontSize: 13 }}>취소</Text>
+              </SelectCancelButton>
             </SelectLocationUpper>
             <SelectLocationUpperBottom>
               <LocationInput
@@ -288,12 +306,17 @@ const PostSearchLocation = ({
                 onChangeText={handleInputChange}
                 placeholder="도시 이름을 입력해주세요."
               />
-              <FontAwesome
-                name="check"
-                size={24}
-                color={colors.primary}
-                onPress={() => selectLocationHandler(query)}
-              />
+              <TouchableOpacity
+                onPress={() => queryDeleteHandler()}
+                disabled={query !== "" ? false : true}
+              >
+                <Ionicons
+                  name="ios-close-circle-outline"
+                  size={23}
+                  color={query !== "" ? colors.primary : colors.pastel}
+                  style={{ width: 20 }}
+                />
+              </TouchableOpacity>
             </SelectLocationUpperBottom>
 
             <SelectLocationMiddle>
@@ -352,7 +375,13 @@ const PostSearchLocation = ({
                         >
                           <LocationSuggestionsFields>
                             <LocationSuggestionsTexts>
-                              {item.display_name}
+                              {[
+                                item.properties.district,
+                                item.properties.street,
+                                item.properties.name,
+                              ]
+                                .filter(Boolean)
+                                .join(" ")}
                             </LocationSuggestionsTexts>
                           </LocationSuggestionsFields>
                         </TouchableOpacity>
@@ -445,12 +474,13 @@ const SelectLocationUpper = styled.View`
   width: 100%;
   height: 50px;
   color: white;
-  padding: 0 20px;
+  padding: 0 12px;
   font-size: 16px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
+  gap: 4;
 `;
 
 const SelectLocationUpperBottom = styled.View`
@@ -459,7 +489,7 @@ const SelectLocationUpperBottom = styled.View`
   color: white;
 
   padding: 10px;
-  padding-right: 20px;
+  padding-right: 15px;
 
   font-size: 16px;
   display: flex;
@@ -476,10 +506,22 @@ const LocationInput = styled.TextInput`
   font-size: 16px;
   border: none;
   border-radius: 5px;
-  width: 70%;
+  width: 90%;
   z-index: 20;
 
   color: #6f6f6f;
+`;
+
+const SelectButton = styled.TouchableOpacity`
+  background-color: ${colors.primary};
+  padding: 5px 12px;
+  border-radius: 5px;
+`;
+
+const SelectCancelButton = styled.TouchableOpacity`
+  background-color: ${colors.skeleton};
+  padding: 5px 12px;
+  border-radius: 5px;
 `;
 
 const LocationSuggestions = styled.View`

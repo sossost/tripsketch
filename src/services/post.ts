@@ -2,7 +2,7 @@ import axiosBase from "@services/axios";
 import { API_PATH } from "@constants/path";
 import { ERROR_MESSAGE } from "@constants/message";
 import { errorLoging } from "@utils/errorHandler";
-import { Post, GetPost, PostUpdate } from "@types/Post";
+import { Post, GetPost, PostUpdate, PostLike } from "@types/Post";
 import { CreatePost } from "@types/Post";
 import { getAccessToken } from "@utils/token";
 
@@ -104,6 +104,18 @@ export const getUpdatePost = async (id: string) => {
   } catch (error: any) {
     console.error("게시글 상세페이지 요청 에러:", error);
     throw error;
+  }
+};
+
+export const getLikesList = async (id: string) => {
+  try {
+    const response = await axiosBase.get<PostLike>(
+      `${API_PATH.TRIP.GET.TRIP_LIKE_LIST.replace(":id", id)}`
+    );
+    return response.data;
+  } catch (error: unknown) {
+    errorLoging(error, "게시글 좋아요 리스트 요청 에러는🤔");
+    throw new Error(ERROR_MESSAGE.GET_LIKES);
   }
 };
 

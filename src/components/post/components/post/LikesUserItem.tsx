@@ -1,18 +1,48 @@
 import { colors } from "@constants/color";
-import { Platform } from "react-native";
+import { Alert, Platform } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
+import { StackNavigation } from "@types/RootStack";
+import { LINK } from "@constants/link";
+import { useGetCurrentUser } from "@hooks/useUserQuery";
 
-const LikesUserItem = ({ likesData }: { likesData: any }) => {
+type LikesItemProps = {
+  likesData: any;
+  modalClose: () => void;
+};
+
+const LikesUserItem = ({ likesData, modalClose }: LikesItemProps) => {
+  const { data: userData } = useGetCurrentUser();
+  const navigation = useNavigation<StackNavigation>();
+
+  const userPageHandler = () => {
+    navigation.navigate(LINK.USER_PAGE, { nickname: likesData.nickname });
+    modalClose();
+  };
+
+  // 비회원일 경우 로그인 페이지로 이동
+  const loginHandler = () => {
+    Alert.alert("알림", "로그인이 필요한 서비스입니다.", [
+      {
+        text: "확인",
+        onPress: () => {
+          modalClose();
+          navigation.navigate(LINK.MY_PAGE);
+        },
+      },
+    ]);
+  };
+
   return (
     <LikeUserContainer>
       <InfoBox>
         <Imagebox>
-          <Image source={{ uri: likesData.imageURL }}></Image>
+          <Image source={{ uri: likesData.profileImageUrl }}></Image>
         </Imagebox>
-        <NickNamebox>{likesData.nickName}</NickNamebox>
+        <NickNamebox>{likesData.nickname}</NickNamebox>
       </InfoBox>
       <ButtonBox>
-        <UserPageButton>
+        <UserPageButton onPress={userData ? userPageHandler : loginHandler}>
           <ButtonText>유저페이지</ButtonText>
         </UserPageButton>
       </ButtonBox>
@@ -29,7 +59,7 @@ const LikeUserContainer = styled.View`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 11px;
+  margin-bottom: 14px;
 `;
 
 const InfoBox = styled.View`
@@ -40,16 +70,16 @@ const InfoBox = styled.View`
 `;
 
 const Imagebox = styled.View`
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
   background-color: #777;
   border-radius: 50px;
   overflow: hidden;
 `;
 
 const Image = styled.Image`
-  width: 38px;
-  height: 38px;
+  width: 42px;
+  height: 42px;
 `;
 
 const NickNamebox = styled.Text`
@@ -58,17 +88,17 @@ const NickNamebox = styled.Text`
 `;
 
 const ButtonBox = styled.View`
-  width: 22%;
+  width: 23%;
 `;
 
 const UserPageButton = styled.TouchableOpacity`
   width: 100%;
   border: 1px solid ${colors.primary};
-  ${Platform.OS === "ios" ? "padding: 7% 3%;" : "padding: 5% 3%;"};
+  ${Platform.OS === "ios" ? "padding: 9% 3%;" : "padding: 7% 3%;"};
 `;
 
 const ButtonText = styled.Text`
-  font-size: 11px;
+  font-size: 12px;
   text-align: center;
   color: ${colors.primary};
 `;

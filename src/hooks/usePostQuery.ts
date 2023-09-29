@@ -5,13 +5,14 @@ import {
   getPostsAndComments,
   getPostsAndCommentsForGuest,
   getUpdatePost,
+  getLikesList,
   createPost,
   postLike,
   postUpdate,
   deletePostById,
 } from "../services/post";
 import { useInfiniteQuery, useMutation, useQuery } from "@tanstack/react-query";
-import { Post, GetPost, PostUpdate } from "../types/Post";
+import { Post, GetPost, PostUpdate, PostLike } from "../types/Post";
 import { getRequest } from "@services/utils/request";
 
 export interface TripsData {
@@ -231,6 +232,16 @@ export const useGetUpdatePost = (id: string) => {
   );
 
   return { updateData, postsUpdateIsLoading, postsUpdateIsError };
+};
+
+export const useGetLikesList = (id: string) => {
+  const {
+    data: likesData,
+    isLoading: likesIsLoading,
+    isError: likesIsError,
+  } = useQuery<PostLike | undefined>(["likesData", id], () => getLikesList(id));
+
+  return { likesData, likesIsLoading, likesIsError };
 };
 
 export const useCreatePost = () => {

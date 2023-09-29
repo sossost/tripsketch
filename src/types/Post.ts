@@ -95,3 +95,11 @@ export type GetPost = {
     second: Comment[];
   };
 };
+
+export type PostLike = {
+  id: string;
+  tripLikesInfo: {
+    nickname: string;
+    profileImageUrl: string;
+  }[];
+};

@@ -5,63 +5,19 @@ import { AntDesign, Ionicons } from "@expo/vector-icons";
 import styled from "styled-components/native";
 import LikesUserItem from "./components/post/LikesUserItem";
 import { colors } from "@constants/color";
+import { useGetLikesList } from "@hooks/usePostQuery";
 
-const Data = [
-  {
-    id: 123123,
-    nickName: "안녕",
-    imageURL: "https://source.unsplash.com/random/?user",
-  },
-  {
-    id: 343343,
-    nickName: "안녕43",
-    imageURL: "https://source.unsplash.com/random/?user",
-  },
-  {
-    id: 456433,
-    nickName: "우쨜",
-    imageURL: "https://source.unsplash.com/random/?user",
-  },
-  {
-    id: 12675,
-    nickName: "아이셔",
-    imageURL: "https://source.unsplash.com/random/?user",
-  },
-  {
-    id: 565332,
-    nickName: "고구마짱",
-    imageURL: "https://source.unsplash.com/random/?user",
-  },
-  {
-    id: 888435,
-    nickName: "감자도리",
-    imageURL: "https://source.unsplash.com/random/?user",
-  },
-  {
-    id: 127234,
-    nickName: "푸딩푸푸",
-    imageURL: "https://source.unsplash.com/random/?user",
-  },
-  {
-    id: 242342,
-    nickName: "햄버거못먹어",
-    imageURL: "https://source.unsplash.com/random/?user",
-  },
-  {
-    id: 23231,
-    nickName: "이빨아파요",
-    imageURL: "https://source.unsplash.com/random/?user",
-  },
-  {
-    id: 7684564,
-    nickName: "성수멋쟁이",
-    imageURL: "https://source.unsplash.com/random/?user",
-  },
-];
+type LikesModalProps = {
+  modalClose: () => void;
+  postId: string;
+};
 
-const LikesListModal = ({ modalClose }: { modalClose: any }) => {
+const LikesListModal = ({ modalClose, postId }: LikesModalProps) => {
   const { height } = Dimensions.get("window");
   const overlayOpacity = new Animated.Value(0);
+
+  // 좋아요한 유저 데이터 조회
+  const { likesData } = useGetLikesList(postId);
 
   useEffect(() => {
     Animated.timing(overlayOpacity, {
@@ -80,6 +36,7 @@ const LikesListModal = ({ modalClose }: { modalClose: any }) => {
         transparent={true}
         visible={true}
         height={height}
+        onRequestClose={modalClose}
       >
         <LikesContainer height={height}>
           <CloseButton onPress={modalClose}>
@@ -90,16 +47,18 @@ const LikesListModal = ({ modalClose }: { modalClose: any }) => {
             <Line />
             <LikesNum>
               <Ionicons name={"md-heart-sharp"} size={13} color={"#ec6565"} />
-              현재 <PointText>{Data.length}명</PointText>의 사람들이 좋아요를
-              눌렀습니다.
+              현재 <PointText>{likesData?.tripLikesInfo.length}명</PointText>의
+              사람들이 좋아요를 눌렀습니다.
             </LikesNum>
           </TitleContainer>
           <ListBox>
-            {Data.length > 0 ? (
+            {likesData?.tripLikesInfo && likesData?.tripLikesInfo.length > 0 ? (
               <FlatList
-                data={Data}
-                renderItem={({ item }) => <LikesUserItem likesData={item} />}
-                keyExtractor={(item) => item.id.toString()}
+                data={likesData?.tripLikesInfo}
+                renderItem={({ item }) => (
+                  <LikesUserItem likesData={item} modalClose={modalClose} />
+                )}
+                keyExtractor={(_, index) => index.toString()}
               />
             ) : null}
           </ListBox>
@@ -155,7 +114,7 @@ const TitleContainer = styled.View`
 `;
 
 const Title = styled.Text`
-  font-size: 16px;
+  font-size: 17px;
   font-weight: 600;
 `;
 
@@ -168,7 +127,8 @@ const Line = styled.Text`
 
 const LikesNum = styled.Text`
   text-align: right;
-  ${Platform.OS === "ios" ? "font-size: 13px;" : "font-size: 12px;"};
+  color: ${colors.subFont};
+  ${Platform.OS === "ios" ? "font-size: 14px;" : "font-size: 13px;"};
 `;
 
 const PointText = styled.Text`
