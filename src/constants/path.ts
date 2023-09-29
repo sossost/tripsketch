@@ -15,6 +15,12 @@ export const API_PATH = {
       BY_NICKNAME: `follow/user/followings?nickname=:nickname`,
     },
   },
+  CATEGORY: {
+    GET: {
+      BY_NICKNAME: (nickname: string) =>
+        `trip/nickname/trips/country-frequencies?nickname=${nickname}`,
+    },
+  },
   COMMENT: {
     GET: {
       // 모든 COMMENT 조회하기

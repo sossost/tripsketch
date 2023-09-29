@@ -1,12 +1,8 @@
-import AuthGuard from "../components/auth/AuthGuard";
+import withAuthGuard from "../components/auth/withAuthGuard";
 import EditProfileComponent from "../components/user/EditProfileComponent";
 
 const EditProfilePage = () => {
-  return (
-    <AuthGuard>
-      <EditProfileComponent />
-    </AuthGuard>
-  );
+  return <EditProfileComponent />;
 };
 
-export default EditProfilePage;
+export default withAuthGuard(EditProfilePage);
