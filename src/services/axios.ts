@@ -1,6 +1,5 @@
 import axios from "axios";
 import jwtDecode, { JwtPayload } from "jwt-decode";
-import { API_BASE_URL } from "@env";
 import { errorLoging } from "@utils/errorHandler";
 import {
   getAccessToken,
@@ -13,7 +12,7 @@ import {
 
 /** axiosBase 인스턴스 생성 */
 export const axiosBase = axios.create({
-  baseURL: API_BASE_URL!,
+  baseURL: "https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/",
   timeout: 10000, // 요청 대기 시간 10초로 설정
 });
 
