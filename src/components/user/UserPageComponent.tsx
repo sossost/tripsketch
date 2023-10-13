@@ -75,12 +75,10 @@ const UserPageComponent = ({ nickname }: UserPageComponentProps) => {
                 selectedCategory={selectedCategory}
                 setSelectedCategory={setSelectedCategory}
               />
-              <AsyncBoundary>
-                <UserPostList
-                  nickname={pageOwnerNickname}
-                  category={selectedCategory}
-                />
-              </AsyncBoundary>
+              <UserPostList
+                nickname={pageOwnerNickname}
+                category={selectedCategory}
+              />
             </UserPageContainer>
           )}
         />
