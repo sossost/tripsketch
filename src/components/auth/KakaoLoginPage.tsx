@@ -10,7 +10,6 @@ import { setAccessToken, setRefreshToken } from "@utils/token";
 import { StackNavigation } from "@types/RootStack";
 
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
-const BASE_URL = process.env.API_BASE_URL;
 
 /**
  * @description : 카카오 OAuth 로그인 페이지 컴포넌트
@@ -31,6 +30,9 @@ const KaKaoLogin = () => {
 
       // 액세스 토큰 저장
       const accessToken: string = response.headers.accesstoken;
+
+      if (!accessToken) return;
+
       await setAccessToken(accessToken);
 
       // 리프레시 토큰 저장
@@ -63,7 +65,7 @@ const KaKaoLogin = () => {
         originWhitelist={["*"]}
         scalesPageToFit={false}
         source={{
-          uri: `${BASE_URL}/oauth/kakao/redirect`,
+          uri: `https://kauth.kakao.com/oauth/authorize?client_id=1927d084a86a31e01a814ce0b2fe3459&redirect_uri=https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao/callback&response_type=code`,
         }}
         injectedJavaScript={INJECTED_JAVASCRIPT}
         javaScriptEnabled
