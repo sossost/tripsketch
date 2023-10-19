@@ -48,6 +48,9 @@ $ npm start
 
 ## 프로젝트 설명
 
+### 아키텍쳐
+![트립스케치 구조](https://github.com/limeorange/TripSketch/assets/78308684/8507d6f8-1580-4edd-acc2-0deaf4e6386f)
+
 ### 주요 기능
 
 OAuth를 활용한 사용자인증
@@ -60,10 +63,6 @@ OAuth를 활용한 사용자인증
 - 사용자 구독 기능
 - 푸시 알림 및 알림 관리 기능
 - 프로필 수정 기능
-
-### 기술 스택
-![트립스케치 구조](https://github.com/limeorange/TripSketch/assets/78308684/8507d6f8-1580-4edd-acc2-0deaf4e6386f)
-
 
 ### 화면 구성
 
