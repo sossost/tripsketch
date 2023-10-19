@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { WebView } from "react-native-webview";
 import { useNavigation } from "@react-navigation/native";
@@ -11,76 +12,70 @@ import { StackNavigation } from "@types/RootStack";
 
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 
-/**
- * @description : 카카오 OAuth 로그인 페이지 컴포넌트
- * @author : 이수현
- * @update : 2023-09-12,
- * @version 1.0.3, 장윤수 : 로그아웃 후 로그인 안되는 로직 해결
- * @see None,
- */
+const BASE_KAKAO_URL =
+  "https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao";
+const KAKAO_AUTH_URL = `${BASE_KAKAO_URL}/redirect`;
+const KAKAO_CALLBACK_URL = `${BASE_KAKAO_URL}/callback`;
 
-const KaKaoLogin = () => {
+const KaKaoLogin: React.FC = () => {
   const navigation = useNavigation<StackNavigation>();
   const queryClient = useQueryClient();
+  const [isLoginInProgress, setIsLoginInProgress] = useState(false);
+  const [lastDetectedUrl, setLastDetectedUrl] = useState("");
 
-  /** 토큰 발급받는 함수 */
   const requestToken = async () => {
     try {
-      const response = await kakaoLogin();
-
-      // 액세스 토큰 저장
-      const accessToken: string = response.headers.accesstoken;
-
-      if (!accessToken) return;
-
-      await setAccessToken(accessToken);
-
-      // 리프레시 토큰 저장
-      const refreshToken: string = response.headers.refreshtoken;
-      await setRefreshToken(refreshToken);
+      const { headers } = await kakaoLogin();
+      const { accesstoken: accessToken, refreshtoken: refreshToken } = headers;
+      if (accessToken) await setAccessToken(accessToken);
+      if (refreshToken) await setRefreshToken(refreshToken);
     } catch (error: unknown) {
-      errorLoging(error, "토큰 발급 요청 실패 에러는");
+      errorLoging(error, "토큰 발급 요청 실패");
     }
   };
 
-  // 카카오 로그인 진행하는 화면
-  const KakaoLoginWebView = async () => {
-    // 토큰 발급 요청
+  const performKakaoLogin = async () => {
     await requestToken();
-
-    // 현재 로그인한 유저 정보 요청 후 쿼리에 저장
     const userInfo = await getCurrentUser();
     queryClient.setQueryData([QUERY_KEY.CURRENT_USER], userInfo);
+    if (userInfo) navigation.navigate(LINK.MAIN);
+  };
 
-    // 메인 화면으로 이동
-    if (userInfo) {
-      navigation.navigate(LINK.MAIN);
+  const handleNavigationChange = (navState: any) => {
+    const currentUrl = navState.url;
+    if (lastDetectedUrl === currentUrl) return;
+    setLastDetectedUrl(currentUrl);
+    if (
+      !isLoginInProgress &&
+      currentUrl.includes(KAKAO_CALLBACK_URL) &&
+      currentUrl.includes("code=")
+    ) {
+      setIsLoginInProgress(true);
+      performKakaoLogin();
     }
   };
 
   return (
-    <View style={Styles.container}>
+    <View style={styles.container}>
       <WebView
         style={{ flex: 1 }}
         originWhitelist={["*"]}
         scalesPageToFit={false}
-        source={{
-          uri: `https://kauth.kakao.com/oauth/authorize?client_id=1927d084a86a31e01a814ce0b2fe3459&redirect_uri=https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao/callback&response_type=code`,
-        }}
+        source={{ uri: KAKAO_AUTH_URL }}
         injectedJavaScript={INJECTED_JAVASCRIPT}
         javaScriptEnabled
-        onMessage={KakaoLoginWebView}
+        onNavigationStateChange={handleNavigationChange}
       />
     </View>
   );
 };
 
-export default KaKaoLogin;
-
-const Styles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 24,
     backgroundColor: "#fff",
   },
 });
+
+export default KaKaoLogin;
