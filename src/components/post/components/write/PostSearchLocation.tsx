@@ -480,7 +480,7 @@ const SelectLocationUpper = styled.View`
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
-  gap: 4;
+  gap: 4px;
 `;
 
 const SelectLocationUpperBottom = styled.View`
