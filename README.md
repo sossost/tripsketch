@@ -61,6 +61,10 @@ OAuth를 활용한 사용자인증
 - 푸시 알림 및 알림 관리 기능
 - 프로필 수정 기능
 
+### 기술 스택
+![트립스케치 구조](https://github.com/limeorange/TripSketch/assets/78308684/8507d6f8-1580-4edd-acc2-0deaf4e6386f)
+
+
 ### 화면 구성
 
 <img width="1120" alt="화면들" src="https://github.com/sossost/portfolio./assets/110542210/f5bb03f5-4ca1-46a8-8097-054bcc2b1454">
