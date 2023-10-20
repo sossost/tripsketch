@@ -4,7 +4,7 @@ import { styled } from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import { colors } from "@constants/color";
 import { LINK } from "@constants/link";
-import { StackNavigation } from "@types/RootStack";
+import { StackNavigation } from "../../../../types/RootStack";
 
 import PageLayout from "@components/common/PageLayout";
 import Header from "@components/UI/header/Header";

@@ -1,8 +1,8 @@
 import { Dimensions } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { styled } from "styled-components/native";
-import { StackNavigation } from "@types/RootStack";
-import { Post } from "@types/Post";
+import { StackNavigation } from "../../../types/RootStack";
+import { Post } from "../../../types/Post";
 import { colors } from "@constants/color";
 import { LINK } from "@constants/link";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");

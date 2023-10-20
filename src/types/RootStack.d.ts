@@ -9,6 +9,6 @@ export type RootStackParamList = {
   // 다른 스크린도 필요한 경우 정의할 수 있음
 };
 
-const Stack = createStackNavigator<StackParamList>();
+const Stack = createStackNavigator<RootStackParamList>();
 
-export type StackNavigation = StackNavigationProp<StackParamList>;
+export type StackNavigation = StackNavigationProp<RootStackParamList>;

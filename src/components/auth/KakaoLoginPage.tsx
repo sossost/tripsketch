@@ -8,7 +8,7 @@ import { getCurrentUser, kakaoLogin } from "@services/user";
 import { LINK } from "@constants/link";
 import { errorLoging } from "@utils/errorHandler";
 import { setAccessToken, setRefreshToken } from "@utils/token";
-import { StackNavigation } from "@types/RootStack";
+import { StackNavigation } from "../../types/RootStack";
 
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 

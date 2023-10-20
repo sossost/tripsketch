@@ -17,7 +17,7 @@ import CommentInput from "./CommentInput";
 import useDeleteAlert from "../../hooks/useDeleteAlert";
 import { LINK } from "@constants/link";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigation } from "@types/RootStack";
+import { StackNavigation } from "../../../../types/RootStack";
 import { useCreateTime } from "@hooks/useCreateTime";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
