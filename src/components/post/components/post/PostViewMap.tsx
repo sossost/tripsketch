@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { styled } from "styled-components/native";
-import MapView, { Marker } from "react-native-maps";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 type Region = {
   latitude: number;
@@ -24,7 +24,11 @@ const PostViewMap = ({ latitude, longitude }: PostMapProps) => {
 
   return (
     <MapViewContainer>
-      <MapView style={{ width: "100%", height: 140 }} region={region}>
+      <MapView
+        provider={PROVIDER_GOOGLE}
+        style={{ width: "100%", height: 140 }}
+        region={region}
+      >
         <Marker
           coordinate={{
             latitude: latitude,

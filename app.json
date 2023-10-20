@@ -25,7 +25,12 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": ["android.permission.RECORD_AUDIO"],
-      "package": "kr.kro.tripsketch"
+      "package": "kr.kro.tripsketch",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAYQ9e0idbqhu81LbtDkTZcQ6FJQqxgDYU"
+        }
+      }
     },
     "web": {
       "favicon": "./src/assets/logoIconBackground.png"
