@@ -17,7 +17,12 @@
     "assetBundlePatterns": ["**/*", "assets/images/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "kr.kro.tripsketch"
+      "bundleIdentifier": "kr.kro.tripsketch",
+      "config": {
+        "googleMaps": {
+          "apiKey": ""
+        }
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -28,7 +33,7 @@
       "package": "kr.kro.tripsketch",
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyAYQ9e0idbqhu81LbtDkTZcQ6FJQqxgDYU"
+          "apiKey": ""
         }
       }
     },
