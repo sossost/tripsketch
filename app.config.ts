@@ -2,6 +2,11 @@ import "dotenv/config";
 
 module.exports = () => {
   return {
+    updates: {
+      enabled: true,
+      url: "https://u.expo.dev/29ddc7fe-a117-470b-8787-7c52553fa0fb",
+    },
+    runtimeVersion: "1.0.0",
     ios: {
       supportsTablet: true,
       bundleIdentifier: "kr.kro.tripsketch",

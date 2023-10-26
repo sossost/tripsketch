@@ -4,8 +4,10 @@
     "slug": "tripsketch",
     "version": "1.0.0",
     "updates": {
-      "enabled": true
+      "enabled": true,
+      "url": "https://u.expo.dev/29ddc7fe-a117-470b-8787-7c52553fa0fb"
     },
+    "runtimeVersion": "1.0.0",
     "orientation": "portrait",
     "icon": "./src/assets/logoIconBackground.png",
     "userInterfaceStyle": "light",
