@@ -6,7 +6,6 @@ import { Post } from "../../../types/Post";
 import { colors } from "@constants/color";
 import { LINK } from "@constants/link";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
-import Flag from "react-native-flags";
 
 interface PostCardProps {
   post: Post;
@@ -42,6 +41,21 @@ const PostCard = ({ post }: PostCardProps) => {
     navigation.navigate(LINK.USER_PAGE, { nickname: post.nickname });
   };
 
+  const countryFlagCode = post.countryCode;
+  const countryFlag = (countryFlagCode: string) => {
+    if (!countryFlagCode || countryFlagCode.length !== 2) return null;
+
+    const offset = 127397;
+    const emoji = String.fromCodePoint(
+      ...countryFlagCode
+        .toUpperCase()
+        .split("")
+        .map((char) => char.charCodeAt(0) + offset)
+    );
+
+    return emoji;
+  };
+
   return (
     <PostCardLayout onPress={postHandleClick} activeOpacity={1}>
       <ImageWrapper>
@@ -59,7 +73,7 @@ const PostCard = ({ post }: PostCardProps) => {
           </PostTitle>
 
           <RowContainer>
-            <Flag code={post.countryCode?.toUpperCase()} size={32} />
+            <FlagImage>{countryFlag(countryFlagCode)}</FlagImage>
             <PostLocation>{post.country}</PostLocation>
           </RowContainer>
         </PostMetaDataContainer>
@@ -219,4 +233,8 @@ const CommentButton = styled.Image`
 const RowContainer = styled.View`
   flex-direction: row;
   align-items: center;
+`;
+
+const FlagImage = styled.Text`
+  font-size: 22px;
 `;
