@@ -7,6 +7,11 @@ import MapView, { Marker, UrlTile } from "react-native-maps";
 import Loading from "../../../UI/Loading";
 import { colors } from "@constants/color";
 
+/* WebView 맵설정 */
+import WebView from "react-native-webview";
+import { getOSMWithMarkerHTML } from "@utils/getOSMWithMarkerHTML";
+import { WebViewSource } from "react-native-webview/lib/WebViewTypes";
+
 type Suggestion = {
   place_id: string;
   display_name: string;
@@ -123,9 +128,17 @@ const PostSearchLocation = ({
   validateAddress,
   errors,
 }: PostSearchLocationProps) => {
+  const handleMessage = (event: any) => {
+    const dataFromWebView = event.nativeEvent.data;
+    const data = JSON.parse(dataFromWebView); // 문자열을 객체로 파싱
+
+    handlePressLocation(data);
+  };
+
   /** 지도클릭시 도시 선택하는 핸들러 */
-  const handlePressLocation = async (event: MapPressEvent) => {
-    const { latitude, longitude } = event.nativeEvent.coordinate;
+  const handlePressLocation = async (data: any) => {
+    const { lat: latitude, lng: longitude } = data;
+    console.log(latitude);
     fetch(
       `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`
     )
@@ -323,30 +336,18 @@ const PostSearchLocation = ({
               {suggestions.length > 0 ? (
                 <MapViewOverlay></MapViewOverlay>
               ) : null}
-              <MapView
-                style={{
-                  width: "100%",
-                  zIndex: 5,
-                  position: "absolute",
-                  height: 550,
-                }}
-                region={region}
-                onRegionChangeComplete={(region) => setRegion(region)}
-                onPress={handlePressLocation}
-              >
-                <UrlTile
-                  urlTemplate="http://c.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                  maximumZ={19}
-                />
-                <Marker
-                  coordinate={{
-                    latitude: address.latitude,
-                    longitude: address.longitude,
-                  }}
-                  title="My Marker"
-                  description="Some description"
-                />
-              </MapView>
+              <WebView
+                source={
+                  {
+                    html: getOSMWithMarkerHTML({
+                      latitude: address.latitude,
+                      longitude: address.longitude,
+                    }),
+                  } as WebViewSource
+                }
+                onMessage={handleMessage}
+                style={{ flex: 1, height: 200 }}
+              />
               {query && query.length === 0 ? (
                 <></>
               ) : suggestions.length > 0 ? (
