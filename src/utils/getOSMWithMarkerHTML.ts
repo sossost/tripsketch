@@ -29,13 +29,30 @@ export const getOSMWithMarkerHTML: React.FC<getOSMProps> = ({
         <body>
           <div id="map" style="height: 100vh;"></div>
           <script>
-            const map = L.map('map').setView([${latitude}, ${longitude}], 13);
+            const map = L.map('map').setView([${latitude}, ${longitude}], 15);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
               maxZoom: 19,
             }).addTo(map);
 
-            // 마커 추가
-            L.marker([${latitude}, ${longitude}]).addTo(map)
+            // 클릭한 위치에 새로운 마커 추가
+            map.on('click', function(event) {
+              if (currentMarker) {
+                // 이전 마커가 있는 경우, 해당 마커를 제거
+                map.removeLayer(currentMarker);
+              }
+              
+              // 새로운 마커 추가
+              const marker = L.marker(event.latlng).addTo(map);
+              currentMarker = marker; // currentMarker를 업데이트
+              
+              const data = { lat: event.latlng.lat, lng: event.latlng.lng };
+              window.ReactNativeWebView.postMessage(JSON.stringify(data));
+  
+            });
+            
+            // 초기 마커 추가
+            currentMarker = L.marker([${latitude}, ${longitude}]).addTo(map);
+
           </script>
         </body>
       </html>
