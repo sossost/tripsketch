@@ -124,8 +124,9 @@ const Title = styled.Text`
 const Content = styled.Text`
   font-size: 14px;
   font-weight: 500;
-  line-height: 14px;
+  line-height: 16px;
   color: ${colors.subFont};
+  margin-top: -2px;
 `;
 
 const MetaData = styled.View`
