@@ -25,6 +25,16 @@ type Suggestion = {
   display_name: string;
   lat: string;
   lon: string;
+  geometry: {
+    coordinates: string[];
+  };
+  properties: {
+    city: string;
+    country: string;
+    name: string;
+    district: string;
+    street: string;
+  };
 };
 
 type Region = {
