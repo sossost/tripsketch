@@ -6,9 +6,7 @@ import { usePostLike } from "../../hooks/usePostQuery";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetCurrentUser } from "../../hooks/useUserQuery";
 import { GetPost } from "../../types/Post";
-import { colors } from "../../constants/color";
 import Toast from "react-native-toast-message";
-import PostViewMap from "./components/post/PostViewMap";
 
 interface LikesAndCommentTextProps {
   postId: string;
@@ -24,7 +22,6 @@ const LikesAndCommentText = ({
   const { data: userData } = useGetCurrentUser();
   const checkLikeUser = postData?.isLiked;
   const [likes, setLikes] = useState(false);
-  const [isLocation, setIsLocation] = useState<boolean>(false);
 
   useEffect(() => {
     setLikes(checkLikeUser);
@@ -53,33 +50,6 @@ const LikesAndCommentText = ({
 
   return (
     <View style={styles.container}>
-      <View style={styles.icon_container}>
-        <TouchableOpacity
-          onPress={() => setIsLocation(!isLocation)}
-          style={styles.location_btn}
-        >
-          <Ionicons name="location-sharp" size={16} color="white" />
-          <Text style={styles.location_text}>위치</Text>
-        </TouchableOpacity>
-      </View>
-      <View>
-        {isLocation ? (
-          postData.latitude !== null ? (
-            <View>
-              <PostViewMap
-                latitude={postData.latitude}
-                longitude={postData.longitude}
-              />
-            </View>
-          ) : (
-            <Text
-              style={{ textAlign: "right", marginRight: 15, marginBottom: 10 }}
-            >
-              위치 데이터가 존재하지 않습니다.
-            </Text>
-          )
-        ) : null}
-      </View>
       <View style={styles.line}>
         <View style={styles.likeView_container}>
           <View style={styles.likes}>
@@ -120,26 +90,6 @@ const LikesAndCommentText = ({
 
 const styles = StyleSheet.create({
   container: {},
-  icon_container: {
-    marginVertical: 12,
-    paddingHorizontal: 15,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  location_btn: {
-    backgroundColor: colors.primary,
-    borderRadius: 5,
-    paddingVertical: 5,
-    paddingLeft: 7,
-    paddingRight: 9,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  location_text: {
-    color: "#fff",
-  },
   line: {
     width: "100%",
     backgroundColor: "#fff",
