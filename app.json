@@ -2,12 +2,12 @@
   "expo": {
     "name": "트립스케치",
     "slug": "tripsketch",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "updates": {
       "enabled": true,
       "url": "https://u.expo.dev/29ddc7fe-a117-470b-8787-7c52553fa0fb"
     },
-    "runtimeVersion": "1.0.0",
+    "runtimeVersion": "1.0.1",
     "orientation": "portrait",
     "icon": "./src/assets/logoIconBackground.png",
     "userInterfaceStyle": "light",
@@ -19,12 +19,7 @@
     "assetBundlePatterns": ["**/*", "assets/images/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "kr.kro.tripsketch",
-      "config": {
-        "googleMaps": {
-          "apiKey": ""
-        }
-      }
+      "bundleIdentifier": "kr.kro.tripsketch"
     },
     "android": {
       "adaptiveIcon": {
@@ -32,12 +27,7 @@
         "backgroundColor": "#ffffff"
       },
       "permissions": ["android.permission.RECORD_AUDIO"],
-      "package": "kr.kro.tripsketch",
-      "config": {
-        "googleMaps": {
-          "apiKey": ""
-        }
-      }
+      "package": "kr.kro.tripsketch"
     },
     "web": {
       "favicon": "./src/assets/logoIconBackground.png"
