@@ -10,26 +10,14 @@ const DEFAULT_IMAGE =
 
 const PostCard = ({ post }: { post: Post }) => {
   const {
+    likes,
     likeButtonImgPath,
     commentButtonImgPath,
     handlePostPress,
     handleProfilePress,
+    handleLikePress,
+    countryFlag,
   } = usePostCard(post);
-
-  const countryFlagCode = post.countryCode;
-  const countryFlag = (countryFlagCode: string) => {
-    if (!countryFlagCode || countryFlagCode.length !== 2) return null;
-
-    const offset = 127397;
-    const emoji = String.fromCodePoint(
-      ...countryFlagCode
-        .toUpperCase()
-        .split("")
-        .map((char) => char.charCodeAt(0) + offset)
-    );
-
-    return emoji;
-  };
 
   return (
     <PostCardLayout onPress={handlePostPress} activeOpacity={1}>
@@ -48,7 +36,7 @@ const PostCard = ({ post }: { post: Post }) => {
           </PostTitle>
 
           <RowContainer>
-            <FlagImage>{countryFlag(countryFlagCode)}</FlagImage>
+            <FlagImage>{countryFlag()}</FlagImage>
             <PostLocation>{post.country}</PostLocation>
           </RowContainer>
         </PostMetaDataContainer>
@@ -62,8 +50,10 @@ const PostCard = ({ post }: { post: Post }) => {
           </ProfileWrapper>
 
           <RowContainer>
-            <LikeButton source={likeButtonImgPath} />
-            <UserLikes>{post.likes}</UserLikes>
+            <LikeButtonWrapper onPress={() => handleLikePress(post.id)}>
+              <LikeButton source={likeButtonImgPath} />
+              <UserLikes>{likes}</UserLikes>
+            </LikeButtonWrapper>
             <CommentButton source={commentButtonImgPath} />
             <UserComments>{post.comments}</UserComments>
           </RowContainer>
@@ -190,6 +180,11 @@ const UserComments = styled.Text`
   font-weight: 500;
   margin-left: 5px;
   color: ${colors.subFont};
+`;
+
+const LikeButtonWrapper = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
 `;
 
 const LikeButton = styled.Image`
