@@ -1,45 +1,20 @@
 import { Dimensions } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
 import { styled } from "styled-components/native";
-import { StackNavigation } from "../../../types/RootStack";
 import { Post } from "../../../types/Post";
 import { colors } from "@constants/color";
-import { LINK } from "@constants/link";
+import usePostCard from "./hooks/usePostCard";
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
-interface PostCardProps {
-  post: Post;
-}
 const DEFAULT_IMAGE =
   "https://ax6izwmsuv9c.objectstorage.ap-osaka-1.oci.customer-oci.com/n/ax6izwmsuv9c/b/tripsketch/o/profile.png";
 
-/**
- * @description : 여행일기 카드 컴포넌트
- * @author : 이수현
- * @update : 2023-09-19,
- * @version 1.1.2, 장윤수 : 터치시 opacity 효과 제거 및 마이페이지인 경우 프로필 클릭 이벤트 제거
- * @see None,
- */
-const PostCard = ({ post }: PostCardProps) => {
-  const route = useRoute<StackNavigation>();
-
-  const isLiked = post.isLiked;
-  const likeButtonImgPath =
-    isLiked === true
-      ? require("@assets/images/isLikedIcon.png")
-      : require("@assets/images/isNotLikedIcon.png");
-  const commentButtonImgPath = require("@assets/images/commentIcon.png");
-
-  const navigation = useNavigation<StackNavigation>();
-
-  const postHandleClick = () => {
-    navigation.navigate(LINK.TRIP_DETAIL_PAGE, { postId: post.id });
-  };
-
-  const handleProfileClick = () => {
-    if (route.name === LINK.MY_PAGE) return;
-    navigation.navigate(LINK.USER_PAGE, { nickname: post.nickname });
-  };
+const PostCard = ({ post }: { post: Post }) => {
+  const {
+    likeButtonImgPath,
+    commentButtonImgPath,
+    handlePostPress,
+    handleProfilePress,
+  } = usePostCard(post);
 
   const countryFlagCode = post.countryCode;
   const countryFlag = (countryFlagCode: string) => {
@@ -57,7 +32,7 @@ const PostCard = ({ post }: PostCardProps) => {
   };
 
   return (
-    <PostCardLayout onPress={postHandleClick} activeOpacity={1}>
+    <PostCardLayout onPress={handlePostPress} activeOpacity={1}>
       <ImageWrapper>
         <Thumnail source={{ uri: post.image || DEFAULT_IMAGE }}>
           <ThumnailText>{post.createdAt.slice(0, 10)}</ThumnailText>
@@ -79,7 +54,7 @@ const PostCard = ({ post }: PostCardProps) => {
         </PostMetaDataContainer>
 
         <ProfileContainer>
-          <ProfileWrapper onPress={handleProfileClick}>
+          <ProfileWrapper onPress={handleProfilePress}>
             <ProfileImageWrapper>
               <ProfileImage source={{ uri: post.profileImageUrl }} />
             </ProfileImageWrapper>
@@ -89,7 +64,6 @@ const PostCard = ({ post }: PostCardProps) => {
           <RowContainer>
             <LikeButton source={likeButtonImgPath} />
             <UserLikes>{post.likes}</UserLikes>
-
             <CommentButton source={commentButtonImgPath} />
             <UserComments>{post.comments}</UserComments>
           </RowContainer>

@@ -2,14 +2,12 @@ import { styled } from "styled-components/native";
 import { Post } from "../../../types/Post";
 import { colors } from "../../../constants/color";
 import { Dimensions, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 import UserAvatar from "../user/UserAvatar";
 import LikesCount from "../LikesCount";
 import CommentsCount from "../CommentsCount";
-import { StackNavigation } from "../../../types/RootStack";
-import { LINK } from "../../../constants/link";
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
+import usePostCard from "./hooks/usePostCard";
 
 interface HorizontalPostCardProps {
   post: Post;
@@ -18,24 +16,11 @@ interface HorizontalPostCardProps {
 const DEFAULT_IMAGE =
   "https://ax6izwmsuv9c.objectstorage.ap-osaka-1.oci.customer-oci.com/n/ax6izwmsuv9c/b/tripsketch/o/profile.png";
 
-/**
- * @description : 수평으로 긴 포스트 카드 컴포넌트
- *
- * @param post : 포스트 객체
- *
- * @author : 장윤수
- * @update : 2023-09-20,
- * @version 1.1.1, 카드 레이아웃 너비 수정
- * @see None,
- */
 const HorizontalPostCard = ({ post }: HorizontalPostCardProps) => {
-  const navigation = useNavigation<StackNavigation>();
-  const handlePostDetailPress = () => {
-    navigation.navigate(LINK.TRIP_DETAIL_PAGE, { postId: post.id });
-  };
+  const { handlePostPress } = usePostCard(post);
 
   return (
-    <Container onPress={handlePostDetailPress}>
+    <Container onPress={handlePostPress}>
       <ThumbnailImage
         source={{
           uri: post.image || DEFAULT_IMAGE,
