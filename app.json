@@ -42,7 +42,7 @@
     ],
     "notification": {
       "handler": "BackgroundNotificationHandler",
-      "experienceId": "@yourusername/tripsketch"
+      "experienceId": "@shagrat/tripsketch"
     },
     "extra": {
       "eas": {
