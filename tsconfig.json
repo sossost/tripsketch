@@ -15,6 +15,7 @@
       "@services/*": ["services/*"],
       "@types/*": ["types/*"],
       "@context/*": ["context/*"]
-    }
+    },
+    "jsx": "react-native"
   }
 }
