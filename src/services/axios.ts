@@ -12,7 +12,7 @@ import {
 
 /** axiosBase 인스턴스 생성 */
 export const axiosBase = axios.create({
-  baseURL: "https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/",
+  baseURL: "https://tripsketch.kro.kr/api/",
   timeout: 10000, // 요청 대기 시간 10초로 설정
 });
 
