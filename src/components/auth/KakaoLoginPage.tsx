@@ -12,8 +12,7 @@ import { StackNavigation } from "../../types/RootStack";
 
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 
-const BASE_KAKAO_URL =
-  "https://port-0-tripsketch-kvmh2mljz6ccl7.sel4.cloudtype.app/api/oauth/kakao";
+const BASE_KAKAO_URL = "https://tripsketch.kro.kr/api/oauth/kakao";
 const KAKAO_AUTH_URL = `${BASE_KAKAO_URL}/redirect`;
 const KAKAO_CALLBACK_URL = `${BASE_KAKAO_URL}/callback`;
 
