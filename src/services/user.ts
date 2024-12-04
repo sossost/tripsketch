@@ -49,12 +49,16 @@ export const patchCurrentUser = async (data: any) => {
 
   try {
     if (accessToken) {
-      const response = await axios.patch(`${API_BASE_URL}user`, data, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.patch(
+        "https://tripsketch.kro.kr//api/user",
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
       return response.data;
     }
     throw new Error(ERROR_MESSAGE.UNAUTHORIZED);

@@ -18,7 +18,9 @@ import Slick from "react-native-slick";
 import useDeleteAlert from "../../hooks/useDeleteAlert";
 import { GetPost } from "../../../../types/Post";
 import NonePostView from "./NonePostView";
+import PostViewMap from "./PostViewMap";
 import { LINK } from "@constants/link";
+import { colors } from "@constants/color";
 
 type PostViewProps = {
   postId: string;
@@ -28,6 +30,7 @@ type PostViewProps = {
 
 const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
   const [isSettingOpen, setIsSettingOpen] = useState(false);
+  const [isLocation, setIsLocation] = useState<boolean>(false);
   const { data: userData } = useGetCurrentUser();
   const navigation = useNavigation<StackNavigation>();
 
@@ -51,6 +54,7 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
   };
 
   const postUpdateHandler = () => {
+    setIsLocation(false);
     navigation.navigate("UpdatePost", { postId: postData.id });
     setIsSettingOpen(!isSettingOpen);
   };
@@ -66,9 +70,10 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
     });
     deleteAlertFunction();
   };
-  postId;
+  //postId;
 
   const followerHandler = () => {
+    setIsLocation(false);
     navigation.navigate(LINK.USER_PAGE, { nickname: postData.nickname });
   };
 
@@ -89,7 +94,10 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
         <View style={styles.header_container}>
           <TouchableOpacity
             style={styles.back_btn}
-            onPress={() => navigation.goBack()}
+            onPress={() => {
+              setIsLocation(false);
+              navigation.goBack();
+            }}
           >
             <MaterialIcons
               name="keyboard-arrow-left"
@@ -170,6 +178,33 @@ const PostView = ({ postId, deletePost, postData }: PostViewProps) => {
             </View>
           ))}
         </View>
+      </View>
+      <View style={styles.icon_container}>
+        <TouchableOpacity
+          onPress={() => setIsLocation(!isLocation)}
+          style={styles.location_btn}
+        >
+          <Ionicons name="location-sharp" size={16} color="white" />
+          <Text style={styles.location_text}>위치</Text>
+        </TouchableOpacity>
+      </View>
+      <View>
+        {isLocation ? (
+          postData.latitude !== null ? (
+            <View>
+              <PostViewMap
+                latitude={postData.latitude}
+                longitude={postData.longitude}
+              />
+            </View>
+          ) : (
+            <Text
+              style={{ textAlign: "right", marginRight: 15, marginBottom: 10 }}
+            >
+              위치 데이터가 존재하지 않습니다.
+            </Text>
+          )
+        ) : null}
       </View>
     </View>
   );
@@ -316,6 +351,27 @@ const styles = StyleSheet.create({
   },
   content_text: {
     lineHeight: 18,
+  },
+
+  icon_container: {
+    marginVertical: 12,
+    paddingHorizontal: 15,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  location_btn: {
+    backgroundColor: colors.primary,
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingLeft: 7,
+    paddingRight: 9,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  location_text: {
+    color: "#fff",
   },
 });
 

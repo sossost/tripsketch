@@ -15,7 +15,7 @@ import { User } from "../../../../types/user";
 import useDeleteAlert from "../../hooks/useDeleteAlert";
 import { useCreateTime } from "@hooks/useCreateTime";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigation } from "@types/RootStack";
+import { StackNavigation } from "../../../../types/RootStack";
 import { LINK } from "@constants/link";
 
 type ReplyCommentProps = {

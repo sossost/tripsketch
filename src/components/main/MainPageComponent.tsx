@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { AuthModalContext } from "@context/AuthModalProvider";
 import { useNavigation } from "@react-navigation/native";
 import { LINK } from "@constants/link";
-import { StackNavigation } from "@types/RootStack";
+import { StackNavigation } from "../../types/RootStack";
 
 import AsyncBoundary from "@components/common/AsyncBoundary";
 import TrendingPostsList from "@components/main/TrendingPostsList";

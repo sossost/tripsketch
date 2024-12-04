@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { styled } from "styled-components/native";
 import { LINK } from "@constants/link";
-import { StackNavigation } from "@types/RootStack";
-import { User } from "@types/user";
+import { StackNavigation } from "../../../types/RootStack";
+import { User } from "../../../types/user";
 import { colors } from "@constants/color";
 
 import SocialButton from "@components/user/social/SocialButton";

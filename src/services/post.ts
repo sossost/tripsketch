@@ -2,8 +2,7 @@ import axiosBase from "@services/axios";
 import { API_PATH } from "@constants/path";
 import { ERROR_MESSAGE } from "@constants/message";
 import { errorLoging } from "@utils/errorHandler";
-import { Post, GetPost, PostUpdate, PostLike } from "@types/Post";
-import { CreatePost } from "@types/Post";
+import { Post, GetPost, PostUpdate, PostLike, CreatePost } from "../types/Post";
 import { getAccessToken } from "@utils/token";
 
 /**

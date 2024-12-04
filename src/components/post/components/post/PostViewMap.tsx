@@ -1,13 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { styled } from "styled-components/native";
-import MapView, { Marker } from "react-native-maps";
-
-type Region = {
-  latitude: number;
-  longitude: number;
-  latitudeDelta: number;
-  longitudeDelta: number;
-};
+import { WebView } from "react-native-webview";
+import { getOSMWithMarkerHTML } from "@utils/getOSMWithMarkerHTML";
+import { WebViewSource } from "react-native-webview/lib/WebViewTypes";
 
 type PostMapProps = {
   latitude: number;
@@ -15,23 +10,16 @@ type PostMapProps = {
 };
 
 const PostViewMap = ({ latitude, longitude }: PostMapProps) => {
-  const [region, setRegion] = useState<Region>({
-    latitude: latitude,
-    longitude: longitude,
-    latitudeDelta: 0.03,
-    longitudeDelta: 0.03,
-  });
-
   return (
     <MapViewContainer>
-      <MapView style={{ width: "100%", height: 140 }} region={region}>
-        <Marker
-          coordinate={{
-            latitude: latitude,
-            longitude: longitude,
-          }}
-        />
-      </MapView>
+      <WebView
+        source={
+          {
+            html: getOSMWithMarkerHTML({ latitude, longitude }),
+          } as WebViewSource
+        }
+        style={{ flex: 1, height: 200 }}
+      />
     </MapViewContainer>
   );
 };

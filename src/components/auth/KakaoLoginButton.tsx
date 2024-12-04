@@ -3,7 +3,7 @@ import { TouchableOpacity, Text, Dimensions, Image, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FadeOutContext } from "../../context/fadeOutContext";
 import { LINK } from "@constants/link";
-import { StackNavigation } from "@types/RootStack";
+import { StackNavigation } from "../../types/RootStack";
 import { AuthModalContext } from "@context/AuthModalProvider";
 
 const { width: screenWidth } = Dimensions.get("window");

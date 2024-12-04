@@ -2,7 +2,7 @@ import React from "react";
 import { useGetCurrentUser, useGetUserByNickname } from "@hooks/useUserQuery";
 import { LINK } from "@constants/link";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigation } from "@types/RootStack";
+import { StackNavigation } from "../../../types/RootStack";
 import { useSocialControllerInUserPage } from "@hooks/useFollowQuery";
 import { styled } from "styled-components/native";
 import { Platform } from "react-native";

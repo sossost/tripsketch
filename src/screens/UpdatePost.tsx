@@ -1,5 +1,5 @@
 import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList } from "@/types/RootStack";
+import { RootStackParamList } from "../types/RootStack";
 
 import PostPageComponent from "@components/post/PostPageComponent";
 import withAuthGuard from "@components/auth/withAuthGuard";

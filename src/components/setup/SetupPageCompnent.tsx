@@ -2,7 +2,7 @@ import { styled } from "styled-components/native";
 import { LINK } from "@constants/link";
 import { colors } from "@constants/color";
 import { useNavigation } from "@react-navigation/native";
-import { StackNavigation } from "@types/RootStack";
+import { StackNavigation } from "../../types/RootStack";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import { SUCCESS_MESSAGE } from "@constants/message";
 import { ERROR_MESSAGE } from "@constants/message";

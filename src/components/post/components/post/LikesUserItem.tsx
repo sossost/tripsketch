@@ -2,7 +2,7 @@ import { colors } from "@constants/color";
 import { Alert, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
-import { StackNavigation } from "@types/RootStack";
+import { StackNavigation } from "../../../../types/RootStack";
 import { LINK } from "@constants/link";
 import { useGetCurrentUser } from "@hooks/useUserQuery";
 
